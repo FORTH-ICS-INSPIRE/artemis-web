@@ -86,38 +86,6 @@ type MyState = {
 };
 
 class SignIn extends React.Component<MyProps, MyState> {
-  // handleLogin(e) {
-  //   e.preventDefault();
-
-  //   setMessage("");
-  //   setLoading(true);
-
-  //   form.current.validateAll();
-
-  //   if (checkBtn.current.context._errors.length === 0) {
-  //     AuthService.login(username, password).then(
-  //       () => {
-  //         props.history.push("/profile");
-  //         window.location.reload();
-  //       },
-  //       (error) => {
-  //         const resMessage =
-  //           (error.response &&
-  //             error.response.data &&
-  //             error.response.data.message) ||
-  //           error.message ||
-  //           error.toString();
-
-  //         // setLoading(false);
-  //         setMessage(resMessage);
-  //       }
-  //     );
-  //   } else {
-  //     // setLoading(false);
-  //   }
-  // };
-  // state = { email: "", setEmail: "", password: "", setPassword: "", loginError: "", setLoginError: ""};
-
   constructor(props: any) {
     super(props);
     this.handleSubmit = this.handleSubmit.bind(this)

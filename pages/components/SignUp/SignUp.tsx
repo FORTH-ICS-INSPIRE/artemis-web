@@ -106,7 +106,7 @@ class SignUp extends React.Component<MyProps, MyState> {
         if (data && data.token) {
           //set cookie
           cookie.set('token', data.token, {expires: 2});
-          // Router.push('/');
+          Router.push('/');
         }
       });
     }
@@ -127,27 +127,16 @@ class SignUp extends React.Component<MyProps, MyState> {
                 </Typography>
                 <form onSubmit={this.handleSubmit} className={classes.form} noValidate>
                 <Grid container spacing={2}>
-                    <Grid item xs={12} sm={6}>
+                    <Grid item xs={12} sm={12}>
                     <TextField
-                        autoComplete="fname"
-                        name="firstName"
+                        autoComplete="uname"
+                        name="username"
                         variant="outlined"
                         required
                         fullWidth
-                        id="firstName"
-                        label="First Name"
+                        id="username"
+                        label="Username"
                         autoFocus
-                    />
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                    <TextField
-                        variant="outlined"
-                        required
-                        fullWidth
-                        id="lastName"
-                        label="Last Name"
-                        name="lastName"
-                        autoComplete="lname"
                     />
                     </Grid>
                     <Grid item xs={12}>
@@ -175,12 +164,6 @@ class SignUp extends React.Component<MyProps, MyState> {
                         onChange={e => this.setState({ "password": e.target.value })}
                     />
                     </Grid>
-                    {/* <Grid item xs={12}>
-                    <FormControlLabel
-                        control={<Checkbox value="allowExtraEmails" color="primary" />}
-                        label="I want to receive inspiration, marketing promotions and updates via email."
-                    />
-                    </Grid> */}
                 </Grid>
                 {this.state.signupError && <p style={{color: 'red'}}>{this.state.signupError}</p>}
 
