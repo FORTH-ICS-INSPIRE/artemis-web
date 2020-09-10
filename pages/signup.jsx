@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import Router from 'next/router';
 import cookie from 'js-cookie';
 import dynamic from 'next/dynamic';
@@ -15,7 +15,7 @@ const Signup = () => {
     const res = await fetch(args);
     return res.json();
   });
-  
+
   if (!data) return <h1>Loading...</h1>;
   let loggedIn = false;
 
@@ -30,13 +30,13 @@ const Signup = () => {
   const Header = dynamic(() => import('./components/Header/Header'));
   return (
     <>
-    <Header loggedIn={loggedIn}></Header>
-    { !loggedIn &&
-    <div className="container d-flex align-items-center flex-column">
-      <SignUp />
-    </div>
-    }
-    <Footer></Footer>
+      <Header loggedIn={loggedIn}></Header>
+      {!loggedIn &&
+        <div className="container d-flex align-items-center flex-column">
+          <SignUp />
+        </div>
+      }
+      <Footer></Footer>
     </>
   );
 };

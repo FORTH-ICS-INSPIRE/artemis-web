@@ -90,46 +90,46 @@ class SignIn extends React.Component<MyProps, MyState> {
     super(props);
     this.handleSubmit = this.handleSubmit.bind(this)
 
-    this.state = { email: "", setEmail: "", password: "", setPassword: "", loginError: "", setLoginError: ""};
+    this.state = { email: "", setEmail: "", password: "", setPassword: "", loginError: "", setLoginError: "" };
   }
 
   validateForm() {
     return this.state.email.length > 0 && this.state.password.length > 0;
   }
 
-  public handleSubmit = (e: any):void => {
+  public handleSubmit = (e: any): void => {
     e.preventDefault();
-    
+
     const email = this.state.email;
     const password = this.state.password;
     this.setState = this.setState.bind(this);
 
-    ( (statef) => {
-    //call api
-    fetch('/api/auth', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        email,
-        password,
-      }),
-    })
-      .then((r) => {
-        return r.json();
+    ((statef) => {
+      //call api
+      fetch('/api/auth', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email,
+          password,
+        }),
       })
-      .then((data) => {
-        console.log(statef);
-        if (data && data.error) {
-          statef({ loginError: data.message });
-        }
-        if (data && data.token) {
-          //set cookie
-          cookie.set('token', data.token, {expires: 2});
-          Router.push('/');
-        }
-      });
+        .then((r) => {
+          return r.json();
+        })
+        .then((data) => {
+          console.log(statef);
+          if (data && data.error) {
+            statef({ loginError: data.message });
+          }
+          if (data && data.token) {
+            //set cookie
+            cookie.set('token', data.token, { expires: 2 });
+            Router.push('/');
+          }
+        });
     }
     )(this.setState);
   }
@@ -178,7 +178,7 @@ class SignIn extends React.Component<MyProps, MyState> {
                 control={<Checkbox value="remember" color="primary" />}
                 label="Remember me"
               />
-              {this.state.loginError && <p style={{color: 'red'}}>{this.state.loginError}</p>}
+              {this.state.loginError && <p style={{ color: 'red' }}>{this.state.loginError}</p>}
               <Button
                 type="submit"
                 fullWidth
