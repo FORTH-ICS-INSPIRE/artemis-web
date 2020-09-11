@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import Router from 'next/router';
-import cookie from 'js-cookie';
 import dynamic from 'next/dynamic';
 import useSWR from 'swr';
+import Head from 'next/head';
 
 
 const Signup = () => {
@@ -30,6 +30,9 @@ const Signup = () => {
   const Header = dynamic(() => import('./components/Header/Header'));
   return (
     <>
+      <Head>
+        <title>ARTEMIS - Sign Up</title>
+      </Head>
       <Header loggedIn={loggedIn}></Header>
       {!loggedIn &&
         <div className="container d-flex align-items-center flex-column">

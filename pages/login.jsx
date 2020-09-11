@@ -3,6 +3,7 @@ import Router from 'next/router';
 import cookie from 'js-cookie';
 import dynamic from 'next/dynamic';
 import useSWR from 'swr';
+import Head from 'next/head';
 
 const Login = () => {
   const [loginError, setLoginError] = useState('');
@@ -29,6 +30,9 @@ const Login = () => {
 
   return (
     <>
+      <Head>
+        <title>ARTEMIS - Login</title>
+      </Head>
       <Header loggedIn={loggedIn}></Header>
       {!loggedIn &&
         <div className="container d-flex align-items-center flex-column">

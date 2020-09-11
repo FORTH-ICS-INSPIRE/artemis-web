@@ -1,10 +1,5 @@
-import Head from 'next/head';
 import fetch from 'isomorphic-unfetch';
 import useSWR from 'swr';
-import Link from 'next/link';
-import cookie from 'js-cookie';
-import Header from './components/Header/Header';
-import Footer from './components/Footer/Footer';
 import Router from 'next/router';
 
 
