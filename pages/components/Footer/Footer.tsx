@@ -20,7 +20,6 @@ const useStyles = makeStyles((theme) => ({
     marginTop: 'auto',
     position: 'absolute',
     bottom: '0',
-    left: "0px;",
     width: '100%',
     backgroundColor:
       theme.palette.grey[800],
@@ -28,6 +27,7 @@ const useStyles = makeStyles((theme) => ({
   link: {
     color: "#ffff",
     textAlign: "left",
+    left: "-10%",
   }
 }));
 

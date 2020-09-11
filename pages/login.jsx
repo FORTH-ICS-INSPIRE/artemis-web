@@ -39,7 +39,7 @@ const Login = () => {
           <SignIn2 />
         </div>
       }
-      <Footer></Footer>
+      <Footer />
     </>
   );
 };

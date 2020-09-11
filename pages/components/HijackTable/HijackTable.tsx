@@ -2,16 +2,29 @@ import React from 'react';
 // import Griddle from 'griddle-react';
 // import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 import BootstrapTable from 'react-bootstrap-table-next';
+import Container from '@material-ui/core/Container';
 
-const products = [{update: 20, time: "sfsf", "hprefix": 3, mprefix: 3, type: "fsdf", as: "dsfsd", rpki: "dfssd", peers: 3, ASes: 2, ack: 0, more: "aa"}, {update: 23, time: "sfsf", "hprefix": 3, mprefix: 3, type: "fsdf", as: "dsfsd", rpki: "dfssd", peers: 3, ASes: 2, ack: 0, more: "aa"}];
+const products = [{ update: 20, time: "sfsf", "hprefix": 3, mprefix: 3, type: "fsdf", as: "dsfsd", rpki: "dfssd", peers: 3, ASes: 2, ack: 0, more: "aa" }, { update: 23, time: "sfsf", "hprefix": 3, mprefix: 3, type: "fsdf", as: "dsfsd", rpki: "dfssd", peers: 3, ASes: 2, ack: 0, more: "aa" }];
 const columns = [{
     dataField: 'update',
     text: 'Last Update',
-    sort: true
+    sort: true,
+    sortCaret: (order, column) => {
+        if (!order) return (<span>&nbsp;&nbsp;&darr;<font color="red">/&uarr;</font></span>);
+        else if (order === 'asc') return (<span>&nbsp;&nbsp;&darr;<font color="red">/&uarr;</font></span>);
+        else if (order === 'desc') return (<span>&nbsp;&nbsp;<font color="red">&darr;</font>/&uarr;</span>);
+        return null;
+    }
 }, {
     dataField: 'time',
     text: 'Time Detected',
-    sort: true
+    sort: true,
+    sortCaret: (order, column) => {
+        if (!order) return (<span>&nbsp;&nbsp;&darr;<font color="red">/&uarr;</font></span>);
+        else if (order === 'asc') return (<span>&nbsp;&nbsp;&darr;<font color="red">/&uarr;</font></span>);
+        else if (order === 'desc') return (<span>&nbsp;&nbsp;<font color="red">&darr;</font>/&uarr;</span>);
+        return null;
+    }
 }, {
     dataField: 'hprefix',
     text: 'Hijacked Prefix',
@@ -30,11 +43,23 @@ const columns = [{
 }, {
     dataField: 'peers',
     text: '# Peers Seen',
-    sort: true
+    sort: true,
+    sortCaret: (order, column) => {
+        if (!order) return (<span>&nbsp;&nbsp;&darr;<font color="red">/&uarr;</font></span>);
+        else if (order === 'asc') return (<span>&nbsp;&nbsp;&darr;<font color="red">/&uarr;</font></span>);
+        else if (order === 'desc') return (<span>&nbsp;&nbsp;<font color="red">&darr;</font>/&uarr;</span>);
+        return null;
+    }
 }, {
     dataField: 'ASes',
     text: '# ASes Infected',
-    sort: true
+    sort: true,
+    sortCaret: (order, column) => {
+        if (!order) return (<span>&nbsp;&nbsp;&darr;<font color="red">/&uarr;</font></span>);
+        else if (order === 'asc') return (<span>&nbsp;&nbsp;&darr;<font color="red">/&uarr;</font></span>);
+        else if (order === 'desc') return (<span>&nbsp;&nbsp;<font color="red">&darr;</font>/&uarr;</span>);
+        return null;
+    }
 }, {
     dataField: 'ack',
     text: 'Ack',
