@@ -33,13 +33,17 @@ const Signup = () => {
       <Head>
         <title>ARTEMIS - Sign Up</title>
       </Head>
-      <Header loggedIn={loggedIn}></Header>
-      {!loggedIn &&
-        <div className="container d-flex align-items-center flex-column">
-          <SignUp />
+      <div id="page-container">
+        <Header loggedIn={loggedIn}></Header>
+        <div id="content-wrap" style={{ paddingBottom: "5rem" }}>
+          {!loggedIn &&
+            <div className="container d-flex align-items-center flex-column">
+              <SignUp />
+            </div>
+          }
         </div>
-      }
-      <Footer></Footer>
+        <Footer></Footer>
+      </div>
     </>
   );
 };

@@ -134,7 +134,7 @@ class SignIn extends React.Component<MyProps, MyState> {
 
     return (
       <ThemeProvider theme={theme}>
-        <Container component="main" maxWidth="sm" className={classes.main}>
+        <Container component="main" maxWidth="sm">
           <CssBaseline />
           <div className={classes.paper}>
             <img width="150" src={'https://demo.bgpartemis.org/images/log_in.png'} alt="avatar" className="img-responsive" />

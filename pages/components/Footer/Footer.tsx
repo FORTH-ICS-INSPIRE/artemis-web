@@ -19,6 +19,7 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(3, 2),
     marginTop: 'auto',
     position: 'absolute',
+    height: "4.5rem",
     bottom: '0',
     width: '100%',
     backgroundColor:
