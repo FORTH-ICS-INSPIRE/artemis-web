@@ -62,7 +62,7 @@ class Footer extends React.Component<MyProps> {
       <div className={this.props.classes.root}>
         <CssBaseline />
         <footer className={this.props.classes.footer}>
-          <Container maxWidth="md">
+          <Container maxWidth="lg">
             <Copyright class={this.props.classes.link} />
           </Container>
         </footer>

@@ -28,6 +28,10 @@ main {
   height: 80%;
 } */
 
+footer > .MuiContainer-root {
+  margin-left: 8%;
+}
+
 #content-wrap > .row {
   margin-left: 0px;
   margin-right: 0%;
