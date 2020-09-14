@@ -3,7 +3,7 @@ import useSWR from 'swr';
 import Router from 'next/router';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
-import HijackTable from './components/HijackTable/HijackTable';
+import BGPTable from './components/BGPTable/BGPTable';
 
 function Overview() {
   const { data, revalidate } = useSWR('/api/me', async function (args) {
@@ -30,38 +30,39 @@ function Overview() {
       <Header loggedIn={loggedIn}></Header>
       <div className="container overview col-lg-12" style={{ paddingTop: "120px" }}>
         <div className="row">
-          <div className="col-lg-2" />
-          <div className="col-lg-8">
-            <h1 style={{ color: "white" }}>Dashboard</h1> <hr style={{ backgroundColor: "white" }} />
-          </div>
-        </div>
-        <div className="row">
-          <div className="col-lg-2" />
-          <div className="col-lg-8">
-            <div className="card">
-              <div className="card-header">Activity</div>
-              <div className="card-body">Welcome back guest@guest.com, your last login was at (11-09-2020 05:22:16) from 172.26.0.11. </div>
-            </div>
+          <div className="col-lg-1" />
+          <div className="col-lg-10">
+            <h1 style={{ color: "white" }}>BGP Updates</h1> <hr style={{ backgroundColor: "white" }} />
           </div>
         </div>
         <div className="row" style={{ marginTop: "20px" }}>
-          <div className="col-lg-2" />
-          <div className="col-lg-8">
+          <div className="col-lg-1" />
+          <div className="col-lg-10">
             <div className="card">
-              <div className="card-header">Ongoing, Non-Dormant Hijacks </div>
+              <div className="card-header"> </div>
               <div className="card-body">
-                <HijackTable />
+                <BGPTable />
               </div>
             </div>
           </div>
         </div>
         <div className="row" style={{ marginTop: "20px" }}>
-          <div className="col-lg-2" />
-          <div className="col-lg-4">
+          <div className="col-lg-1" />
+          <div className="col-lg-10">
             <div className="card">
-              <div className="card-header"> System Status  </div>
+              <div className="card-header"> View distinct values </div>
               <div className="card-body">
-                <table class="table table-hover">
+                <div className="col-lg-3">
+                <select className="form-control" id="distinct_values_selection">
+                  <option value="select">Select</option>
+                  <option value="prefix">Prefix</option>
+                  <option value="matched_prefix">Matched Prefix</option>
+                  <option value="origin_as">Origin AS</option>
+                  <option value="peer_asn">Peer AS</option>
+                  <option value="service">Service</option>
+                </select>
+                </div>
+                {/* <table className="table table-hover">
                   <thead>
                     <tr>
                       <th>Module</th>
@@ -76,26 +77,7 @@ function Overview() {
                       <td>8h</td>
                     </tr>
                   </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-          <div className="col-lg-4">
-            <div className="card">
-              <div className="card-header"> Statistics  </div>
-              <div className="card-body">
-                <table class="table table-hover">
-                  <tbody>
-                    <tr>
-                      <td>Monitored Prefixes</td>
-                      <td>2</td>
-                    </tr>
-                    <tr>
-                      <td>Monitor Peers</td>
-                    <td> 286</td>
-                    </tr>  
-                  </tbody>
-                </table>
+                </table> */}
               </div>
             </div>
           </div>

@@ -79,27 +79,7 @@ const columns = [{
     text: 'More',
 }];
 
-type MyProps = {
-    classes: {
-        paper: string,
-        avatar: string,
-        form: string,
-        submit: string,
-        input: string,
-        main: string
-    }
-};
-
-type MyState = {
-    email: string,
-    setEmail: string,
-    password: string,
-    setPassword: string,
-    loginError: string,
-    setLoginError: string
-};
-
-class HijackTable extends React.Component<MyProps, MyState> {
+class HijackTable extends React.Component {
     render() {
         return (
             <BootstrapTable keyField='update' data={products} columns={columns} />

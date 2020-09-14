@@ -32,14 +32,14 @@ function Overview() {
       <Header loggedIn={loggedIn}></Header>
         <div id="content-wrap" style={ {paddingBottom: "5rem"} }>
           <div className="row">
-            <div className="col-lg-2" />
-            <div className="col-lg-8">
+            <div className="col-lg-1" />
+            <div className="col-lg-10">
               <h1 style={{ color: "white" }}>Dashboard</h1> <hr style={{ backgroundColor: "white" }} />
             </div>
           </div>
           <div className="row">
-            <div className="col-lg-2" />
-            <div className="col-lg-8">
+            <div className="col-lg-1" />
+            <div className="col-lg-10">
               <div className="card">
                 <div className="card-header">Activity</div>
                 <div className="card-body">Welcome back guest@guest.com, your last login was at (11-09-2020 05:22:16) from 172.26.0.11. </div>
@@ -47,8 +47,8 @@ function Overview() {
             </div>
           </div>
           <div className="row" style={{ marginTop: "20px" }}>
-            <div className="col-lg-2" />
-            <div className="col-lg-8">
+            <div className="col-lg-1" />
+            <div className="col-lg-10">
               <div className="card">
                 <div className="card-header">Ongoing, Non-Dormant Hijacks </div>
                 <div className="card-body">
@@ -58,12 +58,12 @@ function Overview() {
             </div>
           </div>
           <div className="row" style={{ marginTop: "20px" }}>
-            <div className="col-lg-2" />
-            <div className="col-lg-4">
+            <div className="col-lg-1" />
+            <div className="col-lg-5">
               <div className="card">
                 <div className="card-header"> System Status  </div>
                 <div className="card-body">
-                  <table class="table table-hover">
+                  <table className="table table-hover">
                     <thead>
                       <tr>
                         <th>Module</th>
@@ -82,11 +82,11 @@ function Overview() {
                 </div>
               </div>
             </div>
-            <div className="col-lg-4">
+            <div className="col-lg-5">
               <div className="card">
                 <div className="card-header"> Statistics  </div>
                 <div className="card-body">
-                  <table class="table table-hover">
+                  <table className="table table-hover">
                     <tbody>
                       <tr>
                         <td>Monitored Prefixes</td>
