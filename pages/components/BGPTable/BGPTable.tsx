@@ -14,9 +14,9 @@ const columns = [{
     sort: true,
     headerTitle: () => "The time when the BGP update was generated, as set by the BGP monitor or route collector.",
     sortCaret: (order, column) => {
-        if (!order) return (<span>&nbsp;&nbsp;&darr;<font color="red">/&uarr;</font></span>);
-        else if (order === 'asc') return (<span>&nbsp;&nbsp;&darr;<font color="red">/&uarr;</font></span>);
-        else if (order === 'desc') return (<span>&nbsp;&nbsp;<font color="red">&darr;</font>/&uarr;</span>);
+        if (!order) return (<span>&nbsp;&nbsp;&darr;<span style={ { color:"red" } }>/&uarr;</span></span>);
+        else if (order === 'asc') return (<span>&nbsp;&nbsp;&darr;<span style={ { color:"red" } }>/&uarr;</span></span>);
+        else if (order === 'desc') return (<span>&nbsp;&nbsp;<span style={ { color:"red" } }>&darr;</span>/&uarr;</span>);
         return null;
     }
 }, {

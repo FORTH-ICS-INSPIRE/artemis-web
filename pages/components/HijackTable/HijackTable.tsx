@@ -13,9 +13,9 @@ const columns = [{
     sort: true,
     headerTitle: () => "The timestamp of the newest known (to the system) BGP update that is related to the hijack.",
     sortCaret: (order, column) => {
-        if (!order) return (<span>&nbsp;&nbsp;&darr;<font color="red">/&uarr;</font></span>);
-        else if (order === 'asc') return (<span>&nbsp;&nbsp;&darr;<font color="red">/&uarr;</font></span>);
-        else if (order === 'desc') return (<span>&nbsp;&nbsp;<font color="red">&darr;</font>/&uarr;</span>);
+        if (!order) return (<span>&nbsp;&nbsp;&darr;<span style={ { color:"red" } }>/&uarr;</span></span>);
+        else if (order === 'asc') return (<span>&nbsp;&nbsp;&darr;<span style={ { color:"red" } }>/&uarr;</span></span>);
+        else if (order === 'desc') return (<span>&nbsp;&nbsp;<span style={ { color:"red" } }>&darr;</span>/&uarr;</span>);
         return null;
     }
 }, {
@@ -24,9 +24,9 @@ const columns = [{
     sort: true,
     headerTitle: () => "The time when a hijack event was first detected by the system.",
     sortCaret: (order, column) => {
-        if (!order) return (<span>&nbsp;&nbsp;&darr;<font color="red">/&uarr;</font></span>);
-        else if (order === 'asc') return (<span>&nbsp;&nbsp;&darr;<font color="red">/&uarr;</font></span>);
-        else if (order === 'desc') return (<span>&nbsp;&nbsp;<font color="red">&darr;</font>/&uarr;</span>);
+        if (!order) return (<span>&nbsp;&nbsp;&darr;<span style={ { color:"red" } }>/&uarr;</span></span>);
+        else if (order === 'asc') return (<span>&nbsp;&nbsp;&darr;<span style={ { color:"red" } }>/&uarr;</span></span>);
+        else if (order === 'desc') return (<span>&nbsp;&nbsp;<span style={ { color:"red" } }>&darr;</span>/&uarr;</span>);
         return null;
     }
 }, {
@@ -59,9 +59,9 @@ const columns = [{
     text: '# Peers Seen',
     sort: true,
     sortCaret: (order, column) => {
-        if (!order) return (<span>&nbsp;&nbsp;&darr;<font color="red">/&uarr;</font></span>);
-        else if (order === 'asc') return (<span>&nbsp;&nbsp;&darr;<font color="red">/&uarr;</font></span>);
-        else if (order === 'desc') return (<span>&nbsp;&nbsp;<font color="red">&darr;</font>/&uarr;</span>);
+        if (!order) return (<span>&nbsp;&nbsp;&darr;<span style={ { color:"red" } }>/&uarr;</span></span>);
+        else if (order === 'asc') return (<span>&nbsp;&nbsp;&darr;<span style={ { color:"red" } }>/&uarr;</span></span>);
+        else if (order === 'desc') return (<span>&nbsp;&nbsp;<span style={ { color:"red" } }>&darr;</span>/&uarr;</span>);
         return null;
     }
 }, {
@@ -70,9 +70,9 @@ const columns = [{
     headerTitle: () => "Number of infected ASes that seem to</br>route traffic towards the hijacker AS.</br>Note that this is an experimental field",
     sort: true,
     sortCaret: (order, column) => {
-        if (!order) return (<span>&nbsp;&nbsp;&darr;<font color="red">/&uarr;</font></span>);
-        else if (order === 'asc') return (<span>&nbsp;&nbsp;&darr;<font color="red">/&uarr;</font></span>);
-        else if (order === 'desc') return (<span>&nbsp;&nbsp;<font color="red">&darr;</font>/&uarr;</span>);
+        if (!order) return (<span>&nbsp;&nbsp;&darr;<span style={ { color:"red" } }>/&uarr;</span></span>);
+        else if (order === 'asc') return (<span>&nbsp;&nbsp;&darr;<span style={ { color:"red" } }>/&uarr;</span></span>);
+        else if (order === 'desc') return (<span>&nbsp;&nbsp;<span style={ { color:"red" } }>&darr;</span>/&uarr;</span>);
         return null;
     }
 }, {
