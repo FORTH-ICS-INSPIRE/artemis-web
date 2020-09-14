@@ -3,7 +3,7 @@ import useSWR from 'swr';
 import Router from 'next/router';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
-import HijackTable from './components/HijackTable/HijackTable';
+import HijackTable from './components/OngoingHijackTable/OngoingHijackTable';
 
 function Overview() {
   const { data, revalidate } = useSWR('/api/me', async function (args) {

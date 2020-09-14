@@ -4,9 +4,7 @@ import React from 'react';
 import BootstrapTable from 'react-bootstrap-table-next';
 import Container from '@material-ui/core/Container';
 
-const products = [
-    { update: '2020-08-24 19:53:44', time: "2020-08-24 09:01:50", status: "Withdrawn", hprefix: "139.91.250.0/24", mprefix: "139.91.250.0/24", type: "E|0|-|-", as: "264409", rpki: "IA", peers: 1, ASes: 0, ack: 0, more: "aa" }];
-
+const products = [{ update: 20, time: "sfsf", "hprefix": 3, mprefix: 3, type: "fsdf", as: "dsfsd", rpki: "dfssd", peers: 3, ASes: 2, ack: 0, more: "aa" }, { update: 23, time: "sfsf", "hprefix": 3, mprefix: 3, type: "fsdf", as: "dsfsd", rpki: "dfssd", peers: 3, ASes: 2, ack: 0, more: "aa" }];
 const columns = [{
     dataField: 'update',
     text: 'Last Update',
@@ -29,10 +27,6 @@ const columns = [{
         else if (order === 'desc') return (<span>&nbsp;&nbsp;<font color="red">&darr;</font>/&uarr;</span>);
         return null;
     }
-}, {
-    dataField: 'status',
-    headerTitle: () => "The status of a hijack event (possible values: ongoing|dormant|withdrawn|under mitigation|ignored|resolved|outdated).",
-    text: 'Status',
 }, {
     dataField: 'hprefix',
     headerTitle: () => "The IPv4/IPv6 prefix that was hijacked.",
@@ -77,11 +71,11 @@ const columns = [{
     }
 }, {
     dataField: 'ack',
-    headerTitle: () => "Whether the user has acknowledged/confirmed the hijack as a true positive.<br>If the resolve|mitigate buttons are pressed this<br>is automatically set to True (default value: False).",
+    headerTitle: () => "Whether the user has acknowledged/confirmed the hijack as a true positive.<br>If the resolve|mitigate buttons are pressed this<br>is automatically set to True (default value: False).",    
     text: 'Ack',
 }, {
     dataField: 'more',
-    headerTitle: () => "Further information related to the hijack.",
+    headerTitle: () => "Further information related to the hijack.",    
     text: 'More',
 }];
 
