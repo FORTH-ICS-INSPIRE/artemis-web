@@ -10,8 +10,10 @@ class Copyright extends React.Component<any> {
         {"Copyright © "}
         <Link color="inherit" href="https://www.ics.forth.gr">
           FORTH-ICS
-        </Link>{" "}
-        {new Date().getFullYear()}.
+        </Link>
+        {" "}
+        {new Date().getFullYear()}
+        .
       </Typography>
     );
   }

@@ -158,8 +158,7 @@ class SignUp extends React.Component<MyProps, MyState> {
                     id="username"
                     label="Username"
                     onChange={(e) =>
-                      this.setState({ username: e.target.value })
-                    }
+                      this.setState({ username: e.target.value })}
                     autoFocus
                   />
                 </Grid>
@@ -186,8 +185,7 @@ class SignUp extends React.Component<MyProps, MyState> {
                     id="password"
                     autoComplete="current-password"
                     onChange={(e) =>
-                      this.setState({ password: e.target.value })
-                    }
+                      this.setState({ password: e.target.value })}
                   />
                 </Grid>
               </Grid>
