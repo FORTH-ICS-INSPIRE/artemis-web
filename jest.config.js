@@ -1,6 +1,9 @@
-// jest.config.js
 module.exports = {
-  transform: { '^.+\\.tsx?$': 'ts-jest' },
-   moduleNameMapper: { '\\.(css|less)$': '<rootDir>/styleMock.js' },
-    setupFiles: ['<rootDir>/jest.setup.js'],
-   }
+  testMatch: ['**/+(*.)+(spec|test).+(ts|js)?(x)'],
+  transform: {
+    '^.+\\.(ts|js|html)$': 'ts-jest',
+  },
+  resolver: '@nrwl/jest/plugins/resolver',
+  moduleFileExtensions: ['ts', 'js', 'html'],
+  coverageReporters: ['html'],
+};

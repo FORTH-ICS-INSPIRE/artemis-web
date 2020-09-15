@@ -1,0 +1,105 @@
+{
+  "version": 1,
+  "projects": {
+    "artemis-web": {
+      "root": "apps/artemis-web",
+      "sourceRoot": "apps/artemis-web",
+      "projectType": "application",
+      "schematics": {},
+      "architect": {
+        "build": {
+          "builder": "@nrwl/next:build",
+          "options": {
+            "root": "apps/artemis-web",
+            "outputPath": "dist/apps/artemis-web"
+          },
+          "configurations": {
+            "production": {}
+          }
+        },
+        "serve": {
+          "builder": "@nrwl/next:server",
+          "options": {
+            "buildTarget": "artemis-web:build",
+            "dev": true
+          },
+          "configurations": {
+            "production": {
+              "buildTarget": "artemis-web:build:production",
+              "dev": false
+            }
+          }
+        },
+        "export": {
+          "builder": "@nrwl/next:export",
+          "options": {
+            "buildTarget": "artemis-web:build:production"
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:lint",
+          "options": {
+            "linter": "eslint",
+            "tsConfig": [
+              "apps/artemis-web/tsconfig.json",
+              "apps/artemis-web/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!apps/artemis-web/**/*"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "apps/artemis-web/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "artemis-web-e2e": {
+      "root": "apps/artemis-web-e2e",
+      "sourceRoot": "apps/artemis-web-e2e/src",
+      "projectType": "application",
+      "architect": {
+        "e2e": {
+          "builder": "@nrwl/cypress:cypress",
+          "options": {
+            "cypressConfig": "apps/artemis-web-e2e/cypress.json",
+            "tsConfig": "apps/artemis-web-e2e/tsconfig.e2e.json",
+            "devServerTarget": "artemis-web:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "artemis-web:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:lint",
+          "options": {
+            "linter": "eslint",
+            "tsConfig": ["apps/artemis-web-e2e/tsconfig.e2e.json"],
+            "exclude": ["**/node_modules/**", "!apps/artemis-web-e2e/**/*"]
+          }
+        }
+      }
+    }
+  },
+  "cli": {
+    "defaultCollection": "@nrwl/next"
+  },
+  "schematics": {
+    "@nrwl/react": {
+      "application": {
+        "babel": true
+      }
+    },
+    "@nrwl/next": {
+      "application": {
+        "style": "css",
+        "linter": "eslint"
+      }
+    }
+  },
+  "defaultProject": "artemis-web"
+}
