@@ -21,7 +21,7 @@ class Header extends React.Component<MyProps> {
         >
           <div className="container">
             <a className="navbar-brand" href="/">
-              <img src="./artemis_logo.png" alt="" width="128px;" />
+              <img src="./artemis-logo.png" alt="" width="128px;" />
             </a>
             {/* <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
                         <span className="navbar-toggler-icon"></span>

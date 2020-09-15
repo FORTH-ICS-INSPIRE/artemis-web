@@ -135,7 +135,7 @@ class SignUp extends React.Component<MyProps, MyState> {
           <div className={classes.paper}>
             <img
               width="150"
-              src="https://demo.bgpartemis.org/images/log_in.png"
+              src="./login.png"
               alt="avatar"
               className="img-responsive"
             />
