@@ -1,17 +1,11 @@
-import React, { useState } from 'react';
-import Router from 'next/router';
-import dynamic from 'next/dynamic';
-import useSWR from 'swr';
-import Head from 'next/head';
-
+import React from "react";
+import Router from "next/router";
+import dynamic from "next/dynamic";
+import useSWR from "swr";
+import Head from "next/head";
 
 const Signup = () => {
-  const [signupError, setSignupError] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [passwordConfirmation, setPasswordConfirmation] = useState('');
-
-  const { data, revalidate } = useSWR('/api/me', async function (args) {
+  const { data } = useSWR("/api/me", async function (args) {
     const res = await fetch(args);
     return res.json();
   });
@@ -21,28 +15,27 @@ const Signup = () => {
 
   if (data.email) {
     loggedIn = true;
-    Router.push('/overview');
-  } else {
+    Router.push("/overview");
   }
 
-  const Footer = dynamic(() => import('./components/Footer/Footer'));
-  const SignUp = dynamic(() => import('./components/SignUp/SignUp'));
-  const Header = dynamic(() => import('./components/Header/Header'));
+  const Footer = dynamic(() => import("./components/Footer/Footer"));
+  const SignUp = dynamic(() => import("./components/SignUp/SignUp"));
+  const Header = dynamic(() => import("./components/Header/Header"));
   return (
     <>
       <Head>
         <title>ARTEMIS - Sign Up</title>
       </Head>
       <div id="page-container">
-        <Header loggedIn={loggedIn}></Header>
+        <Header loggedIn={loggedIn} />
         <div id="content-wrap" style={{ paddingBottom: "5rem" }}>
-          {!loggedIn &&
+          {!loggedIn && (
             <div className="container d-flex align-items-center flex-column">
               <SignUp />
             </div>
-          }
+          )}
         </div>
-        <Footer></Footer>
+        <Footer />
       </div>
     </>
   );

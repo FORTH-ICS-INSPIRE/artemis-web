@@ -1,29 +1,23 @@
-import fetch from 'isomorphic-unfetch';
-import useSWR from 'swr';
-import Router from 'next/router';
-
+import fetch from "isomorphic-unfetch";
+import useSWR from "swr";
+import Router from "next/router";
+import * as React from "react";
 
 function Home() {
-  const { data, revalidate } = useSWR('/api/me', async function (args) {
+  const { data } = useSWR("/api/me", async function (args) {
     const res = await fetch(args);
     return res.json();
   });
 
   if (!data) return <h1>Loading...</h1>;
-  let loggedIn = false;
 
   if (data.email) {
-    loggedIn = true;
-    Router.push('/overview');
+    Router.push("/overview");
   } else {
-    Router.push('/login');
+    Router.push("/login");
   }
 
-  return (
-    <div>
-
-    </div>
-  );
+  return <div />;
 }
 
 export default Home;

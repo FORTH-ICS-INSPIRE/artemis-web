@@ -1,15 +1,14 @@
-import React from 'react';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
-import Link from '@material-ui/core/Link';
+import React from "react";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import { makeStyles } from "@material-ui/core/styles";
+import Container from "@material-ui/core/Container";
+import Copyright from "./Copyright";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    display: 'flex',
-    flexDirection: 'column',
-    left: "0px;"
+    display: "flex",
+    flexDirection: "column",
+    left: "0px;",
   },
   main: {
     marginTop: theme.spacing(8),
@@ -17,53 +16,41 @@ const useStyles = makeStyles((theme) => ({
   },
   footer: {
     padding: theme.spacing(3, 2),
-    marginTop: 'auto',
-    position: 'absolute',
+    marginTop: "auto",
+    position: "absolute",
     height: "4.5rem",
-    bottom: '0',
-    width: '100%',
-    backgroundColor:
-      theme.palette.grey[800],
+    bottom: "0",
+    width: "100%",
+    backgroundColor: theme.palette.grey[800],
   },
   link: {
     color: "#ffff",
     textAlign: "left",
     left: "-10%",
-  }
+  },
 }));
 
-class Copyright extends React.Component<any> {
-  render() {
-    return (
-      <Typography variant="body2" className={this.props.class}>
-        {'Copyright © '}
-        <Link color="inherit" href="https://www.ics.forth.gr">
-          FORTH-ICS
-        </Link>{' '}
-        {new Date().getFullYear()}
-        {'.'}
-      </Typography>
-    );
-  }
-}
+
 
 type MyProps = {
   classes: {
-    root: string,
-    footer: string,
-    link: string
-  }
+    root: string;
+    footer: string;
+    link: string;
+  };
 };
 
 class Footer extends React.Component<MyProps> {
-
   render() {
+    const {classes} = this.props; 
+    const {root, footer, link} = classes;
+
     return (
-      <div className={this.props.classes.root}>
+      <div className={root}>
         <CssBaseline />
-        <footer className={this.props.classes.footer}>
+        <footer className={footer}>
           <Container maxWidth="lg">
-            <Copyright class={this.props.classes.link} />
+            <Copyright _class={link} />
           </Container>
         </footer>
       </div>
@@ -73,7 +60,5 @@ class Footer extends React.Component<MyProps> {
 
 export default () => {
   const classes = useStyles();
-  return (
-    <Footer classes={classes} />
-  )
+  return <Footer classes={classes} />;
 };

@@ -1,12 +1,13 @@
-import fetch from 'isomorphic-unfetch';
-import useSWR from 'swr';
-import Router from 'next/router';
-import dynamic from 'next/dynamic';
-import Head from 'next/head';
-import HijackTable from './components/OngoingHijackTable/OngoingHijackTable';
+import * as React from "react";
+import fetch from "isomorphic-unfetch";
+import useSWR from "swr";
+import Router from "next/router";
+import dynamic from "next/dynamic";
+import Head from "next/head";
+import HijackTable from "./components/OngoingHijackTable/OngoingHijackTable";
 
 function Overview() {
-  const { data, revalidate } = useSWR('/api/me', async function (args) {
+  const { data } = useSWR("/api/me", async function (args) {
     const res = await fetch(args);
     return res.json();
   });
@@ -17,24 +18,25 @@ function Overview() {
   if (data.email) {
     loggedIn = true;
   } else {
-    Router.push('/login');
+    Router.push("/login");
   }
-  const Footer = dynamic(() => import('./components/Footer/Footer'));
-  const Header = dynamic(() => import('./components/Header/Header'));
+  const Footer = dynamic(() => import("./components/Footer/Footer"));
+  const Header = dynamic(() => import("./components/Header/Header"));
 
   return (
     <>
       <Head>
         <title>ARTEMIS - Overview</title>
       </Head>
-      
+
       <div id="page-container" style={{ paddingTop: "120px" }}>
-      <Header loggedIn={loggedIn}></Header>
-        <div id="content-wrap" style={ {paddingBottom: "5rem"} }>
+        <Header loggedIn={loggedIn} />
+        <div id="content-wrap" style={{ paddingBottom: "5rem" }}>
           <div className="row">
             <div className="col-lg-1" />
             <div className="col-lg-10">
-              <h1 style={{ color: "white" }}>Dashboard</h1> <hr style={{ backgroundColor: "white" }} />
+              <h1 style={{ color: "white" }}>Dashboard</h1>{" "}
+              <hr style={{ backgroundColor: "white" }} />
             </div>
           </div>
           <div className="row">
@@ -42,7 +44,10 @@ function Overview() {
             <div className="col-lg-10">
               <div className="card">
                 <div className="card-header">Activity</div>
-                <div className="card-body">Welcome back guest@guest.com, your last login was at (11-09-2020 05:22:16) from 172.26.0.11. </div>
+                <div className="card-body">
+                  Welcome back guest@guest.com, your last login was at
+                  (11-09-2020 05:22:16) from 172.26.0.11.{" "}
+                </div>
               </div>
             </div>
           </div>
@@ -61,7 +66,7 @@ function Overview() {
             <div className="col-lg-1" />
             <div className="col-lg-5">
               <div className="card">
-                <div className="card-header"> System Status  </div>
+                <div className="card-header"> System Status </div>
                 <div className="card-body">
                   <table className="table table-hover">
                     <thead>
@@ -84,7 +89,7 @@ function Overview() {
             </div>
             <div className="col-lg-5">
               <div className="card">
-                <div className="card-header"> Statistics  </div>
+                <div className="card-header"> Statistics </div>
                 <div className="card-body">
                   <table className="table table-hover">
                     <tbody>
@@ -105,7 +110,6 @@ function Overview() {
         </div>
         <Footer />
       </div>
-
     </>
   );
 }

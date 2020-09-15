@@ -1,19 +1,27 @@
-import React, { ReactEventHandler } from 'react';
-import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import Link from '@material-ui/core/Link';
-import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
-import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
-import { orange, lightBlue, deepOrange, deepPurple } from '@material-ui/core/colors';
-import cookie from 'js-cookie';
-import Router from 'next/router';
+import React from "react";
+import Button from "@material-ui/core/Button";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import TextField from "@material-ui/core/TextField";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Checkbox from "@material-ui/core/Checkbox";
+import Link from "@material-ui/core/Link";
+import Grid from "@material-ui/core/Grid";
+import Typography from "@material-ui/core/Typography";
+import {
+  makeStyles,
+  createMuiTheme,
+  ThemeProvider,
+} from "@material-ui/core/styles";
+import Container from "@material-ui/core/Container";
 
+import {
+  orange,
+  lightBlue,
+  deepOrange,
+  deepPurple,
+} from "@material-ui/core/colors";
+import cookie from "js-cookie";
+import Router from "next/router";
 
 const palletType = "dark";
 const darkState = false;
@@ -24,86 +32,82 @@ const theme = createMuiTheme({
   palette: {
     type: palletType,
     primary: {
-      main: mainPrimaryColor
+      main: mainPrimaryColor,
     },
     secondary: {
-      main: mainSecondaryColor
-    }
-  }
+      main: mainSecondaryColor,
+    },
+  },
 });
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles((_theme) => ({
   paper: {
-    marginTop: theme.spacing(16),
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
+    marginTop: _theme.spacing(16),
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
   },
   avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
+    margin: _theme.spacing(1),
+    backgroundColor: _theme.palette.secondary.main,
   },
   form: {
-    width: '100%', // Fix IE 11 issue.
-    marginTop: theme.spacing(1),
+    width: "100%", // Fix IE 11 issue.
+    marginTop: _theme.spacing(1),
   },
   main: {
     // marginTop: "80px"
   },
   submit: {
-    margin: theme.spacing(3, 0, 2),
+    margin: _theme.spacing(3, 0, 2),
   },
   input: {
-    color: "#ffff"
-  }
+    color: "#ffff",
+  },
 }));
-
 
 type MyProps = {
   classes: {
-    paper: string,
-    avatar: string,
-    form: string,
-    submit: string,
-    input: string,
-    main: string
-  }
+    paper: string;
+    avatar: string;
+    form: string;
+    submit: string;
+    input: string;
+    main: string;
+  };
 };
 
 type MyState = {
-  email: string,
-  setEmail: string,
-  password: string,
-  setPassword: string,
-  loginError: string,
-  setLoginError: string
+  email: string;
+  password: string;
+  loginError: string;
 };
 
 class SignIn extends React.Component<MyProps, MyState> {
   constructor(props: any) {
     super(props);
-    this.handleSubmit = this.handleSubmit.bind(this)
+    this.handleSubmit = this.handleSubmit.bind(this);
 
-    this.state = { email: "", setEmail: "", password: "", setPassword: "", loginError: "", setLoginError: "" };
-  }
-
-  validateForm() {
-    return this.state.email.length > 0 && this.state.password.length > 0;
+    this.state = {
+      email: "",
+      password: "",
+      loginError: "",
+    };
   }
 
   public handleSubmit = (e: any): void => {
     e.preventDefault();
 
-    const email = this.state.email;
-    const password = this.state.password;
+    const { email } = this.state;
+    const { password } = this.state;
     this.setState = this.setState.bind(this);
 
     ((statef) => {
-      //call api
-      fetch('/api/auth', {
-        method: 'POST',
+      // call api
+      fetch("/api/auth", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           email,
@@ -114,30 +118,38 @@ class SignIn extends React.Component<MyProps, MyState> {
           return r.json();
         })
         .then((data) => {
-          console.log(statef);
           if (data && data.error) {
             statef({ loginError: data.message });
           }
           if (data && data.token) {
-            //set cookie
-            cookie.set('token', data.token, { expires: 2 });
-            Router.push('/');
+            // set cookie
+            cookie.set("token", data.token, { expires: 2 });
+            Router.push("/");
           }
         });
-    }
-    )(this.setState);
+    })(this.setState);
+  };
+
+  validateForm() {
+    const { email, password } = this.state;
+    const isValid = email.length > 0 && password.length > 0;
+    return isValid;
   }
 
-
   render() {
-    const classes = this.props.classes;
-
+    const { classes } = this.props;
+    const { loginError } = this.state;
     return (
       <ThemeProvider theme={theme}>
         <Container component="main" maxWidth="sm">
           <CssBaseline />
           <div className={classes.paper}>
-            <img width="150" src={'https://demo.bgpartemis.org/images/log_in.png'} alt="avatar" className="img-responsive" />
+            <img
+              width="150"
+              src="https://demo.bgpartemis.org/images/log_in.png"
+              alt="avatar"
+              className="img-responsive"
+            />
             <Typography className={classes.input} component="h1" variant="h5">
               Sign in
             </Typography>
@@ -152,7 +164,7 @@ class SignIn extends React.Component<MyProps, MyState> {
                 label="Email Address"
                 name="email"
                 autoComplete="email"
-                onChange={e => this.setState({ "email": e.target.value })}
+                onChange={(e) => this.setState({ email: e.target.value })}
                 autoFocus
               />
               <TextField
@@ -164,7 +176,7 @@ class SignIn extends React.Component<MyProps, MyState> {
                 label="Password"
                 type="password"
                 id="password"
-                onChange={e => this.setState({ "password": e.target.value })}
+                onChange={(e) => this.setState({ password: e.target.value })}
                 autoComplete="current-password"
               />
               <FormControlLabel
@@ -172,27 +184,26 @@ class SignIn extends React.Component<MyProps, MyState> {
                 control={<Checkbox value="remember" color="primary" />}
                 label="Remember me"
               />
-              {this.state.loginError && <p style={{ color: 'red' }}>{this.state.loginError}</p>}
+              {loginError && <p style={{ color: "red" }}>{loginError}</p>}
               <Button
                 type="submit"
                 fullWidth
                 variant="contained"
                 color="primary"
-
                 disabled={!this.validateForm}
                 className={classes.submit}
               >
                 Sign In
-                    </Button>
+              </Button>
               <Grid container>
                 <Grid style={{ textAlign: "left" }} item xs>
-                  <Link href="#" variant="body2">
+                  {/* <Link href="/" variant="body2">
                     Forgot password?
-                        </Link>
+                  </Link> */}
                 </Grid>
                 <Grid item>
                   <Link color="primary" href="/signup" variant="body2">
-                    {"Don't have an account? Sign Up"}
+                    Dont have an account? Sign Up
                   </Link>
                 </Grid>
               </Grid>
@@ -206,8 +217,6 @@ class SignIn extends React.Component<MyProps, MyState> {
 
 const SignIn2 = () => {
   const classes = useStyles();
-  return (
-    <SignIn classes={classes} />
-  )
+  return <SignIn classes={classes} />;
 };
 export default SignIn2;

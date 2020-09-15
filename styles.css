@@ -8,7 +8,8 @@
   align-items: center;
 }
 
-html, body {
+html,
+body {
   margin: 0;
   /* height: 100%;
   min-height: 100%; */
@@ -70,5 +71,5 @@ footer > .MuiContainer-root {
 .caret:before {
   bottom: -17px;
   right: -8px;
-  border-bottom-color: rgba(0,0,0,.15);
+  border-bottom-color: rgba(0, 0, 0, 0.15);
 }

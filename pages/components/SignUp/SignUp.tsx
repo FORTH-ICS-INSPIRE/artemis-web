@@ -1,17 +1,21 @@
-import React from 'react';
-import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import TextField from '@material-ui/core/TextField';
-import Link from '@material-ui/core/Link';
-import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
-import { orange, lightBlue, deepOrange, deepPurple } from '@material-ui/core/colors';
-import green from '@material-ui/core/colors/green';
-import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
-import cookie from 'js-cookie';
-import Router from 'next/router';
+import React from "react";
+import Button from "@material-ui/core/Button";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import TextField from "@material-ui/core/TextField";
+import Link from "@material-ui/core/Link";
+import Grid from "@material-ui/core/Grid";
+import Typography from "@material-ui/core/Typography";
+import { makeStyles , createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
+import Container from "@material-ui/core/Container";
+import {
+  orange,
+  lightBlue,
+  deepOrange,
+  deepPurple,
+} from "@material-ui/core/colors";
+
+import cookie from "js-cookie";
+import Router from "next/router";
 
 const palletType = "dark";
 const darkState = false;
@@ -21,78 +25,80 @@ const theme = createMuiTheme({
   palette: {
     type: palletType,
     primary: {
-      main: mainPrimaryColor
+      main: mainPrimaryColor,
     },
     secondary: {
-      main: mainSecondaryColor
-    }
-  }
+      main: mainSecondaryColor,
+    },
+  },
 });
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles((_theme) => ({
   paper: {
-    marginTop: theme.spacing(16),
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
+    marginTop: _theme.spacing(16),
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
   },
   avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
+    margin: _theme.spacing(1),
+    backgroundColor: _theme.palette.secondary.main,
   },
   form: {
-    width: '100%', // Fix IE 11 issue.
-    marginTop: theme.spacing(3),
+    width: "100%", // Fix IE 11 issue.
+    marginTop: _theme.spacing(3),
   },
   submit: {
-    margin: theme.spacing(3, 0, 2),
+    margin: _theme.spacing(3, 0, 2),
   },
   input: {
-    color: "#ffff"
-  }
+    color: "#ffff",
+  },
 }));
 
 type MyProps = {
   classes: {
-    paper: string,
-    avatar: string,
-    form: string,
-    submit: string,
-    input: string
-  }
+    paper: string;
+    avatar: string;
+    form: string;
+    submit: string;
+    input: string;
+  };
 };
 
 type MyState = {
-  email: string,
-  setEmail: string,
-  password: string,
-  setPassword: string,
-  signupError: string,
-  setSignupError: string,
-  username: string,
+  email: string;
+  password: string;
+  signupError: string;
+  username: string;
 };
 
 class SignUp extends React.Component<MyProps, MyState> {
   constructor(props: any) {
     super(props);
-    this.handleSubmit = this.handleSubmit.bind(this)
+    this.handleSubmit = this.handleSubmit.bind(this);
 
-    this.state = { email: "", username: "", setEmail: "", password: "", setPassword: "", signupError: "", setSignupError: "" };
+    this.state = {
+      email: "",
+      username: "",
+      password: "",
+      signupError: "",
+    };
   }
 
   handleSubmit = (e: any) => {
     e.preventDefault();
 
-    const email = this.state.email;
-    const password = this.state.password;
-    const username = this.state.username;
+    const {email} = this.state;
+    const {password} = this.state;
+    const {username} = this.state;
     this.setState = this.setState.bind(this);
 
     ((statef) => {
-      fetch('/api/users', {
-        method: 'POST',
+      fetch("/api/users", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           email,
@@ -102,33 +108,41 @@ class SignUp extends React.Component<MyProps, MyState> {
       })
         .then((r) => r.json())
         .then((data) => {
-          console.log(data);
           if (data && data.error) {
             statef({ signupError: data.message });
           }
           if (data && data.token) {
-            //set cookie
-            cookie.set('token', data.token, { expires: 2 });
-            Router.push('/');
+            // set cookie
+            cookie.set("token", data.token, { expires: 2 });
+            Router.push("/");
           }
         });
-    }
-    )(this.setState);
-  }
+    })(this.setState);
+  };
 
   render() {
-    const classes = this.props.classes;
+    const {classes} = this.props;
+    const {signupError} = this.state;
 
     return (
       <ThemeProvider theme={theme}>
         <Container component="main" maxWidth="sm">
           <CssBaseline />
           <div className={classes.paper}>
-            <img width="150" src={'https://demo.bgpartemis.org/images/log_in.png'} alt="avatar" className="img-responsive" />
+            <img
+              width="150"
+              src="https://demo.bgpartemis.org/images/log_in.png"
+              alt="avatar"
+              className="img-responsive"
+            />
             <Typography className={classes.input} component="h1" variant="h5">
               Sign up
-                </Typography>
-            <form onSubmit={this.handleSubmit} className={classes.form} noValidate>
+            </Typography>
+            <form
+              onSubmit={this.handleSubmit}
+              className={classes.form}
+              noValidate
+            >
               <Grid container spacing={2}>
                 <Grid item xs={12} sm={12}>
                   <TextField
@@ -139,7 +153,8 @@ class SignUp extends React.Component<MyProps, MyState> {
                     fullWidth
                     id="username"
                     label="Username"
-                    onChange={e => this.setState({ "username": e.target.value })}
+                    onChange={(e) =>
+                      this.setState({ username: e.target.value })}
                     autoFocus
                   />
                 </Grid>
@@ -152,7 +167,7 @@ class SignUp extends React.Component<MyProps, MyState> {
                     label="Email Address"
                     name="email"
                     autoComplete="email"
-                    onChange={e => this.setState({ "email": e.target.value })}
+                    onChange={(e) => this.setState({ email: e.target.value })}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -165,11 +180,14 @@ class SignUp extends React.Component<MyProps, MyState> {
                     type="password"
                     id="password"
                     autoComplete="current-password"
-                    onChange={e => this.setState({ "password": e.target.value })}
+                    onChange={(e) =>
+                      this.setState({ password: e.target.value })}
                   />
                 </Grid>
               </Grid>
-              {this.state.signupError && <p style={{ color: 'red' }}>{this.state.signupError}</p>}
+              {signupError && (
+                <p style={{ color: "red" }}>{signupError}</p>
+              )}
 
               <Button
                 type="submit"
@@ -179,12 +197,12 @@ class SignUp extends React.Component<MyProps, MyState> {
                 className={classes.submit}
               >
                 Sign Up
-                </Button>
+              </Button>
               <Grid container justify="flex-end">
                 <Grid item>
                   <Link href="/login" variant="body2">
                     Already have an account? Sign in
-                    </Link>
+                  </Link>
                 </Grid>
               </Grid>
             </form>
@@ -197,7 +215,5 @@ class SignUp extends React.Component<MyProps, MyState> {
 
 export default () => {
   const classes = useStyles();
-  return (
-    <SignUp classes={classes} />
-  )
+  return <SignUp classes={classes} />;
 };

@@ -1,16 +1,11 @@
-import React, { useState } from 'react';
-import Router from 'next/router';
-import cookie from 'js-cookie';
-import dynamic from 'next/dynamic';
-import useSWR from 'swr';
-import Head from 'next/head';
+import * as React from "react";
+import Router from "next/router";
+import dynamic from "next/dynamic";
+import useSWR from "swr";
+import Head from "next/head";
 
 const Login = () => {
-  const [loginError, setLoginError] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-
-  const { data, revalidate } = useSWR('/api/me', async function (args) {
+  const { data } = useSWR("/api/me", async function (args) {
     const res = await fetch(args);
     return res.json();
   });
@@ -20,13 +15,12 @@ const Login = () => {
 
   if (data.email) {
     loggedIn = true;
-    Router.push('/overview');
-  } else {
+    Router.push("/overview");
   }
 
-  const Footer = dynamic(() => import('./components/Footer/Footer'));
-  const SignIn2 = dynamic(() => import('./components/SignIn/SignIn'));
-  const Header = dynamic(() => import('./components/Header/Header'));
+  const Footer = dynamic(() => import("./components/Footer/Footer"));
+  const SignIn2 = dynamic(() => import("./components/SignIn/SignIn"));
+  const Header = dynamic(() => import("./components/Header/Header"));
 
   return (
     <>
@@ -34,11 +28,9 @@ const Login = () => {
         <title>ARTEMIS - Login</title>
       </Head>
       <div id="login-container">
-        <Header loggedIn={loggedIn}></Header>
+        <Header loggedIn={loggedIn} />
         <div id="content-wrap" style={{ paddingBottom: "5rem" }}>
-          {!loggedIn &&
-            <SignIn2 />
-          }
+          {!loggedIn && <SignIn2 />}
         </div>
         <Footer />
       </div>
