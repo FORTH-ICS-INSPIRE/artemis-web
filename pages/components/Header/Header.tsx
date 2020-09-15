@@ -31,17 +31,23 @@ class Header extends React.Component<MyProps> {
                   <>
                     <li className="nav-item">
                       <Link href="/overview">
-                        <a href="/#" className="nav-link">Overview</a>
+                        <a href="/#" className="nav-link">
+                          Overview
+                        </a>
                       </Link>
                     </li>
                     <li className="nav-item">
                       <Link href="/bgpupdates">
-                        <a href="/#" className="nav-link">BGP Updates</a>
+                        <a href="/#" className="nav-link">
+                          BGP Updates
+                        </a>
                       </Link>
                     </li>
                     <li className="nav-item">
                       <Link href="/hijacks">
-                        <a href="/#" className="nav-link">Hijacks</a>
+                        <a href="/#" className="nav-link">
+                          Hijacks
+                        </a>
                       </Link>
                     </li>
                   </>
@@ -63,12 +69,16 @@ class Header extends React.Component<MyProps> {
                   <>
                     <li id="security.login" className="nav-item">
                       <Link href="/login">
-                        <a href="/#" className="nav-link">Login</a>
+                        <a href="/#" className="nav-link">
+                          Login
+                        </a>
                       </Link>
                     </li>
                     <li id="security.register_user" className="nav-item">
                       <Link href="/signup">
-                        <a href="/#" className="nav-link">Create Account</a>
+                        <a href="/#" className="nav-link">
+                          Create Account
+                        </a>
                       </Link>
                     </li>
                   </>

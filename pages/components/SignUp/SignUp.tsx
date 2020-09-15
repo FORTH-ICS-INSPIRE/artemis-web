@@ -5,7 +5,11 @@ import TextField from "@material-ui/core/TextField";
 import Link from "@material-ui/core/Link";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
-import { makeStyles , createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
+import {
+  makeStyles,
+  createMuiTheme,
+  ThemeProvider,
+} from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import {
   orange,
@@ -89,9 +93,9 @@ class SignUp extends React.Component<MyProps, MyState> {
   handleSubmit = (e: any) => {
     e.preventDefault();
 
-    const {email} = this.state;
-    const {password} = this.state;
-    const {username} = this.state;
+    const { email } = this.state;
+    const { password } = this.state;
+    const { username } = this.state;
     this.setState = this.setState.bind(this);
 
     ((statef) => {
@@ -121,8 +125,8 @@ class SignUp extends React.Component<MyProps, MyState> {
   };
 
   render() {
-    const {classes} = this.props;
-    const {signupError} = this.state;
+    const { classes } = this.props;
+    const { signupError } = this.state;
 
     return (
       <ThemeProvider theme={theme}>
@@ -154,7 +158,8 @@ class SignUp extends React.Component<MyProps, MyState> {
                     id="username"
                     label="Username"
                     onChange={(e) =>
-                      this.setState({ username: e.target.value })}
+                      this.setState({ username: e.target.value })
+                    }
                     autoFocus
                   />
                 </Grid>
@@ -181,13 +186,12 @@ class SignUp extends React.Component<MyProps, MyState> {
                     id="password"
                     autoComplete="current-password"
                     onChange={(e) =>
-                      this.setState({ password: e.target.value })}
+                      this.setState({ password: e.target.value })
+                    }
                   />
                 </Grid>
               </Grid>
-              {signupError && (
-                <p style={{ color: "red" }}>{signupError}</p>
-              )}
+              {signupError && <p style={{ color: "red" }}>{signupError}</p>}
 
               <Button
                 type="submit"

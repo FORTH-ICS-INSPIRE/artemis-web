@@ -36,7 +36,8 @@ function Overview() {
         <div className="row">
           <div className="col-lg-1" />
           <div className="col-lg-10">
-            <h1 style={{ color: "white" }}>BGP Updates</h1>{" "}
+            <h1 style={{ color: "white" }}>BGP Updates</h1>
+            {" "}
             <hr style={{ backgroundColor: "white" }} />
           </div>
         </div>

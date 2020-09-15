@@ -35,7 +35,8 @@ function Overview() {
           <div className="row">
             <div className="col-lg-1" />
             <div className="col-lg-10">
-              <h1 style={{ color: "white" }}>Dashboard</h1>{" "}
+              <h1 style={{ color: "white" }}>Dashboard</h1>
+              {" "}
               <hr style={{ backgroundColor: "white" }} />
             </div>
           </div>
@@ -46,7 +47,8 @@ function Overview() {
                 <div className="card-header">Activity</div>
                 <div className="card-body">
                   Welcome back guest@guest.com, your last login was at
-                  (11-09-2020 05:22:16) from 172.26.0.11.{" "}
+                  (11-09-2020 05:22:16) from 172.26.0.11.
+                  {" "}
                 </div>
               </div>
             </div>

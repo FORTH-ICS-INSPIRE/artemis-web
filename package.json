@@ -9,8 +9,9 @@
     "dev": "next",
     "build": "next build",
     "start": "next start",
-    "prettier": "npx prettier --write pages/"
-  },
+    "format": "npx prettier --write pages/",
+    "lint": "npx eslint pages/*tsx pages/components/*/*tsx --fix"
+},
   "dependencies": {
     "@material-ui/core": "^4.11.0",
     "@types/node": "^14.6.4",

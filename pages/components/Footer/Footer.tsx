@@ -30,8 +30,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-
-
 type MyProps = {
   classes: {
     root: string;
@@ -42,8 +40,8 @@ type MyProps = {
 
 class Footer extends React.Component<MyProps> {
   render() {
-    const {classes} = this.props; 
-    const {root, footer, link} = classes;
+    const { classes } = this.props;
+    const { root, footer, link } = classes;
 
     return (
       <div className={root}>

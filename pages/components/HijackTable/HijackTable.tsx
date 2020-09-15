@@ -1,8 +1,5 @@
 import React from "react";
-// import Griddle from 'griddle-react';
-// import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 import BootstrapTable from "react-bootstrap-table-next";
-import Container from "@material-ui/core/Container";
 
 const products = [
   {
@@ -28,23 +25,27 @@ const columns = [
     sort: true,
     headerTitle: () =>
       "The timestamp of the newest known (to the system) BGP update that is related to the hijack.",
-    sortCaret: (order, column) => {
+    sortCaret: (order) => {
       if (!order)
         return (
           <span>
-            &nbsp;&nbsp;&darr;<span style={{ color: "red" }}>/&uarr;</span>
+            &nbsp;&nbsp;&darr;
+            <span style={{ color: "red" }}>/&uarr;</span>
           </span>
         );
-      else if (order === "asc")
+      if (order === "asc")
         return (
           <span>
-            &nbsp;&nbsp;&darr;<span style={{ color: "red" }}>/&uarr;</span>
+            &nbsp;&nbsp;&darr;
+            <span style={{ color: "red" }}>/&uarr;</span>
           </span>
         );
-      else if (order === "desc")
+      if (order === "desc")
         return (
           <span>
-            &nbsp;&nbsp;<span style={{ color: "red" }}>&darr;</span>/&uarr;
+            &nbsp;&nbsp;
+            <span style={{ color: "red" }}>&darr;</span>
+            /&uarr;
           </span>
         );
       return null;
@@ -56,23 +57,27 @@ const columns = [
     sort: true,
     headerTitle: () =>
       "The time when a hijack event was first detected by the system.",
-    sortCaret: (order, column) => {
+    sortCaret: (order) => {
       if (!order)
         return (
           <span>
-            &nbsp;&nbsp;&darr;<span style={{ color: "red" }}>/&uarr;</span>
+            &nbsp;&nbsp;&darr;
+            <span style={{ color: "red" }}>/&uarr;</span>
           </span>
         );
-      else if (order === "asc")
+      if (order === "asc")
         return (
           <span>
-            &nbsp;&nbsp;&darr;<span style={{ color: "red" }}>/&uarr;</span>
+            &nbsp;&nbsp;&darr;
+            <span style={{ color: "red" }}>/&uarr;</span>
           </span>
         );
-      else if (order === "desc")
+      if (order === "desc")
         return (
           <span>
-            &nbsp;&nbsp;<span style={{ color: "red" }}>&darr;</span>/&uarr;
+            &nbsp;&nbsp;
+            <span style={{ color: "red" }}>&darr;</span>
+            /&uarr;
           </span>
         );
       return null;
@@ -118,23 +123,27 @@ const columns = [
       "Number of peers/monitors (i.e., ASNs)</br>that have seen hijack updates.",
     text: "# Peers Seen",
     sort: true,
-    sortCaret: (order, column) => {
+    sortCaret: (order) => {
       if (!order)
         return (
           <span>
-            &nbsp;&nbsp;&darr;<span style={{ color: "red" }}>/&uarr;</span>
+            &nbsp;&nbsp;&darr;
+            <span style={{ color: "red" }}>/&uarr;</span>
           </span>
         );
-      else if (order === "asc")
+      if (order === "asc")
         return (
           <span>
-            &nbsp;&nbsp;&darr;<span style={{ color: "red" }}>/&uarr;</span>
+            &nbsp;&nbsp;&darr;
+            <span style={{ color: "red" }}>/&uarr;</span>
           </span>
         );
-      else if (order === "desc")
+      if (order === "desc")
         return (
           <span>
-            &nbsp;&nbsp;<span style={{ color: "red" }}>&darr;</span>/&uarr;
+            &nbsp;&nbsp;
+            <span style={{ color: "red" }}>&darr;</span>
+            /&uarr;
           </span>
         );
       return null;
@@ -146,23 +155,27 @@ const columns = [
     headerTitle: () =>
       "Number of infected ASes that seem to</br>route traffic towards the hijacker AS.</br>Note that this is an experimental field",
     sort: true,
-    sortCaret: (order, column) => {
+    sortCaret: (order) => {
       if (!order)
         return (
           <span>
-            &nbsp;&nbsp;&darr;<span style={{ color: "red" }}>/&uarr;</span>
+            &nbsp;&nbsp;&darr;
+            <span style={{ color: "red" }}>/&uarr;</span>
           </span>
         );
-      else if (order === "asc")
+      if (order === "asc")
         return (
           <span>
-            &nbsp;&nbsp;&darr;<span style={{ color: "red" }}>/&uarr;</span>
+            &nbsp;&nbsp;&darr;
+            <span style={{ color: "red" }}>/&uarr;</span>
           </span>
         );
-      else if (order === "desc")
+      if (order === "desc")
         return (
           <span>
-            &nbsp;&nbsp;<span style={{ color: "red" }}>&darr;</span>/&uarr;
+            &nbsp;&nbsp;
+            <span style={{ color: "red" }}>&darr;</span>
+            /&uarr;
           </span>
         );
       return null;
