@@ -1,27 +1,27 @@
-import React from "react";
-import Button from "@material-ui/core/Button";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import TextField from "@material-ui/core/TextField";
-import Link from "@material-ui/core/Link";
-import Grid from "@material-ui/core/Grid";
-import Typography from "@material-ui/core/Typography";
+import React from 'react';
+import Button from '@material-ui/core/Button';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import TextField from '@material-ui/core/TextField';
+import Link from '@material-ui/core/Link';
+import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
 import {
   makeStyles,
   createMuiTheme,
   ThemeProvider,
-} from "@material-ui/core/styles";
-import Container from "@material-ui/core/Container";
+} from '@material-ui/core/styles';
+import Container from '@material-ui/core/Container';
 import {
   orange,
   lightBlue,
   deepOrange,
   deepPurple,
-} from "@material-ui/core/colors";
+} from '@material-ui/core/colors';
 
-import cookie from "js-cookie";
-import Router from "next/router";
+import cookie from 'js-cookie';
+import Router from 'next/router';
 
-const palletType = "dark";
+const palletType = 'dark';
 const darkState = false;
 const mainPrimaryColor = darkState ? orange[500] : lightBlue[500];
 const mainSecondaryColor = darkState ? deepOrange[900] : deepPurple[500];
@@ -40,23 +40,23 @@ const theme = createMuiTheme({
 const useStyles = makeStyles((_theme) => ({
   paper: {
     marginTop: _theme.spacing(16),
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
   },
   avatar: {
     margin: _theme.spacing(1),
     backgroundColor: _theme.palette.secondary.main,
   },
   form: {
-    width: "100%", // Fix IE 11 issue.
+    width: '100%', // Fix IE 11 issue.
     marginTop: _theme.spacing(3),
   },
   submit: {
     margin: _theme.spacing(3, 0, 2),
   },
   input: {
-    color: "#ffff",
+    color: '#ffff',
   },
 }));
 
@@ -83,10 +83,10 @@ class SignUp extends React.Component<MyProps, MyState> {
     this.handleSubmit = this.handleSubmit.bind(this);
 
     this.state = {
-      email: "",
-      username: "",
-      password: "",
-      signupError: "",
+      email: '',
+      username: '',
+      password: '',
+      signupError: '',
     };
   }
 
@@ -99,10 +99,10 @@ class SignUp extends React.Component<MyProps, MyState> {
     this.setState = this.setState.bind(this);
 
     ((statef) => {
-      fetch("/api/users", {
-        method: "POST",
+      fetch('/api/users', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           email,
@@ -117,8 +117,8 @@ class SignUp extends React.Component<MyProps, MyState> {
           }
           if (data && data.token) {
             // set cookie
-            cookie.set("token", data.token, { expires: 2 });
-            Router.push("/");
+            cookie.set('token', data.token, { expires: 2 });
+            Router.push('/');
           }
         });
     })(this.setState);
@@ -158,7 +158,8 @@ class SignUp extends React.Component<MyProps, MyState> {
                     id="username"
                     label="Username"
                     onChange={(e) =>
-                      this.setState({ username: e.target.value })}
+                      this.setState({ username: e.target.value })
+                    }
                     autoFocus
                   />
                 </Grid>
@@ -185,11 +186,12 @@ class SignUp extends React.Component<MyProps, MyState> {
                     id="password"
                     autoComplete="current-password"
                     onChange={(e) =>
-                      this.setState({ password: e.target.value })}
+                      this.setState({ password: e.target.value })
+                    }
                   />
                 </Grid>
               </Grid>
-              {signupError && <p style={{ color: "red" }}>{signupError}</p>}
+              {signupError && <p style={{ color: 'red' }}>{signupError}</p>}
 
               <Button
                 type="submit"

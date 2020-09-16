@@ -1,7 +1,7 @@
-import React from "react";
-import Link from "next/link";
-import cookie from "js-cookie";
-import Router from "next/router";
+import React from 'react';
+import Link from 'next/link';
+import cookie from 'js-cookie';
+import Router from 'next/router';
 
 type MyProps = {
   loggedIn: boolean;
@@ -13,11 +13,14 @@ class Header extends React.Component<MyProps> {
 
     return (
       <>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"/>
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"/>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" />
+        <link
+          rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        />
         <nav
           className="navbar navbar-expand-md navbar-dark fixed-top bg-dark"
-          style={{ marginBottom: "20px" }}
+          style={{ marginBottom: '20px' }}
         >
           <div className="container">
             <a className="navbar-brand" href="/">
@@ -85,22 +88,20 @@ class Header extends React.Component<MyProps> {
                   </>
                 )}
                 {loggedIn && (
-                  <>
-                    <li id="security.login" className="nav-item">
+                  <li id="security.login" className="nav-item">
                       <a
                         href=""
                         className="nav-link"
                         onClick={() => {
-                          cookie.remove("token");
+                          cookie.remove('token');
                           //   revalidate();
-                          Router.push("/");
+                          Router.push('/');
                           window.location.reload(false);
                         }}
                       >
                         Logout
                       </a>
                     </li>
-                  </>
                 )}
               </ul>
             </div>
