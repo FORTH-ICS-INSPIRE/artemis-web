@@ -63,7 +63,7 @@ export default (req: any, res: any) => {
             }
             if (match) {
               const token = jwt.sign(
-                { userId: user.userId, email: user.email },
+                { userId: user.userId, email: user.email, role: user.role },
                 jwtSecret,
                 {
                   expiresIn: 3000, //50 minutes
