@@ -38,6 +38,7 @@ function createUser(
         email,
         password: hash,
         role: "user",
+        last_login: new Date(),
       },
       function (err: any, userCreated: any) {
         assert.equal(err, null);
@@ -85,6 +86,7 @@ export default (req: any, res: any) => {
                   email: user.email,
                   username: user.username,
                   role: user.role,
+                  last_login: new Date(),
                 },
                 jwtSecret,
                 {

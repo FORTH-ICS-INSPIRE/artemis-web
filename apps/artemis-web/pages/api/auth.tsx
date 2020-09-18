@@ -30,6 +30,11 @@ function authUser(
   bcrypt.compare(password, hash, callback);
 }
 
+const updateTime = (db:any, email: string) => {
+  const collection = db.collection('user');
+  collection.update({'email': email}, {$set:{'last_login': new Date()}});
+};
+
 export default (req: any, res: any) => {
   if (req.method === 'POST') {
     console.log(req);
@@ -62,8 +67,9 @@ export default (req: any, res: any) => {
               res.status(500).json({ error: true, message: 'Auth Failed' });
             }
             if (match) {
+              updateTime(db, email);
               const token = jwt.sign(
-                { userId: user.userId, email: user.email, role: user.role },
+                { userId: user.userId, username: user.username, email: user.email, role: user.role, last_login: user.last_login },
                 jwtSecret,
                 {
                   expiresIn: 3000, //50 minutes

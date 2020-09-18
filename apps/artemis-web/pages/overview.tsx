@@ -22,7 +22,7 @@ const Overview: React.FunctionComponent<{}> = () => {
   }
   const Footer = dynamic(() => import("../components/footer/footer"));
   const Header = dynamic(() => import("../components/header/header"));
-
+  const login_time = (new Date(data.last_login)).toLocaleString('en-US', { timeZone: 'Europe/Athens'});
   return (
     <>
       <Head>
@@ -46,8 +46,7 @@ const Overview: React.FunctionComponent<{}> = () => {
               <div className="card">
                 <div className="card-header">Activity</div>
                 <div className="card-body">
-                  Welcome back guest@guest.com, your last login was at
-                  (11-09-2020 05:22:16) from 172.26.0.11.
+                  Welcome back <b>{data.username}</b>, your last login was at ({ login_time }).
                   {" "}
                 </div>
               </div>
