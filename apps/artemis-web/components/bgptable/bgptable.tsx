@@ -129,12 +129,10 @@ const columns = [
   },
 ];
 
-class BGPTable extends React.Component {
-  render() {
+const BGPTable: React.FunctionComponent<{}> = () => {
     return (
       <BootstrapTable keyField="update" data={products} columns={columns} />
     );
-  }
-}
+};
 
 export default BGPTable;

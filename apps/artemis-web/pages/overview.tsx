@@ -6,7 +6,7 @@ import dynamic from "next/dynamic";
 import Head from "next/head";
 import HijackTable from "../components/ongoing-hijack-table/ongoing-hijack-table";
 
-function Overview() {
+const Overview: React.FunctionComponent<{}> = () => {
   const { data } = useSWR("/api/me", async function (args) {
     const res = await fetch(args);
     return res.json();
@@ -114,6 +114,6 @@ function Overview() {
       </div>
     </>
   );
-}
+};
 
 export default Overview;

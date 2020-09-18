@@ -6,7 +6,7 @@ import dynamic from "next/dynamic";
 import Head from "next/head";
 import BGPTable from "../components/bgptable/bgptable";
 
-function Overview() {
+const BGPUpdates: React.FunctionComponent<{}> = () => {
   const { data } = useSWR("/api/me", async function (args) {
     const res = await fetch(args);
     return res.json();
@@ -95,6 +95,6 @@ function Overview() {
       <Footer />
     </>
   );
-}
+};
 
-export default Overview;
+export default BGPUpdates;

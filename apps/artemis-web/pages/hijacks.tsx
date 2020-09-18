@@ -6,7 +6,7 @@ import dynamic from "next/dynamic";
 import Head from "next/head";
 import HijackTable from "../components/hijack-table/hijack-table";
 
-function Overview() {
+const Hijacks: React.FunctionComponent<{}> = () => {
   const { data } = useSWR("/api/me", async function (args) {
     const res = await fetch(args);
     return res.json();
@@ -94,6 +94,6 @@ function Overview() {
       <Footer />
     </>
   );
-}
+};
 
-export default Overview;
+export default Hijacks;

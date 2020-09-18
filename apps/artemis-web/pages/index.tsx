@@ -3,7 +3,7 @@ import useSWR from "swr";
 import Router from "next/router";
 import * as React from "react";
 
-function Home() {
+const Home: React.FunctionComponent<{}> = () => {
   const { data } = useSWR("/api/me", async function (args) {
     const res = await fetch(args);
     return res.json();
@@ -18,6 +18,6 @@ function Home() {
   }
 
   return <div />;
-}
+};
 
 export default Home;

@@ -199,12 +199,10 @@ const columns = [
   },
 ];
 
-class HijackTable extends React.Component {
-  render() {
+const HijackTable: React.FunctionComponent<{}> = () => {
     return (
       <BootstrapTable keyField="update" data={products} columns={columns} />
     );
-  }
-}
+};
 
 export default HijackTable;
