@@ -4,7 +4,7 @@ import dynamic from "next/dynamic";
 import useSWR from "swr";
 import Head from "next/head";
 
-const Login = () => {
+const Login: React.FunctionComponent<{}> = () => {
   const { data } = useSWR("/api/me", async function (args) {
     const res = await fetch(args);
     return res.json();
