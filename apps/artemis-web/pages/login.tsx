@@ -3,8 +3,11 @@ import Router from "next/router";
 import dynamic from "next/dynamic";
 import useSWR from "swr";
 import Head from "next/head";
+import { signIn, signOut, useSession } from 'next-auth/client';
 
 const Login: React.FunctionComponent<{}> = () => {
+  const [ session, loading ] = useSession()
+
   const { data } = useSWR("/api/me", async function (args) {
     const res = await fetch(args);
     return res.json();
