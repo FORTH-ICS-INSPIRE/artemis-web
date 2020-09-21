@@ -1,6 +1,7 @@
 import assert from 'assert';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import { NextApiRequest, NextApiResponse } from 'next';
 
 const MongoClient = require('mongodb').MongoClient;
 const jwtSecret = 'SUPERSECRETE20220';
@@ -34,7 +35,7 @@ const updateTime = (db: any, email: string) => {
   collection.update({ email: email }, { $set: { lastLogin: new Date() } });
 };
 
-export default (req: any, res: any) => {
+export default (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method === 'POST') {
     console.log(req);
     //login

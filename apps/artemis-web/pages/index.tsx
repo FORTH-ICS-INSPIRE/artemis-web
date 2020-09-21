@@ -4,6 +4,7 @@ import Router from "next/router";
 import * as React from "react";
 
 const Home: React.FunctionComponent<{}> = () => {
+
   const { data } = useSWR("/api/me", async function (args) {
     const res = await fetch(args);
     return res.json();

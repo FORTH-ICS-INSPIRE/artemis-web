@@ -103,7 +103,7 @@ class SignIn extends React.Component<MyProps, MyState> {
 
     ((statef) => {
       // call api
-      fetch('/api/auth', {
+      fetch('/api/_auth', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
