@@ -14,25 +14,24 @@ const client = new MongoClient(url, {
   useUnifiedTopology: true,
 });
 
-function findUser(db: any, email: string, callback: any) {
+const findUser = (db: any, email: string, callback: any) => {
   const collection = db.collection('user');
   collection.findOne({ email }, callback);
-}
+};
 
-function authUser(
+const authUser = (
   db: any,
   email: string,
   password: string,
   hash: string,
   callback: any
-) {
-  const collection = db.collection('user');
+) => {
   bcrypt.compare(password, hash, callback);
-}
+};
 
-const updateTime = (db:any, email: string) => {
+const updateTime = (db: any, email: string) => {
   const collection = db.collection('user');
-  collection.update({'email': email}, {$set:{'last_login': new Date()}});
+  collection.update({ email: email }, { $set: { lastLogin: new Date() } });
 };
 
 export default (req: any, res: any) => {
@@ -64,12 +63,18 @@ export default (req: any, res: any) => {
         } else {
           authUser(db, email, password, user.password, function (err, match) {
             if (err) {
-              res.status(500).json({ error: true, message: 'Auth Failed' });
+              res.status(500).json({ error: true, message: 'Authentication Failed' });
             }
             if (match) {
               updateTime(db, email);
               const token = jwt.sign(
-                { userId: user.userId, username: user.username, email: user.email, role: user.role, last_login: user.last_login },
+                {
+                  userId: user.userId,
+                  username: user.username,
+                  email: user.email,
+                  role: user.role,
+                  lastLogin: user.lastLogin,
+                },
                 jwtSecret,
                 {
                   expiresIn: 3000, //50 minutes
@@ -78,7 +83,7 @@ export default (req: any, res: any) => {
               res.status(200).json({ token });
               return;
             } else {
-              res.status(401).json({ error: true, message: 'Auth Failed' });
+              res.status(401).json({ error: true, message: 'Authentication Failed' });
               return;
             }
           });
@@ -87,7 +92,6 @@ export default (req: any, res: any) => {
     });
   } else {
     // Handle any other HTTP method
-    res.statusCode = 401;
-    res.end();
+    res.status(405).end();
   }
 };
