@@ -74,6 +74,7 @@ type MyProps = {
     input: string;
     main: string;
   };
+  call: (event: any) => void;
 };
 
 type MyState = {
@@ -136,7 +137,7 @@ class SignIn extends React.Component<MyProps, MyState> {
   }
 
   render() {
-    const { classes } = this.props;
+    const { classes, call } = this.props;
     const { loginError } = this.state;
     return (
       <ThemeProvider theme={theme}>
@@ -194,6 +195,16 @@ class SignIn extends React.Component<MyProps, MyState> {
               >
                 Sign In
               </Button>
+                <Button
+                fullWidth
+                variant="contained"
+                color="primary"
+                onClick={call}
+                disabled={!this.validateForm}
+                className={classes.submit}
+              >
+                Sign In with GitHub
+              </Button>
               <Grid container>
                 <Grid style={{ textAlign: 'left' }} item xs>
                   {/* <Link href="/" variant="body2">
@@ -214,8 +225,8 @@ class SignIn extends React.Component<MyProps, MyState> {
   }
 }
 
-const SignIn2 = () => {
+const SignIn2 = (props) => {
   const classes = useStyles();
-  return <SignIn classes={classes} />;
+  return <SignIn classes={classes} call={props.call} />;
 };
 export default SignIn2;

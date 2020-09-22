@@ -2,14 +2,17 @@ import React from 'react';
 import Link from 'next/link';
 import cookie from 'js-cookie';
 import Router from 'next/router';
+import { signIn, signOut, useSession } from 'next-auth/client';
+// const [session, loading] = useSession();
 
 type MyProps = {
   loggedIn: boolean;
+  call: (event: any) => void;
 };
 
 class Header extends React.Component<MyProps> {
   render() {
-    const { loggedIn } = this.props;
+    const { loggedIn, call } = this.props;
 
     return (
       <>
@@ -88,20 +91,18 @@ class Header extends React.Component<MyProps> {
                   </>
                 )}
                 {loggedIn && (
-                  <li id="security.login" className="nav-item">
-                      <a
-                        href=""
-                        className="nav-link"
-                        onClick={() => {
-                          cookie.remove('token');
-                          //   revalidate();
-                          Router.push('/');
-                          window.location.reload(false);
-                        }}
-                      >
-                        Logout
-                      </a>
-                    </li>
+                  <li className="nav-item">
+                    <a
+                      href={`/api/auth/signout`}
+                      className='nav-link'
+                      onClick={(e) => {
+                        e.preventDefault();
+                        signOut();
+                      }}
+                    >
+                      Sign out
+                    </a>
+                  </li>
                 )}
               </ul>
             </div>

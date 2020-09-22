@@ -5,17 +5,20 @@ import Router from "next/router";
 import dynamic from "next/dynamic";
 import Head from "next/head";
 import HijackTable from "../components/ongoing-hijack-table/ongoing-hijack-table";
+import { signIn, signOut, useSession } from 'next-auth/client';
+import cookie from 'js-cookie';
 
 const Overview: React.FunctionComponent<{}> = () => {
+  const [ session, loading ] = useSession();
   const { data } = useSWR("/api/me", async function (args) {
     const res = await fetch(args);
     return res.json();
   });
 
-  if (!data) return <h1>Loading...</h1>;
+  if (!data || loading) return <h1>Loading...</h1>;
   let loggedIn = false;
 
-  if (data.email) {
+  if (data.email || session) {
     loggedIn = true;
   } else {
     Router.push("/login");
@@ -23,6 +26,12 @@ const Overview: React.FunctionComponent<{}> = () => {
   const Footer = dynamic(() => import("../components/footer/footer"));
   const Header = dynamic(() => import("../components/header/header"));
   const loginTime = (new Date(data.lastLogin)).toLocaleString('en-US', { timeZone: 'Europe/Athens'});
+  const logout = () => {
+    cookie.remove('token');
+    //   revalidate();
+    Router.push('/');
+    // window.location.reload(false);
+  }
   return (
     <>
       <Head>
@@ -30,7 +39,7 @@ const Overview: React.FunctionComponent<{}> = () => {
       </Head>
 
       <div id="page-container" style={{ paddingTop: "120px" }}>
-        <Header loggedIn={loggedIn} />
+        <Header loggedIn={loggedIn || session} call={session? signOut: logout} />
         <div id="content-wrap" style={{ paddingBottom: "5rem" }}>
           <div className="row">
             <div className="col-lg-1" />
