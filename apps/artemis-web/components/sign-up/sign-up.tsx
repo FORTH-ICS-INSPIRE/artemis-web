@@ -68,6 +68,8 @@ type MyProps = {
     submit: string;
     input: string;
   };
+  csrf: any;
+  loggedIn:any;
 };
 
 type MyState = {
@@ -80,7 +82,10 @@ type MyState = {
 class SignUp extends React.Component<MyProps, MyState> {
   constructor(props: any) {
     super(props);
-    this.handleSubmit = this.handleSubmit.bind(this);
+    if (props.loggedIn) {
+      Router.push("/overview");
+    }
+    // this.handleSubmit = this.handleSubmit.bind(this);
 
     this.state = {
       email: '',
@@ -90,44 +95,44 @@ class SignUp extends React.Component<MyProps, MyState> {
     };
   }
 
-  handleSubmit = (e: any) => {
-    e.preventDefault();
+  // handleSubmit = (e: any) => {
+  //   e.preventDefault();
 
-    const { email } = this.state;
-    const { password } = this.state;
-    const { username } = this.state;
-    this.setState = this.setState.bind(this);
+  //   const { email } = this.state;
+  //   const { password } = this.state;
+  //   const { username } = this.state;
+  //   this.setState = this.setState.bind(this);
 
-    ((statef) => {
-      fetch('/api/users', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email,
-          password,
-          username,
-        }),
-      })
-        .then((r) => r.json())
-        .then((data) => {
-          if (data && data.error) {
-            statef({ signupError: data.message });
-          }
-          if (data && data.token) {
-            // set cookie
-            cookie.set('token', data.token, { expires: 2 });
-            Router.push('/');
-          }
-        });
-    })(this.setState);
-  };
+  //   ((statef) => {
+  //     fetch('/api/users', {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: JSON.stringify({
+  //         email,
+  //         password,
+  //         username,
+  //       }),
+  //     })
+  //       .then((r) => r.json())
+  //       .then((data) => {
+  //         if (data && data.error) {
+  //           statef({ signupError: data.message });
+  //         }
+  //         if (data && data.token) {
+  //           // set cookie
+  //           cookie.set('token', data.token, { expires: 2 });
+  //           Router.push('/');
+  //         }
+  //       });
+  //   })(this.setState);
+  // };
 
   render() {
-    const { classes } = this.props;
+    const { classes, csrf } = this.props;
     const { signupError } = this.state;
-
+    
     return (
       <ThemeProvider theme={theme}>
         <Container component="main" maxWidth="sm">
@@ -143,10 +148,12 @@ class SignUp extends React.Component<MyProps, MyState> {
               Sign up
             </Typography>
             <form
-              onSubmit={this.handleSubmit}
+              method="post"
+              action="/api/auth/callback/credentials"
               className={classes.form}
-              noValidate
             >
+              <input name="csrfToken" type="hidden" defaultValue={csrf} />
+              <input name="stype" type="hidden" defaultValue="signup" />
               <Grid container spacing={2}>
                 <Grid item xs={12} sm={12}>
                   <TextField
@@ -217,7 +224,7 @@ class SignUp extends React.Component<MyProps, MyState> {
   }
 }
 
-export default () => {
+export default (props) => {
   const classes = useStyles();
-  return <SignUp classes={classes} />;
+  return <SignUp classes={classes} csrf={props.csrf} loggedIn={props.loggedIn} />;
 };

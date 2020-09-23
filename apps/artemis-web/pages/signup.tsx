@@ -3,17 +3,16 @@ import Router from "next/router";
 import dynamic from "next/dynamic";
 import useSWR from "swr";
 import Head from "next/head";
+import { csrfToken, getSession } from 'next-auth/client'
+import { signIn, signOut, useSession } from 'next-auth/client';
 
-const Signup: React.FunctionComponent<{}> = () => {
-  const { data } = useSWR("/api/me", async function (args) {
-    const res = await fetch(args);
-    return res.json();
-  });
-
-  if (!data) return <h1>Loading...</h1>;
+const Signup = ({ csrfToken }) => {
+  const [ session, loading ] = useSession();
   let loggedIn = false;
 
-  if (data.email) {
+  if (loading) return <h1>Loading...</h1>;
+  // let loggedIn = false;
+  if (session) {
     loggedIn = true;
     Router.push("/overview");
   }
@@ -27,11 +26,11 @@ const Signup: React.FunctionComponent<{}> = () => {
         <title>ARTEMIS - Sign Up</title>
       </Head>
       <div id="page-container">
-        <Header loggedIn={loggedIn} />
+        <Header loggedIn={false} call={signOut} />
         <div id="content-wrap" style={{ paddingBottom: "5rem" }}>
           {!loggedIn && (
             <div className="container d-flex align-items-center flex-column">
-              <SignUp />
+              <SignUp csrf={csrfToken} loggedIn={loggedIn} />
             </div>
           )}
         </div>
@@ -40,5 +39,11 @@ const Signup: React.FunctionComponent<{}> = () => {
     </>
   );
 };
+
+Signup.getInitialProps = async (context) => {
+  return {
+    csrfToken: await csrfToken(context)
+  }
+}
 
 export default Signup;

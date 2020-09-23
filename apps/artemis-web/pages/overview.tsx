@@ -7,31 +7,23 @@ import Head from "next/head";
 import HijackTable from "../components/ongoing-hijack-table/ongoing-hijack-table";
 import { signIn, signOut, useSession } from 'next-auth/client';
 import cookie from 'js-cookie';
+import { csrfToken, getSession } from 'next-auth/client'
 
-const Overview: React.FunctionComponent<{}> = () => {
+const Overview = ({ csrfToken }) => {
   const [ session, loading ] = useSession();
-  const { data } = useSWR("/api/me", async function (args) {
-    const res = await fetch(args);
-    return res.json();
-  });
 
-  if (!data || loading) return <h1>Loading...</h1>;
+  if (loading) return <h1>Loading...</h1>;
   let loggedIn = false;
 
-  if (data.email || session) {
+  if (session) {
     loggedIn = true;
   } else {
-    Router.push("/login");
+    // Router.push("/login");
   }
   const Footer = dynamic(() => import("../components/footer/footer"));
   const Header = dynamic(() => import("../components/header/header"));
-  const loginTime = (new Date(data.lastLogin)).toLocaleString('en-US', { timeZone: 'Europe/Athens'});
-  const logout = () => {
-    cookie.remove('token');
-    //   revalidate();
-    Router.push('/');
-    // window.location.reload(false);
-  }
+  const loginTime = (new Date()).toLocaleString('en-US', { timeZone: 'Europe/Athens'});
+
   return (
     <>
       <Head>
@@ -39,7 +31,7 @@ const Overview: React.FunctionComponent<{}> = () => {
       </Head>
 
       <div id="page-container" style={{ paddingTop: "120px" }}>
-        <Header loggedIn={loggedIn || session} call={session? signOut: logout} />
+        <Header loggedIn={loggedIn} call={signOut} />
         <div id="content-wrap" style={{ paddingBottom: "5rem" }}>
           <div className="row">
             <div className="col-lg-1" />
@@ -55,7 +47,7 @@ const Overview: React.FunctionComponent<{}> = () => {
               <div className="card">
                 <div className="card-header">Activity</div>
                 <div className="card-body">
-                  Welcome back <b>{data.username}</b>, your last login was at ({ loginTime }).
+                  Welcome back <b>{session.user && session.user.username}</b>, your last login was at ({ session.user && session.user.lastLogin }).
                   {" "}
                 </div>
               </div>
@@ -123,5 +115,11 @@ const Overview: React.FunctionComponent<{}> = () => {
     </>
   );
 };
+
+Overview.getInitialProps = async (context) => {
+  return {
+    csrfToken: await csrfToken(context)
+  }
+}
 
 export default Overview;

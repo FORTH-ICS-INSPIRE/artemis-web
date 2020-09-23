@@ -7,35 +7,16 @@ import { signIn, signOut, useSession } from 'next-auth/client';
 import cookie from 'js-cookie';
 import { csrfToken, getSession } from 'next-auth/client'
 
-async function myFunction() {
-  const session = await getSession()
-  // console.log(session)
-  /* ... */
-}
-
 const Login = ({ csrfToken }) => {
-  
   const [ session, loading ] = useSession();
-  // myFunction();
+  let loggedIn = false;
 
-  // const { data } = useSWR("/api/me", async function (args) {
-  //   const res = await fetch(args);
-  //   return res.json();
-  // });
-
-  // if (!data || loading) return <h1>Loading...</h1>;
+  if (loading) return <h1>Loading...</h1>;
   // let loggedIn = false;
-
-  // if (data.email || session) {
-  //   loggedIn = true;
-  //   // Router.push("/overview");
-  // }
-  // const logout = () => {
-  //   cookie.remove('token');
-  //   //   revalidate();
-  //   Router.push('/');
-  //   // window.location.reload(false);
-  // }
+  if (session) {
+    loggedIn = true;
+    // Router.push("/overview");
+  }
 
   const Footer = dynamic(() => import("../components/footer/footer"));
   const SignIn2 = dynamic(() => import("../components/sign-in/sign-in"));
@@ -49,7 +30,7 @@ const Login = ({ csrfToken }) => {
       <div id="login-container">
         <Header loggedIn={false} call={signOut} />
         <div id="content-wrap" style={{ paddingBottom: "5rem" }}>
-        <SignIn2 csrf={csrfToken} />
+        <SignIn2 csrf={csrfToken} loggedIn={loggedIn} />
         </div>
         <Footer />
       </div>

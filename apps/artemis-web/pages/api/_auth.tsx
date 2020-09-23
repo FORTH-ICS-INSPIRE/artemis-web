@@ -37,7 +37,7 @@ const updateTime = (db: any, email: string) => {
 
 export default (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method === 'POST') {
-    console.log(req);
+    // console.log(req);
     //login
     try {
       assert.notEqual(null, req.body.email, 'Email required');
