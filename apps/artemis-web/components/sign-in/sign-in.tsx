@@ -91,7 +91,7 @@ class SignIn extends React.Component<MyProps, MyState> {
     super(props);
 
     if (props.loggedIn) {
-      Router.push("/overview");
+      Router.push('/overview');
     }
     // this.handleSubmit = this.handleSubmit.bind(this);
 
@@ -201,6 +201,8 @@ class SignIn extends React.Component<MyProps, MyState> {
 
 const SignIn2 = (props) => {
   const classes = useStyles();
-  return <SignIn classes={classes} csrf={props.csrf} loggedIn={props.loggedIn} />;
+  return (
+    <SignIn classes={classes} csrf={props.csrf} loggedIn={props.loggedIn} />
+  );
 };
 export default SignIn2;

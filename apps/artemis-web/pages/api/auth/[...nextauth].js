@@ -78,29 +78,31 @@ const options = {
             return Promise.resolve(null);
           }
         } else {
-          console.log('signup')
-            let mHash;
-            await bcrypt.hash(password, saltRounds).then((hash) => mHash = hash);
-            // Store hash in your password DB.
-            await db
-              .collection('user').insertOne(
-              {
-                userId: v4(),
-                username,
-                email,
-                password: hash,
-                role: "user",
-                lastLogin: new Date(),
-              }
-            ).then((err) => err);
-
-            return Promise.resolve({
+          console.log('signup');
+          let mHash;
+          await bcrypt
+            .hash(password, saltRounds)
+            .then((hash) => (mHash = hash));
+          // Store hash in your password DB.
+          await db
+            .collection('user')
+            .insertOne({
               userId: v4(),
               username,
               email,
-              role: "user",
+              password: hash,
+              role: 'user',
               lastLogin: new Date(),
-            });
+            })
+            .then((err) => err);
+
+          return Promise.resolve({
+            userId: v4(),
+            username,
+            email,
+            role: 'user',
+            lastLogin: new Date(),
+          });
         }
       },
     }),

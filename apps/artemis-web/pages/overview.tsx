@@ -1,16 +1,16 @@
-import * as React from "react";
-import fetch from "isomorphic-unfetch";
-import useSWR from "swr";
-import Router from "next/router";
-import dynamic from "next/dynamic";
-import Head from "next/head";
-import HijackTable from "../components/ongoing-hijack-table/ongoing-hijack-table";
+import * as React from 'react';
+import fetch from 'isomorphic-unfetch';
+import useSWR from 'swr';
+import Router from 'next/router';
+import dynamic from 'next/dynamic';
+import Head from 'next/head';
+import HijackTable from '../components/ongoing-hijack-table/ongoing-hijack-table';
 import { signIn, signOut, useSession } from 'next-auth/client';
 import cookie from 'js-cookie';
-import { csrfToken, getSession } from 'next-auth/client'
+import { csrfToken, getSession } from 'next-auth/client';
 
 const Overview = ({ csrfToken }) => {
-  const [ session, loading ] = useSession();
+  const [session, loading] = useSession();
 
   if (loading) return <h1>Loading...</h1>;
   let loggedIn = false;
@@ -20,9 +20,11 @@ const Overview = ({ csrfToken }) => {
   } else {
     // Router.push("/login");
   }
-  const Footer = dynamic(() => import("../components/footer/footer"));
-  const Header = dynamic(() => import("../components/header/header"));
-  const loginTime = (new Date()).toLocaleString('en-US', { timeZone: 'Europe/Athens'});
+  const Footer = dynamic(() => import('../components/footer/footer'));
+  const Header = dynamic(() => import('../components/header/header'));
+  const loginTime = new Date().toLocaleString('en-US', {
+    timeZone: 'Europe/Athens',
+  });
 
   return (
     <>
@@ -30,15 +32,14 @@ const Overview = ({ csrfToken }) => {
         <title>ARTEMIS - Overview</title>
       </Head>
 
-      <div id="page-container" style={{ paddingTop: "120px" }}>
+      <div id="page-container" style={{ paddingTop: '120px' }}>
         <Header loggedIn={loggedIn} call={signOut} />
-        <div id="content-wrap" style={{ paddingBottom: "5rem" }}>
+        <div id="content-wrap" style={{ paddingBottom: '5rem' }}>
           <div className="row">
             <div className="col-lg-1" />
             <div className="col-lg-10">
-              <h1 style={{ color: "white" }}>Dashboard</h1>
-              {" "}
-              <hr style={{ backgroundColor: "white" }} />
+              <h1 style={{ color: 'white' }}>Dashboard</h1>{' '}
+              <hr style={{ backgroundColor: 'white' }} />
             </div>
           </div>
           <div className="row">
@@ -47,13 +48,14 @@ const Overview = ({ csrfToken }) => {
               <div className="card">
                 <div className="card-header">Activity</div>
                 <div className="card-body">
-                  Welcome back <b>{session.user && session.user.username}</b>, your last login was at ({ session.user && session.user.lastLogin }).
-                  {" "}
+                  Welcome back <b>{session.user && session.user.username}</b>,
+                  your last login was at (
+                  {session.user && session.user.lastLogin}).{' '}
                 </div>
               </div>
             </div>
           </div>
-          <div className="row" style={{ marginTop: "20px" }}>
+          <div className="row" style={{ marginTop: '20px' }}>
             <div className="col-lg-1" />
             <div className="col-lg-10">
               <div className="card">
@@ -64,7 +66,7 @@ const Overview = ({ csrfToken }) => {
               </div>
             </div>
           </div>
-          <div className="row" style={{ marginTop: "20px" }}>
+          <div className="row" style={{ marginTop: '20px' }}>
             <div className="col-lg-1" />
             <div className="col-lg-5">
               <div className="card">
@@ -118,8 +120,8 @@ const Overview = ({ csrfToken }) => {
 
 Overview.getInitialProps = async (context) => {
   return {
-    csrfToken: await csrfToken(context)
-  }
-}
+    csrfToken: await csrfToken(context),
+  };
+};
 
 export default Overview;
