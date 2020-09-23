@@ -74,7 +74,7 @@ type MyProps = {
     input: string;
     main: string;
   };
-  call: (event: any) => void;
+  csrf: any;
 };
 
 type MyState = {
@@ -137,7 +137,7 @@ class SignIn extends React.Component<MyProps, MyState> {
   }
 
   render() {
-    const { classes, call } = this.props;
+    const { classes, csrf } = this.props;
     const { loginError } = this.state;
     return (
       <ThemeProvider theme={theme}>
@@ -153,7 +153,8 @@ class SignIn extends React.Component<MyProps, MyState> {
             <Typography className={classes.input} component="h1" variant="h5">
               Sign in
             </Typography>
-            <form className={classes.form} onSubmit={this.handleSubmit}>
+            <form method='post' action='/api/auth/callback/credentials'>
+                <input name='csrfToken' type='hidden' defaultValue={csrf}/>
               <TextField
                 variant="outlined"
                 margin="normal"
@@ -199,7 +200,7 @@ class SignIn extends React.Component<MyProps, MyState> {
                 fullWidth
                 variant="contained"
                 color="primary"
-                onClick={call}
+                // onClick={call}
                 disabled={!this.validateForm}
                 className={classes.submit}
               >
@@ -227,6 +228,6 @@ class SignIn extends React.Component<MyProps, MyState> {
 
 const SignIn2 = (props) => {
   const classes = useStyles();
-  return <SignIn classes={classes} call={props.call} />;
+  return <SignIn classes={classes} csrf={props.csrf} />;
 };
 export default SignIn2;
