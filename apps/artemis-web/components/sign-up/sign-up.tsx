@@ -69,7 +69,7 @@ type MyProps = {
     input: string;
   };
   csrf: any;
-  loggedIn:any;
+  loggedIn: any;
 };
 
 type MyState = {
@@ -83,7 +83,7 @@ class SignUp extends React.Component<MyProps, MyState> {
   constructor(props: any) {
     super(props);
     if (props.loggedIn) {
-      Router.push("/overview");
+      Router.push('/overview');
     }
     // this.handleSubmit = this.handleSubmit.bind(this);
 
@@ -132,7 +132,7 @@ class SignUp extends React.Component<MyProps, MyState> {
   render() {
     const { classes, csrf } = this.props;
     const { signupError } = this.state;
-    
+
     return (
       <ThemeProvider theme={theme}>
         <Container component="main" maxWidth="sm">
@@ -226,5 +226,7 @@ class SignUp extends React.Component<MyProps, MyState> {
 
 export default (props) => {
   const classes = useStyles();
-  return <SignUp classes={classes} csrf={props.csrf} loggedIn={props.loggedIn} />;
+  return (
+    <SignUp classes={classes} csrf={props.csrf} loggedIn={props.loggedIn} />
+  );
 };

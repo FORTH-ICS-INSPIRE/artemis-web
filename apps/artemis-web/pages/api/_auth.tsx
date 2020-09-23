@@ -64,7 +64,9 @@ export default (req: NextApiRequest, res: NextApiResponse) => {
         } else {
           authUser(db, email, password, user.password, function (err, match) {
             if (err) {
-              res.status(500).json({ error: true, message: 'Authentication Failed' });
+              res
+                .status(500)
+                .json({ error: true, message: 'Authentication Failed' });
             }
             if (match) {
               updateTime(db, email);
@@ -84,7 +86,9 @@ export default (req: NextApiRequest, res: NextApiResponse) => {
               res.status(200).json({ token });
               return;
             } else {
-              res.status(401).json({ error: true, message: 'Authentication Failed' });
+              res
+                .status(401)
+                .json({ error: true, message: 'Authentication Failed' });
               return;
             }
           });

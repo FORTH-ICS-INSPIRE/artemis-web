@@ -1,13 +1,13 @@
-import React from "react";
-import fetch from "isomorphic-unfetch";
-import useSWR from "swr";
-import Router from "next/router";
-import dynamic from "next/dynamic";
-import Head from "next/head";
-import BGPTable from "../components/bgptable/bgptable";
+import React from 'react';
+import fetch from 'isomorphic-unfetch';
+import useSWR from 'swr';
+import Router from 'next/router';
+import dynamic from 'next/dynamic';
+import Head from 'next/head';
+import BGPTable from '../components/bgptable/bgptable';
 
 const BGPUpdates: React.FunctionComponent<{}> = () => {
-  const { data } = useSWR("/api/me", async function (args) {
+  const { data } = useSWR('/api/me', async function (args) {
     const res = await fetch(args);
     return res.json();
   });
@@ -18,10 +18,10 @@ const BGPUpdates: React.FunctionComponent<{}> = () => {
   if (data.email) {
     loggedIn = true;
   } else {
-    Router.push("/login");
+    Router.push('/login');
   }
-  const Footer = dynamic(() => import("../components/footer/footer"));
-  const Header = dynamic(() => import("../components/header/header"));
+  const Footer = dynamic(() => import('../components/footer/footer'));
+  const Header = dynamic(() => import('../components/header/header'));
 
   return (
     <>
@@ -31,17 +31,16 @@ const BGPUpdates: React.FunctionComponent<{}> = () => {
       <Header loggedIn={loggedIn} />
       <div
         className="container overview col-lg-12"
-        style={{ paddingTop: "120px" }}
+        style={{ paddingTop: '120px' }}
       >
         <div className="row">
           <div className="col-lg-1" />
           <div className="col-lg-10">
-            <h1 style={{ color: "white" }}>BGP Updates</h1>
-            {" "}
-            <hr style={{ backgroundColor: "white" }} />
+            <h1 style={{ color: 'white' }}>BGP Updates</h1>{' '}
+            <hr style={{ backgroundColor: 'white' }} />
           </div>
         </div>
-        <div className="row" style={{ marginTop: "20px" }}>
+        <div className="row" style={{ marginTop: '20px' }}>
           <div className="col-lg-1" />
           <div className="col-lg-10">
             <div className="card">
@@ -52,7 +51,7 @@ const BGPUpdates: React.FunctionComponent<{}> = () => {
             </div>
           </div>
         </div>
-        <div className="row" style={{ marginTop: "20px" }}>
+        <div className="row" style={{ marginTop: '20px' }}>
           <div className="col-lg-1" />
           <div className="col-lg-10">
             <div className="card">

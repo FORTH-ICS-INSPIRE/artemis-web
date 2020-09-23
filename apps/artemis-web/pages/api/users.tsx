@@ -37,7 +37,7 @@ function createUser(
         username,
         email,
         password: hash,
-        role: "user",
+        role: 'user',
         lastLogin: new Date(),
       },
       function (err: any, userCreated: any) {

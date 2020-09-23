@@ -1,61 +1,61 @@
-import React from "react";
-import BootstrapTable from "react-bootstrap-table-next";
+import React from 'react';
+import BootstrapTable from 'react-bootstrap-table-next';
 
 const products = [
   {
     update: 20,
-    time: "sfsf",
+    time: 'sfsf',
     hprefix: 3,
     mprefix: 3,
-    type: "fsdf",
-    as: "dsfsd",
-    rpki: "dfssd",
+    type: 'fsdf',
+    as: 'dsfsd',
+    rpki: 'dfssd',
     peers: 3,
     ASes: 2,
     ack: 0,
-    more: "aa",
+    more: 'aa',
   },
   {
     update: 23,
-    time: "sfsf",
+    time: 'sfsf',
     hprefix: 3,
     mprefix: 3,
-    type: "fsdf",
-    as: "dsfsd",
-    rpki: "dfssd",
+    type: 'fsdf',
+    as: 'dsfsd',
+    rpki: 'dfssd',
     peers: 3,
     ASes: 2,
     ack: 0,
-    more: "aa",
+    more: 'aa',
   },
 ];
 const columns = [
   {
-    dataField: "update",
-    text: "Last Update",
+    dataField: 'update',
+    text: 'Last Update',
     sort: true,
     headerTitle: () =>
-      "The timestamp of the newest known (to the system) BGP update that is related to the hijack.",
+      'The timestamp of the newest known (to the system) BGP update that is related to the hijack.',
     sortCaret: (order) => {
       if (!order)
         return (
           <span>
             &nbsp;&nbsp;&darr;
-            <span style={{ color: "red" }}>/&uarr;</span>
+            <span style={{ color: 'red' }}>/&uarr;</span>
           </span>
         );
-      if (order === "asc")
+      if (order === 'asc')
         return (
           <span>
             &nbsp;&nbsp;&darr;
-            <span style={{ color: "red" }}>/&uarr;</span>
+            <span style={{ color: 'red' }}>/&uarr;</span>
           </span>
         );
-      if (order === "desc")
+      if (order === 'desc')
         return (
           <span>
             &nbsp;&nbsp;
-            <span style={{ color: "red" }}>&darr;</span>
+            <span style={{ color: 'red' }}>&darr;</span>
             /&uarr;
           </span>
         );
@@ -63,31 +63,31 @@ const columns = [
     },
   },
   {
-    dataField: "time",
-    text: "Time Detected",
+    dataField: 'time',
+    text: 'Time Detected',
     sort: true,
     headerTitle: () =>
-      "The time when a hijack event was first detected by the system.",
+      'The time when a hijack event was first detected by the system.',
     sortCaret: (order) => {
       if (!order)
         return (
           <span>
             &nbsp;&nbsp;&darr;
-            <span style={{ color: "red" }}>/&uarr;</span>
+            <span style={{ color: 'red' }}>/&uarr;</span>
           </span>
         );
-      if (order === "asc")
+      if (order === 'asc')
         return (
           <span>
             &nbsp;&nbsp;&darr;
-            <span style={{ color: "red" }}>/&uarr;</span>
+            <span style={{ color: 'red' }}>/&uarr;</span>
           </span>
         );
-      if (order === "desc")
+      if (order === 'desc')
         return (
           <span>
             &nbsp;&nbsp;
-            <span style={{ color: "red" }}>&darr;</span>
+            <span style={{ color: 'red' }}>&darr;</span>
             /&uarr;
           </span>
         );
@@ -95,59 +95,59 @@ const columns = [
     },
   },
   {
-    dataField: "hprefix",
-    headerTitle: () => "The IPv4/IPv6 prefix that was hijacked.",
-    text: "Hijacked Prefix",
+    dataField: 'hprefix',
+    headerTitle: () => 'The IPv4/IPv6 prefix that was hijacked.',
+    text: 'Hijacked Prefix',
   },
   {
-    dataField: "mprefix",
+    dataField: 'mprefix',
     headerTitle: () =>
-      "The configured IPv4/IPv6 prefix that matched the hijacked prefix.",
-    text: "Matched Prefix",
+      'The configured IPv4/IPv6 prefix that matched the hijacked prefix.',
+    text: 'Matched Prefix',
   },
   {
-    dataField: "type",
+    dataField: 'type',
     headerTitle: () =>
-      "The type of the hijack in 4 dimensions: prefix|path|data plane|policy<ul><li>[Prefix] S → Sub-prefix hijack</li>",
-    text: "Type",
+      'The type of the hijack in 4 dimensions: prefix|path|data plane|policy<ul><li>[Prefix] S → Sub-prefix hijack</li>',
+    text: 'Type',
   },
   {
-    dataField: "as",
+    dataField: 'as',
     headerTitle: () =>
-      "The AS that is potentially responsible for the hijack.</br>Note that this is an experimental field.",
-    text: "Hijacked AS",
+      'The AS that is potentially responsible for the hijack.</br>Note that this is an experimental field.',
+    text: 'Hijacked AS',
   },
   {
-    dataField: "rpki",
-    headerTitle: () => "The RPKI status of the hijacked prefix.",
-    text: "RPKI",
+    dataField: 'rpki',
+    headerTitle: () => 'The RPKI status of the hijacked prefix.',
+    text: 'RPKI',
   },
   {
-    dataField: "peers",
+    dataField: 'peers',
     headerTitle: () =>
-      "Number of peers/monitors (i.e., ASNs)</br>that have seen hijack updates.",
-    text: "# Peers Seen",
+      'Number of peers/monitors (i.e., ASNs)</br>that have seen hijack updates.',
+    text: '# Peers Seen',
     sort: true,
     sortCaret: (order) => {
       if (!order)
         return (
           <span>
             &nbsp;&nbsp;&darr;
-            <span style={{ color: "red" }}>/&uarr;</span>
+            <span style={{ color: 'red' }}>/&uarr;</span>
           </span>
         );
-      if (order === "asc")
+      if (order === 'asc')
         return (
           <span>
             &nbsp;&nbsp;&darr;
-            <span style={{ color: "red" }}>/&uarr;</span>
+            <span style={{ color: 'red' }}>/&uarr;</span>
           </span>
         );
-      if (order === "desc")
+      if (order === 'desc')
         return (
           <span>
             &nbsp;&nbsp;
-            <span style={{ color: "red" }}>&darr;</span>
+            <span style={{ color: 'red' }}>&darr;</span>
             /&uarr;
           </span>
         );
@@ -155,31 +155,31 @@ const columns = [
     },
   },
   {
-    dataField: "ASes",
-    text: "# ASes Infected",
+    dataField: 'ASes',
+    text: '# ASes Infected',
     headerTitle: () =>
-      "Number of infected ASes that seem to</br>route traffic towards the hijacker AS.</br>Note that this is an experimental field",
+      'Number of infected ASes that seem to</br>route traffic towards the hijacker AS.</br>Note that this is an experimental field',
     sort: true,
     sortCaret: (order) => {
       if (!order)
         return (
           <span>
             &nbsp;&nbsp;&darr;
-            <span style={{ color: "red" }}>/&uarr;</span>
+            <span style={{ color: 'red' }}>/&uarr;</span>
           </span>
         );
-      if (order === "asc")
+      if (order === 'asc')
         return (
           <span>
             &nbsp;&nbsp;&darr;
-            <span style={{ color: "red" }}>/&uarr;</span>
+            <span style={{ color: 'red' }}>/&uarr;</span>
           </span>
         );
-      if (order === "desc")
+      if (order === 'desc')
         return (
           <span>
             &nbsp;&nbsp;
-            <span style={{ color: "red" }}>&darr;</span>
+            <span style={{ color: 'red' }}>&darr;</span>
             /&uarr;
           </span>
         );
@@ -187,22 +187,20 @@ const columns = [
     },
   },
   {
-    dataField: "ack",
+    dataField: 'ack',
     headerTitle: () =>
-      "Whether the user has acknowledged/confirmed the hijack as a true positive.<br>If the resolve|mitigate buttons are pressed this<br>is automatically set to True (default value: False).",
-    text: "Ack",
+      'Whether the user has acknowledged/confirmed the hijack as a true positive.<br>If the resolve|mitigate buttons are pressed this<br>is automatically set to True (default value: False).',
+    text: 'Ack',
   },
   {
-    dataField: "more",
-    headerTitle: () => "Further information related to the hijack.",
-    text: "More",
+    dataField: 'more',
+    headerTitle: () => 'Further information related to the hijack.',
+    text: 'More',
   },
 ];
 
 const HijackTable: React.FunctionComponent<{}> = () => {
-    return (
-      <BootstrapTable keyField="update" data={products} columns={columns} />
-    );
+  return <BootstrapTable keyField="update" data={products} columns={columns} />;
 };
 
 export default HijackTable;

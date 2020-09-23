@@ -94,7 +94,7 @@ class Header extends React.Component<MyProps> {
                   <li className="nav-item">
                     <a
                       href={`/api/auth/signout`}
-                      className='nav-link'
+                      className="nav-link"
                       onClick={(e) => {
                         e.preventDefault();
                         signOut();
