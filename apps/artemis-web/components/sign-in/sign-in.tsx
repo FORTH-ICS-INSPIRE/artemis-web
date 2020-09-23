@@ -7,6 +7,8 @@ import Checkbox from '@material-ui/core/Checkbox';
 import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
+import { signIn, signOut, useSession } from 'next-auth/client';
+
 import {
   makeStyles,
   createMuiTheme,
@@ -75,6 +77,7 @@ type MyProps = {
     main: string;
   };
   csrf: any;
+  loggedIn: boolean;
 };
 
 type MyState = {
@@ -86,7 +89,11 @@ type MyState = {
 class SignIn extends React.Component<MyProps, MyState> {
   constructor(props: any) {
     super(props);
-    this.handleSubmit = this.handleSubmit.bind(this);
+
+    if (props.loggedIn) {
+      Router.push("/overview");
+    }
+    // this.handleSubmit = this.handleSubmit.bind(this);
 
     this.state = {
       email: '',
@@ -94,41 +101,6 @@ class SignIn extends React.Component<MyProps, MyState> {
       loginError: '',
     };
   }
-
-  public handleSubmit = (e: any): void => {
-    e.preventDefault();
-
-    const { email } = this.state;
-    const { password } = this.state;
-    this.setState = this.setState.bind(this);
-
-    ((statef) => {
-      // call api
-      fetch('/api/_auth', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email,
-          password,
-        }),
-      })
-        .then((r) => {
-          return r.json();
-        })
-        .then((data) => {
-          if (data && data.error) {
-            statef({ loginError: data.message });
-          }
-          if (data && data.token) {
-            // set cookie
-            cookie.set('token', data.token, { expires: 2 });
-            Router.push('/');
-          }
-        });
-    })(this.setState);
-  };
 
   validateForm() {
     const { email, password } = this.state;
@@ -153,8 +125,9 @@ class SignIn extends React.Component<MyProps, MyState> {
             <Typography className={classes.input} component="h1" variant="h5">
               Sign in
             </Typography>
-            <form method='post' action='/api/auth/callback/credentials'>
-                <input name='csrfToken' type='hidden' defaultValue={csrf}/>
+            <form method="post" action="/api/auth/callback/credentials">
+              <input name="csrfToken" type="hidden" defaultValue={csrf} />
+              <input name="stype" type="hidden" defaultValue="signin" />
               <TextField
                 variant="outlined"
                 margin="normal"
@@ -196,7 +169,7 @@ class SignIn extends React.Component<MyProps, MyState> {
               >
                 Sign In
               </Button>
-                <Button
+              <Button
                 fullWidth
                 variant="contained"
                 color="primary"
@@ -228,6 +201,6 @@ class SignIn extends React.Component<MyProps, MyState> {
 
 const SignIn2 = (props) => {
   const classes = useStyles();
-  return <SignIn classes={classes} csrf={props.csrf} />;
+  return <SignIn classes={classes} csrf={props.csrf} loggedIn={props.loggedIn} />;
 };
 export default SignIn2;
