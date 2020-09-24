@@ -51,7 +51,7 @@ node --version # must be 10 or newer
 5. Install required node modules by running:
 ```
 cd artemis_web
-npm -i --save # --save is required in older versions of npm
+yarn install
 ```
 
 ### Running the ARTEMIS Web App
@@ -62,6 +62,6 @@ docker-compose up # add -d for detached state
 ```
 2. To get the app running, run the following:
 ```
-npm run start
+yarn run start
 ```
 3. Open a browser and visit http://localhost:4200
