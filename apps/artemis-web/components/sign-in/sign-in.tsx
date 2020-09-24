@@ -7,7 +7,6 @@ import Checkbox from '@material-ui/core/Checkbox';
 import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
-import { signIn, signOut, useSession } from 'next-auth/client';
 
 import {
   makeStyles,
@@ -21,7 +20,6 @@ import {
   deepOrange,
   deepPurple,
 } from '@material-ui/core/colors';
-import cookie from 'js-cookie';
 import Router from 'next/router';
 
 const palletType = 'dark';

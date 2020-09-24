@@ -6,7 +6,6 @@ import { NextApiRequest, NextApiResponse } from 'next';
 const MongoClient = require('mongodb').MongoClient;
 const jwtSecret = 'SUPERSECRETE20220';
 
-const saltRounds = 10;
 const url = 'mongodb://admin:pass@localhost:27017';
 const dbName = 'artemis-web';
 

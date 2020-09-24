@@ -1,13 +1,42 @@
 import * as React from 'react';
-import fetch from 'isomorphic-unfetch';
-import useSWR from 'swr';
-import Router from 'next/router';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import HijackTable from '../components/ongoing-hijack-table/ongoing-hijack-table';
-import { signIn, signOut, useSession } from 'next-auth/client';
-import cookie from 'js-cookie';
-import { csrfToken, getSession } from 'next-auth/client';
+import { signOut, useSession } from 'next-auth/client';
+import { csrfToken } from 'next-auth/client';
+
+import {
+  ApolloClient,
+  createHttpLink,
+  InMemoryCache,
+  gql,
+} from '@apollo/client';
+import { setContext } from '@apollo/client/link/context';
+
+const graphQLConnect = () => {
+  const httpLink = createHttpLink({
+    uri: 'http://localhost:9999',
+  });
+
+  const authLink = setContext((_, { headers }) => {
+    // return the headers to the context so httpLink can read them
+    return {
+      headers: {
+        ...headers,
+        'x-hasura-admin-secret': '@rt3m1s.',
+      },
+    };
+  });
+
+  const client = new ApolloClient({
+    link: authLink.concat(httpLink),
+    cache: new InMemoryCache(),
+  });
+
+  return client;
+};
+
+const client = graphQLConnect();
 
 const Overview = ({ csrfToken }) => {
   const [session, loading] = useSession();
@@ -17,14 +46,10 @@ const Overview = ({ csrfToken }) => {
 
   if (session) {
     loggedIn = true;
-  } else {
-    // Router.push("/login");
   }
+
   const Footer = dynamic(() => import('../components/footer/footer'));
   const Header = dynamic(() => import('../components/header/header'));
-  const loginTime = new Date().toLocaleString('en-US', {
-    timeZone: 'Europe/Athens',
-  });
 
   return (
     <>
