@@ -5,6 +5,8 @@ import TextField from '@material-ui/core/TextField';
 import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
+import Router from 'next/router';
+
 import {
   makeStyles,
   createMuiTheme,
@@ -17,9 +19,6 @@ import {
   deepOrange,
   deepPurple,
 } from '@material-ui/core/colors';
-
-import cookie from 'js-cookie';
-import Router from 'next/router';
 
 const palletType = 'dark';
 const darkState = false;
@@ -85,7 +84,6 @@ class SignUp extends React.Component<MyProps, MyState> {
     if (props.loggedIn) {
       Router.push('/overview');
     }
-    // this.handleSubmit = this.handleSubmit.bind(this);
 
     this.state = {
       email: '',
@@ -94,40 +92,6 @@ class SignUp extends React.Component<MyProps, MyState> {
       signupError: '',
     };
   }
-
-  // handleSubmit = (e: any) => {
-  //   e.preventDefault();
-
-  //   const { email } = this.state;
-  //   const { password } = this.state;
-  //   const { username } = this.state;
-  //   this.setState = this.setState.bind(this);
-
-  //   ((statef) => {
-  //     fetch('/api/users', {
-  //       method: 'POST',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //       body: JSON.stringify({
-  //         email,
-  //         password,
-  //         username,
-  //       }),
-  //     })
-  //       .then((r) => r.json())
-  //       .then((data) => {
-  //         if (data && data.error) {
-  //           statef({ signupError: data.message });
-  //         }
-  //         if (data && data.token) {
-  //           // set cookie
-  //           cookie.set('token', data.token, { expires: 2 });
-  //           Router.push('/');
-  //         }
-  //       });
-  //   })(this.setState);
-  // };
 
   render() {
     const { classes, csrf } = this.props;

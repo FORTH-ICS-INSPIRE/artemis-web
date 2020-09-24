@@ -9,29 +9,27 @@ const v4 = uuid.v4;
 const saltRounds = 10;
 const url = 'mongodb://admin:pass@localhost:27017';
 const dbName = 'artemis-web';
-let db = null;
-const client = new MongoClient(url, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
-client.connect((err) => {
-  if (err) {
-    console.error('[mongo] client err', err);
-    return reject(err);
-  }
 
-  console.log('[mongo] connected');
-  db = client.db(dbName);
-});
+const initializeDB = (dbName) => {
+  let db;
+  const client = new MongoClient(url, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  });
+  client.connect((err) => {
+    if (err) {
+      console.error('[mongo] client err', err);
+      return reject(err);
+    }
 
-const findUser = (db, email, callback) => {
-  const collection = db.collection('user');
-  collection.findOne({ email }, callback);
+    console.log('[mongo] connected');
+    db = client.db(dbName);
+  });
+
+  return client;
 };
 
-const authUser = (db, email, password, hash, callback) => {
-  bcrypt.compare(password, hash, callback);
-};
+const client = initializeDB(dbName);
 
 const options = {
   // Configure one or more authentication providers
@@ -43,9 +41,6 @@ const options = {
     Providers.Credentials({
       // The name to display on the sign in form (e.g. 'Sign in with...')
       name: 'Credentials',
-      // The credentials is used to generate a suitable form on the sign in page.
-      // You can specify whatever fields you are expecting to be submitted.
-      // e.g. domain, username, password, 2FA token, etc.
       authorize: async (credentials) => {
         const email = credentials.email;
         const password = credentials.password;

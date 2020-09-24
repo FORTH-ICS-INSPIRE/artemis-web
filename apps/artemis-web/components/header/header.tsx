@@ -1,9 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import cookie from 'js-cookie';
-import Router from 'next/router';
-import { signIn, signOut, useSession } from 'next-auth/client';
-// const [session, loading] = useSession();
+import { signOut } from 'next-auth/client';
 
 type MyProps = {
   loggedIn: boolean;
@@ -12,7 +9,7 @@ type MyProps = {
 
 class Header extends React.Component<MyProps> {
   render() {
-    const { loggedIn, call } = this.props;
+    const { loggedIn } = this.props;
 
     return (
       <>

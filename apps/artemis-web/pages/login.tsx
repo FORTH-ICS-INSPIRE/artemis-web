@@ -1,11 +1,8 @@
 import * as React from 'react';
-import Router from 'next/router';
 import dynamic from 'next/dynamic';
-import useSWR from 'swr';
 import Head from 'next/head';
-import { signIn, signOut, useSession } from 'next-auth/client';
-import cookie from 'js-cookie';
-import { csrfToken, getSession } from 'next-auth/client';
+import { signOut, useSession } from 'next-auth/client';
+import { csrfToken } from 'next-auth/client';
 
 const Login = ({ csrfToken }) => {
   const [session, loading] = useSession();
@@ -15,7 +12,6 @@ const Login = ({ csrfToken }) => {
   // let loggedIn = false;
   if (session) {
     loggedIn = true;
-    // Router.push("/overview");
   }
 
   const Footer = dynamic(() => import('../components/footer/footer'));

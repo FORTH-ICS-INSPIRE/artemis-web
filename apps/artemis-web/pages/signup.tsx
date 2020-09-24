@@ -1,17 +1,16 @@
 import React from 'react';
 import Router from 'next/router';
 import dynamic from 'next/dynamic';
-import useSWR from 'swr';
 import Head from 'next/head';
-import { csrfToken, getSession } from 'next-auth/client';
-import { signIn, signOut, useSession } from 'next-auth/client';
+import { csrfToken } from 'next-auth/client';
+import { signOut, useSession } from 'next-auth/client';
 
 const Signup = ({ csrfToken }) => {
   const [session, loading] = useSession();
   let loggedIn = false;
 
   if (loading) return <h1>Loading...</h1>;
-  // let loggedIn = false;
+
   if (session) {
     loggedIn = true;
     Router.push('/overview');
