@@ -8,7 +8,7 @@ import { setContext } from '@apollo/client/link/context';
 
 const graphqlConnect = () => {
   const httpLink = createHttpLink({
-    uri: 'http://localhost:9999/v1/graphql',
+    uri: process.env.GRAPHQL_URI,
   });
 
   const authLink = setContext((_, { headers }) => {
@@ -16,7 +16,7 @@ const graphqlConnect = () => {
     return {
       headers: {
         ...headers,
-        'x-hasura-admin-secret': '@rt3m1s.',
+        'x-hasura-admin-secret': process.env.HASURA_SECRET,
       },
     };
   });
