@@ -4,39 +4,7 @@ import Head from 'next/head';
 import HijackTable from '../components/ongoing-hijack-table/ongoing-hijack-table';
 import { signOut, useSession } from 'next-auth/client';
 import { csrfToken } from 'next-auth/client';
-
-import {
-  ApolloClient,
-  createHttpLink,
-  InMemoryCache,
-  gql,
-} from '@apollo/client';
-import { setContext } from '@apollo/client/link/context';
-
-const graphQLConnect = () => {
-  const httpLink = createHttpLink({
-    uri: 'http://localhost:9999',
-  });
-
-  const authLink = setContext((_, { headers }) => {
-    // return the headers to the context so httpLink can read them
-    return {
-      headers: {
-        ...headers,
-        'x-hasura-admin-secret': '@rt3m1s.',
-      },
-    };
-  });
-
-  const client = new ApolloClient({
-    link: authLink.concat(httpLink),
-    cache: new InMemoryCache(),
-  });
-
-  return client;
-};
-
-const client = graphQLConnect();
+import graphqlConnect from '../utils/graphql';
 
 const Overview = ({ csrfToken }) => {
   const [session, loading] = useSession();
