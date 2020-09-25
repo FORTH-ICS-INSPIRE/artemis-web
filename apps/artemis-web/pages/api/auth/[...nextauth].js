@@ -1,36 +1,11 @@
 import NextAuth from 'next-auth';
 import Providers from 'next-auth/providers';
-const MongoClient = require('mongodb').MongoClient;
 import bcrypt from 'bcrypt';
 import uuid from 'uuid';
-
-const v4 = uuid.v4;
+import { initializeDB } from '../../../utils/database';
 
 const saltRounds = 10;
-const url = 'mongodb://admin:pass@localhost:27017';
-const dbName = 'artemis-web';
-
-let db;
-
-const initializeDB = (dbName) => {
-  const client = new MongoClient(url, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  });
-  client.connect((err) => {
-    if (err) {
-      console.error('[mongo] client err', err);
-      return reject(err);
-    }
-
-    console.log('[mongo] connected');
-    db = client.db(dbName);
-  });
-
-  return client;
-};
-
-const client = initializeDB(dbName);
+const v4 = uuid.v4;
 
 const options = {
   // Configure one or more authentication providers
@@ -44,6 +19,7 @@ const options = {
       name: 'Credentials',
       authorize: async (credentials) => {
         try {
+          const db = await initializeDB();
           const email = credentials.email;
           const password = credentials.password;
           const username = credentials.username;
@@ -79,7 +55,6 @@ const options = {
             await bcrypt.hash(password, saltRounds).then((hash) => {
               mHash = hash;
             });
-            console.log(mHash);
             // Store hash in your password DB.
             let newUser = {
               userId: v4(),
@@ -137,10 +112,10 @@ const options = {
   },
   jwt: {
     // A secret to use for key generation (you should set this explicitly)
-    secret: 'INp8IvdIyeMcoGAgFGoA61DdBglwwSqnXJZkgz8PSnw',
+    secret: process.env.JWT_SECRET,
   },
   // A database is optional, but required to persist accounts in a database
-  database: process.env.DATABASE_URL,
+  database: process.env.MONGODB_URI,
 };
 
 export default (req, res) => NextAuth(req, res, options);

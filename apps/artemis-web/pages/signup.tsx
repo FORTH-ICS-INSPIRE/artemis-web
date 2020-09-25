@@ -25,7 +25,7 @@ const Signup = ({ csrfToken }) => {
         <title>ARTEMIS - Sign Up</title>
       </Head>
       <div id="page-container">
-        <Header loggedIn={false} call={signOut} />
+        <Header loggedIn={false} />
         <div id="content-wrap" style={{ paddingBottom: '5rem' }}>
           {!loggedIn && (
             <div className="container d-flex align-items-center flex-column">

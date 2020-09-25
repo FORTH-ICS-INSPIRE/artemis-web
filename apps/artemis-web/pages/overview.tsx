@@ -26,7 +26,7 @@ const Overview = ({ csrfToken }) => {
       </Head>
 
       <div id="page-container" style={{ paddingTop: '120px' }}>
-        <Header loggedIn={loggedIn} call={signOut} />
+        <Header loggedIn={loggedIn} />
         <div id="content-wrap" style={{ paddingBottom: '5rem' }}>
           <div className="row">
             <div className="col-lg-1" />

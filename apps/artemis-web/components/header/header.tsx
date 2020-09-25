@@ -4,7 +4,6 @@ import { signOut } from 'next-auth/client';
 
 type MyProps = {
   loggedIn: boolean;
-  call: (event: any) => void;
 };
 
 class Header extends React.Component<MyProps> {

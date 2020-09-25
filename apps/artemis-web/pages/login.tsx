@@ -24,7 +24,7 @@ const Login = ({ csrfToken }) => {
         <title>ARTEMIS - Login</title>
       </Head>
       <div id="login-container">
-        <Header loggedIn={false} call={signOut} />
+        <Header loggedIn={false} />
         <div id="content-wrap" style={{ paddingBottom: '5rem' }}>
           <SignIn2 csrf={csrfToken} loggedIn={loggedIn} />
         </div>

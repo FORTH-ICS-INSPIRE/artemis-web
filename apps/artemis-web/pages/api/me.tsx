@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-const jwtSecret = 'SUPERSECRETE20220';
+const jwtSecret = process.env.JWT_SECRET;
 
 export default (req: any, res: any) => {
   if (req.method === 'GET') {
