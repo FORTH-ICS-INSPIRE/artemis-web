@@ -86,7 +86,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "yarn run format",
+      "pre-commit": "./pre-commit.sh",
       "pre-push": "yarn run lint"
     }
   }
