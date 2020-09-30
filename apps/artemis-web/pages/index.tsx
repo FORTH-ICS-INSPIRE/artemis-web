@@ -1,23 +1,18 @@
-import fetch from 'isomorphic-unfetch';
-import useSWR from 'swr';
-import Router from 'next/router';
-import * as React from 'react';
+import { useRouter } from 'next/router';
+import React, { useEffect } from 'react';
+import { useCurrentUser } from '../lib/hooks';
 
-const Home: React.FunctionComponent<{}> = () => {
-  const { data } = useSWR('/api/me', async function (args) {
-    const res = await fetch(args);
-    return res.json();
-  });
+const HomePage: React.FunctionComponent<{}> = () => {
+  const [user] = useCurrentUser();
+  const router = useRouter();
 
-  if (!data) return <h1>Loading...</h1>;
-
-  if (data.email) {
-    Router.push('/overview');
-  } else {
-    Router.push('/login');
-  }
+  useEffect(() => {
+    // redirect to home if user is authenticated
+    if (!user) router.push('/signin');
+    else router.push('/overview');
+  }, [user]);
 
   return <div />;
 };
 
-export default Home;
+export default HomePage;

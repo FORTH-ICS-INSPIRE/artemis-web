@@ -1,35 +1,32 @@
-import React from 'react';
-import Router from 'next/router';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
-import { csrfToken } from 'next-auth/client';
-import { signOut, useSession } from 'next-auth/client';
+import { useRouter } from 'next/router';
+import React, { useEffect } from 'react';
+import { useCurrentUser } from '../lib/hooks';
 
-const Signup = ({ csrfToken }) => {
-  const [session, loading] = useSession();
-  let loggedIn = false;
-
-  if (loading) return <h1>Loading...</h1>;
-
-  if (session) {
-    loggedIn = true;
-    Router.push('/overview');
-  }
+const SignupPage: React.FunctionComponent<{}> = () => {
+  const [user] = useCurrentUser();
+  const router = useRouter();
+  useEffect(() => {
+    // redirect to home if user is authenticated
+    if (user) router.push('/');
+  }, [user]);
 
   const Footer = dynamic(() => import('../components/footer/footer'));
-  const SignUp = dynamic(() => import('../components/sign-up/sign-up'));
+  const SignUpComponent = dynamic(() => import('../components/sign-up/sign-up'));
   const Header = dynamic(() => import('../components/header/header'));
   return (
     <>
       <Head>
+        overview
         <title>ARTEMIS - Sign Up</title>
       </Head>
       <div id="page-container">
-        <Header loggedIn={false} />
+        <Header />
         <div id="content-wrap" style={{ paddingBottom: '5rem' }}>
-          {!loggedIn && (
+          {!user && (
             <div className="container d-flex align-items-center flex-column">
-              <SignUp csrf={csrfToken} loggedIn={loggedIn} />
+              <SignUpComponent />
             </div>
           )}
         </div>
@@ -39,10 +36,4 @@ const Signup = ({ csrfToken }) => {
   );
 };
 
-Signup.getInitialProps = async (context) => {
-  return {
-    csrfToken: await csrfToken(context),
-  };
-};
-
-export default Signup;
+export default SignupPage;

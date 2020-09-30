@@ -1,23 +1,23 @@
-import * as React from 'react';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
-import HijackTable from '../components/ongoing-hijack-table/ongoing-hijack-table';
-import { signOut, useSession } from 'next-auth/client';
-import { csrfToken } from 'next-auth/client';
+import { useRouter } from 'next/router';
+import React, { useEffect } from 'react';
+import HijackTableComponent from '../components/ongoing-hijack-table/ongoing-hijack-table';
+import { useCurrentUser } from '../lib/hooks';
 import graphqlConnect from '../utils/graphql';
 
-const Overview = ({ csrfToken }) => {
-  const [session, loading] = useSession();
-
-  if (loading) return <h1>Loading...</h1>;
-  let loggedIn = false;
-
-  if (session) {
-    loggedIn = true;
-  }
-
+const OverviewPage = () => {
   const Footer = dynamic(() => import('../components/footer/footer'));
   const Header = dynamic(() => import('../components/header/header'));
+  const [user] = useCurrentUser();
+  const router = useRouter();
+  useEffect(() => {
+    // redirect to home if user is authenticated
+    if (!user) router.push('/');
+  }, [user]);
+
+  const client = graphqlConnect.graphqlConnect();
+  console.log(graphqlConnect.getHijacks(client));
 
   return (
     <>
@@ -26,7 +26,7 @@ const Overview = ({ csrfToken }) => {
       </Head>
 
       <div id="page-container" style={{ paddingTop: '120px' }}>
-        <Header loggedIn={loggedIn} />
+        <Header />
         <div id="content-wrap" style={{ paddingBottom: '5rem' }}>
           <div className="row">
             <div className="col-lg-1" />
@@ -41,9 +41,8 @@ const Overview = ({ csrfToken }) => {
               <div className="card">
                 <div className="card-header">Activity</div>
                 <div className="card-body">
-                  Welcome back <b>{session.user && session.user.username}</b>,
-                  your last login was at (
-                  {session.user && session.user.lastLogin}).{' '}
+                  Welcome back <b>{user && user.name}</b>, your last login was
+                  at ({/* {session.user && session.user.lastLogin}).{' '} */}
                 </div>
               </div>
             </div>
@@ -54,7 +53,7 @@ const Overview = ({ csrfToken }) => {
               <div className="card">
                 <div className="card-header">Ongoing, Non-Dormant Hijacks </div>
                 <div className="card-body">
-                  <HijackTable />
+                  <HijackTableComponent />
                 </div>
               </div>
             </div>
@@ -105,16 +104,10 @@ const Overview = ({ csrfToken }) => {
             </div>
           </div>
         </div>
-        <Footer />
       </div>
+      <Footer />
     </>
   );
 };
 
-Overview.getInitialProps = async (context) => {
-  return {
-    csrfToken: await csrfToken(context),
-  };
-};
-
-export default Overview;
+export default OverviewPage;

@@ -5,7 +5,8 @@ import TextField from '@material-ui/core/TextField';
 import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
-import Router from 'next/router';
+import { useState } from 'react';
+import { useUser } from '../../lib/hooks';
 
 import {
   makeStyles,
@@ -59,138 +60,118 @@ const useStyles = makeStyles((_theme) => ({
   },
 }));
 
-type MyProps = {
-  classes: {
-    paper: string;
-    avatar: string;
-    form: string;
-    submit: string;
-    input: string;
-  };
-  csrf: any;
-  loggedIn: any;
-};
+const SignUpComponent = (props) => {
+  const { classes } = props;
+  const [{ mutate }] = useUser();
+  const [errorMsg, setErrorMsg] = useState('');
 
-type MyState = {
-  email: string;
-  password: string;
-  signupError: string;
-  username: string;
-};
-
-class SignUp extends React.Component<MyProps, MyState> {
-  constructor(props: any) {
-    super(props);
-    if (props.loggedIn) {
-      Router.push('/overview');
-    }
-
-    this.state = {
-      email: '',
-      username: '',
-      password: '',
-      signupError: '',
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const body = {
+      email: e.currentTarget.email.value,
+      name: e.currentTarget.name.value,
+      password: e.currentTarget.password.value,
     };
-  }
 
-  render() {
-    const { classes, csrf } = this.props;
-    const { signupError } = this.state;
+    const res = await fetch('/api/users', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    });
 
-    return (
-      <ThemeProvider theme={theme}>
-        <Container component="main" maxWidth="sm">
-          <CssBaseline />
-          <div className={classes.paper}>
-            <img
-              width="150"
-              src="./login.png"
-              alt="avatar"
-              className="img-responsive"
-            />
-            <Typography className={classes.input} component="h1" variant="h5">
-              Sign up
-            </Typography>
-            <form
-              method="post"
-              action="/api/auth/callback/credentials"
-              className={classes.form}
+    if (res.status === 201) {
+      const userObj = await res.json();
+
+      mutate(userObj);
+    } else {
+      setErrorMsg(await res.text());
+    }
+  };
+
+  return (
+    <ThemeProvider theme={theme}>
+      <Container component="main" maxWidth="sm">
+        <CssBaseline />
+        <div className={classes.paper}>
+          <img
+            width="150"
+            src="./login.png"
+            alt="avatar"
+            className="img-responsive"
+          />
+          <Typography className={classes.input} component="h1" variant="h5">
+            Sign up
+          </Typography>
+          <form
+            method="post"
+            onSubmit={handleSubmit}
+            className={classes.form}
+          >
+            {errorMsg ? <p style={{ color: 'red' }}>{errorMsg}</p> : null}
+            <input name="emailVerified" type="hidden" defaultValue={'true'} />
+            <input name="stype" type="hidden" defaultValue="signup" />
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={12}>
+                <TextField
+                  autoComplete="uname"
+                  name="name"
+                  variant="outlined"
+                  required
+                  fullWidth
+                  id="username"
+                  label="Username"
+                  autoFocus
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  variant="outlined"
+                  required
+                  fullWidth
+                  id="email"
+                  label="Email Address"
+                  name="email"
+                  autoComplete="email"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  variant="outlined"
+                  required
+                  fullWidth
+                  name="password"
+                  label="Password"
+                  type="password"
+                  id="password"
+                  autoComplete="current-password"
+                />
+              </Grid>
+            </Grid>
+
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              color="primary"
+              className={classes.submit}
             >
-              <input name="csrfToken" type="hidden" defaultValue={csrf} />
-              <input name="stype" type="hidden" defaultValue="signup" />
-              <Grid container spacing={2}>
-                <Grid item xs={12} sm={12}>
-                  <TextField
-                    autoComplete="uname"
-                    name="username"
-                    variant="outlined"
-                    required
-                    fullWidth
-                    id="username"
-                    label="Username"
-                    onChange={(e) =>
-                      this.setState({ username: e.target.value })
-                    }
-                    autoFocus
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    variant="outlined"
-                    required
-                    fullWidth
-                    id="email"
-                    label="Email Address"
-                    name="email"
-                    autoComplete="email"
-                    onChange={(e) => this.setState({ email: e.target.value })}
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    variant="outlined"
-                    required
-                    fullWidth
-                    name="password"
-                    label="Password"
-                    type="password"
-                    id="password"
-                    autoComplete="current-password"
-                    onChange={(e) =>
-                      this.setState({ password: e.target.value })
-                    }
-                  />
-                </Grid>
+              Sign Up
+            </Button>
+            <Grid container justify="flex-end">
+              <Grid item>
+                <Link href="/signin" variant="body2">
+                  Already have an account? Sign in
+                </Link>
               </Grid>
-              {signupError && <p style={{ color: 'red' }}>{signupError}</p>}
-
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                color="primary"
-                className={classes.submit}
-              >
-                Sign Up
-              </Button>
-              <Grid container justify="flex-end">
-                <Grid item>
-                  <Link href="/login" variant="body2">
-                    Already have an account? Sign in
-                  </Link>
-                </Grid>
-              </Grid>
-            </form>
-          </div>
-        </Container>
-      </ThemeProvider>
-    );
-  }
-}
+            </Grid>
+          </form>
+        </div>
+      </Container>
+    </ThemeProvider>
+  );
+};
 
 export default (props) => {
   const classes = useStyles();
-  return (
-    <SignUp classes={classes} csrf={props.csrf} loggedIn={props.loggedIn} />
-  );
+  return <SignUpComponent classes={classes} />;
 };

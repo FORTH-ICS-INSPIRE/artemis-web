@@ -1,25 +1,18 @@
-import React from 'react';
-import fetch from 'isomorphic-unfetch';
-import useSWR from 'swr';
-import Router from 'next/router';
+import React, { useEffect } from 'react';
+import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
-import HijackTable from '../components/hijack-table/hijack-table';
+import HijackTableComponent from '../components/hijack-table/hijack-table';
+import { useCurrentUser } from '../lib/hooks';
 
-const Hijacks: React.FunctionComponent<{}> = () => {
-  const { data } = useSWR('/api/me', async function (args) {
-    const res = await fetch(args);
-    return res.json();
-  });
+const HijacksPage: React.FunctionComponent<{}> = () => {
+  const [user] = useCurrentUser();
+  const router = useRouter();
+  useEffect(() => {
+    // redirect to home if user is authenticated
+    if (!user) router.push('/');
+  }, [user]);
 
-  if (!data) return <h1>Loading...</h1>;
-  let loggedIn = false;
-
-  if (data.email) {
-    loggedIn = true;
-  } else {
-    Router.push('/login');
-  }
   const Footer = dynamic(() => import('../components/footer/footer'));
   const Header = dynamic(() => import('../components/header/header'));
 
@@ -28,7 +21,7 @@ const Hijacks: React.FunctionComponent<{}> = () => {
       <Head>
         <title>ARTEMIS - Overview</title>
       </Head>
-      <Header loggedIn={loggedIn} />
+      <Header />
       <div
         className="container overview col-lg-12"
         style={{ paddingTop: '120px' }}
@@ -46,7 +39,7 @@ const Hijacks: React.FunctionComponent<{}> = () => {
             <div className="card">
               <div className="card-header"> </div>
               <div className="card-body">
-                <HijackTable />
+                <HijackTableComponent />
               </div>
             </div>
           </div>
@@ -69,22 +62,6 @@ const Hijacks: React.FunctionComponent<{}> = () => {
                     <option value="rpki_status">RPKI</option>
                   </select>
                 </div>
-                {/* <table className="table table-hover">
-                  <thead>
-                    <tr>
-                      <th>Module</th>
-                      <th>Status</th>
-                      <th>Uptime</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>Clock</td>
-                      <td>On</td>
-                      <td>8h</td>
-                    </tr>
-                  </tbody>
-                </table> */}
               </div>
             </div>
           </div>
@@ -95,4 +72,4 @@ const Hijacks: React.FunctionComponent<{}> = () => {
   );
 };
 
-export default Hijacks;
+export default HijacksPage;

@@ -1,14 +1,14 @@
-import React from "react";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import { makeStyles } from "@material-ui/core/styles";
-import Container from "@material-ui/core/Container";
-import Copyright from "./copyright";
+import React from 'react';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import { makeStyles } from '@material-ui/core/styles';
+import Container from '@material-ui/core/Container';
+import Copyright from './copyright';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    display: "flex",
-    flexDirection: "column",
-    left: "0px;",
+    display: 'flex',
+    flexDirection: 'column',
+    left: '0px;',
   },
   main: {
     marginTop: theme.spacing(8),
@@ -16,17 +16,17 @@ const useStyles = makeStyles((theme) => ({
   },
   footer: {
     padding: theme.spacing(3, 2),
-    marginTop: "auto",
-    position: "absolute",
-    height: "4.5rem",
-    bottom: "0",
-    width: "100%",
+    marginTop: 'auto',
+    position: 'absolute',
+    height: '4.5rem',
+    bottom: '0',
+    width: '100%',
     backgroundColor: theme.palette.grey[800],
   },
   link: {
-    color: "#ffff",
-    textAlign: "left",
-    left: "-10%",
+    color: '#ffff',
+    textAlign: 'left',
+    left: '-10%',
   },
 }));
 

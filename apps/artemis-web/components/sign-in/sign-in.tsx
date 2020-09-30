@@ -7,7 +7,6 @@ import Checkbox from '@material-ui/core/Checkbox';
 import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
-
 import {
   makeStyles,
   createMuiTheme,
@@ -21,6 +20,9 @@ import {
   deepPurple,
 } from '@material-ui/core/colors';
 import Router from 'next/router';
+
+import { useUser } from '../../lib/hooks';
+import { useState, useEffect } from 'react';
 
 const palletType = 'dark';
 const darkState = false;
@@ -55,7 +57,6 @@ const useStyles = makeStyles((_theme) => ({
     marginTop: _theme.spacing(1),
   },
   main: {
-    // marginTop: "80px"
   },
   submit: {
     margin: _theme.spacing(3, 0, 2),
@@ -65,142 +66,120 @@ const useStyles = makeStyles((_theme) => ({
   },
 }));
 
-type MyProps = {
-  classes: {
-    paper: string;
-    avatar: string;
-    form: string;
-    submit: string;
-    input: string;
-    main: string;
-  };
-  csrf: any;
-  loggedIn: boolean;
-};
+const SignInComponent = (props) => {
+  const [user, { mutate }] = useUser();
+  const [errorMsg, setErrorMsg] = useState('');
 
-type MyState = {
-  email: string;
-  password: string;
-  loginError: string;
-};
+  async function onSubmit(e) {
+    e.preventDefault();
 
-class SignIn extends React.Component<MyProps, MyState> {
-  constructor(props: any) {
-    super(props);
-
-    if (props.loggedIn) {
-      Router.push('/overview');
-    }
-    // this.handleSubmit = this.handleSubmit.bind(this);
-
-    this.state = {
-      email: '',
-      password: '',
-      loginError: '',
+    const body = {
+      email: e.currentTarget.email.value,
+      password: e.currentTarget.password.value,
     };
+    const res = await fetch('/api/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    });
+
+    if (res.status === 200) {
+      const userObj = await res.json();
+      mutate(userObj);
+    } else {
+      setErrorMsg('Incorrect username or password. Try again!');
+    }
   }
 
-  validateForm() {
-    const { email, password } = this.state;
-    const isValid = email.length > 0 && password.length > 0;
-    return isValid;
-  }
+  useEffect(() => {
+    // redirect to home if user is authenticated
+    if (user) Router.push('/overview');
+  }, [user]);
 
-  render() {
-    const { classes, csrf } = this.props;
-    const { loginError } = this.state;
-    return (
-      <ThemeProvider theme={theme}>
-        <Container component="main" maxWidth="sm">
-          <CssBaseline />
-          <div className={classes.paper}>
-            <img
-              width="150"
-              src="./login.png"
-              alt="avatar"
-              className="img-responsive"
+  return (
+    <ThemeProvider theme={theme}>
+      <Container component="main" maxWidth="sm">
+        <CssBaseline />
+        <div className={props.classes.paper}>
+          <img
+            width="150"
+            src="./login.png"
+            alt="avatar"
+            className="img-responsive"
+          />
+          <Typography
+            className={props.classes.input}
+            component="h1"
+            variant="h5"
+          >
+            Sign in
+          </Typography>
+          {errorMsg && <p className="error">{errorMsg}</p>}
+          <form method="post" onSubmit={onSubmit}>
+            <input name="stype" type="hidden" defaultValue="signin" />
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              id="email"
+              color="primary"
+              label="Email Address"
+              name="email"
+              autoComplete="email"
+              autoFocus
             />
-            <Typography className={classes.input} component="h1" variant="h5">
-              Sign in
-            </Typography>
-            <form method="post" action="/api/auth/callback/credentials">
-              <input name="csrfToken" type="hidden" defaultValue={csrf} />
-              <input name="stype" type="hidden" defaultValue="signin" />
-              <TextField
-                variant="outlined"
-                margin="normal"
-                required
-                fullWidth
-                id="email"
-                color="primary"
-                label="Email Address"
-                name="email"
-                autoComplete="email"
-                onChange={(e) => this.setState({ email: e.target.value })}
-                autoFocus
-              />
-              <TextField
-                variant="outlined"
-                margin="normal"
-                required
-                fullWidth
-                name="password"
-                label="Password"
-                type="password"
-                id="password"
-                onChange={(e) => this.setState({ password: e.target.value })}
-                autoComplete="current-password"
-              />
-              <FormControlLabel
-                className={classes.input}
-                control={<Checkbox value="remember" color="primary" />}
-                label="Remember me"
-              />
-              {loginError && <p style={{ color: 'red' }}>{loginError}</p>}
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                color="primary"
-                disabled={!this.validateForm}
-                className={classes.submit}
-              >
-                Sign In
-              </Button>
-              <Button
-                fullWidth
-                variant="contained"
-                color="primary"
-                // onClick={call}
-                disabled={!this.validateForm}
-                className={classes.submit}
-              >
-                Sign In with GitHub
-              </Button>
-              <Grid container>
-                <Grid style={{ textAlign: 'left' }} item xs>
-                  {/* <Link href="/" variant="body2">
-                    Forgot password?
-                  </Link> */}
-                </Grid>
-                <Grid item>
-                  <Link color="primary" href="/signup" variant="body2">
-                    Dont have an account? Sign Up
-                  </Link>
-                </Grid>
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              name="password"
+              label="Password"
+              type="password"
+              id="password"
+              autoComplete="current-password"
+            />
+            <FormControlLabel
+              className={props.classes.input}
+              control={<Checkbox value="remember" color="primary" />}
+              label="Remember me"
+            />
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              color="primary"
+              className={props.classes.submit}
+            >
+              Sign In
+            </Button>
+            <Button
+              fullWidth
+              variant="contained"
+              color="primary"
+              className={props.classes.submit}
+            >
+              Sign In with GitHub
+            </Button>
+            <Grid container>
+              <Grid style={{ textAlign: 'left' }} item xs>
               </Grid>
-            </form>
-          </div>
-        </Container>
-      </ThemeProvider>
-    );
-  }
-}
+              <Grid item>
+                <Link color="primary" href="/signup" variant="body2">
+                  Dont have an account? Sign Up
+                </Link>
+              </Grid>
+            </Grid>
+          </form>
+        </div>
+      </Container>
+    </ThemeProvider>
+  );
+};
 
 const SignIn2 = (props) => {
   const classes = useStyles();
-  return (
-    <SignIn classes={classes} csrf={props.csrf} loggedIn={props.loggedIn} />
-  );
+  return <SignInComponent classes={classes} />;
 };
 export default SignIn2;
