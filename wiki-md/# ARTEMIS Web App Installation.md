@@ -44,9 +44,11 @@ No further installation/building actions are required on your side at this point
 4. Install Node.js and npm from Ubuntu repository (for newer versions you have to install from the NodeSource repository).
 ```
 sudo apt update
-sudo apt install nodejs npm
+sudo apt -y install curl dirmngr apt-transport-https lsb-release ca-certificates
+curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -
+sudo apt -y install nodejs
 
-node --version # must be 10 or newer
+node --version # must be 12 or newer
 ```
 5. Install required node modules by running:
 ```
