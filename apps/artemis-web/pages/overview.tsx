@@ -4,7 +4,6 @@ import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
 import HijackTableComponent from '../components/ongoing-hijack-table/ongoing-hijack-table';
 import { useCurrentUser } from '../lib/hooks';
-import graphqlConnect from '../utils/graphql';
 
 const OverviewPage = () => {
   const Footer = dynamic(() => import('../components/footer/footer'));
@@ -15,9 +14,6 @@ const OverviewPage = () => {
     // redirect to home if user is authenticated
     if (!user) router.push('/');
   }, [user]);
-
-  const client = graphqlConnect.graphqlConnect();
-  console.log(graphqlConnect.getHijacks(client));
 
   return (
     <>
