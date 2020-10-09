@@ -6,9 +6,23 @@ import {
 } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 
+import { onError } from '@apollo/client/link/error';
+
+const link = onError(({ graphQLErrors, networkError }) => {
+  if (graphQLErrors)
+    graphQLErrors.map(({ message, locations, path }) =>
+      console.log(
+        `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
+      )
+    );
+
+  if (networkError) console.log(`[Network error]: ${networkError}`);
+});
+
 const graphqlConnect = () => {
   const httpLink = createHttpLink({
     uri: process.env.GRAPHQL_URI,
+    useGETForQueries: false,
   });
 
   const authLink = setContext((_, { headers }) => {
@@ -27,6 +41,21 @@ const graphqlConnect = () => {
   });
 
   return client;
+};
+
+const getStats = (client) => {
+  return client.query({
+    query: gql`
+      query getStats {
+        view_processes {
+          name
+          running
+          loading
+          timestamp
+        }
+      }
+    `,
+  });
 };
 
 // An example graphql query to test the API
@@ -61,7 +90,8 @@ const getHijacks = (client) => {
       }
     }
   `;
+
   return client.query({ query: HIJACKS });
 };
 
-export default { graphqlConnect, getHijacks };
+export default { graphqlConnect, getStats };

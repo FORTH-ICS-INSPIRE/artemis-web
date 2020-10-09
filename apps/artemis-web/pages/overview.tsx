@@ -10,6 +10,20 @@ const OverviewPage = () => {
   const Header = dynamic(() => import('../components/header/header'));
   const [user, { loading }] = useUser();
   const router = useRouter();
+
+  async function populateData() {
+    const res = await fetch('/api/graphql', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ table: 'stats' }),
+    });
+
+    // write code to fill tables with data
+    console.log(await res.json());
+  }
+
+  populateData();
+
   useEffect(() => {
     // redirect to home if user is authenticated
     if (!user && !loading) router.push('/signin');
