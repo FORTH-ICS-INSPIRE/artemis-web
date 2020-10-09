@@ -7,6 +7,7 @@ export function useUser() {
   // if data is not defined, the query has not completed
   const loading = !data;
   const user = data?.user;
+
   return [user, { mutate, loading }];
 }
 

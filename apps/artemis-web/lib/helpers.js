@@ -1,11 +1,12 @@
 export function extractUser(req) {
   if (!req.user) return null;
 
-  const { name, email, password } = req.user;
+  const { name, email, role, lastLogin } = req.user;
   return {
     name,
     email,
-    password,
+    role,
+    lastLogin,
   };
 }
 

@@ -3,15 +3,16 @@ import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import HijackTableComponent from '../components/hijack-table/hijack-table';
-import { useCurrentUser } from '../lib/hooks';
+import { useUser } from '../lib/hooks';
 
 const HijacksPage: React.FunctionComponent<{}> = () => {
-  const [user] = useCurrentUser();
+  const [user, { loading }] = useUser();
   const router = useRouter();
+
   useEffect(() => {
     // redirect to home if user is authenticated
-    if (!user) router.push('/');
-  }, [user]);
+    if (!user && !loading) router.push('/');
+  }, [user, loading, router]);
 
   const Footer = dynamic(() => import('../components/footer/footer'));
   const Header = dynamic(() => import('../components/header/header'));

@@ -3,17 +3,17 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
 import HijackTableComponent from '../components/ongoing-hijack-table/ongoing-hijack-table';
-import { useCurrentUser } from '../lib/hooks';
+import { useUser } from '../lib/hooks';
 
 const OverviewPage = () => {
   const Footer = dynamic(() => import('../components/footer/footer'));
   const Header = dynamic(() => import('../components/header/header'));
-  const [user] = useCurrentUser();
+  const [user, { loading }] = useUser();
   const router = useRouter();
   useEffect(() => {
     // redirect to home if user is authenticated
-    if (!user) router.push('/');
-  }, [user]);
+    if (!user && !loading) router.push('/signin');
+  }, [user, loading, router]);
 
   return (
     <>
@@ -38,7 +38,12 @@ const OverviewPage = () => {
                 <div className="card-header">Activity</div>
                 <div className="card-body">
                   Welcome back <b>{user && user.name}</b>, your last login was
-                  at ({/* {session.user && session.user.lastLogin}).{' '} */}
+                  at (
+                  {user &&
+                    new Date(user.lastLogin).toLocaleDateString() +
+                      ' ' +
+                      new Date(user.lastLogin).toLocaleTimeString()}
+                  ). You are {user && user.role}.
                 </div>
               </div>
             </div>

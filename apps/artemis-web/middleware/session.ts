@@ -1,4 +1,4 @@
-import { session, promisifyStore, Store, MemoryStore } from 'next-session';
+import { session, Store, MemoryStore } from 'next-session';
 import connectMongo from 'connect-mongo';
 
 const MongoStore = connectMongo({ Store, MemoryStore });
@@ -8,7 +8,11 @@ export default function (req, res, next) {
     client: req.dbClient,
     stringify: false,
   });
+
   return session({
-    store: promisifyStore(mongoStore),
+    store: mongoStore,
+    cookie: {
+      secure: process.env.production === 'true',
+    },
   })(req, res, next);
 }

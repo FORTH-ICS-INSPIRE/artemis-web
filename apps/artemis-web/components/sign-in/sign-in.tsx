@@ -56,8 +56,7 @@ const useStyles = makeStyles((_theme) => ({
     width: '100%', // Fix IE 11 issue.
     marginTop: _theme.spacing(1),
   },
-  main: {
-  },
+  main: {},
   submit: {
     margin: _theme.spacing(3, 0, 2),
   },
@@ -66,17 +65,21 @@ const useStyles = makeStyles((_theme) => ({
   },
 }));
 
-const SignInComponent = (props) => {
-  const [user, { mutate }] = useUser();
+const SignIn = (props) => {
+  const [user, { mutate, loading }] = useUser();
   const [errorMsg, setErrorMsg] = useState('');
 
   async function onSubmit(e) {
     e.preventDefault();
 
+    const rememberMe = e.currentTarget.remember.checked;
+
     const body = {
       email: e.currentTarget.email.value,
       password: e.currentTarget.password.value,
+      rememberMe: rememberMe,
     };
+
     const res = await fetch('/api/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -93,8 +96,8 @@ const SignInComponent = (props) => {
 
   useEffect(() => {
     // redirect to home if user is authenticated
-    if (user) Router.push('/overview');
-  }, [user]);
+    if (user && !loading) Router.push('/overview');
+  }, [user, loading]);
 
   return (
     <ThemeProvider theme={theme}>
@@ -142,7 +145,9 @@ const SignInComponent = (props) => {
             />
             <FormControlLabel
               className={props.classes.input}
-              control={<Checkbox value="remember" color="primary" />}
+              control={
+                <Checkbox value="remember" name="remember" color="primary" />
+              }
               label="Remember me"
             />
             <Button
@@ -154,17 +159,16 @@ const SignInComponent = (props) => {
             >
               Sign In
             </Button>
-            <Button
+            {/* <Button
               fullWidth
               variant="contained"
               color="primary"
               className={props.classes.submit}
             >
               Sign In with GitHub
-            </Button>
+            </Button> */}
             <Grid container>
-              <Grid style={{ textAlign: 'left' }} item xs>
-              </Grid>
+              <Grid style={{ textAlign: 'left' }} item xs></Grid>
               <Grid item>
                 <Link color="primary" href="/signup" variant="body2">
                   Dont have an account? Sign Up
@@ -178,8 +182,8 @@ const SignInComponent = (props) => {
   );
 };
 
-const SignIn2 = (props) => {
+const SignInComponent = (props) => {
   const classes = useStyles();
-  return <SignInComponent classes={classes} />;
+  return <SignIn classes={classes} />;
 };
-export default SignIn2;
+export default SignInComponent;

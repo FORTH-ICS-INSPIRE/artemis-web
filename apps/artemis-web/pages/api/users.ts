@@ -4,12 +4,19 @@ import normalizeEmail from 'validator/lib/normalizeEmail';
 import bcrypt from 'bcrypt';
 import auth from '../../middleware/auth';
 import { extractUser } from '../../lib/helpers';
+import { nanoid } from 'nanoid';
+import { NextApiRequest, NextApiResponse } from 'next';
+
+interface NextApiRequestExtended extends NextApiRequest {
+  logIn(user: any, arg1: (err: any) => void);
+  db: any;
+}
 
 const handler = nextConnect();
 
 handler.use(auth);
 
-handler.post(async (req, res) => {
+handler.post(async (req: NextApiRequestExtended, res: NextApiResponse) => {
   const { name, password } = req.body;
   const email = normalizeEmail(req.body.email);
   if (!isEmail(email)) {
@@ -32,9 +39,10 @@ handler.post(async (req, res) => {
       email,
       password: hashedPassword,
       name,
-      emailVerified: false,
-      bio: '',
-      profilePicture: null,
+      lastLogin: new Date(),
+      currentLogin: new Date(),
+      role: 'guest',
+      token: '',
     })
     .then(({ ops }) => ops[0]);
   req.logIn(user, (err) => {

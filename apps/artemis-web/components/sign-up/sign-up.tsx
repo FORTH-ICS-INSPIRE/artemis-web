@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
@@ -20,6 +20,7 @@ import {
   deepOrange,
   deepPurple,
 } from '@material-ui/core/colors';
+import { useRouter } from 'next/router';
 
 const palletType = 'dark';
 const darkState = false;
@@ -60,9 +61,16 @@ const useStyles = makeStyles((_theme) => ({
   },
 }));
 
-const SignUpComponent = (props) => {
+const SignUp = (props) => {
   const { classes } = props;
-  const [{ mutate }] = useUser();
+  const [user, { mutate, loading }] = useUser();
+  const router = useRouter();
+
+  useEffect(() => {
+    // redirect to home if user is authenticated
+    if (user && !loading) router.push('/');
+  }, [user, loading, router]);
+
   const [errorMsg, setErrorMsg] = useState('');
 
   const handleSubmit = async (e) => {
@@ -102,11 +110,7 @@ const SignUpComponent = (props) => {
           <Typography className={classes.input} component="h1" variant="h5">
             Sign up
           </Typography>
-          <form
-            method="post"
-            onSubmit={handleSubmit}
-            className={classes.form}
-          >
+          <form method="post" onSubmit={handleSubmit} className={classes.form}>
             {errorMsg ? <p style={{ color: 'red' }}>{errorMsg}</p> : null}
             <input name="emailVerified" type="hidden" defaultValue={'true'} />
             <input name="stype" type="hidden" defaultValue="signup" />
@@ -171,7 +175,9 @@ const SignUpComponent = (props) => {
   );
 };
 
-export default (props) => {
+const SignUpComponent = (props) => {
   const classes = useStyles();
-  return <SignUpComponent classes={classes} />;
+  return <SignUp classes={classes} />;
 };
+
+export default SignUpComponent;

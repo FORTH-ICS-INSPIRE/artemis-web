@@ -13,13 +13,8 @@ describe('Header', () => {
     expect(baseElement).toBeTruthy();
   });
 
-  it('should render the login, create account if logged in', () => {
-    const wrapper = shallow(<Header loggedIn={false} />);
+  it('should render the login and create account options if not logged in', () => {
+    const wrapper = shallow(<Header />);
     expect(wrapper.find(Link)).toHaveLength(2);
-  });
-
-  it('should render the overview, bgp updates, hijack pages, logout if logged in', () => {
-    const wrapper = shallow(<Header loggedIn={true} />);
-    expect(wrapper.find(Link)).toHaveLength(3);
   });
 });
