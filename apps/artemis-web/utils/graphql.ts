@@ -5,8 +5,8 @@ import {
   gql,
 } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
-
 import { onError } from '@apollo/client/link/error';
+import constants from './constants';
 
 const link = onError(({ graphQLErrors, networkError }) => {
   if (graphQLErrors)
@@ -21,7 +21,7 @@ const link = onError(({ graphQLErrors, networkError }) => {
 
 const graphqlConnect = () => {
   const httpLink = createHttpLink({
-    uri: process.env.GRAPHQL_URI,
+    uri: constants.GRAPHQL_URI,
     useGETForQueries: false,
   });
 
@@ -30,7 +30,7 @@ const graphqlConnect = () => {
     return {
       headers: {
         ...headers,
-        'x-hasura-admin-secret': process.env.HASURA_SECRET,
+        'x-hasura-admin-secret': constants.HASURA_SECRET,
       },
     };
   });

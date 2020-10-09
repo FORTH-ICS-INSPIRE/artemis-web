@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
 import HijackTableComponent from '../components/ongoing-hijack-table/ongoing-hijack-table';
 import { useUser } from '../lib/hooks';
+import graphQL from '../utils/graphql';
 
 const OverviewPage = () => {
   const Footer = dynamic(() => import('../components/footer/footer'));
@@ -11,18 +12,8 @@ const OverviewPage = () => {
   const [user, { loading }] = useUser();
   const router = useRouter();
 
-  async function populateData() {
-    const res = await fetch('/api/graphql', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ table: 'stats' }),
-    });
-
-    // write code to fill tables with data
-    console.log(await res.json());
-  }
-
-  populateData();
+  const client = graphQL.graphqlConnect();
+  graphQL.getStats(client).then((result) => console.log(result));
 
   useEffect(() => {
     // redirect to home if user is authenticated
