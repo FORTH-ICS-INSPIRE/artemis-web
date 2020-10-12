@@ -4,16 +4,15 @@ import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
 import HijackTableComponent from '../components/ongoing-hijack-table/ongoing-hijack-table';
 import { useUser } from '../lib/hooks';
-import graphQL from '../utils/graphql';
+import { initializeApollo, STATS_QUERY, HIJACK_QUERY } from '../utils/graphql';
+import { useQuery } from '@apollo/client';
 
-const OverviewPage = () => {
+const OverviewPage = (props) => {
   const Footer = dynamic(() => import('../components/footer/footer'));
   const Header = dynamic(() => import('../components/header/header'));
   const [user, { loading }] = useUser();
   const router = useRouter();
-
-  const client = graphQL.graphqlConnect();
-  graphQL.getStats(client).then((result) => console.log(result));
+  let { data } = useQuery(HIJACK_QUERY);
 
   useEffect(() => {
     // redirect to home if user is authenticated
@@ -115,5 +114,15 @@ const OverviewPage = () => {
     </>
   );
 };
+
+export async function getStaticProps() {
+  const apolloClient = initializeApollo();
+
+  return {
+    props: {
+      initialApolloState: apolloClient.cache.extract(),
+    },
+  };
+}
 
 export default OverviewPage;
