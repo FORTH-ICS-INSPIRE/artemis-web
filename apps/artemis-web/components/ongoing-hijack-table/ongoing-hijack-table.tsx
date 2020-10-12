@@ -1,7 +1,7 @@
 import React from 'react';
 import BootstrapTable from 'react-bootstrap-table-next';
 
-let mockHijacks = [
+const mockHijacks = [
   {
     update: 20,
     time: 'sfsf',
