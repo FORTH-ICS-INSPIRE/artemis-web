@@ -5,14 +5,17 @@ import React, { useEffect } from 'react';
 import HijackTableComponent from '../components/ongoing-hijack-table/ongoing-hijack-table';
 import { useUser } from '../lib/hooks';
 import { initializeApollo, STATS_QUERY, HIJACK_QUERY } from '../utils/graphql';
-import { useQuery } from '@apollo/client';
+import { useQuery, useSubscription } from '@apollo/client';
 
 const OverviewPage = (props) => {
   const Footer = dynamic(() => import('../components/footer/footer'));
   const Header = dynamic(() => import('../components/header/header'));
   const [user, { loading }] = useUser();
   const router = useRouter();
-  let { data } = useQuery(HIJACK_QUERY);
+
+  const STATS_DATA = useQuery(STATS_QUERY).data;
+  const HIJACK_DATA = useQuery(HIJACK_QUERY).data;
+  console.log(HIJACK_DATA);
 
   useEffect(() => {
     // redirect to home if user is authenticated
@@ -58,7 +61,9 @@ const OverviewPage = (props) => {
               <div className="card">
                 <div className="card-header">Ongoing, Non-Dormant Hijacks </div>
                 <div className="card-body">
-                  <HijackTableComponent />
+                  <HijackTableComponent
+                    data={HIJACK_DATA ? HIJACK_DATA.view_hijacks : []}
+                  />
                 </div>
               </div>
             </div>
@@ -78,11 +83,25 @@ const OverviewPage = (props) => {
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
-                        <td>Clock</td>
-                        <td>On</td>
-                        <td>8h</td>
-                      </tr>
+                      {STATS_DATA != undefined ? (
+                        STATS_DATA.view_processes.map((process) => {
+                          return (
+                            <tr>
+                              <td>{process.name}</td>
+                              <td>{process.running ? 'On' : 'Off'}</td>
+                              <td>
+                                {process.running
+                                  ? new Date().getHours() -
+                                    new Date(process.timestamp).getHours() +
+                                    'h'
+                                  : '0h'}
+                              </td>
+                            </tr>
+                          );
+                        })
+                      ) : (
+                        <tr></tr>
+                      )}
                     </tbody>
                   </table>
                 </div>
