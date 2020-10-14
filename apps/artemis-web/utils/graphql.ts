@@ -26,6 +26,14 @@ const createApolloClient = () => {
         uri: `ws://localhost:9999/v1/graphql`,
         options: {
           reconnect: true,
+          lazy: true,
+          connectionParams: async () => {
+            return {
+              headers: {
+                'x-hasura-admin-secret': constants.HASURA_SECRET,
+              },
+            };
+          },
         },
       })
     : null;
@@ -48,13 +56,13 @@ const createApolloClient = () => {
             definition.operation === 'subscription'
           );
         },
-        wsLink,
+        authLink.concat(wsLink),
         authLink.concat(httpLink)
       )
     : null;
 
   return new ApolloClient({
-    link: authLink.concat(httpLink),
+    link: splitLink,
     cache: new InMemoryCache(),
   });
 };
@@ -71,9 +79,8 @@ export const initializeApollo = (initialState = null) => {
 
   return apolloClient;
 };
-
 export const STATS_QUERY = gql`
-  query getStats {
+  subscription getStats {
     view_processes {
       name
       running
@@ -85,7 +92,7 @@ export const STATS_QUERY = gql`
 
 // An example graphql query to test the API
 export const HIJACK_QUERY = gql`
-  query hijacks {
+  subscription hijacks {
     view_hijacks(limit: 10, order_by: { time_last: desc }) {
       active
       comment

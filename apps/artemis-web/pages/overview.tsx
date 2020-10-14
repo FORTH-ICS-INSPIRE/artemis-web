@@ -13,9 +13,8 @@ const OverviewPage = (props) => {
   const [user, { loading }] = useUser();
   const router = useRouter();
 
-  const STATS_DATA = useQuery(STATS_QUERY).data;
-  const HIJACK_DATA = useQuery(HIJACK_QUERY).data;
-  console.log(HIJACK_DATA);
+  const STATS_DATA = useSubscription(STATS_QUERY).data;
+  const HIJACK_DATA = useSubscription(HIJACK_QUERY).data;
 
   useEffect(() => {
     // redirect to home if user is authenticated
@@ -83,7 +82,7 @@ const OverviewPage = (props) => {
                       </tr>
                     </thead>
                     <tbody>
-                      {STATS_DATA != undefined ? (
+                      {STATS_DATA && STATS_DATA ? (
                         STATS_DATA.view_processes.map((process) => {
                           return (
                             <tr>
