@@ -12,10 +12,22 @@ import { WebSocketLink } from '@apollo/client/link/ws';
 import { useMemo } from 'react';
 import { setContext } from '@apollo/client/link/context';
 import constants from './constants';
+// import fetch from 'sync-fetch';
 
 let apolloClient: ApolloClient<NormalizedCacheObject>;
 
+async function jw() {
+  let res = fetch('http://localhost:4200/api/jwt', {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
+  });
+  const jwt = res.json();
+
+  return jwt;
+}
+
 const createApolloClient = () => {
+  // console.log(jwt);
   const httpLink = createHttpLink({
     uri: constants.GRAPHQL_URI,
     useGETForQueries: false,
