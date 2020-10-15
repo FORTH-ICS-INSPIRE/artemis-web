@@ -6,6 +6,8 @@ import HijackTableComponent from '../components/ongoing-hijack-table/ongoing-hij
 import { useUser } from '../lib/hooks';
 import { initializeApollo, STATS_QUERY, HIJACK_QUERY } from '../utils/graphql';
 import { useQuery, useSubscription } from '@apollo/client';
+import Cookies from 'js-cookie';
+import { useCookie } from 'next-cookie'
 
 const OverviewPage = (props) => {
   const Footer = dynamic(() => import('../components/footer/footer'));
@@ -47,8 +49,8 @@ const OverviewPage = (props) => {
                   at (
                   {user &&
                     new Date(user.lastLogin).toLocaleDateString() +
-                      ' ' +
-                      new Date(user.lastLogin).toLocaleTimeString()}
+                    ' ' +
+                    new Date(user.lastLogin).toLocaleTimeString()}
                   ). You are {user && user.role}.
                 </div>
               </div>
@@ -91,16 +93,16 @@ const OverviewPage = (props) => {
                               <td>
                                 {process.running
                                   ? new Date().getHours() -
-                                    new Date(process.timestamp).getHours() +
-                                    'h'
+                                  new Date(process.timestamp).getHours() +
+                                  'h'
                                   : '0h'}
                               </td>
                             </tr>
                           );
                         })
                       ) : (
-                        <tr></tr>
-                      )}
+                          <tr></tr>
+                        )}
                     </tbody>
                   </table>
                 </div>
@@ -133,8 +135,11 @@ const OverviewPage = (props) => {
   );
 };
 
-export async function getStaticProps() {
-  const apolloClient = initializeApollo();
+export function getServerSideProps(context) {
+  const cookie = useCookie(context)
+  const token = cookie.get('token');
+
+  const apolloClient = initializeApollo(null, token);
 
   return {
     props: {

@@ -16,18 +16,8 @@ import constants from './constants';
 
 let apolloClient: ApolloClient<NormalizedCacheObject>;
 
-async function jw() {
-  let res = fetch('http://localhost:4200/api/jwt', {
-    method: 'GET',
-    headers: { 'Content-Type': 'application/json' },
-  });
-  const jwt = res.json();
-
-  return jwt;
-}
-
 const createApolloClient = () => {
-  // console.log(jwt);
+
   const httpLink = createHttpLink({
     uri: constants.GRAPHQL_URI,
     useGETForQueries: false,
@@ -35,19 +25,19 @@ const createApolloClient = () => {
 
   const wsLink = process.browser
     ? new WebSocketLink({
-        uri: `ws://localhost:9999/v1/graphql`,
-        options: {
-          reconnect: true,
-          lazy: true,
-          connectionParams: async () => {
-            return {
-              headers: {
-                'x-hasura-admin-secret': constants.HASURA_SECRET,
-              },
-            };
-          },
+      uri: `ws://localhost:9999/v1/graphql`,
+      options: {
+        reconnect: true,
+        lazy: true,
+        connectionParams: async () => {
+          return {
+            headers: {
+              'x-hasura-admin-secret': constants.HASURA_SECRET,
+            },
+          };
         },
-      })
+      },
+    })
     : null;
 
   const authLink = setContext((_, { headers }) => {
@@ -61,16 +51,16 @@ const createApolloClient = () => {
 
   const splitLink = process.browser
     ? split(
-        ({ query }) => {
-          const definition = getMainDefinition(query);
-          return (
-            definition.kind === 'OperationDefinition' &&
-            definition.operation === 'subscription'
-          );
-        },
-        authLink.concat(wsLink),
-        authLink.concat(httpLink)
-      )
+      ({ query }) => {
+        const definition = getMainDefinition(query);
+        return (
+          definition.kind === 'OperationDefinition' &&
+          definition.operation === 'subscription'
+        );
+      },
+      authLink.concat(wsLink),
+      authLink.concat(httpLink)
+    )
     : null;
 
   return new ApolloClient({
@@ -79,7 +69,7 @@ const createApolloClient = () => {
   });
 };
 
-export const initializeApollo = (initialState = null) => {
+export const initializeApollo = (initialState = null, token) => {
   const _apolloClient = apolloClient ?? createApolloClient();
 
   if (initialState) {
@@ -135,6 +125,6 @@ export const HIJACK_QUERY = gql`
 `;
 
 export const useApollo = (initialState) => {
-  const store = useMemo(() => initializeApollo(initialState), [initialState]);
+  const store = useMemo(() => initializeApollo(initialState, null), [initialState]);
   return store;
 };
