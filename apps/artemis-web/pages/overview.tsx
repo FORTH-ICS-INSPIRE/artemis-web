@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
 import HijackTableComponent from '../components/ongoing-hijack-table/ongoing-hijack-table';
 import { useUser } from '../lib/hooks';
-import { initializeApollo, STATS_QUERY, HIJACK_QUERY } from '../utils/graphql';
+import { initializeApollo, STATS_QUERY, STATS_SUB, HIJACK_QUERY } from '../utils/graphql';
 import { useQuery, useSubscription } from '@apollo/client';
 import Cookies from 'js-cookie';
 import { useCookie } from 'next-cookie'
@@ -15,7 +15,7 @@ const OverviewPage = (props) => {
   const [user, { loading }] = useUser();
   const router = useRouter();
 
-  const STATS_DATA = useSubscription(STATS_QUERY).data;
+  const STATS_DATA = useSubscription(STATS_SUB).data;
   const HIJACK_DATA = useSubscription(HIJACK_QUERY).data;
 
   useEffect(() => {
@@ -135,11 +135,8 @@ const OverviewPage = (props) => {
   );
 };
 
-export function getServerSideProps(context) {
-  const cookie = useCookie(context)
-  const token = cookie.get('token');
-
-  const apolloClient = initializeApollo(null, token);
+export function getStaticProps(context) {
+  const apolloClient = initializeApollo(null);
 
   return {
     props: {

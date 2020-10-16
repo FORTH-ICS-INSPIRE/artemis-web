@@ -13,10 +13,15 @@ import { useMemo } from 'react';
 import { setContext } from '@apollo/client/link/context';
 import constants from './constants';
 // import fetch from 'sync-fetch';
+let accessToken = null;
+const requestToken = async () => {
+  const res = await fetch('/api/jwt');
+  accessToken = await res.json();
+};
 
 let apolloClient: ApolloClient<NormalizedCacheObject>;
 
-const createApolloClient = (token) => {
+const createApolloClient = () => {
   const httpLink = createHttpLink({
     uri: constants.GRAPHQL_URI,
     useGETForQueries: false,
@@ -29,9 +34,11 @@ const createApolloClient = (token) => {
         reconnect: true,
         lazy: true,
         connectionParams: async () => {
+          await requestToken();
+          console.log(accessToken.access_token);
           return {
             headers: {
-                "Authorization":"Bearer " + token,
+                authorization: `Bearer ${accessToken.access_token}`
               //'x-hasura-admin-secret': constants.HASURA_SECRET,
             },
           };
@@ -69,9 +76,8 @@ const createApolloClient = (token) => {
   });
 };
 
-export const initializeApollo = (initialState = null, token) => {
-  const _apolloClient = apolloClient ?? createApolloClient(token);
-
+export const initializeApollo = (initialState = null) => {
+  const _apolloClient = apolloClient ?? createApolloClient();
   if (initialState) {
     _apolloClient.cache.restore(initialState);
   }
@@ -81,8 +87,19 @@ export const initializeApollo = (initialState = null, token) => {
 
   return apolloClient;
 };
-export const STATS_QUERY = gql`
+export const STATS_SUB = gql`
   subscription getStats {
+    view_processes {
+      name
+      running
+      loading
+      timestamp
+    }
+  }
+`;
+
+export const STATS_QUERY = gql`
+  query getStats {
     view_processes {
       name
       running
