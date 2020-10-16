@@ -65,6 +65,7 @@ handler.post(
           '44fe431cdc896ccab691ad0599f4e0a12690ce1ededebe57b825823bc6b4d24f'
         ),
       };
+
       res.cookie('token', token.access_token, {
         path: '/',
         httpOnly: true,

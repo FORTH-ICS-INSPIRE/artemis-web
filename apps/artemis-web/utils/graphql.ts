@@ -16,8 +16,7 @@ import constants from './constants';
 
 let apolloClient: ApolloClient<NormalizedCacheObject>;
 
-const createApolloClient = () => {
-
+const createApolloClient = (token) => {
   const httpLink = createHttpLink({
     uri: constants.GRAPHQL_URI,
     useGETForQueries: false,
@@ -32,7 +31,8 @@ const createApolloClient = () => {
         connectionParams: async () => {
           return {
             headers: {
-              'x-hasura-admin-secret': constants.HASURA_SECRET,
+                "Authorization":"Bearer " + token,
+              //'x-hasura-admin-secret': constants.HASURA_SECRET,
             },
           };
         },
@@ -70,7 +70,7 @@ const createApolloClient = () => {
 };
 
 export const initializeApollo = (initialState = null, token) => {
-  const _apolloClient = apolloClient ?? createApolloClient();
+  const _apolloClient = apolloClient ?? createApolloClient(token);
 
   if (initialState) {
     _apolloClient.cache.restore(initialState);
