@@ -5,8 +5,6 @@ import { extractUser } from '../../lib/helpers';
 import { NextApiRequest, NextApiResponse } from 'next';
 import getRandomString from '../../utils/token';
 
-import jwt from 'jsonwebtoken';
-
 interface NextApiRequestExtended extends NextApiRequest {
   db: any;
   user: any;

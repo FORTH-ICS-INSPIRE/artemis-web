@@ -1,19 +1,28 @@
 import nextConnect from 'next-connect';
 import jwt from 'jsonwebtoken';
 import auth from '../../middleware/auth';
+import { NextApiRequest, NextApiResponse } from 'next';
+
+interface NextApiRequestExtended extends NextApiRequest {
+  user: any;
+}
+
+interface NextApiResponseExtended extends NextApiResponse {
+  send(arg0: any);
+}
 
 const handler = nextConnect();
 handler.use(auth);
 
-handler.get((req, res) => {
+handler.get((req: NextApiRequestExtended, res: NextApiResponseExtended) => {
   if (!req.user) res.send(null);
   else {
-    let now = new Date();
+    const now = new Date();
     let time = now.getTime();
     time += 3600 * 1000;
-
+    
     res.send({
-      access_token: jwt.sign(
+      accessToken: jwt.sign(
         {
           'https://hasura.io/jwt/claims': {
             'x-hasura-allowed-roles': ['user'],
@@ -21,14 +30,14 @@ handler.get((req, res) => {
             'x-hasura-user-id': '11',
           },
           exp: time,
-          sub: req.use.role,
+          sub: req.user.role,
           fresh: false,
           type: 'access',
         },
-        '44fe431cdc896ccab691ad0599f4e0a12690ce1ededebe57b825823bc6b4d24f'
+       process.env.JWT_SECRET 
       ),
     });
   }
 });
-// var token = jwt.sign({ foo: 'bar' }, 'shhhhh');
+
 export default handler;

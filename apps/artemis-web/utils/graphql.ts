@@ -5,14 +5,13 @@ import {
   createHttpLink,
   gql,
 } from '@apollo/client';
-import { split, HttpLink } from '@apollo/client';
+import { split } from '@apollo/client';
 import { getMainDefinition } from '@apollo/client/utilities';
 import { WebSocketLink } from '@apollo/client/link/ws';
 
 import { useMemo } from 'react';
 import { setContext } from '@apollo/client/link/context';
-import constants from './constants';
-// import fetch from 'sync-fetch';
+
 let accessToken = null;
 const requestToken = async () => {
   const res = await fetch('/api/jwt');
@@ -23,7 +22,7 @@ let apolloClient: ApolloClient<NormalizedCacheObject>;
 
 const createApolloClient = () => {
   const httpLink = createHttpLink({
-    uri: constants.GRAPHQL_URI,
+    uri: `http://localhost:9999/v1/graphql`,
     useGETForQueries: false,
   });
 
@@ -35,10 +34,9 @@ const createApolloClient = () => {
         lazy: true,
         connectionParams: async () => {
           await requestToken();
-          console.log(accessToken.access_token);
           return {
             headers: {
-                authorization: `Bearer ${accessToken.access_token}`
+                authorization: `Bearer ${accessToken.accessToken}`
               //'x-hasura-admin-secret': constants.HASURA_SECRET,
             },
           };
@@ -47,11 +45,13 @@ const createApolloClient = () => {
     })
     : null;
 
-  const authLink = setContext((_, { headers }) => {
+  const authLink = setContext(async (_, { headers }) => {
+    await requestToken();
     return {
       headers: {
         ...headers,
-        'x-hasura-admin-secret': constants.HASURA_SECRET,
+        // 'x-hasura-admin-secret': process.env.HASURA_SECRET
+        authorization: `Bearer ${accessToken.accessToken}`
       },
     };
   });
@@ -142,6 +142,6 @@ export const HIJACK_QUERY = gql`
 `;
 
 export const useApollo = (initialState) => {
-  const store = useMemo(() => initializeApollo(initialState, null), [initialState]);
+  const store = useMemo(() => initializeApollo(initialState), [initialState]);
   return store;
 };
