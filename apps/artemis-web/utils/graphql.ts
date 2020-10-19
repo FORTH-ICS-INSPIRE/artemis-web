@@ -35,15 +35,15 @@ const createApolloClient = (GRAPHQL_URI, GRAPHQL_WS_URI) => {
           lazy: true,
           connectionParams: async () => {
             accessToken = getCookie('jwt');
-            
+
             if (process.browser && !accessToken) {
               await requestToken();
               accessToken = accessToken.accessToken;
-              setCookie("jwt", accessToken, 1);
+              setCookie('jwt', accessToken, 1);
             } else {
               accessToken = accessToken;
             }
-            
+
             return {
               headers: {
                 authorization: `Bearer ${accessToken}`,
@@ -57,15 +57,15 @@ const createApolloClient = (GRAPHQL_URI, GRAPHQL_WS_URI) => {
 
   const authLink = setContext(async (_, { headers }) => {
     accessToken = getCookie('jwt');
-            
+
     if (process.browser && !accessToken) {
       await requestToken();
       accessToken = accessToken.accessToken;
-      setCookie("jwt", accessToken, 1);
+      setCookie('jwt', accessToken, 1);
     } else {
       accessToken = accessToken;
     }
-    
+
     return {
       headers: {
         ...headers,
