@@ -26,9 +26,9 @@ const OverviewPage = (props) => {
       <Head>
         <title>ARTEMIS - Overview</title>
       </Head>
-        <div id="page-container" style={{ paddingTop: '120px' }}>
-          <Header />
-          {user && !loading && (
+      <div id="page-container" style={{ paddingTop: '120px' }}>
+        <Header />
+        {user && !loading && (
           <div id="content-wrap" style={{ paddingBottom: '5rem' }}>
             <div className="row">
               <div className="col-lg-1" />
@@ -47,8 +47,8 @@ const OverviewPage = (props) => {
                     at (
                     {user &&
                       new Date(user.lastLogin).toLocaleDateString() +
-                        ' ' +
-                        new Date(user.lastLogin).toLocaleTimeString()}
+                      ' ' +
+                      new Date(user.lastLogin).toLocaleTimeString()}
                     ). You are {user && user.role}.
                   </div>
                 </div>
@@ -75,7 +75,7 @@ const OverviewPage = (props) => {
                 <div className="card">
                   <div className="card-header"> System Status </div>
                   <div className="card-body">
-                    <table className="table table-hover">
+                    <table id="modules" className="table table-hover">
                       <thead>
                         <tr>
                           <th>Module</th>
@@ -93,16 +93,16 @@ const OverviewPage = (props) => {
                                 <td>
                                   {process.running
                                     ? new Date().getHours() -
-                                      new Date(process.timestamp).getHours() +
-                                      'h'
+                                    new Date(process.timestamp).getHours() +
+                                    'h'
                                     : '0h'}
                                 </td>
                               </tr>
                             );
                           })
                         ) : (
-                          <tr></tr>
-                        )}
+                            <tr></tr>
+                          )}
                       </tbody>
                     </table>
                   </div>
@@ -129,8 +129,8 @@ const OverviewPage = (props) => {
               </div>
             </div>
           </div>
-          )}
-        </div>
+        )}
+      </div>
       <Footer />
     </>
   );

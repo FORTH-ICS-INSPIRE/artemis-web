@@ -37,35 +37,35 @@ const createApolloClient = (GRAPHQL_URI, GRAPHQL_WS_URI) => {
 
   const wsLink = process.browser
     ? new WebSocketLink({
-        uri: GRAPHQL_WS_URI,
-        options: {
-          reconnect: true,
-          lazy: true,
-          connectionParams: async () => {
-            await requestToken();
-            return {
-              headers: {
-                authorization: `Bearer ${accessToken}`,
-                //'x-hasura-admin-secret': constants.HASURA_SECRET,
-              },
-            };
-          },
+      uri: GRAPHQL_WS_URI,
+      options: {
+        reconnect: true,
+        lazy: true,
+        connectionParams: async () => {
+          await requestToken();
+          return {
+            headers: {
+              authorization: `Bearer ${accessToken}`,
+              //'x-hasura-admin-secret': constants.HASURA_SECRET,
+            },
+          };
         },
-      })
+      },
+    })
     : null;
 
   const splitLink = process.browser
     ? split(
-        ({ query }) => {
-          const definition = getMainDefinition(query);
-          return (
-            definition.kind === 'OperationDefinition' &&
-            definition.operation === 'subscription'
-          );
-        },
-        wsLink,
-        httpLink
-      )
+      ({ query }) => {
+        const definition = getMainDefinition(query);
+        return (
+          definition.kind === 'OperationDefinition' &&
+          definition.operation === 'subscription'
+        );
+      },
+      wsLink,
+      httpLink
+    )
     : null;
 
   return new ApolloClient({
