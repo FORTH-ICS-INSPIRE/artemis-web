@@ -11,6 +11,7 @@ import { WebSocketLink } from '@apollo/client/link/ws';
 
 import { useMemo } from 'react';
 import { setContext } from '@apollo/client/link/context';
+import { setCookie, getCookie } from './token';
 
 let accessToken = null;
 const requestToken = async () => {
@@ -21,8 +22,6 @@ const requestToken = async () => {
 let apolloClient: ApolloClient<NormalizedCacheObject>;
 
 const createApolloClient = (GRAPHQL_URI, GRAPHQL_WS_URI) => {
-  if (process.browser) console.log(document.cookie);
-  
   const httpLink = createHttpLink({
     uri: GRAPHQL_URI,
     useGETForQueries: false,
@@ -35,10 +34,19 @@ const createApolloClient = (GRAPHQL_URI, GRAPHQL_WS_URI) => {
           reconnect: true,
           lazy: true,
           connectionParams: async () => {
-            await requestToken();
+            accessToken = getCookie('jwt');
+            
+            if (process.browser && !accessToken) {
+              await requestToken();
+              accessToken = accessToken.accessToken;
+              setCookie("jwt", accessToken, 1);
+            } else {
+              accessToken = accessToken;
+            }
+            
             return {
               headers: {
-                authorization: `Bearer ${accessToken.accessToken}`,
+                authorization: `Bearer ${accessToken}`,
                 //'x-hasura-admin-secret': constants.HASURA_SECRET,
               },
             };
@@ -48,12 +56,21 @@ const createApolloClient = (GRAPHQL_URI, GRAPHQL_WS_URI) => {
     : null;
 
   const authLink = setContext(async (_, { headers }) => {
-    await requestToken();
+    accessToken = getCookie('jwt');
+            
+    if (process.browser && !accessToken) {
+      await requestToken();
+      accessToken = accessToken.accessToken;
+      setCookie("jwt", accessToken, 1);
+    } else {
+      accessToken = accessToken;
+    }
+    
     return {
       headers: {
         ...headers,
         // 'x-hasura-admin-secret': process.env.HASURA_SECRET
-        authorization: `Bearer ${accessToken.accessToken}`,
+        authorization: `Bearer ${accessToken}`,
       },
     };
   });
@@ -78,9 +95,13 @@ const createApolloClient = (GRAPHQL_URI, GRAPHQL_WS_URI) => {
   });
 };
 
-export const initializeApollo = (initialState = null, GRAPHQL_URI, GRAPHQL_WS_URI) => {
-
-  const _apolloClient = apolloClient ?? createApolloClient(GRAPHQL_URI, GRAPHQL_WS_URI);
+export const initializeApollo = (
+  initialState = null,
+  GRAPHQL_URI,
+  GRAPHQL_WS_URI
+) => {
+  const _apolloClient =
+    apolloClient ?? createApolloClient(GRAPHQL_URI, GRAPHQL_WS_URI);
   if (initialState) {
     _apolloClient.cache.restore(initialState);
   }
@@ -144,7 +165,10 @@ export const HIJACK_SUB = gql`
   }
 `;
 
-export const useApollo = (initialState, GRAPHQL_URI, GRAPHQL_WS_URI ) => {
-  const store = useMemo(() => initializeApollo(initialState, GRAPHQL_URI, GRAPHQL_WS_URI), [initialState]);
+export const useApollo = (initialState, GRAPHQL_URI, GRAPHQL_WS_URI) => {
+  const store = useMemo(
+    () => initializeApollo(initialState, GRAPHQL_URI, GRAPHQL_WS_URI),
+    [initialState]
+  );
   return store;
 };

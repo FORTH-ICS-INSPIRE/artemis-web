@@ -15,7 +15,7 @@ const OverviewPage = (props) => {
 
   const STATS_DATA = useSubscription(STATS_SUB).data;
   const HIJACK_DATA = useSubscription(HIJACK_SUB).data;
-  
+
   useEffect(() => {
     // redirect to home if user is authenticated
     if (!user && !loading) router.push('/signin');
@@ -134,7 +134,11 @@ const OverviewPage = (props) => {
 };
 
 export function getStaticProps(context) {
-  const apolloClient = initializeApollo(null, process.env.GRAPHQL_URI, process.env.GRAPHQL_WS_URI);
+  const apolloClient = initializeApollo(
+    null,
+    process.env.GRAPHQL_URI,
+    process.env.GRAPHQL_WS_URI
+  );
   return {
     props: {
       GRAPHQL_WS_URI: process.env.GRAPHQL_WS_URI,
