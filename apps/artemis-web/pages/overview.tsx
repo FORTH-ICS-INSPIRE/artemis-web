@@ -83,9 +83,9 @@ const OverviewPage = (props) => {
                     </thead>
                     <tbody>
                       {STATS_DATA && STATS_DATA ? (
-                        STATS_DATA.view_processes.map((process) => {
+                        STATS_DATA.view_processes.map((process, i) => {
                           return (
-                            <tr>
+                            <tr key={i}>
                               <td>{process.name}</td>
                               <td>{process.running ? 'On' : 'Off'}</td>
                               <td>

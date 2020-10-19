@@ -40,8 +40,6 @@ const createApolloClient = (GRAPHQL_URI, GRAPHQL_WS_URI) => {
               await requestToken();
               accessToken = accessToken.accessToken;
               setCookie('jwt', accessToken, 1);
-            } else {
-              accessToken = accessToken;
             }
 
             return {
@@ -57,15 +55,13 @@ const createApolloClient = (GRAPHQL_URI, GRAPHQL_WS_URI) => {
 
   const authLink = setContext(async (_, { headers }) => {
     accessToken = getCookie('jwt');
-
+    
     if (process.browser && !accessToken) {
       await requestToken();
       accessToken = accessToken.accessToken;
       setCookie('jwt', accessToken, 1);
-    } else {
-      accessToken = accessToken;
     }
-
+    
     return {
       headers: {
         ...headers,
@@ -168,7 +164,7 @@ export const HIJACK_SUB = gql`
 export const useApollo = (initialState, GRAPHQL_URI, GRAPHQL_WS_URI) => {
   const store = useMemo(
     () => initializeApollo(initialState, GRAPHQL_URI, GRAPHQL_WS_URI),
-    [initialState]
+    [initialState, GRAPHQL_URI, GRAPHQL_WS_URI]
   );
   return store;
 };

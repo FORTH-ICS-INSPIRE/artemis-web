@@ -17,10 +17,6 @@ handler.use(auth);
 handler.get((req: NextApiRequestExtended, res: NextApiResponseExtended) => {
   if (!req.user) res.send(null);
   else {
-    const now = new Date();
-    let time = now.getTime();
-    time += 3600 * 1000;
-
     res.send({
       accessToken: jwt.sign(
         {

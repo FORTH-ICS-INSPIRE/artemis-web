@@ -15,16 +15,17 @@ const getRandomInt = (min, max) => {
 };
 
 export const getCookie = (name) => {
-  var dc = document.cookie;
-  var prefix = name + '=';
-  var begin = dc.indexOf('; ' + prefix);
-  if (begin == -1) {
+  const dc = document.cookie;
+  const prefix = name + '=';
+  let begin = dc.indexOf('; ' + prefix);
+  let end;
+  if (begin === -1) {
     begin = dc.indexOf(prefix);
-    if (begin != 0) return null;
+    if (begin !== 0) return null;
   } else {
     begin += 2;
-    var end = document.cookie.indexOf(';', begin);
-    if (end == -1) {
+    end = document.cookie.indexOf(';', begin);
+    if (end === -1) {
       end = dc.length;
     }
   }
@@ -33,9 +34,9 @@ export const getCookie = (name) => {
   return decodeURI(dc.substring(begin + prefix.length, end));
 };
 export const setCookie = (cname, cvalue, exHours) => {
-  var d = new Date();
+  const d = new Date();
   d.setTime(d.getTime() + exHours * 60 * 60 * 1000);
-  var expires = 'expires=' + d.toUTCString();
+  const expires = 'expires=' + d.toUTCString();
   document.cookie = cname + '=' + cvalue + ';' + expires + ';path=/';
 };
 
