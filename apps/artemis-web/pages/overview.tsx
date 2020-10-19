@@ -4,8 +4,8 @@ import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
 import HijackTableComponent from '../components/ongoing-hijack-table/ongoing-hijack-table';
 import { useUser } from '../lib/hooks';
-import { initializeApollo, STATS_SUB, HIJACK_QUERY } from '../utils/graphql';
-import { useQuery, useSubscription } from '@apollo/client';
+import { initializeApollo, STATS_SUB, HIJACK_SUB } from '../utils/graphql';
+import { useSubscription } from '@apollo/client';
 
 const OverviewPage = (props) => {
   const Footer = dynamic(() => import('../components/footer/footer'));
@@ -13,9 +13,9 @@ const OverviewPage = (props) => {
   const [user, { loading }] = useUser();
   const router = useRouter();
 
-  const STATS_DATA = useQuery(STATS_SUB).data;
-  const HIJACK_DATA = useSubscription(HIJACK_QUERY).data;
-
+  const STATS_DATA = useSubscription(STATS_SUB).data;
+  const HIJACK_DATA = useSubscription(HIJACK_SUB).data;
+  
   useEffect(() => {
     // redirect to home if user is authenticated
     if (!user && !loading) router.push('/signin');
@@ -47,8 +47,8 @@ const OverviewPage = (props) => {
                   at (
                   {user &&
                     new Date(user.lastLogin).toLocaleDateString() +
-                    ' ' +
-                    new Date(user.lastLogin).toLocaleTimeString()}
+                      ' ' +
+                      new Date(user.lastLogin).toLocaleTimeString()}
                   ). You are {user && user.role}.
                 </div>
               </div>
@@ -91,16 +91,16 @@ const OverviewPage = (props) => {
                               <td>
                                 {process.running
                                   ? new Date().getHours() -
-                                  new Date(process.timestamp).getHours() +
-                                  'h'
+                                    new Date(process.timestamp).getHours() +
+                                    'h'
                                   : '0h'}
                               </td>
                             </tr>
                           );
                         })
                       ) : (
-                          <tr></tr>
-                        )}
+                        <tr></tr>
+                      )}
                     </tbody>
                   </table>
                 </div>
@@ -134,10 +134,11 @@ const OverviewPage = (props) => {
 };
 
 export function getStaticProps(context) {
-  const apolloClient = initializeApollo(null);
-
+  const apolloClient = initializeApollo(null, process.env.GRAPHQL_URI, process.env.GRAPHQL_WS_URI);
   return {
     props: {
+      GRAPHQL_WS_URI: process.env.GRAPHQL_WS_URI,
+      GRAPHQL_URI: process.env.GRAPHQL_URI,
       initialApolloState: apolloClient.cache.extract(),
     },
   };

@@ -20,29 +20,31 @@ const requestToken = async () => {
 
 let apolloClient: ApolloClient<NormalizedCacheObject>;
 
-const createApolloClient = () => {
+const createApolloClient = (GRAPHQL_URI, GRAPHQL_WS_URI) => {
+  if (process.browser) console.log(document.cookie);
+  
   const httpLink = createHttpLink({
-    uri: `http://localhost:9999/v1/graphql`,
+    uri: GRAPHQL_URI,
     useGETForQueries: false,
   });
 
   const wsLink = process.browser
     ? new WebSocketLink({
-      uri: `ws://localhost:9999/v1/graphql`,
-      options: {
-        reconnect: true,
-        lazy: true,
-        connectionParams: async () => {
-          await requestToken();
-          return {
-            headers: {
-                authorization: `Bearer ${accessToken.accessToken}`
-              //'x-hasura-admin-secret': constants.HASURA_SECRET,
-            },
-          };
+        uri: GRAPHQL_WS_URI,
+        options: {
+          reconnect: true,
+          lazy: true,
+          connectionParams: async () => {
+            await requestToken();
+            return {
+              headers: {
+                authorization: `Bearer ${accessToken.accessToken}`,
+                //'x-hasura-admin-secret': constants.HASURA_SECRET,
+              },
+            };
+          },
         },
-      },
-    })
+      })
     : null;
 
   const authLink = setContext(async (_, { headers }) => {
@@ -51,23 +53,23 @@ const createApolloClient = () => {
       headers: {
         ...headers,
         // 'x-hasura-admin-secret': process.env.HASURA_SECRET
-        authorization: `Bearer ${accessToken.accessToken}`
+        authorization: `Bearer ${accessToken.accessToken}`,
       },
     };
   });
 
   const splitLink = process.browser
     ? split(
-      ({ query }) => {
-        const definition = getMainDefinition(query);
-        return (
-          definition.kind === 'OperationDefinition' &&
-          definition.operation === 'subscription'
-        );
-      },
-      authLink.concat(wsLink),
-      authLink.concat(httpLink)
-    )
+        ({ query }) => {
+          const definition = getMainDefinition(query);
+          return (
+            definition.kind === 'OperationDefinition' &&
+            definition.operation === 'subscription'
+          );
+        },
+        authLink.concat(wsLink),
+        authLink.concat(httpLink)
+      )
     : null;
 
   return new ApolloClient({
@@ -76,8 +78,9 @@ const createApolloClient = () => {
   });
 };
 
-export const initializeApollo = (initialState = null) => {
-  const _apolloClient = apolloClient ?? createApolloClient();
+export const initializeApollo = (initialState = null, GRAPHQL_URI, GRAPHQL_WS_URI) => {
+
+  const _apolloClient = apolloClient ?? createApolloClient(GRAPHQL_URI, GRAPHQL_WS_URI);
   if (initialState) {
     _apolloClient.cache.restore(initialState);
   }
@@ -110,7 +113,7 @@ export const STATS_QUERY = gql`
 `;
 
 // An example graphql query to test the API
-export const HIJACK_QUERY = gql`
+export const HIJACK_SUB = gql`
   subscription hijacks {
     view_hijacks(limit: 10, order_by: { time_last: desc }) {
       active
@@ -141,7 +144,7 @@ export const HIJACK_QUERY = gql`
   }
 `;
 
-export const useApollo = (initialState) => {
-  const store = useMemo(() => initializeApollo(initialState), [initialState]);
+export const useApollo = (initialState, GRAPHQL_URI, GRAPHQL_WS_URI ) => {
+  const store = useMemo(() => initializeApollo(initialState, GRAPHQL_URI, GRAPHQL_WS_URI), [initialState]);
   return store;
 };

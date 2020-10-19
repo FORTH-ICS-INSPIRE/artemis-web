@@ -20,7 +20,7 @@ handler.get((req: NextApiRequestExtended, res: NextApiResponseExtended) => {
     const now = new Date();
     let time = now.getTime();
     time += 3600 * 1000;
-    
+
     res.send({
       accessToken: jwt.sign(
         {
@@ -29,12 +29,8 @@ handler.get((req: NextApiRequestExtended, res: NextApiResponseExtended) => {
             'x-hasura-default-role': 'user',
             'x-hasura-user-id': '11',
           },
-          exp: time,
-          sub: req.user.role,
-          fresh: false,
-          type: 'access',
         },
-       process.env.JWT_SECRET 
+        process.env.JWT_SECRET
       ),
     });
   }
