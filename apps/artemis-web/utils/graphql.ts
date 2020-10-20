@@ -10,13 +10,14 @@ import { getMainDefinition } from '@apollo/client/utilities';
 import { WebSocketLink } from '@apollo/client/link/ws';
 
 import { useMemo } from 'react';
-import { setContext } from '@apollo/client/link/context';
-import { setCookie, getCookie } from './token';
 
 let accessToken = null;
 const requestToken = async () => {
-  const res = await fetch('/api/jwt');
-  accessToken = await res.json();
+  if (!accessToken) {
+    const res = await fetch('/api/jwt');
+    accessToken = await res.json();
+    accessToken = accessToken.accessToken;
+  }
 };
 
 let apolloClient: ApolloClient<NormalizedCacheObject>;
@@ -25,6 +26,13 @@ const createApolloClient = (GRAPHQL_URI, GRAPHQL_WS_URI) => {
   const httpLink = createHttpLink({
     uri: GRAPHQL_URI,
     useGETForQueries: false,
+    headers: async () => {
+      await requestToken();
+      return {
+        authorization: `Bearer ${accessToken}`,
+        // 'x-hasura-admin-secret': process.env.HASURA_SECRET
+      };
+    },
   });
 
   const wsLink = process.browser
@@ -34,14 +42,7 @@ const createApolloClient = (GRAPHQL_URI, GRAPHQL_WS_URI) => {
           reconnect: true,
           lazy: true,
           connectionParams: async () => {
-            accessToken = getCookie('jwt');
-
-            if (process.browser && !accessToken) {
-              await requestToken();
-              accessToken = accessToken.accessToken;
-              setCookie('jwt', accessToken, 1);
-            }
-
+            await requestToken();
             return {
               headers: {
                 authorization: `Bearer ${accessToken}`,
@@ -53,24 +54,6 @@ const createApolloClient = (GRAPHQL_URI, GRAPHQL_WS_URI) => {
       })
     : null;
 
-  const authLink = setContext(async (_, { headers }) => {
-    accessToken = getCookie('jwt');
-    
-    if (process.browser && !accessToken) {
-      await requestToken();
-      accessToken = accessToken.accessToken;
-      setCookie('jwt', accessToken, 1);
-    }
-    
-    return {
-      headers: {
-        ...headers,
-        // 'x-hasura-admin-secret': process.env.HASURA_SECRET
-        authorization: `Bearer ${accessToken}`,
-      },
-    };
-  });
-
   const splitLink = process.browser
     ? split(
         ({ query }) => {
@@ -80,8 +63,8 @@ const createApolloClient = (GRAPHQL_URI, GRAPHQL_WS_URI) => {
             definition.operation === 'subscription'
           );
         },
-        authLink.concat(wsLink),
-        authLink.concat(httpLink)
+        wsLink,
+        httpLink
       )
     : null;
 
@@ -107,6 +90,7 @@ export const initializeApollo = (
 
   return apolloClient;
 };
+
 export const STATS_SUB = gql`
   subscription getStats {
     view_processes {
