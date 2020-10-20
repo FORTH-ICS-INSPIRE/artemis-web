@@ -1,7 +1,7 @@
 import React from 'react';
 import BootstrapTable from 'react-bootstrap-table-next';
 
-const products = [
+const mockBGP = [
   {
     timestamp: 20,
     prefix: 'sfsf',
@@ -129,8 +129,29 @@ const columns = [
   },
 ];
 
-const BGPTableComponent: React.FunctionComponent<{}> = () => {
-  return <BootstrapTable keyField="update" data={products} columns={columns} />;
+const BGPTableComponent = (props) => {
+  const BGP_DATA = props;
+  let bgp;
+  const debug = true;
+
+  if (BGP_DATA.length || !debug) {
+    bgp = BGP_DATA.map((row) => ({
+      update: row.time_last,
+      time: row.time_detected,
+      hprefix: row.prefix,
+      mprefix: row.configured_prefix,
+      type: row.type,
+      as: row.hijack_as,
+      rpki: row.key,
+      peers: row.num_peers_seen,
+      ASes: row.num_asns_inf,
+      ack: row.seen,
+      more: row.comment,
+    }));
+  } else {
+    bgp = mockBGP;
+  }
+  return <BootstrapTable keyField="update" data={bgp} columns={columns} />;
 };
 
 export default BGPTableComponent;
