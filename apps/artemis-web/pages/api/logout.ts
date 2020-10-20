@@ -16,6 +16,8 @@ interface NextApiResponseExtended extends NextApiResponse {
 handler
   .use(auth)
   .get((req: NextApiRequestExtended, res: NextApiResponseExtended) => {
+    console.log('mpike');
+    
     req.logOut();
     res.clearCookie('remember_me');
     res.status(204).end();
