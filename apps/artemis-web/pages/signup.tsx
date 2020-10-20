@@ -1,6 +1,8 @@
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
-import React from 'react';
+import { useRouter } from 'next/router';
+import React, { useEffect } from 'react';
+import { useUser } from '../lib/hooks';
 
 const SignupPage: React.FunctionComponent<{}> = () => {
   const Footer = dynamic(() => import('../components/footer/footer'));
@@ -8,6 +10,14 @@ const SignupPage: React.FunctionComponent<{}> = () => {
     import('../components/sign-up/sign-up')
   );
   const Header = dynamic(() => import('../components/header/header'));
+  const [user, { loading }] = useUser();
+  const router = useRouter();
+
+  useEffect(() => {
+    // redirect to home if user is authenticated
+    if (user && !loading) router.push('/');
+  }, [user, loading, router]);
+
   return (
     <>
       <Head>
@@ -16,11 +26,13 @@ const SignupPage: React.FunctionComponent<{}> = () => {
       </Head>
       <div id="page-container">
         <Header />
+        {!user && !loading && (
         <div id="content-wrap" style={{ paddingBottom: '5rem' }}>
           <div className="container d-flex align-items-center flex-column">
             <SignUpComponent />
           </div>
         </div>
+        )}
         <Footer />
       </div>
     </>

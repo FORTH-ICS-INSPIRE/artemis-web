@@ -42,6 +42,7 @@ handler.post(
         httpOnly: true,
         maxAge: 604800000,
       });
+
       res.json({ user: extractUser(req) });
     }
   }

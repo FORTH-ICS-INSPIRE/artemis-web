@@ -91,7 +91,7 @@ const Header = () => {
               )}
               {user && (
                 <li className="nav-item">
-                  <a href="#" className="nav-link" onClick={handleLogout}>
+                  <a className="nav-link" onClick={handleLogout}>
                     Sign out
                   </a>
                 </li>

@@ -1,7 +1,7 @@
 import React from 'react';
 import BootstrapTable from 'react-bootstrap-table-next';
 
-const products = [
+const mockHijacks = [
   {
     update: 20,
     time: 'sfsf',
@@ -199,8 +199,30 @@ const columns = [
   },
 ];
 
-const HijackTableComponent: React.FunctionComponent<{}> = () => {
-  return <BootstrapTable keyField="update" data={products} columns={columns} />;
+const HijackTableComponent = (props) => {
+  const HIJACK_DATA = props.data;
+  let hijacks;
+  const debug = true;
+
+  if (HIJACK_DATA.length || !debug) {
+    hijacks = HIJACK_DATA.map((row) => ({
+      update: row.time_last,
+      time: row.time_detected,
+      hprefix: row.prefix,
+      mprefix: row.configured_prefix,
+      type: row.type,
+      as: row.hijack_as,
+      rpki: row.key,
+      peers: row.num_peers_seen,
+      ASes: row.num_asns_inf,
+      ack: row.seen,
+      more: row.comment,
+    }));
+  } else {
+    hijacks = mockHijacks;
+  }
+
+  return <BootstrapTable keyField="update" data={hijacks} columns={columns} />;
 };
 
 export default HijackTableComponent;

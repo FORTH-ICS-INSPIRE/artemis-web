@@ -6,7 +6,7 @@ import BGPTableComponent from '../components/bgptable/bgptable';
 import { useUser } from '../lib/hooks';
 
 const BGPUpdates: React.FunctionComponent<{}> = () => {
-  const [user, loading] = useUser();
+  const [user, { loading }] = useUser();
   const router = useRouter();
 
   useEffect(() => {
@@ -23,6 +23,7 @@ const BGPUpdates: React.FunctionComponent<{}> = () => {
         <title>ARTEMIS - Overview</title>
       </Head>
       <Header />
+      {user && !loading && (
       <div
         className="container overview col-lg-12"
         style={{ paddingTop: '120px' }}
@@ -69,6 +70,7 @@ const BGPUpdates: React.FunctionComponent<{}> = () => {
           </div>
         </div>
       </div>
+      )}
       <Footer />
     </>
   );

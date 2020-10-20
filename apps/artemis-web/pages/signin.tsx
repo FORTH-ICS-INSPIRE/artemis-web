@@ -25,7 +25,7 @@ const SigninPage: React.FunctionComponent<{}> = () => {
       </Head>
       <div id="login-container">
         <Header />
-        {!user && (
+        {!user && !loading && (
           <div id="content-wrap" style={{ paddingBottom: '5rem' }}>
             <SignInComponent />
           </div>
