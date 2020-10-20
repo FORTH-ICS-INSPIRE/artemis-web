@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
@@ -8,10 +8,12 @@ import { useUser } from '../lib/hooks';
 const HijacksPage: React.FunctionComponent<{}> = () => {
   const [user, { loading }] = useUser();
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     // redirect to home if user is authenticated
     if (!user && !loading) router.push('/');
+    if (user && !loading) setIsLoading(false);
   }, [user, loading, router]);
 
   const Footer = dynamic(() => import('../components/footer/footer'));
@@ -23,6 +25,7 @@ const HijacksPage: React.FunctionComponent<{}> = () => {
         <title>ARTEMIS - Overview</title>
       </Head>
       <Header />
+      {!isLoading && (
       <div
         className="container overview col-lg-12"
         style={{ paddingTop: '120px' }}
@@ -68,6 +71,7 @@ const HijacksPage: React.FunctionComponent<{}> = () => {
           </div>
         </div>
       </div>
+      )}
       <Footer />
     </>
   );

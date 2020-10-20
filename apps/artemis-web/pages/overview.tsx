@@ -1,7 +1,7 @@
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import HijackTableComponent from '../components/ongoing-hijack-table/ongoing-hijack-table';
 import { useUser } from '../lib/hooks';
 import { initializeApollo, STATS_SUB, HIJACK_SUB } from '../utils/graphql';
@@ -11,6 +11,7 @@ const OverviewPage = (props) => {
   const Footer = dynamic(() => import('../components/footer/footer'));
   const Header = dynamic(() => import('../components/header/header'));
   const [user, { loading }] = useUser();
+  const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
 
   const STATS_DATA = useSubscription(STATS_SUB).data;
@@ -19,6 +20,7 @@ const OverviewPage = (props) => {
   useEffect(() => {
     // redirect to home if user is authenticated
     if (!user && !loading) router.push('/signin');
+    if (user && !loading) setIsLoading(false);
   }, [user, loading, router]);
 
   return (
@@ -26,7 +28,7 @@ const OverviewPage = (props) => {
       <Head>
         <title>ARTEMIS - Overview</title>
       </Head>
-
+      {!isLoading && (
       <div id="page-container" style={{ paddingTop: '120px' }}>
         <Header />
         <div id="content-wrap" style={{ paddingBottom: '5rem' }}>
@@ -128,6 +130,7 @@ const OverviewPage = (props) => {
           </div>
         </div>
       </div>
+      )}
       <Footer />
     </>
   );
