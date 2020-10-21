@@ -116,7 +116,11 @@ export const STATS_QUERY = gql`
 // An example graphql query to test the API
 export const HIJACK_SUB = gql`
   subscription hijacks {
-    view_hijacks(limit: 10, order_by: { time_last: desc }) {
+    view_hijacks(
+      limit: 10
+      order_by: { time_last: desc }
+      where: { _and: [{ active: { _eq: true } }, { dormant: { _eq: false } }] }
+    ) {
       active
       comment
       configured_prefix
