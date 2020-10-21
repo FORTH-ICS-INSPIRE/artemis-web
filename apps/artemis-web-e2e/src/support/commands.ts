@@ -33,26 +33,14 @@ Cypress.Commands.add('typeLogin', (user) => {
 });
 
 Cypress.Commands.add('typeRegister', (user) => {
-  cy.get('body').then(($body) => {
-    // synchronously query from body
-    // to find which element was created
-    if ($body.find('#email').length) {
-      cy.get('#username').type(user.name);
-      cy.get('#email').type(user.email);
-      cy.get('#password').type(user.password);
-    }
-  });
+  cy.get('#username').type(user.name);
+  cy.get('#email').type(user.email);
+  cy.get('#password').type(user.password);
 });
 
 Cypress.Commands.add('register', () => {
-  cy.get('body').then(($body) => {
-    // synchronously query from body
-    // to find which element was created
-    if ($body.find('#email').length) {
-      cy.get('button[type=submit]').click();
-      cy.wait(1000);
-    }
-  });
+  cy.get('button[type=submit]').click();
+  cy.wait(1000);
 });
 
 Cypress.Commands.add('login', () => {

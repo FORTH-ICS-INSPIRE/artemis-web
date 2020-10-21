@@ -22,7 +22,7 @@ describe('artemis-web', () => {
   it('logs out', () => {
     // Custom command example, see `../support/commands.ts` file
     cy.get('#logout').click();
-    cy.wait(1000);
+    cy.wait(2000);
     cy.get('h1').should('have.text', 'Sign in');
   });
 

@@ -35,38 +35,40 @@ const createApolloClient = (GRAPHQL_URI, GRAPHQL_WS_URI) => {
     },
   });
 
-  const wsLink = process.browser
-    ? new WebSocketLink({
-      uri: GRAPHQL_WS_URI,
-      options: {
-        reconnect: true,
-        lazy: true,
-        connectionParams: async () => {
-          await requestToken();
-          return {
-            headers: {
-              authorization: `Bearer ${accessToken}`,
-              //'x-hasura-admin-secret': constants.HASURA_SECRET,
+  const wsLink =
+    typeof window !== 'undefined'
+      ? new WebSocketLink({
+          uri: GRAPHQL_WS_URI,
+          options: {
+            reconnect: true,
+            lazy: true,
+            connectionParams: async () => {
+              await requestToken();
+              return {
+                headers: {
+                  authorization: `Bearer ${accessToken}`,
+                  //'x-hasura-admin-secret': constants.HASURA_SECRET,
+                },
+              };
             },
-          };
-        },
-      },
-    })
-    : null;
+          },
+        })
+      : null;
 
-  const splitLink = process.browser
-    ? split(
-      ({ query }) => {
-        const definition = getMainDefinition(query);
-        return (
-          definition.kind === 'OperationDefinition' &&
-          definition.operation === 'subscription'
-        );
-      },
-      wsLink,
-      httpLink
-    )
-    : null;
+  const splitLink =
+    typeof window !== 'undefined'
+      ? split(
+          ({ query }) => {
+            const definition = getMainDefinition(query);
+            return (
+              definition.kind === 'OperationDefinition' &&
+              definition.operation === 'subscription'
+            );
+          },
+          wsLink,
+          httpLink
+        )
+      : null;
 
   return new ApolloClient({
     link: splitLink,
@@ -85,7 +87,7 @@ export const initializeApollo = (
     _apolloClient.cache.restore(initialState);
   }
 
-  if (typeof window === 'undefined') return _apolloClient;
+  if (typeof window !== 'undefined') return _apolloClient;
   apolloClient = apolloClient ?? _apolloClient;
 
   return apolloClient;
@@ -116,7 +118,11 @@ export const STATS_QUERY = gql`
 // An example graphql query to test the API
 export const HIJACK_SUB = gql`
   subscription hijacks {
-    view_hijacks(limit: 10, order_by: { time_last: desc }) {
+    view_hijacks(
+      limit: 10
+      order_by: { time_last: desc }
+      where: { _and: [{ active: { _eq: true } }, { dormant: { _eq: false } }] }
+    ) {
       active
       comment
       configured_prefix
@@ -141,6 +147,29 @@ export const HIJACK_SUB = gql`
       type
       under_mitigation
       withdrawn
+    }
+  }
+`;
+
+export const BGP_SUB = gql`
+  subscription bgpupdates {
+    view_bgpupdates(
+      limit: 10
+      offset: 0
+      order_by: { timestamp: desc_nulls_first }
+    ) {
+      prefix
+      origin_as
+      peer_asn
+      as_path
+      service
+      type
+      communities
+      timestamp
+      hijack_key
+      handled
+      matched_prefix
+      orig_path
     }
   }
 `;

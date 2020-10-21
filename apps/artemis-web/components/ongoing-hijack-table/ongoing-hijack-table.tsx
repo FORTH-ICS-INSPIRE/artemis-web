@@ -204,7 +204,7 @@ const HijackTableComponent = (props) => {
   let hijacks;
   const debug = true;
 
-  if (HIJACK_DATA.length || !debug) {
+  if ((HIJACK_DATA && HIJACK_DATA.length) || !debug) {
     hijacks = HIJACK_DATA.map((row) => ({
       update: row.time_last,
       time: row.time_detected,

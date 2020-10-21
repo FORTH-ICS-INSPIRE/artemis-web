@@ -9,7 +9,7 @@ const HomePage: React.FunctionComponent<{}> = () => {
   useEffect(() => {
     // redirect to home if user is authenticated
     if (!user && !loading) router.push('/signin');
-    else router.push('/overview');
+    else if (router) router.push('/overview');
   }, [user, loading, router]);
 
   return <div />;
