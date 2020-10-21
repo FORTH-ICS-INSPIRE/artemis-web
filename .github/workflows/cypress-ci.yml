@@ -10,7 +10,6 @@ jobs:
     # Because of this the network configuration changes from host based network to a container network.
     container:
       image: cypress/included:3.2.0
-      entrypoint: bash
 
     services:
       mongodb:
