@@ -25,10 +25,15 @@ const OverviewPage = (props) => {
     <>
       <Head>
         <title>ARTEMIS - Overview</title>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" />
+        <link
+          rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        />
       </Head>
-        <div id="page-container" style={{ paddingTop: '120px' }}>
-          <Header />
-          {user && !loading && (
+      <div id="page-container" style={{ paddingTop: '120px' }}>
+        <Header />
+        {user && !loading && (
           <div id="content-wrap" style={{ paddingBottom: '5rem' }}>
             <div className="row">
               <div className="col-lg-1" />
@@ -129,8 +134,8 @@ const OverviewPage = (props) => {
               </div>
             </div>
           </div>
-          )}
-        </div>
+        )}
+      </div>
       <Footer />
     </>
   );

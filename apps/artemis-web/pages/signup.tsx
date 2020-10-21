@@ -23,15 +23,20 @@ const SignupPage: React.FunctionComponent<{}> = () => {
       <Head>
         overview
         <title>ARTEMIS - Sign Up</title>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" />
+        <link
+          rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        />
       </Head>
       <div id="page-container">
         <Header />
         {!user && !loading && (
-        <div id="content-wrap" style={{ paddingBottom: '5rem' }}>
-          <div className="container d-flex align-items-center flex-column">
-            <SignUpComponent />
+          <div id="content-wrap" style={{ paddingBottom: '5rem' }}>
+            <div className="container d-flex align-items-center flex-column">
+              <SignUpComponent />
+            </div>
           </div>
-        </div>
         )}
         <Footer />
       </div>

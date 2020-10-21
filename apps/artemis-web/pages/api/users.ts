@@ -41,7 +41,7 @@ handler.post(async (req: NextApiRequestExtended, res: NextApiResponse) => {
       name,
       lastLogin: new Date(),
       currentLogin: new Date(),
-      role: 'guest',
+      role: 'pending',
       token: '',
     })
     .then(({ ops }) => ops[0]);

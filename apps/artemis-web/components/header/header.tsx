@@ -1,6 +1,7 @@
 import { useUser } from '../../lib/hooks';
 import Link from 'next/link';
 import React from 'react';
+import Head from 'next/head';
 
 type MyProps = {
   loggedIn: boolean;
@@ -18,11 +19,6 @@ const Header = () => {
 
   return (
     <>
-      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" />
-      <link
-        rel="stylesheet"
-        href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-      />
       <nav
         className="navbar navbar-expand-md navbar-dark fixed-top bg-dark"
         style={{ marginBottom: '20px' }}
