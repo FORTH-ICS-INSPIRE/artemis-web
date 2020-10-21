@@ -1,7 +1,7 @@
 import React from 'react';
 import BootstrapTable from 'react-bootstrap-table-next';
 
-const products = [
+const mockBGP = [
   {
     timestamp: 20,
     prefix: 'sfsf',
@@ -129,8 +129,9 @@ const columns = [
   },
 ];
 
-const BGPTableComponent: React.FunctionComponent<{}> = () => {
-  return <BootstrapTable keyField="update" data={products} columns={columns} />;
+const BGPTableComponent = (props) => {
+  const bgp = props.data ?? mockBGP;
+  return <BootstrapTable keyField="update" data={bgp} columns={columns} />;
 };
 
 export default BGPTableComponent;
