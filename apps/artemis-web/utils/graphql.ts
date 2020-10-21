@@ -145,6 +145,29 @@ export const HIJACK_SUB = gql`
   }
 `;
 
+export const BGP_SUB = gql`
+  subscription bgpupdates {
+    view_bgpupdates(
+      limit: 10
+      offset: 0
+      order_by: { timestamp: desc_nulls_first }
+    ) {
+      prefix
+      origin_as
+      peer_asn
+      as_path
+      service
+      type
+      communities
+      timestamp
+      hijack_key
+      handled
+      matched_prefix
+      orig_path
+    }
+  }
+`;
+
 export const useApollo = (initialState, GRAPHQL_URI, GRAPHQL_WS_URI) => {
   const store = useMemo(
     () => initializeApollo(initialState, GRAPHQL_URI, GRAPHQL_WS_URI),

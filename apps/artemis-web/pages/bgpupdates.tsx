@@ -4,11 +4,14 @@ import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import BGPTableComponent from '../components/bgptable/bgptable';
 import { useUser } from '../lib/hooks';
+import { useSubscription } from '@apollo/client';
+import { BGP_SUB } from '../utils/graphql';
 
 const BGPUpdates: React.FunctionComponent<{}> = () => {
   const [user, { loading }] = useUser();
   const router = useRouter();
-
+  const BGP_DATA = useSubscription(BGP_SUB).data;
+  
   useEffect(() => {
     // redirect to home if user is authenticated
     if (!user && !loading) router.push('/');
@@ -41,7 +44,8 @@ const BGPUpdates: React.FunctionComponent<{}> = () => {
             <div className="card">
               <div className="card-header"> </div>
               <div className="card-body">
-                <BGPTableComponent />
+                <BGPTableComponent
+                  data={BGP_DATA ? BGP_DATA.view_hijacks : []} />
               </div>
             </div>
           </div>
