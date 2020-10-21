@@ -1,6 +1,12 @@
 name: Cypress E2E
 
-on: [push]
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
 
 jobs:
   cypress-e2e:
@@ -21,3 +27,6 @@ jobs:
     - uses: actions/checkout@v1
     - run: yarn install --frozen-lockfile
     - run: yarn run nx e2e artemis-web-e2e
+      env:
+        MONGODB_HOST: mongodb
+        MONGODB_PORT: ${{ job.services.mongodb.ports[27017] }}
