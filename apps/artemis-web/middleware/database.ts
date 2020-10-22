@@ -1,6 +1,8 @@
 import { MongoClient } from 'mongodb';
 
-const client = new MongoClient(process.env.MONGODB_URI, {
+const MONGODB_URI = `mongodb://${process.env.MONGODB_USER}:${process.env.MONGODB_PASS}@${process.env.MONGODB_HOST}:${process.env.MONGODB_PORT}`;
+
+const client = new MongoClient(MONGODB_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
@@ -16,7 +18,7 @@ export async function setUpDb(db) {
 export default async function database(req, res, next) {
   if (!client.isConnected()) await client.connect();
   req.dbClient = client;
-  req.db = client.db(process.env.DB_NAME);
+  req.db = client.db(process.env.MONGODB_NAME);
   await setUpDb(req.db);
   return next();
 }

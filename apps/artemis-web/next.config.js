@@ -1,6 +1,6 @@
 module.exports = {
   env: {
-    GRAPHQL_URI: process.env.GRAPHQL_URI,
-    GRAPHQL_WS_URI: process.env.GRAPHQL_WS_URI,
+    GRAPHQL_URI: `http://${process.env.GRAPHQL_HOST}:${process.env.GRAPHQL_PORT}/v1/graphql`,
+    GRAPHQL_WS_URI: `ws://${process.env.GRAPHQL_HOST}:${process.env.GRAPHQL_PORT}/v1/graphql`,
   },
 };
