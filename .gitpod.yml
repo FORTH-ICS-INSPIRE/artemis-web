@@ -1,0 +1,25 @@
+image: gitpod/workspace-mongodb
+tasks:
+  - init: yarn install --frozen-lockfile
+    command: yarn run start
+  - command: |
+      mkdir -p /workspace/data && mongod --dbpath /workspace/data &
+      if [ -f .env ]; then export $(cat .env | sed 's/#.*//g' | xargs); fi
+      mongo admin --eval "db.createUser({user:'"$MONGODB_USER"',pwd:'"$MONGODB_PASS"',roles:[{role:'root',db:'admin'}]})"
+      killall mongod
+      mongod --auth --dbpath /workspace/data
+ports:
+  - port: 4200
+    onOpen: open-preview
+github:
+  prebuilds:
+    # enable for the master/default branch (defaults to true)
+    master: true
+    # enable for pull requests coming from this repo (defaults to true)
+    pullRequests: true
+    # enable for pull requests coming from forks (defaults to false)
+    pullRequestsFromForks: true
+    # add a check to pull requests (defaults to true)
+    addCheck: true
+    # add a "Review in Gitpod" button as a comment to pull requests (defaults to false)
+    addComment: true
