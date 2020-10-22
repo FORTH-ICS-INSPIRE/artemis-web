@@ -30,3 +30,10 @@ jobs:
       env:
         MONGODB_HOST: mongodb
         MONGODB_PORT: ${{ job.services.mongodb.ports[27017] }}
+    - name: 'Upload Artifact'
+      if: failure()
+      uses: actions/upload-artifact@v2
+      with:
+        name: cypress
+        path: dist/cypress
+        retention-days: 5
