@@ -4,6 +4,7 @@ import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import HijackTableComponent from '../components/hijack-table/hijack-table';
 import { useUser } from '../lib/hooks';
+import Flexbox from 'flexbox-react';
 
 const HijacksPage: React.FunctionComponent<{}> = () => {
   const [user, { loading }] = useUser();
@@ -22,55 +23,58 @@ const HijacksPage: React.FunctionComponent<{}> = () => {
       <Head>
         <title>ARTEMIS - Overview</title>
       </Head>
-      <Header />
-      {user && !loading && (
-        <div
-          className="container overview col-lg-12"
-          style={{ paddingTop: '120px' }}
-        >
-          <div className="row">
-            <div className="col-lg-1" />
-            <div className="col-lg-10">
-              <h1 style={{ color: 'white' }}>Hijacks</h1>{' '}
-              <hr style={{ backgroundColor: 'white' }} />
-            </div>
-          </div>
-          <div className="row" style={{ marginTop: '20px' }}>
-            <div className="col-lg-1" />
-            <div className="col-lg-10">
-              <div className="card">
-                <div className="card-header"> </div>
-                <div className="card-body">
-                  <HijackTableComponent />
+      <Flexbox flexDirection="column" minHeight="100vh">
+        <Header />
+        <Flexbox flexGrow={1}>
+          {user && !loading && (
+            <div className="container overview col-lg-12">
+              <div className="row">
+                <div className="col-lg-1" />
+                <div className="col-lg-10">
+                  <h1 style={{ color: 'white' }}>Hijacks</h1>{' '}
+                  <hr style={{ backgroundColor: 'white' }} />
                 </div>
               </div>
-            </div>
-          </div>
-          <div className="row" style={{ marginTop: '20px' }}>
-            <div className="col-lg-1" />
-            <div className="col-lg-10">
-              <div className="card">
-                <div className="card-header"> View distinct values </div>
-                <div className="card-body">
-                  <div className="col-lg-3">
-                    <select
-                      className="form-control"
-                      id="distinct_values_selection"
-                    >
-                      <option value="select">Select</option>
-                      <option value="prefix">Hijacked Prefix</option>
-                      <option value="configured_prefix">Matched Prefix</option>
-                      <option value="hijack_as">Hijack AS</option>
-                      <option value="rpki_status">RPKI</option>
-                    </select>
+              <div className="row" style={{ marginTop: '20px' }}>
+                <div className="col-lg-1" />
+                <div className="col-lg-10">
+                  <div className="card">
+                    <div className="card-header"> </div>
+                    <div className="card-body">
+                      <HijackTableComponent />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="row" style={{ marginTop: '20px' }}>
+                <div className="col-lg-1" />
+                <div className="col-lg-10">
+                  <div className="card">
+                    <div className="card-header"> View distinct values </div>
+                    <div className="card-body">
+                      <div className="col-lg-3">
+                        <select
+                          className="form-control"
+                          id="distinct_values_selection"
+                        >
+                          <option value="select">Select</option>
+                          <option value="prefix">Hijacked Prefix</option>
+                          <option value="configured_prefix">
+                            Matched Prefix
+                          </option>
+                          <option value="hijack_as">Hijack AS</option>
+                          <option value="rpki_status">RPKI</option>
+                        </select>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-      )}
-      <Footer />
+          )}
+        </Flexbox>
+        <Footer />
+      </Flexbox>
     </>
   );
 };

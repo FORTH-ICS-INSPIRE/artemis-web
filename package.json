@@ -40,6 +40,7 @@
     "connect-mongo": "^3.2.0",
     "connect-roles": "^3.1.2",
     "cookie-cutter": "^0.2.0",
+    "flexbox-react": "^4.4.0",
     "graphql": "^15.3.0",
     "isomorphic-unfetch": "^3.0.0",
     "js-cookie": "^2.2.1",

@@ -11,8 +11,6 @@
 html,
 body {
   margin: 0;
-  /* height: 100%;
-  min-height: 100%; */
   background-color: #121212 !important;
 }
 
@@ -21,8 +19,8 @@ main {
   height: 100%;
 }
 
-footer > .MuiContainer-root {
-  margin-left: 8%;
+footer {
+  /* padding-left: 8%; */
 }
 
 #content-wrap > .row {
@@ -37,7 +35,7 @@ footer > .MuiContainer-root {
 
 #page-container {
   position: relative;
-  min-height: 100vh;
+  /* min-height: 100vh; */
 }
 
 .navbar > .container {

@@ -3,12 +3,14 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Copyright from './copyright';
+import Flexbox from 'flexbox-react';
 
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
     flexDirection: 'column',
     left: '0px;',
+    width: '100%',
   },
   main: {
     marginTop: theme.spacing(8),
@@ -17,7 +19,8 @@ const useStyles = makeStyles((theme) => ({
   footer: {
     padding: theme.spacing(3, 2),
     marginTop: 'auto',
-    position: 'absolute',
+    paddingLeft: '8%',
+    // position: 'absolute',
     height: '4.5rem',
     bottom: '0',
     width: '100%',
@@ -44,14 +47,16 @@ class Footer extends React.Component<MyProps> {
     const { root, footer, link } = classes;
 
     return (
-      <div className={root}>
-        <CssBaseline />
-        <footer className={footer}>
-          <Container maxWidth="lg">
+      <Flexbox element="footer" height="4.5rem" width="100%">
+        <div className={root}>
+          <CssBaseline />
+          {/* <footer className={footer}> */}
+          <Container maxWidth="lg" className={footer}>
             <Copyright _class={link} />
           </Container>
-        </footer>
-      </div>
+          {/* </footer> */}
+        </div>
+      </Flexbox>
     );
   }
 }

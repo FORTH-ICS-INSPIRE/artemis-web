@@ -3,6 +3,7 @@ import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { useUser } from '../lib/hooks';
 import { useRouter } from 'next/router';
+import Flexbox from 'flexbox-react';
 
 const SigninPage: React.FunctionComponent<{}> = () => {
   const [user, { loading }] = useUser();
@@ -23,15 +24,18 @@ const SigninPage: React.FunctionComponent<{}> = () => {
       <Head>
         <title>ARTEMIS - Login</title>
       </Head>
-      <div id="login-container">
+      <Flexbox flexDirection="column" minHeight="100vh" alignItems="center">
+        {/*  */}
         <Header />
-        {!user && !loading && (
-          <div id="content-wrap" style={{ paddingBottom: '5rem' }}>
-            <SignInComponent />
-          </div>
-        )}
+        <Flexbox flexGrow={1}>
+          {!user && !loading && (
+            <div id="content-wrap" style={{ paddingBottom: '5rem' }}>
+              <SignInComponent />
+            </div>
+          )}
+        </Flexbox>
         <Footer />
-      </div>
+      </Flexbox>
     </>
   );
 };

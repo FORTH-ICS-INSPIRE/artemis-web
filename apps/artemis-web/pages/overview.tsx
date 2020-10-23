@@ -6,6 +6,7 @@ import HijackTableComponent from '../components/ongoing-hijack-table/ongoing-hij
 import { useUser } from '../lib/hooks';
 import { initializeApollo, STATS_SUB, HIJACK_SUB } from '../utils/graphql';
 import { useSubscription } from '@apollo/client';
+import Flexbox from 'flexbox-react';
 
 const OverviewPage = (props) => {
   const Footer = dynamic(() => import('../components/footer/footer'));
@@ -26,112 +27,114 @@ const OverviewPage = (props) => {
       <Head>
         <title>ARTEMIS - Overview</title>
       </Head>
-      <div id="page-container" style={{ paddingTop: '120px' }}>
+      <Flexbox flexDirection="column" minHeight="100vh">
         <Header />
-        {user && !loading && (
-          <div id="content-wrap" style={{ paddingBottom: '5rem' }}>
-            <div className="row">
-              <div className="col-lg-1" />
-              <div className="col-lg-10">
-                <h1 style={{ color: 'white' }}>Dashboard</h1>{' '}
-                <hr style={{ backgroundColor: 'white' }} />
+        <Flexbox flexGrow={1}>
+          {user && !loading && (
+            <div id="content-wrap" style={{ paddingBottom: '5rem' }}>
+              <div className="row">
+                <div className="col-lg-1" />
+                <div className="col-lg-10">
+                  <h1 style={{ color: 'white' }}>Dashboard</h1>{' '}
+                  <hr style={{ backgroundColor: 'white' }} />
+                </div>
               </div>
-            </div>
-            <div className="row">
-              <div className="col-lg-1" />
-              <div className="col-lg-10">
-                <div className="card">
-                  <div className="card-header">Activity</div>
-                  <div className="card-body">
-                    Welcome back <b>{user && user.name}</b>, your last login was
-                    at (
-                    {user &&
-                      new Date(user.lastLogin).toLocaleDateString() +
-                      ' ' +
-                      new Date(user.lastLogin).toLocaleTimeString()}
-                    ). You are {user && user.role}.
+              <div className="row">
+                <div className="col-lg-1" />
+                <div className="col-lg-10">
+                  <div className="card">
+                    <div className="card-header">Activity</div>
+                    <div className="card-body">
+                      Welcome back <b>{user && user.name}</b>, your last login
+                      was at (
+                      {user &&
+                        new Date(user.lastLogin).toLocaleDateString() +
+                          ' ' +
+                          new Date(user.lastLogin).toLocaleTimeString()}
+                      ). You are {user && user.role}.
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <div className="row" style={{ marginTop: '20px' }}>
-              <div className="col-lg-1" />
-              <div className="col-lg-10">
-                <div className="card">
-                  <div className="card-header">
-                    Ongoing, Non-Dormant Hijacks{' '}
-                  </div>
-                  <div className="card-body">
-                    <HijackTableComponent
-                      data={HIJACK_DATA ? HIJACK_DATA.view_hijacks : []}
-                    />
+              <div className="row" style={{ marginTop: '20px' }}>
+                <div className="col-lg-1" />
+                <div className="col-lg-10">
+                  <div className="card">
+                    <div className="card-header">
+                      Ongoing, Non-Dormant Hijacks{' '}
+                    </div>
+                    <div className="card-body">
+                      <HijackTableComponent
+                        data={HIJACK_DATA ? HIJACK_DATA.view_hijacks : []}
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <div className="row" style={{ marginTop: '20px' }}>
-              <div className="col-lg-1" />
-              <div className="col-lg-5">
-                <div className="card">
-                  <div className="card-header"> System Status </div>
-                  <div className="card-body">
-                    <table id="modules" className="table table-hover">
-                      <thead>
-                        <tr>
-                          <th>Module</th>
-                          <th>Status</th>
-                          <th>Uptime</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {STATS_DATA && STATS_DATA ? (
-                          STATS_DATA.view_processes.map((process, i) => {
-                            return (
-                              <tr key={i}>
-                                <td>{process.name}</td>
-                                <td>{process.running ? 'On' : 'Off'}</td>
-                                <td>
-                                  {process.running
-                                    ? new Date().getHours() -
-                                    new Date(process.timestamp).getHours() +
-                                    'h'
-                                    : '0h'}
-                                </td>
-                              </tr>
-                            );
-                          })
-                        ) : (
+              <div className="row" style={{ marginTop: '20px' }}>
+                <div className="col-lg-1" />
+                <div className="col-lg-5">
+                  <div className="card">
+                    <div className="card-header"> System Status </div>
+                    <div className="card-body">
+                      <table id="modules" className="table table-hover">
+                        <thead>
+                          <tr>
+                            <th>Module</th>
+                            <th>Status</th>
+                            <th>Uptime</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {STATS_DATA && STATS_DATA ? (
+                            STATS_DATA.view_processes.map((process, i) => {
+                              return (
+                                <tr key={i}>
+                                  <td>{process.name}</td>
+                                  <td>{process.running ? 'On' : 'Off'}</td>
+                                  <td>
+                                    {process.running
+                                      ? new Date().getHours() -
+                                        new Date(process.timestamp).getHours() +
+                                        'h'
+                                      : '0h'}
+                                  </td>
+                                </tr>
+                              );
+                            })
+                          ) : (
                             <tr></tr>
                           )}
-                      </tbody>
-                    </table>
+                        </tbody>
+                      </table>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div className="col-lg-5">
-                <div className="card">
-                  <div className="card-header"> Statistics </div>
-                  <div className="card-body">
-                    <table className="table table-hover">
-                      <tbody>
-                        <tr>
-                          <td>Monitored Prefixes</td>
-                          <td>2</td>
-                        </tr>
-                        <tr>
-                          <td>Monitor Peers</td>
-                          <td> 286</td>
-                        </tr>
-                      </tbody>
-                    </table>
+                <div className="col-lg-5">
+                  <div className="card">
+                    <div className="card-header"> Statistics </div>
+                    <div className="card-body">
+                      <table className="table table-hover">
+                        <tbody>
+                          <tr>
+                            <td>Monitored Prefixes</td>
+                            <td>2</td>
+                          </tr>
+                          <tr>
+                            <td>Monitor Peers</td>
+                            <td> 286</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-        )}
-      </div>
-      <Footer />
+          )}
+        </Flexbox>
+        <Footer />
+      </Flexbox>
     </>
   );
 };

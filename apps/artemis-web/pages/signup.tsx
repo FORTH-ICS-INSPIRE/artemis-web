@@ -3,6 +3,7 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
 import { useUser } from '../lib/hooks';
+import Flexbox from 'flexbox-react';
 
 const SignupPage: React.FunctionComponent<{}> = () => {
   const Footer = dynamic(() => import('../components/footer/footer'));
@@ -21,20 +22,21 @@ const SignupPage: React.FunctionComponent<{}> = () => {
   return (
     <>
       <Head>
-        overview
         <title>ARTEMIS - Sign Up</title>
       </Head>
-      <div id="page-container">
+      <Flexbox flexDirection="column" minHeight="100vh" alignItems="center">
         <Header />
-        {!user && !loading && (
-        <div id="content-wrap" style={{ paddingBottom: '5rem' }}>
-          <div className="container d-flex align-items-center flex-column">
-            <SignUpComponent />
-          </div>
-        </div>
-        )}
+        <Flexbox flexGrow={1}>
+          {!user && !loading && (
+            <div id="content-wrap" style={{ paddingBottom: '5rem' }}>
+              <div className="container d-flex align-items-center flex-column">
+                <SignUpComponent />
+              </div>
+            </div>
+          )}
+        </Flexbox>
         <Footer />
-      </div>
+      </Flexbox>
     </>
   );
 };
