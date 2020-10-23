@@ -131,7 +131,7 @@ const columns = [
 
 const BGPTableComponent = (props) => {
   const bgp = props.data ?? mockBGP;
-  return <BootstrapTable keyField="update" data={bgp} columns={columns} />;
+  return <BootstrapTable keyField="timestamp" data={bgp} columns={columns} />;
 };
 
 export default BGPTableComponent;
