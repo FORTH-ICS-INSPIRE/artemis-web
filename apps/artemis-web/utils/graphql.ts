@@ -36,7 +36,7 @@ const createApolloClient = (GRAPHQL_URI, GRAPHQL_WS_URI) => {
   });
 
   const wsLink =
-    typeof window === 'undefined'
+    typeof window !== 'undefined'
       ? new WebSocketLink({
           uri: GRAPHQL_WS_URI,
           options: {
@@ -56,7 +56,7 @@ const createApolloClient = (GRAPHQL_URI, GRAPHQL_WS_URI) => {
       : null;
 
   const splitLink =
-    typeof window === 'undefined'
+    typeof window !== 'undefined'
       ? split(
           ({ query }) => {
             const definition = getMainDefinition(query);
@@ -87,7 +87,7 @@ export const initializeApollo = (
     _apolloClient.cache.restore(initialState);
   }
 
-  if (typeof window === 'undefined') return _apolloClient;
+  if (typeof window !== 'undefined') return _apolloClient;
   apolloClient = apolloClient ?? _apolloClient;
 
   return apolloClient;
