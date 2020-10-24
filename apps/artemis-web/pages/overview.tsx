@@ -1,5 +1,3 @@
-import dynamic from 'next/dynamic';
-import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
 import HijackTableComponent from '../components/ongoing-hijack-table/ongoing-hijack-table';
@@ -8,8 +6,6 @@ import { initializeApollo, STATS_SUB, HIJACK_SUB } from '../utils/graphql';
 import { useSubscription } from '@apollo/client';
 
 const OverviewPage = (props) => {
-  const Footer = dynamic(() => import('../components/footer/footer'));
-  const Header = dynamic(() => import('../components/header/header'));
   const [user, { loading }] = useUser();
   const router = useRouter();
 
@@ -22,57 +18,42 @@ const OverviewPage = (props) => {
   }, [user, loading, router]);
 
   return (
-    <>
-      <Head>
-        <title>ARTEMIS - Overview</title>
-      </Head>
-      <script src="https://code.jquery.com/jquery-3.5.1.min.js" />
-      <script src="https://unpkg.com/@popperjs/core@2"></script>
-      <link
-        rel="stylesheet"
-        href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
-      />
-      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" />
-      <div id="page-container" style={{ paddingTop: '120px' }}>
-        <Header />
-        {user && !loading && (
-          <div id="content-wrap" style={{ paddingBottom: '5rem' }}>
-            <div className="row">
-              <div className="col-lg-1" />
-              <div className="col-lg-10">
-                <h1 style={{ color: 'white' }}>Dashboard</h1>{' '}
-                <hr style={{ backgroundColor: 'white' }} />
-              </div>
+    <div id="page-container" style={{ paddingTop: '120px' }}>
+      {user && !loading && (
+        <div id="content-wrap" style={{ paddingBottom: '5rem' }}>
+          <div className="row">
+            <div className="col-lg-1" />
+            <div className="col-lg-10">
+              <h1 style={{ color: 'white' }}>Dashboard</h1>{' '}
+              <hr style={{ backgroundColor: 'white' }} />
             </div>
-            <div className="row">
-              <div className="col-lg-1" />
-              <div className="col-lg-10">
-                <div className="card">
-                  <div className="card-header">Activity</div>
-                  <div className="card-body">
-                    Welcome back <b>{user && user.name}</b>, your last login was
-                    at (
-                    {user &&
-                      new Date(user.lastLogin).toLocaleDateString() +
-                        ' ' +
-                        new Date(user.lastLogin).toLocaleTimeString()}
-                    ). You are {user && user.role}.
-                  </div>
+          </div>
+          <div className="row">
+            <div className="col-lg-1" />
+            <div className="col-lg-10">
+              <div className="card">
+                <div className="card-header">Activity</div>
+                <div className="card-body">
+                  Welcome back <b>{user && user.name}</b>, your last login was
+                  at (
+                  {user &&
+                    new Date(user.lastLogin).toLocaleDateString() +
+                      ' ' +
+                      new Date(user.lastLogin).toLocaleTimeString()}
+                  ). You are {user && user.role}.
                 </div>
               </div>
             </div>
-            <div className="row" style={{ marginTop: '20px' }}>
-              <div className="col-lg-1" />
-              <div className="col-lg-10">
-                <div className="card">
-                  <div className="card-header">
-                    Ongoing, Non-Dormant Hijacks{' '}
-                  </div>
-                  <div className="card-body">
-                    <HijackTableComponent
-                      data={HIJACK_DATA ? HIJACK_DATA.view_hijacks : []}
-                    />
-                  </div>
+          </div>
+          <div className="row" style={{ marginTop: '20px' }}>
+            <div className="col-lg-1" />
+            <div className="col-lg-10">
+              <div className="card">
+                <div className="card-header">Ongoing, Non-Dormant Hijacks </div>
+                <div className="card-body">
+                  <HijackTableComponent
+                    data={HIJACK_DATA ? HIJACK_DATA.view_hijacks : []}
+                  />
                 </div>
               </div>
             </div>
@@ -115,31 +96,30 @@ const OverviewPage = (props) => {
                   </div>
                 </div>
               </div>
-              <div className="col-lg-5">
-                <div className="card">
-                  <div className="card-header"> Statistics </div>
-                  <div className="card-body">
-                    <table className="table table-hover">
-                      <tbody>
-                        <tr>
-                          <td>Monitored Prefixes</td>
-                          <td>2</td>
-                        </tr>
-                        <tr>
-                          <td>Monitor Peers</td>
-                          <td> 286</td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
+            </div>
+            <div className="col-lg-5">
+              <div className="card">
+                <div className="card-header"> Statistics </div>
+                <div className="card-body">
+                  <table className="table table-hover">
+                    <tbody>
+                      <tr>
+                        <td>Monitored Prefixes</td>
+                        <td>2</td>
+                      </tr>
+                      <tr>
+                        <td>Monitor Peers</td>
+                        <td> 286</td>
+                      </tr>
+                    </tbody>
+                  </table>
                 </div>
               </div>
             </div>
           </div>
-        )}
-      </div>
-      <Footer />
-    </>
+        </div>
+      )}
+    </div>
   );
 };
 
@@ -154,6 +134,7 @@ export function getStaticProps(context) {
       GRAPHQL_WS_URI: process.env.GRAPHQL_WS_URI,
       GRAPHQL_URI: process.env.GRAPHQL_URI,
       initialApolloState: apolloClient.cache.extract(),
+      pageTitle: 'Overview',
     },
   };
 }

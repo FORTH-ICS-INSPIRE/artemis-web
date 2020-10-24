@@ -2,6 +2,7 @@ import './styles.css';
 import React from 'react';
 import { ApolloProvider } from '@apollo/client';
 import { useApollo } from '../utils/graphql';
+import Layout from '../components/layout/layout';
 
 function MyApp({ Component, pageProps }) {
   const client = useApollo(
@@ -12,7 +13,9 @@ function MyApp({ Component, pageProps }) {
 
   return (
     <ApolloProvider client={client}>
-      <Component {...pageProps} />
+      <Layout pageTitle={pageProps.pageTitle}>
+        <Component {...pageProps} />
+      </Layout>
     </ApolloProvider>
   );
 }

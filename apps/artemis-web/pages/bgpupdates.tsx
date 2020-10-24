@@ -1,7 +1,5 @@
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
-import dynamic from 'next/dynamic';
-import Head from 'next/head';
 import BGPTableComponent from '../components/bgptable/bgptable';
 import { useUser } from '../lib/hooks';
 import { useSubscription } from '@apollo/client';
@@ -17,22 +15,8 @@ const BGPUpdates: React.FunctionComponent<{}> = () => {
     if (!user && !loading) router.push('/');
   }, [user, loading, router]);
 
-  const Footer = dynamic(() => import('../components/footer/footer'));
-  const Header = dynamic(() => import('../components/header/header'));
-
   return (
     <>
-      <Head>
-        <title>ARTEMIS - Overview</title>
-      </Head>
-      <script src="https://code.jquery.com/jquery-3.5.1.min.js" />
-      <script src="https://unpkg.com/@popperjs/core@2"></script>
-      <link
-        rel="stylesheet"
-        href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
-      />
-      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" />
-      <Header />
       {user && !loading && (
         <div
           className="container overview col-lg-12"
@@ -83,9 +67,16 @@ const BGPUpdates: React.FunctionComponent<{}> = () => {
           </div>
         </div>
       )}
-      <Footer />
     </>
   );
 };
+
+export function getStaticProps(context) {
+  return {
+    props: {
+      pageTitle: 'BGP Updates',
+    },
+  };
+}
 
 export default BGPUpdates;
