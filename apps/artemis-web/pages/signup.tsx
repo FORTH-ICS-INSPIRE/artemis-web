@@ -23,12 +23,14 @@ const SignupPage: React.FunctionComponent<{}> = () => {
       <Head>
         overview
         <title>ARTEMIS - Sign Up</title>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" />
-        <link
-          rel="stylesheet"
-          href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-        />
       </Head>
+      <script src="https://code.jquery.com/jquery-3.5.1.min.js" />
+      <script src="https://unpkg.com/@popperjs/core@2"></script>
+      <link
+        rel="stylesheet"
+        href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      />
+      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" />
       <div id="page-container">
         <Header />
         {!user && !loading && (

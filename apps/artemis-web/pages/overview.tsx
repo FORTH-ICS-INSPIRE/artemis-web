@@ -25,12 +25,14 @@ const OverviewPage = (props) => {
     <>
       <Head>
         <title>ARTEMIS - Overview</title>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" />
-        <link
-          rel="stylesheet"
-          href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-        />
       </Head>
+      <script src="https://code.jquery.com/jquery-3.5.1.min.js" />
+      <script src="https://unpkg.com/@popperjs/core@2"></script>
+      <link
+        rel="stylesheet"
+        href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      />
+      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" />
       <div id="page-container" style={{ paddingTop: '120px' }}>
         <Header />
         {user && !loading && (
@@ -52,8 +54,8 @@ const OverviewPage = (props) => {
                     at (
                     {user &&
                       new Date(user.lastLogin).toLocaleDateString() +
-                      ' ' +
-                      new Date(user.lastLogin).toLocaleTimeString()}
+                        ' ' +
+                        new Date(user.lastLogin).toLocaleTimeString()}
                     ). You are {user && user.role}.
                   </div>
                 </div>
@@ -98,16 +100,16 @@ const OverviewPage = (props) => {
                                 <td>
                                   {process.running
                                     ? new Date().getHours() -
-                                    new Date(process.timestamp).getHours() +
-                                    'h'
+                                      new Date(process.timestamp).getHours() +
+                                      'h'
                                     : '0h'}
                                 </td>
                               </tr>
                             );
                           })
                         ) : (
-                            <tr></tr>
-                          )}
+                          <tr></tr>
+                        )}
                       </tbody>
                     </table>
                   </div>
