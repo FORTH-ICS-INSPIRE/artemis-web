@@ -1,4 +1,3 @@
-import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
@@ -8,8 +7,6 @@ import { initializeApollo, STATS_SUB, HIJACK_SUB } from '../utils/graphql';
 import { useSubscription } from '@apollo/client';
 
 const OverviewPage = (props) => {
-  const Footer = dynamic(() => import('../components/footer/footer'));
-  const Header = dynamic(() => import('../components/header/header'));
   const [user, { loading }] = useUser();
   const router = useRouter();
 
@@ -27,7 +24,6 @@ const OverviewPage = (props) => {
         <title>ARTEMIS - Overview</title>
       </Head>
       <div id="page-container" style={{ paddingTop: '120px' }}>
-        <Header />
         {user && !loading && (
           <div id="content-wrap" style={{ paddingBottom: '5rem' }}>
             <div className="row">
@@ -131,7 +127,6 @@ const OverviewPage = (props) => {
           </div>
         )}
       </div>
-      <Footer />
     </>
   );
 };

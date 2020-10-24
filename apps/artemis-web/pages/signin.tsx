@@ -12,11 +12,9 @@ const SigninPage: React.FunctionComponent<{}> = () => {
     if (user && !loading) router.push('/');
   }, [user, loading, router]);
 
-  const Footer = dynamic(() => import('../components/footer/footer'));
   const SignInComponent = dynamic(() =>
     import('../components/sign-in/sign-in')
   );
-  const Header = dynamic(() => import('../components/header/header'));
 
   return (
     <>
@@ -24,13 +22,11 @@ const SigninPage: React.FunctionComponent<{}> = () => {
         <title>ARTEMIS - Login</title>
       </Head>
       <div id="login-container">
-        <Header />
         {!user && !loading && (
           <div id="content-wrap" style={{ paddingBottom: '5rem' }}>
             <SignInComponent />
           </div>
         )}
-        <Footer />
       </div>
     </>
   );

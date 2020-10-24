@@ -12,7 +12,7 @@ tasks:
       mongod --auth --dbpath /workspace/data
 ports:
   - port: 4200
-    onOpen: open-preview
+    onOpen: open-browser
 github:
   prebuilds:
     # enable for the master/default branch (defaults to true)

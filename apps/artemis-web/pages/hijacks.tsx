@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
-import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import HijackTableComponent from '../components/hijack-table/hijack-table';
 import { useUser } from '../lib/hooks';
@@ -14,15 +13,11 @@ const HijacksPage: React.FunctionComponent<{}> = () => {
     if (!user && !loading) router.push('/');
   }, [user, loading, router]);
 
-  const Footer = dynamic(() => import('../components/footer/footer'));
-  const Header = dynamic(() => import('../components/header/header'));
-
   return (
     <>
       <Head>
         <title>ARTEMIS - Overview</title>
       </Head>
-      <Header />
       {user && !loading && (
         <div
           className="container overview col-lg-12"
@@ -70,7 +65,6 @@ const HijacksPage: React.FunctionComponent<{}> = () => {
           </div>
         </div>
       )}
-      <Footer />
     </>
   );
 };
