@@ -81,12 +81,7 @@ const Header = () => {
             )}
             {user && (
               <li className="nav-item">
-                <a
-                  href="/#"
-                  id="logout"
-                  className="nav-link"
-                  onClick={handleLogout}
-                >
+                <a id="logout" className="nav-link" onClick={handleLogout}>
                   Sign out
                 </a>
               </li>
