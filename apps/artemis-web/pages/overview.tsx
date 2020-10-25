@@ -2,12 +2,17 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
 import HijackTableComponent from '../components/ongoing-hijack-table/ongoing-hijack-table';
-import { useUser } from '../lib/hooks';
 import { initializeApollo, STATS_SUB, HIJACK_SUB } from '../utils/graphql';
 import { useSubscription } from '@apollo/client';
 
+import nc from 'next-connect';
+import auth from '../middleware/auth';
+import passport from '../lib/passport';
+import { NextApiRequest, NextApiResponse } from 'next';
+import { extractUser } from '../lib/helpers';
+
 const OverviewPage = (props) => {
-  const [user, { loading }] = useUser();
+  const { user } = props;
   const router = useRouter();
 
   const STATS_DATA = useSubscription(STATS_SUB).data;
@@ -15,8 +20,8 @@ const OverviewPage = (props) => {
 
   useEffect(() => {
     // redirect to home if user is authenticated
-    if (!user && !loading) router.push('/signin');
-  }, [user, loading, router]);
+    if (!user) router.push('/signin');
+  }, [user, router]);
 
   return (
     <>
@@ -24,7 +29,7 @@ const OverviewPage = (props) => {
         <title>ARTEMIS - Overview</title>
       </Head>
       <div id="page-container" style={{ paddingTop: '120px' }}>
-        {user && !loading && (
+        {user && (
           <div id="content-wrap" style={{ paddingBottom: '5rem' }}>
             <div className="row">
               <div className="col-lg-1" />
@@ -45,7 +50,7 @@ const OverviewPage = (props) => {
                       new Date(user.lastLogin).toLocaleDateString() +
                         ' ' +
                         new Date(user.lastLogin).toLocaleTimeString()}
-                    ). You are {user && user.role}.
+                    ). Your role is {user && user.role}.
                   </div>
                 </div>
               </div>
@@ -131,14 +136,43 @@ const OverviewPage = (props) => {
   );
 };
 
-export function getStaticProps(context) {
+export async function getServerSideProps({ req, res }) {
   const apolloClient = initializeApollo(
     null,
     process.env.GRAPHQL_URI,
     process.env.GRAPHQL_WS_URI
   );
+
+  interface NextApiRequestExtended extends NextApiRequest {
+    db: any;
+    user: any;
+  }
+
+  interface NextApiResponseExtended extends NextApiResponse {
+    cookie(
+      arg0: string,
+      token: string,
+      arg2: { path: string; httpOnly: boolean; maxAge: number }
+    );
+  }
+
+  const handler = nc<NextApiRequestExtended, NextApiResponseExtended>()
+    .use(auth)
+    .post(passport.authenticate('local'), (req, res, next) => {
+      if (!req.body.rememberMe || !req.user) {
+        res.json({ user: extractUser(req.user) });
+      }
+    });
+
+  try {
+    await handler.run(req, res);
+  } catch (e) {
+    console.log(e);
+  }
+
   return {
     props: {
+      user: extractUser(req),
       GRAPHQL_WS_URI: process.env.GRAPHQL_WS_URI,
       GRAPHQL_URI: process.env.GRAPHQL_URI,
       initialApolloState: apolloClient.cache.extract(),

@@ -10260,10 +10260,10 @@ next-auth@^3.1.0:
     require_optional "^1.0.1"
     typeorm "^0.2.24"
 
-next-connect@^0.9.0:
-  version "0.9.0"
-  resolved "https://registry.yarnpkg.com/next-connect/-/next-connect-0.9.0.tgz#d110cf177decebbfb3b36eff5deb1496de40bf29"
-  integrity sha512-fuWVJNTCYXG0wbzHFuf1vYUr8BFUAa5+jbaOzTQpN9lyIeZbww7EM/bZeOUlgd8C/A78SKa+f/GEwPK063zhsQ==
+next-connect@^0.9.1:
+  version "0.9.1"
+  resolved "https://registry.yarnpkg.com/next-connect/-/next-connect-0.9.1.tgz#884faaf3df3af37838568009b84696c372e20272"
+  integrity sha512-CPEdciM43y9oHKxE/KVtlB+vbWwTCYqPr8/EjzoMtSRIi0s7XhdSrY6VShlACnnsJzsAr/RZnL3/xFC/vjgZUQ==
   dependencies:
     trouter "^3.1.0"
 

@@ -10,9 +10,3 @@ export function useUser() {
 
   return [user, { mutate, loading }];
 }
-
-export function useCurrentUser() {
-  const { data, mutate } = useSWR('/api/user', fetcher);
-  const user = data?.user;
-  return [user, { mutate }];
-}
