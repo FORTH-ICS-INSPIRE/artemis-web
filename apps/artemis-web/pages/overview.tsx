@@ -2,12 +2,14 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
 import HijackTableComponent from '../components/ongoing-hijack-table/ongoing-hijack-table';
-import { useUser } from '../lib/hooks';
 import { initializeApollo, STATS_SUB, HIJACK_SUB } from '../utils/graphql';
 import { useSubscription } from '@apollo/client';
 
+import jwt from 'jsonwebtoken';
+import { useCookie } from 'next-cookie';
+
 const OverviewPage = (props) => {
-  const [user, { loading }] = useUser();
+  const user = props.user;
   const router = useRouter();
 
   const STATS_DATA = useSubscription(STATS_SUB).data;
@@ -15,8 +17,8 @@ const OverviewPage = (props) => {
 
   useEffect(() => {
     // redirect to home if user is authenticated
-    if (!user && !loading) router.push('/signin');
-  }, [user, loading, router]);
+    if (!user || user.role !== 'user') router.push('/signin');
+  }, [user, router]);
 
   return (
     <>
@@ -24,7 +26,7 @@ const OverviewPage = (props) => {
         <title>ARTEMIS - Overview</title>
       </Head>
       <div id="page-container" style={{ paddingTop: '120px' }}>
-        {user && !loading && (
+        {user && (
           <div id="content-wrap" style={{ paddingBottom: '5rem' }}>
             <div className="row">
               <div className="col-lg-1" />
@@ -131,14 +133,32 @@ const OverviewPage = (props) => {
   );
 };
 
-export function getStaticProps(context) {
+export async function getServerSideProps(ctx) {
   const apolloClient = initializeApollo(
     null,
     process.env.GRAPHQL_URI,
     process.env.GRAPHQL_WS_URI
   );
+  /* eslint-disable-next-line react-hooks/rules-of-hooks */
+  const cookies = useCookie(ctx);
+  const accessToken: string = cookies.get('access_token');
+
+  let claims: {
+    'https://hasura.io/jwt/claims': object;
+    user: object;
+    iat: number;
+  };
+  try {
+    const verifiedClaims = jwt.verify(accessToken, process.env.JWT_SECRET);
+    if (typeof verifiedClaims === 'string') {
+      claims = JSON.parse(verifiedClaims);
+    }
+  } catch (e) {
+    claims = null;
+  }
   return {
     props: {
+      user: claims ? claims.user : {},
       GRAPHQL_WS_URI: process.env.GRAPHQL_WS_URI,
       GRAPHQL_URI: process.env.GRAPHQL_URI,
       initialApolloState: apolloClient.cache.extract(),
