@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 type ProcessType = {
-  view_processes: { name: string; running: boolean; timestamp: Date }[];
+  view_processes: { name: string; running: boolean; timestamp: number }[];
 };
 
 type StatsType = {
