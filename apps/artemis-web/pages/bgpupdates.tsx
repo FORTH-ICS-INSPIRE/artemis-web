@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
-import BGPTableComponent from '../components/bgptable/bgptable';
 import { useUser } from '../lib/hooks';
 import { useSubscription } from '@apollo/client';
 import { BGP_SUB } from '../utils/graphql';
+import BGPTableComponent from '../components/bgp-table/bgp-table';
 
 const BGPUpdates: React.FunctionComponent<{}> = () => {
   const [user, { loading }] = useUser();

@@ -5,7 +5,7 @@ import Head from 'next/head';
 export default class Layout extends React.Component<any> {
   render() {
     const { children } = this.props;
-    const Footer = dynamic(() => import('../footer/footer'));
+    // const Footer = dynamic(() => import('../footer/footer'));
     const Header = dynamic(() => import('../header/header'));
 
     return (
