@@ -5,6 +5,7 @@ import HijackTableComponent from '../components/ongoing-hijack-table/ongoing-hij
 import { useUser } from '../lib/hooks';
 import { initializeApollo, STATS_SUB, HIJACK_SUB } from '../utils/graphql';
 import { useSubscription } from '@apollo/client';
+import StatsTable from '../components/stats-table/stats-table';
 
 const OverviewPage = (props) => {
   const [user, { loading }] = useUser();
@@ -71,36 +72,7 @@ const OverviewPage = (props) => {
                 <div className="card">
                   <div className="card-header"> System Status </div>
                   <div className="card-body">
-                    <table id="modules" className="table table-hover">
-                      <thead>
-                        <tr>
-                          <th>Module</th>
-                          <th>Status</th>
-                          <th>Uptime</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {STATS_DATA && STATS_DATA ? (
-                          STATS_DATA.view_processes.map((process, i) => {
-                            return (
-                              <tr key={i}>
-                                <td>{process.name}</td>
-                                <td>{process.running ? 'On' : 'Off'}</td>
-                                <td>
-                                  {process.running
-                                    ? new Date().getHours() -
-                                      new Date(process.timestamp).getHours() +
-                                      'h'
-                                    : '0h'}
-                                </td>
-                              </tr>
-                            );
-                          })
-                        ) : (
-                          <tr></tr>
-                        )}
-                      </tbody>
-                    </table>
+                    <StatsTable data={STATS_DATA} />
                   </div>
                 </div>
               </div>
