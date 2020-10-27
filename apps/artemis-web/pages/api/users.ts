@@ -1,7 +1,7 @@
 import nextConnect from 'next-connect';
 import isEmail from 'validator/lib/isEmail';
 import normalizeEmail from 'validator/lib/normalizeEmail';
-import bcrypt from 'bcrypt';
+import argon2 from 'argon2';
 import auth from '../../middleware/auth';
 import { extractUser } from '../../lib/helpers';
 import { nanoid } from 'nanoid';
@@ -31,7 +31,7 @@ handler.post(async (req: NextApiRequestExtended, res: NextApiResponse) => {
     res.status(403).send('The email has already been used.');
     return;
   }
-  const hashedPassword = await bcrypt.hash(password, 10);
+  const hashedPassword = await argon2.hash(password);
   const user = await req.db
     .collection('users')
     .insertOne({
