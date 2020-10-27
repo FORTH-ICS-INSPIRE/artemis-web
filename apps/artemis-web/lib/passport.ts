@@ -1,5 +1,5 @@
 import passport from 'passport';
-import bcrypt from 'bcrypt';
+import argon2 from 'argon2';
 import { Strategy as LocalStrategy } from 'passport-local';
 import { Strategy as RememberMeStrategy } from 'passport-remember-me';
 import getRandomString from '../utils/token';
@@ -25,7 +25,7 @@ passport.use(
     async (req, email, password, done) => {
       dbInstance = req.db;
       const user = await req.db.collection('users').findOne({ email });
-      if (user && (await bcrypt.compare(password, user.password))) {
+      if (user && (await argon2.verify(user.password, password))) {
         const lastLogin = user.currentLogin;
         await req.db.collection('users').updateOne(
           { email: email },
