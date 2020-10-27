@@ -5,6 +5,7 @@
   "scripts": {
     "nx": "nx",
     "start": "nx serve",
+    "start:debug": "cd apps/artemis-web && NODE_OPTIONS='--inspect' next dev -p 4200",
     "build": "nx build",
     "test": "nx test",
     "lint": "nx workspace-lint && nx lint",
