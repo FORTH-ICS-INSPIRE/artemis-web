@@ -5,23 +5,25 @@ import { useUser } from '../lib/hooks';
 import { useSubscription } from '@apollo/client';
 import { BGP_SUB } from '../utils/graphql';
 import BGPTableComponent from '../components/bgp-table/bgp-table';
+import withAuth, { getProps } from '../HOC/withAuth';
 
-const BGPUpdates: React.FunctionComponent<{}> = () => {
-  const [user, { loading }] = useUser();
+const BGPUpdates = (props) => {
+  const user = props.user;
   const router = useRouter();
   const BGP_DATA = useSubscription(BGP_SUB).data;
 
   useEffect(() => {
     // redirect to home if user is authenticated
-    if (!user && !loading) router.push('/');
-  }, [user, loading, router]);
+    // TODO: change that to 'user'
+    if (!user || user.role !== 'pending') router.push('/signin');
+  }, [user, router]);
 
   return (
     <>
       <Head>
         <title>ARTEMIS - Overview</title>
       </Head>
-      {user && !loading && (
+      {user && (
         <div
           className="container overview col-lg-12"
           style={{ paddingTop: '120px' }}
@@ -75,4 +77,8 @@ const BGPUpdates: React.FunctionComponent<{}> = () => {
   );
 };
 
-export default BGPUpdates;
+export async function getServerSideProps(ctx) {
+  return getProps(ctx);
+}
+
+export default withAuth(BGPUpdates);

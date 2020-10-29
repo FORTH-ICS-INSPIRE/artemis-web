@@ -18,12 +18,14 @@ handler
   .get((req: NextApiRequestExtended, res: NextApiResponseExtended) => {
     req.logOut();
     res.clearCookie('remember_me');
+    res.clearCookie('access_token');
     res.status(204).end();
   });
 
 handler.delete((req: NextApiRequestExtended, res: NextApiResponseExtended) => {
   req.logOut();
   res.clearCookie('remember_me');
+  res.clearCookie('access_token');
   res.status(204).end();
 });
 

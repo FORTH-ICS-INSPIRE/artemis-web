@@ -48,6 +48,7 @@ handler.post(
 
       res.json({ user: userObj });
     }
+
     res.cookie(
       'access_token',
       jwt.sign(
@@ -57,7 +58,7 @@ handler.post(
             'x-hasura-default-role': userObj.role,
             'x-hasura-user-id': '11',
           },
-          user: extractUser(req),
+          user: userObj,
         },
         process.env.JWT_SECRET
       ),
@@ -65,8 +66,8 @@ handler.post(
         path: '/',
         httpOnly: true,
         maxAge: 604800000, // todo set small timeout and have refresh token impl
-        // sameSite: 'strict',
-        // secure: true,
+        sameSite: 'strict',
+        secure: process.env.production === 'true',
       }
     );
   }

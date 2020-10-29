@@ -14,39 +14,6 @@ const withAuth = (WrappedComponent) => {
   };
 
   class App extends React.PureComponent {
-    static async getInitialProps(ctx) {
-      const apolloClient = initializeApollo(
-        null,
-        process.env.GRAPHQL_URI,
-        process.env.GRAPHQL_WS_URI
-      );
-      /* eslint-disable-next-line react-hooks/rules-of-hooks */
-      const cookies = useCookie(ctx);
-      const accessToken: string = cookies.get('access_token');
-
-      let claims: {
-        'https://hasura.io/jwt/claims': object;
-        user: object;
-        iat: number;
-      };
-      try {
-        const verifiedClaims = jwt.verify(accessToken, process.env.JWT_SECRET);
-        if (typeof verifiedClaims === 'string') {
-          claims = JSON.parse(verifiedClaims);
-        }
-      } catch (e) {
-        claims = null;
-      }
-      return {
-        props: {
-          user: claims ? claims.user : {},
-          GRAPHQL_WS_URI: process.env.GRAPHQL_WS_URI,
-          GRAPHQL_URI: process.env.GRAPHQL_URI,
-          initialApolloState: apolloClient.cache.extract(),
-        },
-      };
-    }
-
     render() {
       return <WrappedComponent {...this.props} />;
     }
@@ -54,5 +21,44 @@ const withAuth = (WrappedComponent) => {
 
   return App;
 };
+
+export async function getProps(ctx) {
+  const apolloClient = initializeApollo(
+    null,
+    process.env.GRAPHQL_URI,
+    process.env.GRAPHQL_WS_URI
+  );
+  /* eslint-disable-next-line react-hooks/rules-of-hooks */
+  const cookies = useCookie(ctx);
+  const accessToken: string = cookies.get('access_token');
+
+  type claimType = {
+    'https://hasura.io/jwt/claims': object;
+    user: object;
+    iat: number;
+  };
+  let claims: claimType;
+
+  try {
+    const verifiedClaims = jwt.verify(accessToken, process.env.JWT_SECRET);
+
+    if (typeof verifiedClaims === 'string') {
+      claims = JSON.parse(verifiedClaims);
+    } else {
+      claims = verifiedClaims;
+    }
+  } catch (e) {
+    claims = null;
+  }
+
+  return {
+    props: {
+      user: claims ? claims.user : null,
+      GRAPHQL_WS_URI: process.env.GRAPHQL_WS_URI,
+      GRAPHQL_URI: process.env.GRAPHQL_URI,
+      initialApolloState: apolloClient.cache.extract(),
+    },
+  };
+}
 
 export default withAuth;

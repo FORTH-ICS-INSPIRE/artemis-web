@@ -2,16 +2,10 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
 import HijackTableComponent from '../components/ongoing-hijack-table/ongoing-hijack-table';
-import { useUser } from '../lib/hooks';
-import { initializeApollo, STATS_SUB, HIJACK_SUB } from '../utils/graphql';
+import { STATS_SUB, HIJACK_SUB } from '../utils/graphql';
 import { useSubscription } from '@apollo/client';
 import StatsTable from '../components/stats-table/stats-table';
-import withAuth from '../HOC/withAuth';
-import nc from 'next-connect';
-import auth from '../middleware/auth';
-import passport from '../lib/passport';
-import extractUser from '../lib/helpers';
-import { NextApiRequest, NextApiResponse } from 'next';
+import withAuth, { getProps } from '../HOC/withAuth';
 
 const OverviewPage = (props) => {
   const user = props.user;
@@ -22,7 +16,8 @@ const OverviewPage = (props) => {
 
   useEffect(() => {
     // redirect to home if user is authenticated
-    if (!user || user.role !== 'user') router.push('/signin');
+    // TODO: change that to 'user'
+    if (!user || user.role !== 'pending') router.push('/signin');
   }, [user, router]);
 
   return (
@@ -108,5 +103,9 @@ const OverviewPage = (props) => {
     </>
   );
 };
+
+export async function getServerSideProps(ctx) {
+  return getProps(ctx);
+}
 
 export default withAuth(OverviewPage);

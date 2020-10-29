@@ -21,8 +21,7 @@ import {
 } from '@material-ui/core/colors';
 import Router from 'next/router';
 
-import { useUser } from '../../lib/hooks';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 const palletType = 'dark';
 const darkState = false;
@@ -66,7 +65,6 @@ const useStyles = makeStyles((_theme) => ({
 }));
 
 const SignIn = (props) => {
-  const [user, { mutate, loading }] = useUser();
   const [errorMsg, setErrorMsg] = useState('');
 
   async function onSubmit(e) {
@@ -88,16 +86,11 @@ const SignIn = (props) => {
 
     if (res.status === 200) {
       const userObj = await res.json();
-      mutate(userObj);
+      if (userObj) Router.push('/overview');
     } else {
       setErrorMsg('Incorrect username or password. Try again!');
     }
   }
-
-  // useEffect(() => {
-  //   // redirect to home if user is authenticated
-  //   if (user && !loading) Router.push('/overview');
-  // }, [user, loading]);
 
   return (
     <ThemeProvider theme={theme}>
@@ -184,6 +177,6 @@ const SignIn = (props) => {
 
 const SignInComponent = (props) => {
   const classes = useStyles();
-  return <SignIn classes={classes} />;
+  return <SignIn {...props} classes={classes} />;
 };
 export default SignInComponent;

@@ -1,15 +1,19 @@
 import { useUser } from '../../lib/hooks';
 import Link from 'next/link';
 import React from 'react';
+import { Router } from 'next/router';
+import { useRouter } from 'next/router';
 
 const Header = () => {
+  const router = useRouter();
+
   const [user, { mutate }] = useUser();
   const handleLogout = async () => {
     await fetch('/api/logout', {
       method: 'DELETE',
     });
     // set the user state to null
-    mutate(null);
+    router.push('/');
   };
 
   return (
