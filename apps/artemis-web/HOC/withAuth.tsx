@@ -32,12 +32,7 @@ export async function getProps(ctx) {
   const cookies = useCookie(ctx);
   const accessToken: string = cookies.get('access_token');
 
-  type claimType = {
-    'https://hasura.io/jwt/claims': object;
-    user: object;
-    iat: number;
-  };
-  let claims: claimType;
+  let claims: any;
 
   try {
     const verifiedClaims = jwt.verify(accessToken, process.env.JWT_SECRET);
