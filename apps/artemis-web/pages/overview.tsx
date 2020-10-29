@@ -6,7 +6,7 @@ import { useUser } from '../lib/hooks';
 import { initializeApollo, STATS_SUB, HIJACK_SUB } from '../utils/graphql';
 import { useSubscription } from '@apollo/client';
 import StatsTable from '../components/stats-table/stats-table';
-import withAuth, { isfun } from '../HOC/withAuth';
+import withAuth from '../HOC/withAuth';
 import nc from 'next-connect';
 import auth from '../middleware/auth';
 import passport from '../lib/passport';
@@ -14,7 +14,7 @@ import extractUser from '../lib/helpers';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 const OverviewPage = (props) => {
-  const [user, { loading }] = useUser();
+  const user = props.user;
   const router = useRouter();
 
   const STATS_DATA = useSubscription(STATS_SUB).data;
@@ -22,8 +22,8 @@ const OverviewPage = (props) => {
 
   useEffect(() => {
     // redirect to home if user is authenticated
-    if (!user && !loading) router.push('/signin');
-  }, [user, loading, router]);
+    if (!user || user.role !== 'user') router.push('/signin');
+  }, [user, router]);
 
   return (
     <>
@@ -31,7 +31,7 @@ const OverviewPage = (props) => {
         <title>ARTEMIS - Overview</title>
       </Head>
       <div id="page-container" style={{ paddingTop: '120px' }}>
-        {user && !loading && (
+        {user && (
           <div id="content-wrap" style={{ paddingBottom: '5rem' }}>
             <div className="row">
               <div className="col-lg-1" />

@@ -94,10 +94,10 @@ const SignIn = (props) => {
     }
   }
 
-  useEffect(() => {
-    // redirect to home if user is authenticated
-    if (user && !loading) Router.push('/overview');
-  }, [user, loading]);
+  // useEffect(() => {
+  //   // redirect to home if user is authenticated
+  //   if (user && !loading) Router.push('/overview');
+  // }, [user, loading]);
 
   return (
     <ThemeProvider theme={theme}>
