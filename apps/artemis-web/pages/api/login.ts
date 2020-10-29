@@ -15,7 +15,13 @@ interface NextApiResponseExtended extends NextApiResponse {
   cookie(
     arg0: string,
     token: string,
-    arg2: { path: string; httpOnly: boolean; maxAge: number }
+    arg2: {
+      path: string;
+      httpOnly: boolean;
+      maxAge: number;
+      sameSite: string;
+      secure: boolean;
+    }
   );
 }
 
