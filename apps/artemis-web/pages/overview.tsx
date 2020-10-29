@@ -6,6 +6,12 @@ import { useUser } from '../lib/hooks';
 import { initializeApollo, STATS_SUB, HIJACK_SUB } from '../utils/graphql';
 import { useSubscription } from '@apollo/client';
 import StatsTable from '../components/stats-table/stats-table';
+import withAuth, { isfun } from '../HOC/withAuth';
+import nc from 'next-connect';
+import auth from '../middleware/auth';
+import passport from '../lib/passport';
+import extractUser from '../lib/helpers';
+import { NextApiRequest, NextApiResponse } from 'next';
 
 const OverviewPage = (props) => {
   const [user, { loading }] = useUser();
@@ -103,19 +109,4 @@ const OverviewPage = (props) => {
   );
 };
 
-export function getStaticProps(context) {
-  const apolloClient = initializeApollo(
-    null,
-    process.env.GRAPHQL_URI,
-    process.env.GRAPHQL_WS_URI
-  );
-  return {
-    props: {
-      GRAPHQL_WS_URI: process.env.GRAPHQL_WS_URI,
-      GRAPHQL_URI: process.env.GRAPHQL_URI,
-      initialApolloState: apolloClient.cache.extract(),
-    },
-  };
-}
-
-export default OverviewPage;
+export default withAuth(OverviewPage);

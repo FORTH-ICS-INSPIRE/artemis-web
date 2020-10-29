@@ -49,6 +49,7 @@
     "react-dom": "16.13.1",
     "subscriptions-transport-ws": "^0.9.18",
     "swr": "^0.1.16",
+    "tslib": "^2.0.3",
     "validator": "^13.1.17"
   },
   "devDependencies": {
