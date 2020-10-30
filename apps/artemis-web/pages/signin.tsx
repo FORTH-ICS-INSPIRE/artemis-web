@@ -7,12 +7,6 @@ import withAuth, { getProps } from '../HOC/withAuth';
 const SigninPage = (props) => {
   const user = props.user;
 
-  const router = useRouter();
-  useEffect(() => {
-    // redirect to home if user is authenticated
-    if (user) router.push('/overview');
-  }, [user, router]);
-
   const SignInComponent = dynamic(() =>
     import('../components/sign-in/sign-in')
   );
@@ -33,8 +27,8 @@ const SigninPage = (props) => {
   );
 };
 
-export async function getServerSideProps(ctx) {
-  return getProps(ctx);
-}
+// export async function getServerSideProps(ctx) {
+//   return getProps(ctx);
+// }
 
-export default withAuth(SigninPage);
+export default withAuth(SigninPage, ['pending']);

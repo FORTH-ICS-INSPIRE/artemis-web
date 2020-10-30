@@ -6,13 +6,13 @@ import withAuth, { getProps } from '../HOC/withAuth';
 
 const HijacksPage = (props) => {
   const user = props.user;
-  const router = useRouter();
+  // const router = useRouter();
 
-  useEffect(() => {
-    // redirect to home if user is authenticated
-    // TODO: change that to 'user'
-    if (!user || user.role !== 'pending') router.push('/signin');
-  }, [user, router]);
+  // useEffect(() => {
+  //   // redirect to home if user is authenticated
+  //   // TODO: change that to 'user'
+  //   if (!user || user.role !== 'pending') router.push('/signin');
+  // }, [user, router]);
 
   return (
     <>
@@ -70,8 +70,8 @@ const HijacksPage = (props) => {
   );
 };
 
-export async function getServerSideProps(ctx) {
-  return getProps(ctx);
-}
+// export async function getServerSideProps(ctx) {
+//   return getProps(ctx);
+// }
 
 export default withAuth(HijacksPage);

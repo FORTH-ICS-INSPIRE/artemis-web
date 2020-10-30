@@ -10,11 +10,11 @@ const SignupPage = (props) => {
   );
   const user = props.user;
 
-  const router = useRouter();
-  useEffect(() => {
-    // redirect to home if user is authenticated
-    if (user) router.push('/overview');
-  }, [user, router]);
+  // const router = useRouter();
+  // useEffect(() => {
+  //   // redirect to home if user is authenticated
+  //   if (user) router.push('/overview');
+  // }, [user, router]);
 
   return (
     <>
@@ -34,9 +34,5 @@ const SignupPage = (props) => {
     </>
   );
 };
-
-export async function getServerSideProps(ctx) {
-  return getProps(ctx);
-}
 
 export default withAuth(SignupPage);

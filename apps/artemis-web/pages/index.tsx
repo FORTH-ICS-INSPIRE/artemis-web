@@ -16,8 +16,8 @@ const HomePage = (props) => {
   return <div />;
 };
 
-export async function getServerSideProps(ctx) {
-  return getProps(ctx);
-}
+// export async function getServerSideProps(ctx) {
+//   return getProps(ctx);
+// }
 
 export default withAuth(HomePage);

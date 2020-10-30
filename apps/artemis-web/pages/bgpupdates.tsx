@@ -9,14 +9,14 @@ import withAuth, { getProps } from '../HOC/withAuth';
 
 const BGPUpdates = (props) => {
   const user = props.user;
-  const router = useRouter();
+  // const router = useRouter();
   const BGP_DATA = useSubscription(BGP_SUB).data;
 
-  useEffect(() => {
-    // redirect to home if user is authenticated
-    // TODO: change that to 'user'
-    if (!user || user.role !== 'pending') router.push('/signin');
-  }, [user, router]);
+  // useEffect(() => {
+  //   // redirect to home if user is authenticated
+  //   // TODO: change that to 'user'
+  //   if (!user || user.role !== 'pending') router.push('/signin');
+  // }, [user, router]);
 
   return (
     <>
@@ -77,8 +77,8 @@ const BGPUpdates = (props) => {
   );
 };
 
-export async function getServerSideProps(ctx) {
-  return getProps(ctx);
-}
+// export async function getServerSideProps(ctx) {
+//   return getProps(ctx);
+// }
 
 export default withAuth(BGPUpdates);

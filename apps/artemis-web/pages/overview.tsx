@@ -9,16 +9,9 @@ import withAuth, { getProps } from '../HOC/withAuth';
 
 const OverviewPage = (props) => {
   const user = props.user;
-  const router = useRouter();
 
   const STATS_DATA = useSubscription(STATS_SUB).data;
   const HIJACK_DATA = useSubscription(HIJACK_SUB).data;
-
-  useEffect(() => {
-    // redirect to home if user is authenticated
-    // TODO: change that to 'user'
-    if (!user || user.role !== 'pending') router.push('/signin');
-  }, [user, router]);
 
   return (
     <>
@@ -104,8 +97,8 @@ const OverviewPage = (props) => {
   );
 };
 
-export async function getServerSideProps(ctx) {
-  return getProps(ctx);
-}
+// export async function getServerSideProps(ctx) {
+//   return getProps(ctx);
+// }
 
 export default withAuth(OverviewPage);

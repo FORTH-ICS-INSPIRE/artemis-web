@@ -27,7 +27,7 @@ export default class Layout extends React.Component<any> {
           ></script>
         </Head>
         <div className="layout">
-          <Header />
+          <Header user={this.props.user} />
           {children}
           {/* <Footer /> */}
         </div>

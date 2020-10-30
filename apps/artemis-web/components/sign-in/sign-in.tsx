@@ -7,6 +7,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
+import Cookies from 'universal-cookie';
 import {
   makeStyles,
   createMuiTheme,
@@ -80,12 +81,20 @@ const SignIn = (props) => {
 
     const res = await fetch('/api/login', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      // withCredentials: true,
+      credentials: 'include',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
       body: JSON.stringify(body),
     });
 
     if (res.status === 200) {
       const userObj = await res.json();
+
+      const cookies = new Cookies();
+      cookies.set(userObj.token[0], userObj.token[1], userObj.token[2]);
       if (userObj) Router.push('/overview');
     } else {
       setErrorMsg('Incorrect username or password. Try again!');
