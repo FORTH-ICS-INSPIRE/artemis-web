@@ -68,4 +68,4 @@ const BGPUpdates = (props) => {
   );
 };
 
-export default withAuth(BGPUpdates, ['admin', 'user']);
+export default withAuth(BGPUpdates, 'RINA', ['pending']);

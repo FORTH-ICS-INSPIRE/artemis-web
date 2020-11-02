@@ -62,4 +62,4 @@ const HijacksPage = (props) => {
   );
 };
 
-export default withAuth(HijacksPage, ['admin', 'user']);
+export default withAuth(HijacksPage, 'RINA', ['pending']);

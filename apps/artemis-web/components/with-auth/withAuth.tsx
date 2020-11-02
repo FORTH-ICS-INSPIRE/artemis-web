@@ -2,13 +2,19 @@ import React from 'react';
 import { useCookie } from 'next-cookie';
 import jwt from 'jsonwebtoken';
 
-const withAuth = (WrappedComponent, ACL) => {
+const withAuth = (WrappedComponent, action, ACL) => {
   class App extends React.PureComponent {
     render() {
       return <WrappedComponent {...this.props} />;
     }
 
     static async getInitialProps(ctx) {
+      const landingMap = {
+        pending: '/pending',
+        user: '/overview',
+        admin: '/overview',
+      };
+
       const { req, res } = ctx;
 
       if (req) {
@@ -38,32 +44,11 @@ const withAuth = (WrappedComponent, ACL) => {
 
         const isLoggedIn = !!claims;
 
-        if (
-          !isLoggedIn &&
-          WrappedComponent.name !== 'SignupPage' &&
-          WrappedComponent.name !== 'SigninPage'
-        ) {
-          res.redirect('/signin');
-        } else if (
-          isLoggedIn &&
-          (WrappedComponent.name === 'SignupPage' ||
-            WrappedComponent.name === 'SigninPage')
-        ) {
-          res.redirect('/overview');
-        } else if (isLoggedIn && !ACL.includes(claims.user.role)) {
-          res.redirect('/');
-        } else if (
-          isLoggedIn &&
-          WrappedComponent.name === 'HomePage' &&
-          claims.user.role == 'pending'
-        ) {
-          res.redirect('pending');
-        } else if (
-          isLoggedIn &&
-          WrappedComponent.name === 'HomePage' &&
-          claims.user.role == 'user'
-        ) {
-          res.redirect('overview');
+        if (!isLoggedIn && action === 'RINA') res.redirect('/signin');
+        else if (isLoggedIn && action === 'RIA')
+          res.redirect(landingMap[claims.user.role]);
+        else if (isLoggedIn && ACL.includes(claims.user.role)) {
+          res.redirect(landingMap[claims.user.role]);
         }
 
         return props;

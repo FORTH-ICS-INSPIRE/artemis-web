@@ -26,4 +26,4 @@ const SigninPage = (props) => {
   );
 };
 
-export default withAuth(SigninPage, []);
+export default withAuth(SigninPage, 'RIA', []);

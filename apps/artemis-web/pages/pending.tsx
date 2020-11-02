@@ -21,4 +21,4 @@ const PendingPage = (props) => {
   );
 };
 
-export default withAuth(PendingPage, ['pending']);
+export default withAuth(PendingPage, 'RINA', ['user', 'admin']);

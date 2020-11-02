@@ -29,4 +29,4 @@ const SignupPage = (props) => {
   );
 };
 
-export default withAuth(SignupPage, []);
+export default withAuth(SignupPage, 'RIA', []);
