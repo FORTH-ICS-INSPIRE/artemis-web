@@ -1,20 +1,14 @@
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
-import { useRouter } from 'next/router';
-import React, { useEffect } from 'react';
-import withAuth, { getProps } from '../HOC/withAuth';
+import withAuth from '../components/with-auth/withAuth';
+import React from 'react';
 
 const SignupPage = (props) => {
   const SignUpComponent = dynamic(() =>
     import('../components/sign-up/sign-up')
   );
-  const user = props.user;
 
-  // const router = useRouter();
-  // useEffect(() => {
-  //   // redirect to home if user is authenticated
-  //   if (user) router.push('/overview');
-  // }, [user, router]);
+  const user = props.user;
 
   return (
     <>
@@ -35,4 +29,4 @@ const SignupPage = (props) => {
   );
 };
 
-export default withAuth(SignupPage);
+export default withAuth(SignupPage, []);

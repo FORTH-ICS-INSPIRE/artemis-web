@@ -1,11 +1,10 @@
 import Head from 'next/head';
-import { useRouter } from 'next/router';
-import React, { useEffect } from 'react';
+import React from 'react';
 import HijackTableComponent from '../components/ongoing-hijack-table/ongoing-hijack-table';
 import { STATS_SUB, HIJACK_SUB } from '../utils/graphql';
 import { useSubscription } from '@apollo/client';
 import StatsTable from '../components/stats-table/stats-table';
-import withAuth, { getProps } from '../HOC/withAuth';
+import withAuth from '../components/with-auth/withAuth';
 
 const OverviewPage = (props) => {
   const user = props.user;
@@ -97,8 +96,4 @@ const OverviewPage = (props) => {
   );
 };
 
-// export async function getServerSideProps(ctx) {
-//   return getProps(ctx);
-// }
-
-export default withAuth(OverviewPage);
+export default withAuth(OverviewPage, ['admin', 'user']);

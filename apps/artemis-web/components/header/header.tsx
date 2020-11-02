@@ -1,20 +1,14 @@
-import { useUser } from '../../lib/hooks';
 import Link from 'next/link';
 import React from 'react';
-import { Router } from 'next/router';
-import { useRouter } from 'next/router';
 
 const Header = (props) => {
-  const router = useRouter();
-
   const user = props.user;
 
   const handleLogout = async () => {
     await fetch('/api/logout', {
       method: 'DELETE',
     });
-    // set the user state to null
-    router.push('/');
+    window.location.reload();
   };
 
   return (
@@ -31,25 +25,25 @@ const Header = (props) => {
             {user && (
               <>
                 <li className="nav-item">
-                  <Link href="/overview">
-                    <a href="/#" className="nav-link">
-                      Overview
-                    </a>
-                  </Link>
+                  {/* <Link href="/overview"> */}
+                  <a href="/overview" className="nav-link">
+                    Overview
+                  </a>
+                  {/* </Link> */}
                 </li>
                 <li className="nav-item">
-                  <Link href="/bgpupdates">
-                    <a href="/#" className="nav-link">
-                      BGP Updates
-                    </a>
-                  </Link>
+                  {/* <Link href="/bgpupdates"> */}
+                  <a href="/bgpupdates" className="nav-link">
+                    BGP Updates
+                  </a>
+                  {/* </Link> */}
                 </li>
                 <li className="nav-item">
-                  <Link href="/hijacks">
-                    <a href="/#" className="nav-link">
-                      Hijacks
-                    </a>
-                  </Link>
+                  {/* <Link href="/hijacks"> */}
+                  <a href="/hijacks" className="nav-link">
+                    Hijacks
+                  </a>
+                  {/* </Link> */}
                 </li>
               </>
             )}

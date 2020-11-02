@@ -1,8 +1,7 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
-import { useRouter } from 'next/router';
-import withAuth, { getProps } from '../HOC/withAuth';
+import withAuth from '../components/with-auth/withAuth';
 
 const SigninPage = (props) => {
   const user = props.user;
@@ -27,8 +26,4 @@ const SigninPage = (props) => {
   );
 };
 
-// export async function getServerSideProps(ctx) {
-//   return getProps(ctx);
-// }
-
-export default withAuth(SigninPage, ['pending']);
+export default withAuth(SigninPage, []);

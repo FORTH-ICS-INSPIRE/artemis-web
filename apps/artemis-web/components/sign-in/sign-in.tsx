@@ -7,7 +7,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
-import Cookies from 'universal-cookie';
+
 import {
   makeStyles,
   createMuiTheme,
@@ -20,7 +20,6 @@ import {
   deepOrange,
   deepPurple,
 } from '@material-ui/core/colors';
-import Router from 'next/router';
 
 import { useState } from 'react';
 
@@ -91,11 +90,7 @@ const SignIn = (props) => {
     });
 
     if (res.status === 200) {
-      const userObj = await res.json();
-
-      const cookies = new Cookies();
-      cookies.set(userObj.token[0], userObj.token[1], userObj.token[2]);
-      if (userObj) Router.push('/overview');
+      window.location.reload();
     } else {
       setErrorMsg('Incorrect username or password. Try again!');
     }

@@ -50,7 +50,7 @@ handler.post(
         ),
         {
           path: '/',
-          httpOnly: true,
+          httpOnly: false,
           maxAge: 604800000, // todo set small timeout and have refresh token impl
           sameSite: 'strict',
           secure: process.env.production === 'true',
@@ -58,28 +58,7 @@ handler.post(
       );
 
       res.json({
-        user: userObj,
-        token: [
-          'access_token',
-          jwt.sign(
-            {
-              'https://hasura.io/jwt/claims': {
-                'x-hasura-allowed-roles': [userObj.role],
-                'x-hasura-default-role': userObj.role,
-                'x-hasura-user-id': '11',
-              },
-              user: userObj,
-            },
-            process.env.JWT_SECRET
-          ),
-          {
-            path: '/',
-            // httpOnly: true,
-            // maxAge: 604800000, // todo set small timeout and have refresh token impl
-            // sameSite: 'strict',
-            // secure: process.env.production === 'true',
-          },
-        ],
+        // user: userObj,
       });
     } else {
       const token = getRandomString(64);
@@ -91,37 +70,38 @@ handler.post(
           },
         }
       );
+      res.cookie(
+        'access_token',
+        jwt.sign(
+          {
+            'https://hasura.io/jwt/claims': {
+              'x-hasura-allowed-roles': [userObj.role],
+              'x-hasura-default-role': userObj.role,
+              'x-hasura-user-id': '11',
+            },
+            user: userObj,
+          },
+          process.env.JWT_SECRET
+        ),
+        {
+          path: '/',
+          httpOnly: false,
+          maxAge: 604800000, // todo set small timeout and have refresh token impl
+          sameSite: 'strict',
+          secure: process.env.production === 'true',
+        }
+      );
+
       res.cookie('remember_me', token, {
         path: '/',
-        httpOnly: true,
+        httpOnly: false,
         maxAge: 604800000,
         sameSite: 'strict',
         secure: process.env.production === 'true',
       });
 
       res.json({
-        user: userObj,
-        token: [
-          'access_token',
-          jwt.sign(
-            {
-              'https://hasura.io/jwt/claims': {
-                'x-hasura-allowed-roles': [userObj.role],
-                'x-hasura-default-role': userObj.role,
-                'x-hasura-user-id': '11',
-              },
-              user: userObj,
-            },
-            process.env.JWT_SECRET
-          ),
-          {
-            path: '/',
-            // httpOnly: true,
-            // maxAge: 604800000, // todo set small timeout and have refresh token impl
-            // sameSite: 'strict',
-            // secure: process.env.production === 'true',
-          },
-        ],
+        // user: userObj,
       });
     }
   }

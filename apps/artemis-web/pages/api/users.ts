@@ -57,7 +57,7 @@ handler.post(
         name,
         lastLogin: new Date(),
         currentLogin: new Date(),
-        role: 'pending',
+        role: 'user', // just for testing. normally it will be 'pending'
         token: '',
       })
       .then(({ ops }) => ops[0]);

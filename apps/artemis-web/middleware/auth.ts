@@ -1,11 +1,10 @@
 import nextConnect from 'next-connect';
 import passport from '../lib/passport';
-import session from './session';
 import database from './database';
 
 const auth = nextConnect()
   .use(database)
-  .use(session)
+  // .use(session)
   .use(passport.initialize())
   .use(
     passport.session({
