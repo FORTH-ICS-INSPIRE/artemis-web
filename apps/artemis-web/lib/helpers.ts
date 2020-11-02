@@ -15,25 +15,23 @@ export function extractUser(req) {
 
 export function setAccessCookie(req, res) {
   const userObj = extractUser(req);
-  res.cookie(
-    'access_token',
-    jwt.sign(
-      {
-        'https://hasura.io/jwt/claims': {
-          'x-hasura-allowed-roles': [userObj.role],
-          'x-hasura-default-role': userObj.role,
-          'x-hasura-user-id': userObj._id,
-        },
-        user: userObj,
-      },
-      process.env.JWT_SECRET
-    ),
+  const accessToken = jwt.sign(
     {
-      path: '/',
-      httpOnly: true,
-      maxAge: 604800000, // todo set small timeout and have refresh token impl
-      sameSite: 'strict',
-      secure: process.env.production === 'true',
-    }
+      'https://hasura.io/jwt/claims': {
+        'x-hasura-allowed-roles': [userObj.role],
+        'x-hasura-default-role': userObj.role,
+        'x-hasura-user-id': userObj._id,
+      },
+      user: userObj,
+    },
+    process.env.JWT_SECRET
   );
+  res.cookie('access_token', accessToken, {
+    path: '/',
+    httpOnly: true,
+    maxAge: 604800000, // todo set small timeout and have refresh token impl
+    sameSite: 'strict',
+    secure: process.env.production === 'true',
+  });
+  res.json({ accessToken: accessToken });
 }
