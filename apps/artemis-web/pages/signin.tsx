@@ -1,7 +1,7 @@
 import React from 'react';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
-import withAuth from '../components/with-auth/withAuth';
+import withAuth from '../components/with-auth/with-auth';
 
 const SigninPage = (props) => {
   const user = props.user;
@@ -26,4 +26,4 @@ const SigninPage = (props) => {
   );
 };
 
-export default withAuth(SigninPage, 'RIA', []);
+export default withAuth(SigninPage, 'RIA');

@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import React from 'react';
-import withAuth from '../components/with-auth/withAuth';
+import withAuth from '../components/with-auth/with-auth';
 
 const PendingPage = (props) => {
   const user = props.user;
@@ -21,4 +21,4 @@ const PendingPage = (props) => {
   );
 };
 
-export default withAuth(PendingPage, 'RINA', ['user', 'admin']);
+export default withAuth(PendingPage, 'RINA', ['pending']);

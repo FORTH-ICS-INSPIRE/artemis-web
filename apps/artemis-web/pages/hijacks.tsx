@@ -1,7 +1,7 @@
 import React from 'react';
 import Head from 'next/head';
 import HijackTableComponent from '../components/hijack-table/hijack-table';
-import withAuth from '../components/with-auth/withAuth';
+import withAuth from '../components/with-auth/with-auth';
 
 const HijacksPage = (props) => {
   const user = props.user;
@@ -9,7 +9,7 @@ const HijacksPage = (props) => {
   return (
     <>
       <Head>
-        <title>ARTEMIS - Overview</title>
+        <title>ARTEMIS - Hijacks</title>
       </Head>
       {user && (
         <div
@@ -62,4 +62,4 @@ const HijacksPage = (props) => {
   );
 };
 
-export default withAuth(HijacksPage, 'RINA', ['pending']);
+export default withAuth(HijacksPage, 'RINA', ['user', 'admin']);

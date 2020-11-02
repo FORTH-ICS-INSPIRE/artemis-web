@@ -3,36 +3,16 @@ import isEmail from 'validator/lib/isEmail';
 import normalizeEmail from 'validator/lib/normalizeEmail';
 import argon2 from 'argon2';
 import auth from '../../middleware/auth';
-import { extractUser } from '../../lib/helpers';
+import { setAccessCookie } from '../../lib/helpers';
 import { nanoid } from 'nanoid';
-import { NextApiRequest, NextApiResponse } from 'next';
-import jwt from 'jsonwebtoken';
+import {
+  NextApiRequestExtended,
+  NextApiResponseExtended,
+} from '../../definitions';
 
-interface NextApiRequestExtended extends NextApiRequest {
-  logIn(user: any, arg1: (err: any) => void);
-  db: any;
-}
-
-interface NextApiResponseExtended extends NextApiResponse {
-  cookie(
-    arg0: string,
-    token: string,
-    arg2: {
-      path: string;
-      httpOnly: boolean;
-      maxAge: number;
-      sameSite: string;
-      secure: boolean;
-    }
-  );
-}
-
-const handler = nextConnect();
-
-handler.use(auth);
-
-handler.post(
-  async (req: NextApiRequestExtended, res: NextApiResponseExtended) => {
+const handler = nextConnect()
+  .use(auth)
+  .post(async (req: NextApiRequestExtended, res: NextApiResponseExtended) => {
     const { name, password } = req.body;
     const email = normalizeEmail(req.body.email);
     if (!isEmail(email)) {
@@ -63,35 +43,8 @@ handler.post(
       .then(({ ops }) => ops[0]);
     req.logIn(user, (err) => {
       if (err) throw err;
-      const userObj = extractUser(req);
-
-      res.cookie(
-        'access_token',
-        jwt.sign(
-          {
-            'https://hasura.io/jwt/claims': {
-              'x-hasura-allowed-roles': [userObj.role],
-              'x-hasura-default-role': userObj.role,
-              'x-hasura-user-id': '11',
-            },
-            user: userObj,
-          },
-          process.env.JWT_SECRET
-        ),
-        {
-          path: '/',
-          httpOnly: true,
-          maxAge: 604800000, // todo set small timeout and have refresh token impl
-          sameSite: 'strict',
-          secure: process.env.production === 'true',
-        }
-      );
-
-      res.status(201).json({
-        user: userObj,
-      });
+      setAccessCookie(req, res);
     });
-  }
-);
+  });
 
 export default handler;

@@ -3,7 +3,7 @@ import Head from 'next/head';
 import { useSubscription } from '@apollo/client';
 import { BGP_SUB } from '../utils/graphql';
 import BGPTableComponent from '../components/bgp-table/bgp-table';
-import withAuth from '../components/with-auth/withAuth';
+import withAuth from '../components/with-auth/with-auth';
 
 const BGPUpdates = (props) => {
   const user = props.user;
@@ -12,7 +12,7 @@ const BGPUpdates = (props) => {
   return (
     <>
       <Head>
-        <title>ARTEMIS - Overview</title>
+        <title>ARTEMIS - BGP Updates</title>
       </Head>
       {user && (
         <div
@@ -68,4 +68,4 @@ const BGPUpdates = (props) => {
   );
 };
 
-export default withAuth(BGPUpdates, 'RINA', ['pending']);
+export default withAuth(BGPUpdates, 'RINA', ['user', 'admin']);

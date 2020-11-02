@@ -4,7 +4,7 @@ import HijackTableComponent from '../components/ongoing-hijack-table/ongoing-hij
 import { STATS_SUB, HIJACK_SUB } from '../utils/graphql';
 import { useSubscription } from '@apollo/client';
 import StatsTable from '../components/stats-table/stats-table';
-import withAuth from '../components/with-auth/withAuth';
+import withAuth from '../components/with-auth/with-auth';
 
 const OverviewPage = (props) => {
   const user = props.user;
@@ -96,4 +96,4 @@ const OverviewPage = (props) => {
   );
 };
 
-export default withAuth(OverviewPage, 'RINA', ['pending']);
+export default withAuth(OverviewPage, 'RINA', ['user', 'admin']);

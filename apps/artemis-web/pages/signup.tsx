@@ -1,6 +1,6 @@
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
-import withAuth from '../components/with-auth/withAuth';
+import withAuth from '../components/with-auth/with-auth';
 import React from 'react';
 
 const SignupPage = (props) => {
@@ -29,4 +29,4 @@ const SignupPage = (props) => {
   );
 };
 
-export default withAuth(SignupPage, 'RIA', []);
+export default withAuth(SignupPage, 'RIA');
