@@ -22,7 +22,7 @@ const Header = (props) => {
         </a>
         <div className="collapse navbar-collapse" id="navbarCollapse">
           <ul className="nav navbar-nav navbar-right">
-            {user && (
+            {user && user.role !== 'pending' && (
               <>
                 <li className="nav-item">
                   {/* <Link href="/overview"> */}
@@ -46,6 +46,15 @@ const Header = (props) => {
                   {/* </Link> */}
                 </li>
               </>
+            )}
+            {user && user.role === 'admin' && (
+              <li className="nav-item">
+                {/* <Link href="/hijacks"> */}
+                <a href="/adminpanel" className="nav-link">
+                  Admin Panel
+                </a>
+                {/* </Link> */}
+              </li>
             )}
           </ul>
           <ul className="navbar-nav mr-auto" />
