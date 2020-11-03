@@ -1,17 +1,23 @@
 import nextConnect from 'next-connect';
 import auth from '../../middleware/auth';
-import { setAccessCookie } from '../../lib/helpers';
+
 import {
   NextApiRequestExtended,
   NextApiResponseExtended,
 } from '../../definitions';
+import { useCookie } from 'next-cookie';
 
 const handler = nextConnect()
   .use(auth)
   .get((req: NextApiRequestExtended, res: NextApiResponseExtended) => {
-    if (!req.user) res.send(null);
+    const pathname = '/',
+      query = null,
+      AppTree = null;
+    const cookies = useCookie({ req, res, pathname, query, AppTree });
+    const accessToken: string = cookies.get('access_token');
+    if (!accessToken) res.send(null);
     else {
-      setAccessCookie(req, res);
+      res.send({ accessToken });
     }
   });
 

@@ -1,16 +1,14 @@
 import Head from 'next/head';
 import React from 'react';
 import HijackTableComponent from '../components/ongoing-hijack-table/ongoing-hijack-table';
-import { STATS_SUB, HIJACK_SUB } from '../utils/graphql';
-import { useSubscription } from '@apollo/client';
 import StatsTable from '../components/stats-table/stats-table';
 import withAuth from '../components/with-auth/with-auth';
+import { useGraphQl } from '../hooks/useGraphQL';
 
 const OverviewPage = (props) => {
   const user = props.user;
-
-  const STATS_DATA = useSubscription(STATS_SUB).data;
-  const HIJACK_DATA = useSubscription(HIJACK_SUB).data;
+  const STATS_DATA = useGraphQl('stats', props.isProduction);
+  const HIJACK_DATA = useGraphQl('hijack', props.isProduction);
 
   return (
     <>

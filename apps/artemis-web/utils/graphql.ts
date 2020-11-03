@@ -8,7 +8,7 @@ import {
 import { split } from '@apollo/client';
 import { getMainDefinition } from '@apollo/client/utilities';
 import { WebSocketLink } from '@apollo/client/link/ws';
-
+import { setContext } from '@apollo/client/link/context';
 import { useMemo } from 'react';
 
 let accessToken = null;
@@ -23,17 +23,26 @@ const requestToken = async () => {
 let apolloClient: ApolloClient<NormalizedCacheObject>;
 
 const createApolloClient = (GRAPHQL_URI, GRAPHQL_WS_URI) => {
-  const httpLink = createHttpLink({
-    uri: GRAPHQL_URI,
-    useGETForQueries: false,
-    headers: async () => {
-      await requestToken();
-      return {
-        authorization: `Bearer ${accessToken}`,
-        // 'x-hasura-admin-secret': process.env.HASURA_SECRET
-      };
-    },
-  });
+  const httpLink =
+    typeof window !== 'undefined'
+      ? createHttpLink({
+          uri: GRAPHQL_URI,
+          useGETForQueries: false,
+        })
+      : null;
+
+  const authLink =
+    typeof window !== 'undefined'
+      ? setContext(async (_, { headers }) => {
+          await requestToken();
+          return {
+            headers: {
+              ...headers,
+              authorization: accessToken ? `Bearer ${accessToken}` : '',
+            },
+          };
+        })
+      : null;
 
   const wsLink =
     typeof window !== 'undefined'
@@ -47,7 +56,6 @@ const createApolloClient = (GRAPHQL_URI, GRAPHQL_WS_URI) => {
               return {
                 headers: {
                   authorization: `Bearer ${accessToken}`,
-                  //'x-hasura-admin-secret': constants.HASURA_SECRET,
                 },
               };
             },
@@ -66,7 +74,7 @@ const createApolloClient = (GRAPHQL_URI, GRAPHQL_WS_URI) => {
             );
           },
           wsLink,
-          httpLink
+          authLink.concat(httpLink)
         )
       : null;
 
@@ -118,6 +126,41 @@ export const STATS_QUERY = gql`
 // An example graphql query to test the API
 export const HIJACK_SUB = gql`
   subscription hijacks {
+    view_hijacks(
+      limit: 10
+      order_by: { time_last: desc }
+      where: { _and: [{ active: { _eq: true } }, { dormant: { _eq: false } }] }
+    ) {
+      active
+      comment
+      configured_prefix
+      hijack_as
+      ignored
+      dormant
+      key
+      mitigation_started
+      num_asns_inf
+      num_peers_seen
+      outdated
+      peers_seen
+      peers_withdrawn
+      prefix
+      resolved
+      seen
+      time_detected
+      time_ended
+      time_last
+      time_started
+      timestamp_of_config
+      type
+      under_mitigation
+      withdrawn
+    }
+  }
+`;
+
+export const HIJACK_QUERY = gql`
+  query hijacks {
     view_hijacks(
       limit: 10
       order_by: { time_last: desc }
