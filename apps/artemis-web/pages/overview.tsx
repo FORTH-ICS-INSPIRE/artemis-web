@@ -94,4 +94,4 @@ const OverviewPage = (props) => {
   );
 };
 
-export default withAuth(OverviewPage, 'RINA', ['user', 'admin']);
+export default withAuth(OverviewPage, 'RINA', ['user', 'admin'], ['apollo']);

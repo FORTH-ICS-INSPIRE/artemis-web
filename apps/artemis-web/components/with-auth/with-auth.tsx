@@ -3,7 +3,7 @@ import { useCookie } from 'next-cookie';
 import jwt from 'jsonwebtoken';
 import { initializeApollo } from '../../utils/graphql';
 
-const withAuth = (WrappedComponent, action = '', ACL = []) => {
+const withAuth = (WrappedComponent, action = '', ACL = [], deps = []) => {
   class App extends React.PureComponent {
     render() {
       return <WrappedComponent {...this.props} />;
@@ -33,19 +33,22 @@ const withAuth = (WrappedComponent, action = '', ACL = []) => {
           claims = null;
         }
 
-        const apolloClient = initializeApollo(
-          null,
-          process.env.GRAPHQL_URI,
-          process.env.GRAPHQL_WS_URI
-        );
-
         const props = {
           user: claims ? claims.user : null,
           isProduction: process.env.production,
-          GRAPHQL_WS_URI: process.env.GRAPHQL_WS_URI,
-          GRAPHQL_URI: process.env.GRAPHQL_URI,
-          initialApolloState: apolloClient.cache.extract(),
         };
+
+        if (deps.includes('apollo')) {
+          const apolloClient = initializeApollo(
+            null,
+            process.env.GRAPHQL_URI,
+            process.env.GRAPHQL_WS_URI
+          );
+
+          props['GRAPHQL_WS_URI'] = process.env.GRAPHQL_WS_URI;
+          props['GRAPHQL_URI'] = process.env.GRAPHQL_URI;
+          props['initialApolloState'] = apolloClient.cache.extract();
+        }
 
         const isLoggedIn = !!claims;
 
