@@ -4,8 +4,15 @@ import HijackTableComponent from '../components/ongoing-hijack-table/ongoing-hij
 import StatsTable from '../components/stats-table/stats-table';
 import withAuth from '../components/with-auth/with-auth';
 import { useGraphQl } from '../hooks/useGraphQL';
+import { worker } from '../mocks/browser';
 
 const OverviewPage = (props) => {
+  if (process.env.NODE_ENV === 'development') {
+    if (typeof window !== 'undefined') {
+      worker.start();
+    }
+  }
+
   const user = props.user;
   const STATS_DATA = useGraphQl('stats', props.isProduction);
   const HIJACK_DATA = useGraphQl('hijack', props.isProduction);

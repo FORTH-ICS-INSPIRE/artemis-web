@@ -1,13 +1,19 @@
 import React from 'react';
 import Head from 'next/head';
-import { useSubscription } from '@apollo/client';
-import { BGP_SUB } from '../utils/graphql';
 import BGPTableComponent from '../components/bgp-table/bgp-table';
 import withAuth from '../components/with-auth/with-auth';
+import { useGraphQl } from '../hooks/useGraphQL';
+import { worker } from '../mocks/browser';
 
 const BGPUpdates = (props) => {
+  if (process.env.NODE_ENV === 'development') {
+    if (typeof window !== 'undefined') {
+      worker.start();
+    }
+  }
+
   const user = props.user;
-  const BGP_DATA = useSubscription(BGP_SUB).data;
+  const BGP_DATA = useGraphQl('bgpupdates', props.isProduction);
 
   return (
     <>
@@ -33,7 +39,7 @@ const BGPUpdates = (props) => {
                 <div className="card-header"> </div>
                 <div className="card-body">
                   <BGPTableComponent
-                    data={BGP_DATA ? BGP_DATA.view_hijacks : []}
+                    data={BGP_DATA ? BGP_DATA.view_bgpupdates : []}
                   />
                 </div>
               </div>
@@ -68,4 +74,4 @@ const BGPUpdates = (props) => {
   );
 };
 
-export default withAuth(BGPUpdates, 'RINA', ['user', 'admin']);
+export default withAuth(BGPUpdates, 'RINA', ['user', 'admin'], ['apollo']);

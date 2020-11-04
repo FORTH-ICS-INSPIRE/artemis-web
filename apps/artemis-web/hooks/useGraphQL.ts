@@ -1,5 +1,7 @@
 import { useQuery, useSubscription } from '@apollo/client';
 import {
+  BGP_QUERY,
+  BGP_SUB,
   HIJACK_QUERY,
   HIJACK_SUB,
   STATS_QUERY,
@@ -26,6 +28,15 @@ export function useGraphQl(module, isProduction) {
       } else {
         // eslint-disable-next-line react-hooks/rules-of-hooks
         data = useQuery(HIJACK_QUERY).data;
+      }
+      break;
+    case 'bgpupdates':
+      if (isProduction) {
+        // eslint-disable-next-line react-hooks/rules-of-hooks
+        data = useSubscription(BGP_SUB).data;
+      } else {
+        // eslint-disable-next-line react-hooks/rules-of-hooks
+        data = useQuery(BGP_QUERY).data;
       }
       break;
   }
