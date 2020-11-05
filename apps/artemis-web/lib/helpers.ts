@@ -1,4 +1,5 @@
 import jwt from 'jsonwebtoken';
+import { useFetch } from '../hooks/useJWT';
 
 export function extractUser(req) {
   if (!req.user) return null;
@@ -13,13 +14,22 @@ export function extractUser(req) {
   };
 }
 
+export function getUser() {
+  const { status, data } = useFetch('/api/jwt');
+  const jwt = data ? parseJwt(data) : null;
+  const user = jwt ? jwt.user : null;
+  const loading = status !== 'fetched';
+
+  return [user, loading];
+}
+
 export function parseJwt(token) {
   try {
-    return JSON.parse(Buffer.from(token.split('.')[1], "base64").toString());
+    return JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
   } catch (e) {
     return null;
   }
-};
+}
 
 export function setAccessCookie(req, res) {
   const userObj = extractUser(req);
@@ -35,17 +45,13 @@ export function setAccessCookie(req, res) {
     process.env.JWT_SECRET
   );
 
-  res.cookie(
-    'access_token',
-    token,
-    {
-      path: '/',
-      httpOnly: true,
-      maxAge: 604800000, // todo set small timeout and have refresh token impl
-      sameSite: 'strict',
-      secure: process.env.production === 'true',
-    }
-  );
+  res.cookie('access_token', token, {
+    path: '/',
+    httpOnly: true,
+    maxAge: 604800000, // todo set small timeout and have refresh token impl
+    sameSite: 'strict',
+    secure: process.env.production === 'true',
+  });
 
   return token;
 }

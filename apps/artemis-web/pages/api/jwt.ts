@@ -15,6 +15,7 @@ const handler = nextConnect()
       AppTree = null;
     const cookies = useCookie({ req, res, pathname, query, AppTree });
     const accessToken: string = cookies.get('access_token');
+
     if (!accessToken) res.send(null);
     else {
       res.send({ accessToken });

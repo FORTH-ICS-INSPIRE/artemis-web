@@ -4,15 +4,17 @@ import BGPTableComponent from '../components/bgp-table/bgp-table';
 import withAuth from '../components/with-auth/with-auth';
 import { useGraphQl } from '../hooks/useGraphQL';
 import { worker } from '../mocks/browser';
+import { getUser } from '../lib/helpers';
 
 const BGPUpdates = (props) => {
   if (process.env.NODE_ENV === 'development') {
     if (typeof window !== 'undefined') {
+      const { worker } = require('../mocks/browser');
       worker.start();
     }
   }
 
-  const user = props.user;
+  const [user, loading] = getUser();
   const BGP_DATA = useGraphQl('bgpupdates', props.isProduction);
 
   return (
@@ -74,4 +76,4 @@ const BGPUpdates = (props) => {
   );
 };
 
-export default withAuth(BGPUpdates, 'RINA', ['user', 'admin'], ['apollo']);
+export default BGPUpdates;

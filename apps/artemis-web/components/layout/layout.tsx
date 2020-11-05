@@ -5,11 +5,7 @@ import { useRouter } from 'next/router';
 
 export default class Layout extends React.Component<any> {
   render() {
-    const user = this.props.jwt ? this.props.jwt.user : null;
-    // const router = useRouter();
-    
-    // if (!user && !this.props.loading) router.push('/signin');
-
+    // const user = this.props.jwt ? this.props.jwt.user : null;
     const { children } = this.props;
     // const Footer = dynamic(() => import('../footer/footer'));
     const Header = dynamic(() => import('../header/header'));

@@ -1,9 +1,10 @@
 import Head from 'next/head';
 import React from 'react';
 import withAuth from '../components/with-auth/with-auth';
+import { getUser } from '../lib/helpers';
 
 const PendingPage = (props) => {
-  const user = props.user;
+  const [user, loading] = getUser();
 
   return (
     <>

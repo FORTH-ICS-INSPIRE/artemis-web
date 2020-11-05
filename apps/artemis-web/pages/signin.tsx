@@ -3,21 +3,15 @@ import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import withAuth from '../components/with-auth/with-auth';
 import { useRouter } from 'next/router';
-import { useJWT } from '../hooks/useJWT';
+import { getUser } from '../lib/helpers';
 
 const SigninPage = (props) => {
-  const [jwt, loading] = [props.jwt, props.loading];
-  const user = jwt ? jwt.user : null;
+  const [user, loading] = getUser();
   const router = useRouter();
-
-  // useEffect(() => {
-  //   // redirect to home if user is authenticated
-  //   if (user && user.role === 'pending')
-  //       router.push('/pending')
-  //     else 
-  //       router.push('/overview')
-  // }, [user, loading, router]);
-
+  if (user && !loading) {
+    if (user.role === 'pending') router.push('pending');
+    else router.push('overview');
+  }
   const SignInComponent = dynamic(() =>
     import('../components/sign-in/sign-in')
   );

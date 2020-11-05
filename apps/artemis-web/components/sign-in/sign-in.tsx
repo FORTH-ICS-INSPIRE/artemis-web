@@ -93,10 +93,8 @@ const SignIn = (props) => {
 
     if (res.status === 200) {
       const token = await res.json();
-      if (token.user.role === 'pending')
-        router.push('/pending')
-      else 
-        router.push('/overview')
+      if (token.user.role === 'pending') router.push('/pending');
+      else router.push('/overview');
     } else {
       setErrorMsg('Incorrect username or password. Try again!');
     }

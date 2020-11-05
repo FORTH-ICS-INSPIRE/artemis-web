@@ -2,9 +2,10 @@ import React from 'react';
 import Head from 'next/head';
 import HijackTableComponent from '../components/hijack-table/hijack-table';
 import withAuth from '../components/with-auth/with-auth';
+import { getUser } from '../lib/helpers';
 
 const HijacksPage = (props) => {
-  const user = props.user;
+  const [user, loading] = getUser();
 
   return (
     <>
@@ -62,4 +63,4 @@ const HijacksPage = (props) => {
   );
 };
 
-export default withAuth(HijacksPage, 'RINA', ['user', 'admin']);
+export default HijacksPage;

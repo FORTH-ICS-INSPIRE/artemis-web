@@ -1,17 +1,23 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
+import { useFetch } from 'apps/artemis-web/hooks/useJWT';
+import { parseJwt } from 'apps/artemis-web/lib/helpers';
 
 const Header = (props) => {
-  const [jwt, loading] = [props.jwt, props.loading];
-  const user = jwt ? jwt.user : null;
+  // const [jwt, loading] = [props.jwt, props.loading];
+
   const router = useRouter();
-  
+  const { status, data } = useFetch('/api/jwt');
+  const jwt = data ? parseJwt(data) : null;
+  const user = jwt ? jwt.user : null;
+
   const handleLogout = async () => {
     await fetch('/api/logout', {
       method: 'DELETE',
     });
     router.push('/signin');
+    window.location.reload();
   };
 
   return (
@@ -29,23 +35,23 @@ const Header = (props) => {
               <>
                 <li className="nav-item">
                   <Link href="/overview">
-                  <a href="/overview" className="nav-link">
-                    Overview
-                  </a>
+                    <a href="/overview" className="nav-link">
+                      Overview
+                    </a>
                   </Link>
                 </li>
                 <li className="nav-item">
                   <Link href="/bgpupdates">
-                  <a href="/bgpupdates" className="nav-link">
-                    BGP Updates
-                  </a>
+                    <a href="/bgpupdates" className="nav-link">
+                      BGP Updates
+                    </a>
                   </Link>
                 </li>
                 <li className="nav-item">
                   <Link href="/hijacks">
-                  <a href="/hijacks" className="nav-link">
-                    Hijacks
-                  </a>
+                    <a href="/hijacks" className="nav-link">
+                      Hijacks
+                    </a>
                   </Link>
                 </li>
               </>
@@ -53,9 +59,9 @@ const Header = (props) => {
             {user && user.role === 'admin' && (
               <li className="nav-item">
                 <Link href="/hijacks">
-                <a href="/adminpanel" className="nav-link">
-                  Admin Panel
-                </a>
+                  <a href="/adminpanel" className="nav-link">
+                    Admin Panel
+                  </a>
                 </Link>
               </li>
             )}

@@ -6,18 +6,19 @@ import withAuth from '../components/with-auth/with-auth';
 import { useGraphQl } from '../hooks/useGraphQL';
 import { useJWT } from '../hooks/useJWT';
 import { useRouter } from 'next/router';
+import { getUser } from '../lib/helpers';
 
 const OverviewPage = (props) => {
   if (process.env.NODE_ENV === 'development') {
     if (typeof window !== 'undefined') {
-      const {worker} = require('../mocks/browser');
+      const { worker } = require('../mocks/browser');
       worker.start();
     }
   }
-  
-  // const [jwt, { loading }] = useJWT();
-  // const user = jwt ? jwt.user : null;
-  // const router = useRouter();
+  const [user, loading] = getUser();
+
+  const router = useRouter();
+  if (!user && !loading) router.push('signin');
 
   const STATS_DATA = useGraphQl('stats', props.isProduction);
   const HIJACK_DATA = useGraphQl('hijack', props.isProduction);
@@ -28,7 +29,7 @@ const OverviewPage = (props) => {
         <title>ARTEMIS - Overview</title>
       </Head>
       <div id="page-container" style={{ paddingTop: '120px' }}>
-        {user && (
+        {user && !loading && (
           <div id="content-wrap" style={{ paddingBottom: '5rem' }}>
             <div className="row">
               <div className="col-lg-1" />
