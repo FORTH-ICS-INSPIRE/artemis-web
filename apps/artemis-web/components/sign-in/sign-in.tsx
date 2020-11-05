@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
@@ -22,6 +22,7 @@ import {
 } from '@material-ui/core/colors';
 
 import { useState } from 'react';
+import { useRouter } from 'next/router';
 
 const palletType = 'dark';
 const darkState = false;
@@ -66,6 +67,7 @@ const useStyles = makeStyles((_theme) => ({
 
 const SignIn = (props) => {
   const [errorMsg, setErrorMsg] = useState('');
+  const router = useRouter();
 
   async function onSubmit(e) {
     e.preventDefault();
@@ -90,7 +92,11 @@ const SignIn = (props) => {
     });
 
     if (res.status === 200) {
-      window.location.reload();
+      const token = await res.json();
+      if (token.user.role === 'pending')
+        router.push('/pending')
+      else 
+        router.push('/overview')
     } else {
       setErrorMsg('Incorrect username or password. Try again!');
     }
@@ -156,14 +162,6 @@ const SignIn = (props) => {
             >
               Sign In
             </Button>
-            {/* <Button
-              fullWidth
-              variant="contained"
-              color="primary"
-              className={props.classes.submit}
-            >
-              Sign In with GitHub
-            </Button> */}
             <Grid container>
               <Grid style={{ textAlign: 'left' }} item xs></Grid>
               <Grid item>

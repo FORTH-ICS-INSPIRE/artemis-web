@@ -1,19 +1,24 @@
 import Head from 'next/head';
-import React from 'react';
+import React, { useEffect } from 'react';
 import HijackTableComponent from '../components/ongoing-hijack-table/ongoing-hijack-table';
 import StatsTable from '../components/stats-table/stats-table';
 import withAuth from '../components/with-auth/with-auth';
 import { useGraphQl } from '../hooks/useGraphQL';
-import { worker } from '../mocks/browser';
+import { useJWT } from '../hooks/useJWT';
+import { useRouter } from 'next/router';
 
 const OverviewPage = (props) => {
   if (process.env.NODE_ENV === 'development') {
     if (typeof window !== 'undefined') {
+      const {worker} = require('../mocks/browser');
       worker.start();
     }
   }
+  
+  // const [jwt, { loading }] = useJWT();
+  // const user = jwt ? jwt.user : null;
+  // const router = useRouter();
 
-  const user = props.user;
   const STATS_DATA = useGraphQl('stats', props.isProduction);
   const HIJACK_DATA = useGraphQl('hijack', props.isProduction);
 
@@ -101,4 +106,4 @@ const OverviewPage = (props) => {
   );
 };
 
-export default withAuth(OverviewPage, 'RINA', ['user', 'admin'], ['apollo']);
+export default OverviewPage;

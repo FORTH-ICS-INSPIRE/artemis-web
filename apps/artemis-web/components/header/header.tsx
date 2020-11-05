@@ -1,14 +1,17 @@
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import React from 'react';
 
 const Header = (props) => {
-  const user = props.user;
-
+  const [jwt, loading] = [props.jwt, props.loading];
+  const user = jwt ? jwt.user : null;
+  const router = useRouter();
+  
   const handleLogout = async () => {
     await fetch('/api/logout', {
       method: 'DELETE',
     });
-    window.location.reload();
+    router.push('/signin');
   };
 
   return (
@@ -25,35 +28,35 @@ const Header = (props) => {
             {user && user.role !== 'pending' && (
               <>
                 <li className="nav-item">
-                  {/* <Link href="/overview"> */}
+                  <Link href="/overview">
                   <a href="/overview" className="nav-link">
                     Overview
                   </a>
-                  {/* </Link> */}
+                  </Link>
                 </li>
                 <li className="nav-item">
-                  {/* <Link href="/bgpupdates"> */}
+                  <Link href="/bgpupdates">
                   <a href="/bgpupdates" className="nav-link">
                     BGP Updates
                   </a>
-                  {/* </Link> */}
+                  </Link>
                 </li>
                 <li className="nav-item">
-                  {/* <Link href="/hijacks"> */}
+                  <Link href="/hijacks">
                   <a href="/hijacks" className="nav-link">
                     Hijacks
                   </a>
-                  {/* </Link> */}
+                  </Link>
                 </li>
               </>
             )}
             {user && user.role === 'admin' && (
               <li className="nav-item">
-                {/* <Link href="/hijacks"> */}
+                <Link href="/hijacks">
                 <a href="/adminpanel" className="nav-link">
                   Admin Panel
                 </a>
-                {/* </Link> */}
+                </Link>
               </li>
             )}
           </ul>

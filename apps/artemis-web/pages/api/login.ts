@@ -1,7 +1,7 @@
 import nextConnect from 'next-connect';
 import auth from '../../middleware/auth';
 import passport from '../../lib/passport';
-import { setAccessCookie } from '../../lib/helpers';
+import { parseJwt, setAccessCookie } from '../../lib/helpers';
 import getRandomString from '../../utils/token';
 import {
   NextApiRequestExtended,
@@ -33,9 +33,8 @@ const handler = nextConnect()
         });
       }
 
-      setAccessCookie(req, res);
-
-      res.json({});
+      const token = setAccessCookie(req, res);
+      res.json(parseJwt(token));
     }
   );
 

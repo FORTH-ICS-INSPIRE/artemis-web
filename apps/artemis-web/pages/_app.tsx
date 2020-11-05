@@ -1,8 +1,9 @@
 import './styles.css';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { ApolloProvider } from '@apollo/client';
 import { useApollo } from '../utils/graphql';
 import Layout from '../components/layout/layout';
+import { useJWT } from '../hooks/useJWT';
 
 function MyApp({ Component, pageProps }) {
   const client = useApollo(
@@ -10,11 +11,12 @@ function MyApp({ Component, pageProps }) {
     process.env.GRAPHQL_URI,
     process.env.GRAPHQL_WS_URI
   );
+  const [jwt, { loading }] = useJWT();
 
   return (
     <ApolloProvider client={client}>
-      <Layout user={pageProps.user}>
-        <Component {...pageProps} />
+      <Layout jwt={jwt} loading={loading}>
+        <Component jwt={jwt} loading={loading}  {...pageProps} />
       </Layout>
     </ApolloProvider>
   );

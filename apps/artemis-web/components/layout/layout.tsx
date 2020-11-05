@@ -1,9 +1,15 @@
 import React from 'react';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 
 export default class Layout extends React.Component<any> {
   render() {
+    const user = this.props.jwt ? this.props.jwt.user : null;
+    // const router = useRouter();
+    
+    // if (!user && !this.props.loading) router.push('/signin');
+
     const { children } = this.props;
     // const Footer = dynamic(() => import('../footer/footer'));
     const Header = dynamic(() => import('../header/header'));
@@ -27,7 +33,7 @@ export default class Layout extends React.Component<any> {
           ></script>
         </Head>
         <div className="layout">
-          <Header user={this.props.user} />
+          <Header jwt={this.props.jwt} loading={this.props.loading} />
           {children}
           {/* <Footer /> */}
         </div>
