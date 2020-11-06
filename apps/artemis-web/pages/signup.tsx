@@ -1,20 +1,21 @@
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import React, { useEffect } from 'react';
-import { useUser } from '../lib/hooks';
+import React from 'react';
+import { useJWT } from '../hooks/useJWT';
 
-const SignupPage: React.FunctionComponent<{}> = () => {
+const SignupPage = (props) => {
   const SignUpComponent = dynamic(() =>
     import('../components/sign-up/sign-up')
   );
-  const [user, { loading }] = useUser();
-  const router = useRouter();
 
-  useEffect(() => {
-    // redirect to home if user is authenticated
-    if (user && !loading) router.push('/');
-  }, [user, loading, router]);
+  const [user, loading] = useJWT();
+  const router = useRouter();
+  if (user && !loading) {
+    console.log(user);
+    if (user.role === 'pending') router.push('pending');
+    else router.push('overview');
+  }
 
   return (
     <>

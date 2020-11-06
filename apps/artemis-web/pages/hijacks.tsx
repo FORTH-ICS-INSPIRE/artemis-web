@@ -1,24 +1,17 @@
-import React, { useEffect } from 'react';
-import { useRouter } from 'next/router';
 import Head from 'next/head';
+import React from 'react';
 import HijackTableComponent from '../components/hijack-table/hijack-table';
-import { useUser } from '../lib/hooks';
+import { useJWT } from '../hooks/useJWT';
 
-const HijacksPage: React.FunctionComponent<{}> = () => {
-  const [user, { loading }] = useUser();
-  const router = useRouter();
-
-  useEffect(() => {
-    // redirect to home if user is authenticated
-    if (!user && !loading) router.push('/');
-  }, [user, loading, router]);
+const HijacksPage = (props) => {
+  const [user, loading] = useJWT();
 
   return (
     <>
       <Head>
-        <title>ARTEMIS - Overview</title>
+        <title>ARTEMIS - Hijacks</title>
       </Head>
-      {user && !loading && (
+      {user && (
         <div
           className="container overview col-lg-12"
           style={{ paddingTop: '120px' }}

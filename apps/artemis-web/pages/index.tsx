@@ -1,18 +1,17 @@
+import React from 'react';
+import { useJWT } from '../hooks/useJWT';
 import { useRouter } from 'next/router';
-import React, { useEffect } from 'react';
-import { useUser } from '../lib/hooks';
 
-const HomePage: React.FunctionComponent<{}> = () => {
-  const [user, { loading }] = useUser();
+const HomePage = (props) => {
+  const [user, loading] = useJWT();
   const router = useRouter();
-
-  useEffect(() => {
-    // redirect to home if user is authenticated
-    if (!user && !loading) router.push('/signin');
-    else if (router) router.push('/overview');
-  }, [user, loading, router]);
-
-  return <div />;
+  if (user && !loading && router) {
+    if (user.role === 'pending') router.push('pending');
+    else router.push('overview');
+  } else if (!user && !loading && router) {
+    router.push('/signin');
+  }
+  return <div> Loading... </div>;
 };
 
 export default HomePage;

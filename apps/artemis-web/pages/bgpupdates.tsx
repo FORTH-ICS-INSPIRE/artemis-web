@@ -1,27 +1,27 @@
-import React, { useEffect } from 'react';
-import { useRouter } from 'next/router';
 import Head from 'next/head';
-import { useUser } from '../lib/hooks';
-import { useSubscription } from '@apollo/client';
-import { BGP_SUB } from '../utils/graphql';
+import React from 'react';
 import BGPTableComponent from '../components/bgp-table/bgp-table';
+import { useGraphQl } from '../hooks/useGraphQL';
+import { useJWT } from '../hooks/useJWT';
 
-const BGPUpdates: React.FunctionComponent<{}> = () => {
-  const [user, { loading }] = useUser();
-  const router = useRouter();
-  const BGP_DATA = useSubscription(BGP_SUB).data;
+const BGPUpdates = (props) => {
+  if (process.env.NODE_ENV === 'development') {
+    if (typeof window !== 'undefined') {
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      const { worker } = require('../mocks/browser');
+      worker.start();
+    }
+  }
 
-  useEffect(() => {
-    // redirect to home if user is authenticated
-    if (!user && !loading) router.push('/');
-  }, [user, loading, router]);
+  const [user, loading] = useJWT();
+  const BGP_DATA = useGraphQl('bgpupdates', props.isProduction);
 
   return (
     <>
       <Head>
-        <title>ARTEMIS - Overview</title>
+        <title>ARTEMIS - BGP Updates</title>
       </Head>
-      {user && !loading && (
+      {user && (
         <div
           className="container overview col-lg-12"
           style={{ paddingTop: '120px' }}
@@ -40,7 +40,7 @@ const BGPUpdates: React.FunctionComponent<{}> = () => {
                 <div className="card-header"> </div>
                 <div className="card-body">
                   <BGPTableComponent
-                    data={BGP_DATA ? BGP_DATA.view_hijacks : []}
+                    data={BGP_DATA ? BGP_DATA.view_bgpupdates : []}
                   />
                 </div>
               </div>

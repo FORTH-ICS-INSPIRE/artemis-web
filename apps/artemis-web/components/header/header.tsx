@@ -1,15 +1,19 @@
-import { useUser } from '../../lib/hooks';
 import Link from 'next/link';
 import React from 'react';
+import { useFetch } from '../../hooks/useJWT';
+import { parseJwt } from '../../lib/helpers';
 
-const Header = () => {
-  const [user, { mutate }] = useUser();
+const Header = (props) => {
+  const { data } = useFetch('/api/jwt');
+  const jwt = data ? parseJwt(data) : null;
+  const user = jwt ? jwt.user : null;
+
   const handleLogout = async () => {
     await fetch('/api/logout', {
       method: 'DELETE',
     });
-    // set the user state to null
-    mutate(null);
+
+    window.location.reload();
   };
 
   return (
@@ -23,30 +27,39 @@ const Header = () => {
         </a>
         <div className="collapse navbar-collapse" id="navbarCollapse">
           <ul className="nav navbar-nav navbar-right">
-            {user && (
+            {user && user.role !== 'pending' && (
               <>
                 <li className="nav-item">
                   <Link href="/overview">
-                    <a href="/#" className="nav-link">
+                    <a href="/overview" className="nav-link">
                       Overview
                     </a>
                   </Link>
                 </li>
                 <li className="nav-item">
                   <Link href="/bgpupdates">
-                    <a href="/#" className="nav-link">
+                    <a href="/bgpupdates" className="nav-link">
                       BGP Updates
                     </a>
                   </Link>
                 </li>
                 <li className="nav-item">
                   <Link href="/hijacks">
-                    <a href="/#" className="nav-link">
+                    <a href="/hijacks" className="nav-link">
                       Hijacks
                     </a>
                   </Link>
                 </li>
               </>
+            )}
+            {user && user.role === 'admin' && (
+              <li className="nav-item">
+                <Link href="/hijacks">
+                  <a href="/adminpanel" className="nav-link">
+                    Admin Panel
+                  </a>
+                </Link>
+              </li>
             )}
           </ul>
           <ul className="navbar-nav mr-auto" />

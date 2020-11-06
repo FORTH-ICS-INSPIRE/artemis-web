@@ -1,35 +1,33 @@
 import nextConnect from 'next-connect';
-import jwt from 'jsonwebtoken';
 import auth from '../../middleware/auth';
-import { NextApiRequest, NextApiResponse } from 'next';
+import { extractUser } from '../../lib/helpers';
+import {
+  NextApiRequestExtended,
+  NextApiResponseExtended,
+} from '../../definitions';
+import jwt from 'jsonwebtoken';
 
-interface NextApiRequestExtended extends NextApiRequest {
-  user: any;
-}
-
-interface NextApiResponseExtended extends NextApiResponse {
-  send(arg0: any);
-}
-
-const handler = nextConnect();
-handler.use(auth);
-
-handler.get((req: NextApiRequestExtended, res: NextApiResponseExtended) => {
-  if (!req.user) res.send(null);
-  else {
-    res.send({
-      accessToken: jwt.sign(
+const handler = nextConnect()
+  .use(auth)
+  .get((req: NextApiRequestExtended, res: NextApiResponseExtended) => {
+    if (!req.user) res.send({});
+    else {
+      const userObj = extractUser(req);
+      const token = jwt.sign(
         {
           'https://hasura.io/jwt/claims': {
-            'x-hasura-allowed-roles': ['user'],
-            'x-hasura-default-role': 'user',
-            'x-hasura-user-id': '11',
+            'x-hasura-allowed-roles': [userObj.role],
+            'x-hasura-default-role': userObj.role,
+            'x-hasura-user-id': userObj._id,
           },
+          user: userObj,
         },
         process.env.JWT_SECRET
-      ),
-    });
-  }
-});
+      );
+      res.send({
+        accessToken: token,
+      });
+    }
+  });
 
 export default handler;

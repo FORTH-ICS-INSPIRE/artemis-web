@@ -4,6 +4,7 @@ import { configure, shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import Header from './header';
 import Link from 'next/link';
+require('jest-fetch-mock').enableMocks();
 
 configure({ adapter: new Adapter() });
 

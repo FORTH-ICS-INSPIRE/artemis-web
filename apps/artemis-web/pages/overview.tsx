@@ -1,23 +1,26 @@
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import React, { useEffect } from 'react';
+import React from 'react';
 import HijackTableComponent from '../components/ongoing-hijack-table/ongoing-hijack-table';
-import { useUser } from '../lib/hooks';
-import { initializeApollo, STATS_SUB, HIJACK_SUB } from '../utils/graphql';
-import { useSubscription } from '@apollo/client';
 import StatsTable from '../components/stats-table/stats-table';
+import { useGraphQl } from '../hooks/useGraphQL';
+import { useJWT } from '../hooks/useJWT';
 
 const OverviewPage = (props) => {
-  const [user, { loading }] = useUser();
+  if (process.env.NODE_ENV === 'development') {
+    if (typeof window !== 'undefined') {
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      const { worker } = require('../mocks/browser');
+      worker.start();
+    }
+  }
+  const [user, loading] = useJWT();
+
   const router = useRouter();
+  if (!user && !loading) router.push('signin');
 
-  const STATS_DATA = useSubscription(STATS_SUB).data;
-  const HIJACK_DATA = useSubscription(HIJACK_SUB).data;
-
-  useEffect(() => {
-    // redirect to home if user is authenticated
-    if (!user && !loading) router.push('/signin');
-  }, [user, loading, router]);
+  const STATS_DATA = useGraphQl('stats', props.isProduction);
+  const HIJACK_DATA = useGraphQl('hijack', props.isProduction);
 
   return (
     <>
@@ -102,20 +105,5 @@ const OverviewPage = (props) => {
     </>
   );
 };
-
-export function getStaticProps(context) {
-  const apolloClient = initializeApollo(
-    null,
-    process.env.GRAPHQL_URI,
-    process.env.GRAPHQL_WS_URI
-  );
-  return {
-    props: {
-      GRAPHQL_WS_URI: process.env.GRAPHQL_WS_URI,
-      GRAPHQL_URI: process.env.GRAPHQL_URI,
-      initialApolloState: apolloClient.cache.extract(),
-    },
-  };
-}
 
 export default OverviewPage;

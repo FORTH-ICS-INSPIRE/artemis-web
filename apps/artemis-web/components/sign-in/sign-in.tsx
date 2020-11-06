@@ -1,28 +1,25 @@
-import React from 'react';
 import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
-import Link from '@material-ui/core/Link';
-import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
 import {
-  makeStyles,
-  createMuiTheme,
-  ThemeProvider,
-} from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
-import {
-  orange,
-  lightBlue,
   deepOrange,
   deepPurple,
+  lightBlue,
+  orange,
 } from '@material-ui/core/colors';
-import Router from 'next/router';
-
-import { useUser } from '../../lib/hooks';
-import { useState, useEffect } from 'react';
+import Container from '@material-ui/core/Container';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Grid from '@material-ui/core/Grid';
+import Link from '@material-ui/core/Link';
+import {
+  createMuiTheme,
+  makeStyles,
+  ThemeProvider,
+} from '@material-ui/core/styles';
+import TextField from '@material-ui/core/TextField';
+import Typography from '@material-ui/core/Typography';
+import { useRouter } from 'next/router';
+import React, { useState } from 'react';
 
 const palletType = 'dark';
 const darkState = false;
@@ -66,8 +63,8 @@ const useStyles = makeStyles((_theme) => ({
 }));
 
 const SignIn = (props) => {
-  const [user, { mutate, loading }] = useUser();
   const [errorMsg, setErrorMsg] = useState('');
+  const router = useRouter();
 
   async function onSubmit(e) {
     e.preventDefault();
@@ -82,22 +79,27 @@ const SignIn = (props) => {
 
     const res = await fetch('/api/login', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      // withCredentials: true,
+      credentials: 'include',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
       body: JSON.stringify(body),
     });
 
     if (res.status === 200) {
-      const userObj = await res.json();
-      mutate(userObj);
+      const token = await res.json();
+      if (token.user.role === 'pending') {
+        router.push('/pending');
+      } else {
+        router.push('/overview');
+      }
+      window.location.reload();
     } else {
       setErrorMsg('Incorrect username or password. Try again!');
     }
   }
-
-  useEffect(() => {
-    // redirect to home if user is authenticated
-    if (user && !loading) Router.push('/overview');
-  }, [user, loading]);
 
   return (
     <ThemeProvider theme={theme}>
@@ -159,14 +161,6 @@ const SignIn = (props) => {
             >
               Sign In
             </Button>
-            {/* <Button
-              fullWidth
-              variant="contained"
-              color="primary"
-              className={props.classes.submit}
-            >
-              Sign In with GitHub
-            </Button> */}
             <Grid container>
               <Grid style={{ textAlign: 'left' }} item xs></Grid>
               <Grid item>
@@ -184,6 +178,6 @@ const SignIn = (props) => {
 
 const SignInComponent = (props) => {
   const classes = useStyles();
-  return <SignIn classes={classes} />;
+  return <SignIn {...props} classes={classes} />;
 };
 export default SignInComponent;

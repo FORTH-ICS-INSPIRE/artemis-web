@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
@@ -6,7 +6,6 @@ import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { useState } from 'react';
-import { useUser } from '../../lib/hooks';
 
 import {
   makeStyles,
@@ -20,7 +19,6 @@ import {
   deepOrange,
   deepPurple,
 } from '@material-ui/core/colors';
-import { useRouter } from 'next/router';
 
 const palletType = 'dark';
 const darkState = false;
@@ -63,14 +61,6 @@ const useStyles = makeStyles((_theme) => ({
 
 const SignUp = (props) => {
   const { classes } = props;
-  const [user, { mutate, loading }] = useUser();
-  const router = useRouter();
-
-  useEffect(() => {
-    // redirect to home if user is authenticated
-    if (user && !loading) router.push('/');
-  }, [user, loading, router]);
-
   const [errorMsg, setErrorMsg] = useState('');
 
   const handleSubmit = async (e) => {
@@ -87,10 +77,8 @@ const SignUp = (props) => {
       body: JSON.stringify(body),
     });
 
-    if (res.status === 201) {
-      const userObj = await res.json();
-
-      mutate(userObj);
+    if (res.status === 200) {
+      window.location.reload();
     } else {
       setErrorMsg(await res.text());
     }

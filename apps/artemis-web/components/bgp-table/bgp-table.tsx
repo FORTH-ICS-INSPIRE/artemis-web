@@ -72,28 +72,22 @@ const columns = [
     headerTitle: () => 'The IPv4/IPv6 prefix related to the BGP update.',
   },
   {
-    dataField: 'matched',
+    dataField: 'matched_prefix',
     headerTitle: () => 'The IPv4/IPv6 prefix that was hijacked.',
     text: 'Matched Prefix',
   },
   {
-    dataField: 'mprefix',
-    headerTitle: () =>
-      'The configured IPv4/IPv6 prefix that matched the hijacked prefix.',
-    text: 'Matched Prefix',
-  },
-  {
-    dataField: 'origin',
+    dataField: 'origin_as',
     headerTitle: () => 'The AS that originated the BGP update.',
     text: 'Origin AS',
   },
   {
-    dataField: 'path',
+    dataField: 'as_path',
     headerTitle: () => 'The AS-level path of the update.',
     text: 'AS Path',
   },
   {
-    dataField: 'peer',
+    dataField: 'peer_asn',
     headerTitle: () =>
       'The route collector service that is connected to the monitor AS that observed the BGP update.',
     text: 'Peer As',
@@ -111,13 +105,13 @@ const columns = [
       '<ul><li>A → route announcement</li><li>W → route withdrawal</li></ul>',
   },
   {
-    dataField: 'hijack',
+    dataField: 'hijack_key',
     headerTitle: () =>
       'Redirects to the hijack view if the BGP update is not benign, otherwise empty.',
     text: 'Hijack',
   },
   {
-    dataField: 'status',
+    dataField: 'handled',
     headerTitle: () =>
       'Whether the BGP update has been handled by the detection module or not.',
     text: 'Status',
