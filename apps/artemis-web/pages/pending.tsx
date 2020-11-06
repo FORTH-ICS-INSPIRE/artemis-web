@@ -1,6 +1,5 @@
 import Head from 'next/head';
 import React from 'react';
-import withAuth from '../components/with-auth/with-auth';
 import { getUser } from '../lib/helpers';
 
 const PendingPage = (props) => {
@@ -12,7 +11,7 @@ const PendingPage = (props) => {
         <title>ARTEMIS - Pending</title>
       </Head>
       <div id="pending-container">
-        {!user && (
+        {user && user.role === 'pending' && (
           <div id="content-wrap" style={{ paddingBottom: '5rem' }}>
             <div> Please wait for approval... </div>
           </div>
@@ -22,4 +21,4 @@ const PendingPage = (props) => {
   );
 };
 
-export default withAuth(PendingPage, 'RINA', ['pending']);
+export default PendingPage;

@@ -1,9 +1,9 @@
 import Head from 'next/head';
 import React from 'react';
-import withAuth from '../components/with-auth/with-auth';
+import { useJWT } from '../hooks/useJWT';
 
 const AdminPanelPage = (props) => {
-  const user = props.user;
+  const [user, loading] = useJWT();
 
   return (
     <>
@@ -11,7 +11,7 @@ const AdminPanelPage = (props) => {
         <title>ARTEMIS - Admin</title>
       </Head>
       <div id="pending-container">
-        {!user && (
+        {user && user.role === 'admin' && (
           <div id="content-wrap" style={{ paddingBottom: '5rem' }}>
             <div> Welcome to admin dashboard... </div>
           </div>
@@ -21,4 +21,4 @@ const AdminPanelPage = (props) => {
   );
 };
 
-export default withAuth(AdminPanelPage, 'RINA', ['admin']);
+export default AdminPanelPage;
