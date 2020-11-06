@@ -1,14 +1,14 @@
-import React, { useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
-import withAuth from '../components/with-auth/with-auth';
 import { useRouter } from 'next/router';
-import { getUser } from '../lib/helpers';
+import React from 'react';
+import { useJWT } from '../hooks/useJWT';
 
 const SigninPage = (props) => {
-  const [user, loading] = getUser();
+  const [user, loading] = useJWT();
   const router = useRouter();
   if (user && !loading) {
+    console.log(user);
     if (user.role === 'pending') router.push('pending');
     else router.push('overview');
   }

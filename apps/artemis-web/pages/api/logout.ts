@@ -14,10 +14,11 @@ const handler = nextConnect()
     res.status(204).end();
   })
   .delete((req: NextApiRequestExtended, res: NextApiResponseExtended) => {
+    req.logOut();
     res.clearCookie('remember_me');
     res.clearCookie('access_token');
-    req.logOut();
-    res.status(204).end();
+    res.writeHead(204, { Location: '/signin' });
+    res.end();
   });
 
 export default handler;

@@ -86,6 +86,7 @@
     "eslint-plugin-react-hooks": "4.0.4",
     "husky": "^4.3.0",
     "jest": "26.2.2",
+    "jest-fetch-mock": "^3.0.3",
     "msw": "^0.21.3",
     "prettier": "2.0.4",
     "ts-jest": "26.1.4",

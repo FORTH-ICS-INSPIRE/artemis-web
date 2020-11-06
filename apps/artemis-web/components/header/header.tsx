@@ -1,14 +1,10 @@
 import Link from 'next/link';
-import { useRouter } from 'next/router';
 import React from 'react';
-import { useFetch } from 'apps/artemis-web/hooks/useJWT';
-import { parseJwt } from 'apps/artemis-web/lib/helpers';
+import { useFetch } from '../../hooks/useJWT';
+import { parseJwt } from '../../lib/helpers';
 
 const Header = (props) => {
-  // const [jwt, loading] = [props.jwt, props.loading];
-
-  const router = useRouter();
-  const { status, data } = useFetch('/api/jwt');
+  const { data } = useFetch('/api/jwt');
   const jwt = data ? parseJwt(data) : null;
   const user = jwt ? jwt.user : null;
 
@@ -16,7 +12,7 @@ const Header = (props) => {
     await fetch('/api/logout', {
       method: 'DELETE',
     });
-    router.push('/signin');
+
     window.location.reload();
   };
 

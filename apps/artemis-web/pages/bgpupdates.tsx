@@ -1,20 +1,19 @@
-import React from 'react';
 import Head from 'next/head';
+import React from 'react';
 import BGPTableComponent from '../components/bgp-table/bgp-table';
-import withAuth from '../components/with-auth/with-auth';
 import { useGraphQl } from '../hooks/useGraphQL';
-import { worker } from '../mocks/browser';
-import { getUser } from '../lib/helpers';
+import { useJWT } from '../hooks/useJWT';
 
 const BGPUpdates = (props) => {
   if (process.env.NODE_ENV === 'development') {
     if (typeof window !== 'undefined') {
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
       const { worker } = require('../mocks/browser');
       worker.start();
     }
   }
 
-  const [user, loading] = getUser();
+  const [user, loading] = useJWT();
   const BGP_DATA = useGraphQl('bgpupdates', props.isProduction);
 
   return (

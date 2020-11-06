@@ -15,6 +15,7 @@ const handler = nextConnect()
   .post(async (req: NextApiRequestExtended, res: NextApiResponseExtended) => {
     const { name, password } = req.body;
     const email = normalizeEmail(req.body.email);
+
     if (!isEmail(email)) {
       res.status(400).send('The email you entered is invalid.');
       return;
@@ -41,10 +42,13 @@ const handler = nextConnect()
         token: '',
       })
       .then(({ ops }) => ops[0]);
+
     req.logIn(user, (err) => {
       if (err) throw err;
       setAccessCookie(req, res);
     });
+    res.status(200);
+    res.json({});
   });
 
 export default handler;

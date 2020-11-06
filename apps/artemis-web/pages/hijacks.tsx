@@ -1,11 +1,10 @@
-import React from 'react';
 import Head from 'next/head';
+import React from 'react';
 import HijackTableComponent from '../components/hijack-table/hijack-table';
-import withAuth from '../components/with-auth/with-auth';
-import { getUser } from '../lib/helpers';
+import { useJWT } from '../hooks/useJWT';
 
 const HijacksPage = (props) => {
-  const [user, loading] = getUser();
+  const [user, loading] = useJWT();
 
   return (
     <>

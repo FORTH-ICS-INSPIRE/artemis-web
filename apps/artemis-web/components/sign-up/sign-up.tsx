@@ -77,7 +77,7 @@ const SignUp = (props) => {
       body: JSON.stringify(body),
     });
 
-    if (res.status === 201) {
+    if (res.status === 200) {
       window.location.reload();
     } else {
       setErrorMsg(await res.text());

@@ -1,16 +1,13 @@
-import useSWR from 'swr';
 import { parseJwt } from '../lib/helpers';
 import { useEffect, useState } from 'react';
 
-export const fetcher = (url) => fetch(url).then((r) => r.json());
-
 export function useJWT() {
-  const { data, mutate } = useSWR('/api/jwt', fetcher);
-  // if data is not defined, the query has not completed
-  const loading = !data;
-  const token = data?.accessToken;
+  const { status, data } = useFetch('/api/jwt');
+  const jwt = data ? parseJwt(data) : null;
+  const user = jwt ? jwt.user : null;
+  const loading = status !== 'fetched';
 
-  return [parseJwt(token), { mutate, loading }];
+  return [user, loading];
 }
 
 const cache = {};
