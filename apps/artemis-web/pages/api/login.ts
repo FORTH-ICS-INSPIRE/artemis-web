@@ -1,7 +1,7 @@
 import nextConnect from 'next-connect';
 import auth from '../../middleware/auth';
 import passport from '../../lib/passport';
-import { parseJwt, setAccessCookie } from '../../lib/helpers';
+import { extractUser } from '../../lib/helpers';
 import getRandomString from '../../utils/token';
 import {
   NextApiRequestExtended,
@@ -33,8 +33,8 @@ const handler = nextConnect()
         });
       }
 
-      const token = setAccessCookie(req, res);
-      res.json(parseJwt(token));
+      const userObj = extractUser(req);
+      res.json({ user: userObj });
     }
   );
 

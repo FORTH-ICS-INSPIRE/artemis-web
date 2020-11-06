@@ -1,24 +1,32 @@
 import nextConnect from 'next-connect';
 import auth from '../../middleware/auth';
-
+import { extractUser } from '../../lib/helpers';
 import {
   NextApiRequestExtended,
   NextApiResponseExtended,
 } from '../../definitions';
-import { useCookie } from 'next-cookie';
+import jwt from 'jsonwebtoken';
 
 const handler = nextConnect()
   .use(auth)
   .get((req: NextApiRequestExtended, res: NextApiResponseExtended) => {
-    const pathname = '/',
-      query = null,
-      AppTree = null;
-    const cookies = useCookie({ req, res, pathname, query, AppTree });
-    const accessToken: string = cookies.get('access_token');
-
-    if (!accessToken) res.send(null);
+    if (!req.user) res.send({});
     else {
-      res.send({ accessToken });
+      const userObj = extractUser(req);
+      const token = jwt.sign(
+        {
+          'https://hasura.io/jwt/claims': {
+            'x-hasura-allowed-roles': [userObj.role],
+            'x-hasura-default-role': userObj.role,
+            'x-hasura-user-id': userObj._id,
+          },
+          user: userObj,
+        },
+        process.env.JWT_SECRET
+      );
+      res.send({
+        accessToken: token,
+      });
     }
   });
 

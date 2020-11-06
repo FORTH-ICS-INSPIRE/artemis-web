@@ -3,7 +3,6 @@ import isEmail from 'validator/lib/isEmail';
 import normalizeEmail from 'validator/lib/normalizeEmail';
 import argon2 from 'argon2';
 import auth from '../../middleware/auth';
-import { setAccessCookie } from '../../lib/helpers';
 import { nanoid } from 'nanoid';
 import {
   NextApiRequestExtended,
@@ -45,7 +44,6 @@ const handler = nextConnect()
 
     req.logIn(user, (err) => {
       if (err) throw err;
-      setAccessCookie(req, res);
     });
     res.status(200);
     res.json({});
