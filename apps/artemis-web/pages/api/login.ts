@@ -29,7 +29,7 @@ const handler = nextConnect()
           httpOnly: true,
           maxAge: 604800000,
           sameSite: 'strict',
-          secure: process.env.production === 'true',
+          secure: process.env.NODE_ENV === 'production',
         });
       }
 

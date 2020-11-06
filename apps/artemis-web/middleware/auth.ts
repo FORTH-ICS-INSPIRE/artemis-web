@@ -10,7 +10,7 @@ const auth = nextConnect()
   .use(
     passport.session({
       cookie: {
-        secure: process.env.production === 'true',
+        secure: process.env.NODE_ENV === 'production',
       },
     })
   )

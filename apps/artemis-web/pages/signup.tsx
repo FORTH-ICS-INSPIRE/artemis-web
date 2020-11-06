@@ -12,7 +12,6 @@ const SignupPage = (props) => {
   const [user, loading] = useJWT();
   const router = useRouter();
   if (user && !loading) {
-    console.log(user);
     if (user.role === 'pending') router.push('pending');
     else router.push('overview');
   }
