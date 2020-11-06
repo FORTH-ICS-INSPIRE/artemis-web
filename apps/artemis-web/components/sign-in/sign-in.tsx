@@ -95,6 +95,7 @@ const SignIn = (props) => {
       } else {
         router.push('/overview');
       }
+      window.location.reload();
     } else {
       setErrorMsg('Incorrect username or password. Try again!');
     }

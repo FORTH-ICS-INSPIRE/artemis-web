@@ -1,9 +1,13 @@
 import Head from 'next/head';
 import React from 'react';
-import { getUser } from '../lib/helpers';
+import { useJWT } from '../hooks/useJWT';
+import { useRouter } from 'next/router';
 
 const PendingPage = (props) => {
-  const [user, loading] = getUser();
+  const [user, loading] = useJWT();
+
+  const router = useRouter();
+  if (!user && !loading) router.push('signin');
 
   return (
     <>

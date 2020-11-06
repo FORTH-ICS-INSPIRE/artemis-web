@@ -1,9 +1,13 @@
 import Head from 'next/head';
 import React from 'react';
 import { useJWT } from '../hooks/useJWT';
+import { useRouter } from 'next/router';
 
 const AdminPanelPage = (props) => {
   const [user, loading] = useJWT();
+
+  const router = useRouter();
+  if (!user && !loading) router.push('signin');
 
   return (
     <>
