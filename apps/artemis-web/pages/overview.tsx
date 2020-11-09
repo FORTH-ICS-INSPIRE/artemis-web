@@ -1,7 +1,8 @@
 import Head from 'next/head';
-import React from 'react';
+import React, { useEffect } from 'react';
 import NotFoundHOC from '../components/404-hoc/404-hoc';
-import HijackTableComponent from '../components/ongoing-hijack-table/ongoing-hijack-table';
+import Notifier, { openSnackbar } from '../components/notifier/notifier';
+import OngoingHijackTableComponent from '../components/ongoing-hijack-table/ongoing-hijack-table';
 import StatsTable from '../components/stats-table/stats-table';
 import { useGraphQl } from '../hooks/useGraphQL';
 
@@ -17,7 +18,14 @@ const OverviewPage = (props) => {
   const user = props.user;
 
   const STATS_DATA = useGraphQl('stats', props.isProduction);
-  const HIJACK_DATA = useGraphQl('hijack', props.isProduction);
+  const HIJACK_DATA = useGraphQl('ongoing_hijack', props.isProduction);
+
+  useEffect(() => {
+    if (HIJACK_DATA && HIJACK_DATA.view_hijacks)
+      openSnackbar({
+        message: `${HIJACK_DATA.view_hijacks.length} hijacks found!`,
+      });
+  });
 
   return (
     <>
@@ -25,6 +33,7 @@ const OverviewPage = (props) => {
         <title>ARTEMIS - Overview</title>
       </Head>
       <div id="page-container" style={{ paddingTop: '120px' }}>
+        <Notifier />
         {user && (
           <div id="content-wrap" style={{ paddingBottom: '5rem' }}>
             <div className="row">
@@ -59,7 +68,7 @@ const OverviewPage = (props) => {
                     Ongoing, Non-Dormant Hijacks{' '}
                   </div>
                   <div className="card-body">
-                    <HijackTableComponent
+                    <OngoingHijackTableComponent
                       data={HIJACK_DATA ? HIJACK_DATA.view_hijacks : []}
                     />
                   </div>

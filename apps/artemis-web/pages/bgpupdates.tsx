@@ -1,7 +1,8 @@
 import Head from 'next/head';
-import React from 'react';
+import React, { useEffect } from 'react';
 import NotFoundHOC from '../components/404-hoc/404-hoc';
 import BGPTableComponent from '../components/bgp-table/bgp-table';
+import Notifier, { openSnackbar } from '../components/notifier/notifier';
 import { useGraphQl } from '../hooks/useGraphQL';
 
 const BGPUpdates = (props) => {
@@ -16,11 +17,19 @@ const BGPUpdates = (props) => {
   const user = props.user;
   const BGP_DATA = useGraphQl('bgpupdates', props.isProduction);
 
+  useEffect(() => {
+    if (BGP_DATA && BGP_DATA.view_bgpupdates)
+      openSnackbar({
+        message: `${BGP_DATA.view_bgpupdates.length} updates found!`,
+      });
+  });
+
   return (
     <>
       <Head>
         <title>ARTEMIS - BGP Updates</title>
       </Head>
+      <Notifier />
       {user && (
         <div
           className="container overview col-lg-12"
