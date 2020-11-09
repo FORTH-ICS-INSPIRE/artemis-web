@@ -1,4 +1,5 @@
 import jwt from 'jsonwebtoken';
+import Head from 'next/head';
 
 export function extractUser(req) {
   if (!req.user) return null;

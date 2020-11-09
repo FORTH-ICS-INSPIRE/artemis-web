@@ -3,6 +3,7 @@ import React from 'react';
 import BGPTableComponent from '../components/bgp-table/bgp-table';
 import { useGraphQl } from '../hooks/useGraphQL';
 import { useJWT } from '../hooks/useJWT';
+import DefaultErrorPage from 'next/error';
 
 const BGPUpdates = (props) => {
   if (process.env.NODE_ENV === 'development') {
@@ -15,6 +16,20 @@ const BGPUpdates = (props) => {
 
   const [user, loading] = useJWT();
   const BGP_DATA = useGraphQl('bgpupdates', props.isProduction);
+
+  if (user && user.role === 'pending') {
+    return (
+      <>
+        <Head>
+          <meta name="robots" content="noindex" />
+        </Head>
+        <DefaultErrorPage
+          statusCode={404}
+          title={'You do not have the permission to access'}
+        />
+      </>
+    );
+  }
 
   return (
     <>

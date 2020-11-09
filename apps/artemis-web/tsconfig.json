@@ -12,6 +12,6 @@
     "resolveJsonModule": true,
     "isolatedModules": true
   },
-  "include": ["**/*.ts", "**/*.tsx", "next-env.d.ts"],
+  "include": ["**/*.ts", "**/*.tsx", "next-env.d.ts", "pages/404.js"],
   "exclude": ["node_modules"]
 }

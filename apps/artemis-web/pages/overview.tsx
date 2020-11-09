@@ -5,6 +5,7 @@ import HijackTableComponent from '../components/ongoing-hijack-table/ongoing-hij
 import StatsTable from '../components/stats-table/stats-table';
 import { useGraphQl } from '../hooks/useGraphQL';
 import { useJWT } from '../hooks/useJWT';
+import DefaultErrorPage from 'next/error';
 
 const OverviewPage = (props) => {
   if (process.env.NODE_ENV === 'development') {
@@ -21,6 +22,20 @@ const OverviewPage = (props) => {
 
   const STATS_DATA = useGraphQl('stats', props.isProduction);
   const HIJACK_DATA = useGraphQl('hijack', props.isProduction);
+
+  if (user && user.role === 'pending') {
+    return (
+      <>
+        <Head>
+          <meta name="robots" content="noindex" />
+        </Head>
+        <DefaultErrorPage
+          statusCode={404}
+          title={'You do not have the permission to access'}
+        />
+      </>
+    );
+  }
 
   return (
     <>
