@@ -1,16 +1,39 @@
 import Head from 'next/head';
-import React from 'react';
+import { useRouter } from 'next/router';
+import React, { useEffect } from 'react';
 import HijackTableComponent from '../components/hijack-table/hijack-table';
+import Notifier, { openSnackbar } from '../components/notifier/notifier';
+import { useGraphQl } from '../hooks/useGraphQL';
 import { useJWT } from '../hooks/useJWT';
 
 const HijacksPage = (props) => {
+  if (process.env.NODE_ENV === 'development') {
+    if (typeof window !== 'undefined') {
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      const { worker } = require('../mocks/browser');
+      worker.start();
+    }
+  }
   const [user, loading] = useJWT();
+
+  const router = useRouter();
+  if (!user && !loading) router.push('signin');
+
+  const HIJACK_DATA = useGraphQl('hijack', props.isProduction);
+
+  useEffect(() => {
+    if (HIJACK_DATA && HIJACK_DATA.view_hijacks)
+      openSnackbar({
+        message: `${HIJACK_DATA.view_hijacks.length} hijacks found!`,
+      });
+  });
 
   return (
     <>
       <Head>
         <title>ARTEMIS - Hijacks</title>
       </Head>
+      <Notifier />
       {user && (
         <div
           className="container overview col-lg-12"
@@ -29,7 +52,9 @@ const HijacksPage = (props) => {
               <div className="card">
                 <div className="card-header"> </div>
                 <div className="card-body">
-                  <HijackTableComponent />
+                  <HijackTableComponent
+                    data={HIJACK_DATA ? HIJACK_DATA.view_hijacks : []}
+                  />
                 </div>
               </div>
             </div>

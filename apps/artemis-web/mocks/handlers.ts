@@ -68,7 +68,28 @@ export const handlers = [
   graphql.query('hijacks', (req, res, ctx) => {
     return res(
       ctx.data({
-        view_hijacks: [],
+        view_hijacks: [
+          {
+            time_detected: '2020-08-24T06:01:50.275152',
+            prefix: '139.91.250.0/24',
+            type: 'E|0|-|-',
+            hijack_as: 264409,
+            rpki_status: 'IA',
+            num_peers_seen: 1,
+            num_asns_inf: 0,
+            key: '79e522e81453a3a439aa581aab3e93e2',
+            seen: false,
+            withdrawn: true,
+            resolved: false,
+            ignored: false,
+            active: false,
+            dormant: false,
+            under_mitigation: false,
+            outdated: false,
+            time_last: '2020-08-24T16:53:44.457036',
+            configured_prefix: '139.91.250.0/24',
+          },
+        ],
       })
     );
   }),

@@ -199,12 +199,11 @@ const columns = [
   },
 ];
 
-const HijackTableComponent = (props) => {
+const OngoingHijackTableComponent = (props) => {
   const HIJACK_DATA = props.data;
   let hijacks;
-  const debug = true;
 
-  if ((HIJACK_DATA && HIJACK_DATA.length) || !debug) {
+  if (HIJACK_DATA && HIJACK_DATA.length) {
     hijacks = HIJACK_DATA.map((row) => ({
       update: row.time_last,
       time: row.time_detected,
@@ -225,4 +224,4 @@ const HijackTableComponent = (props) => {
   return <BootstrapTable keyField="update" data={hijacks} columns={columns} />;
 };
 
-export default HijackTableComponent;
+export default OngoingHijackTableComponent;

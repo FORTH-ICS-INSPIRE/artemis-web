@@ -124,12 +124,77 @@ export const STATS_QUERY = gql`
 `;
 
 // An example graphql query to test the API
+export const ONGOING_HIJACK_SUB = gql`
+  subscription hijacks {
+    view_hijacks(
+      limit: 10
+      offset: 0
+      order_by: { time_last: desc_nulls_first }
+    ) {
+      active
+      comment
+      configured_prefix
+      hijack_as
+      ignored
+      dormant
+      key
+      mitigation_started
+      num_asns_inf
+      num_peers_seen
+      outdated
+      peers_seen
+      peers_withdrawn
+      prefix
+      resolved
+      seen
+      time_detected
+      time_ended
+      time_last
+      time_started
+      timestamp_of_config
+      type
+      under_mitigation
+      withdrawn
+    }
+  }
+`;
+
+export const ONGOING_HIJACK_QUERY = gql`
+  query hijacks {
+    view_hijacks(
+      limit: 10
+      offset: 0
+      order_by: { time_last: desc_nulls_first }
+    ) {
+      time_detected
+      prefix
+      type
+      hijack_as
+      rpki_status
+      num_peers_seen
+      num_asns_inf
+      key
+      seen
+      withdrawn
+      resolved
+      ignored
+      active
+      dormant
+      under_mitigation
+      outdated
+      time_last
+      configured_prefix
+    }
+  }
+`;
+
+// An example graphql query to test the API
 export const HIJACK_SUB = gql`
   subscription hijacks {
     view_hijacks(
       limit: 10
-      order_by: { time_last: desc }
-      where: { _and: [{ active: { _eq: true } }, { dormant: { _eq: false } }] }
+      offset: 0
+      order_by: { time_last: desc_nulls_first }
     ) {
       active
       comment
@@ -163,33 +228,27 @@ export const HIJACK_QUERY = gql`
   query hijacks {
     view_hijacks(
       limit: 10
-      order_by: { time_last: desc }
-      where: { _and: [{ active: { _eq: true } }, { dormant: { _eq: false } }] }
+      offset: 0
+      order_by: { time_last: desc_nulls_first }
     ) {
-      active
-      comment
-      configured_prefix
-      hijack_as
-      ignored
-      dormant
-      key
-      mitigation_started
-      num_asns_inf
-      num_peers_seen
-      outdated
-      peers_seen
-      peers_withdrawn
-      prefix
-      resolved
-      seen
       time_detected
-      time_ended
-      time_last
-      time_started
-      timestamp_of_config
+      prefix
       type
-      under_mitigation
+      hijack_as
+      rpki_status
+      num_peers_seen
+      num_asns_inf
+      key
+      seen
       withdrawn
+      resolved
+      ignored
+      active
+      dormant
+      under_mitigation
+      outdated
+      time_last
+      configured_prefix
     }
   }
 `;
