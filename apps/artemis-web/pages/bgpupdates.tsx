@@ -2,8 +2,10 @@ import Head from 'next/head';
 import React, { useEffect } from 'react';
 import NotFoundHOC from '../components/404-hoc/404-hoc';
 import BGPTableComponent from '../components/bgp-table/bgp-table';
-import Notifier, { openSnackbar } from '../components/notifier/notifier';
 import { useGraphQl } from '../hooks/useGraphQL';
+import { useJWT } from '../hooks/useJWT';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const BGPUpdates = (props) => {
   if (process.env.NODE_ENV === 'development') {
@@ -16,12 +18,11 @@ const BGPUpdates = (props) => {
 
   const user = props.user;
   const BGP_DATA = useGraphQl('bgpupdates', props.isProduction);
+  const notify = (message) => toast(message);
 
   useEffect(() => {
     if (BGP_DATA && BGP_DATA.view_bgpupdates)
-      openSnackbar({
-        message: `${BGP_DATA.view_bgpupdates.length} updates found!`,
-      });
+      notify(`${BGP_DATA.view_bgpupdates.length} updates found!`);
   });
 
   return (
@@ -29,7 +30,7 @@ const BGPUpdates = (props) => {
       <Head>
         <title>ARTEMIS - BGP Updates</title>
       </Head>
-      <Notifier />
+      <ToastContainer />
       {user && (
         <div
           className="container overview col-lg-12"

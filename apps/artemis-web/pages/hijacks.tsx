@@ -2,8 +2,10 @@ import Head from 'next/head';
 import React, { useEffect } from 'react';
 import NotFoundHOC from '../components/404-hoc/404-hoc';
 import HijackTableComponent from '../components/hijack-table/hijack-table';
-import Notifier, { openSnackbar } from '../components/notifier/notifier';
 import { useGraphQl } from '../hooks/useGraphQL';
+import { useJWT } from '../hooks/useJWT';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const HijacksPage = (props) => {
   if (process.env.NODE_ENV === 'development') {
@@ -16,12 +18,11 @@ const HijacksPage = (props) => {
   const user = props.user;
 
   const HIJACK_DATA = useGraphQl('hijack', props.isProduction);
+  const notify = (message) => toast(message);
 
   useEffect(() => {
     if (HIJACK_DATA && HIJACK_DATA.view_hijacks)
-      openSnackbar({
-        message: `${HIJACK_DATA.view_hijacks.length} hijacks found!`,
-      });
+      notify(`${HIJACK_DATA.view_hijacks.length} hijacks found!`);
   });
 
   return (
@@ -29,7 +30,7 @@ const HijacksPage = (props) => {
       <Head>
         <title>ARTEMIS - Hijacks</title>
       </Head>
-      <Notifier />
+      <ToastContainer />
       {user && (
         <div
           className="container overview col-lg-12"

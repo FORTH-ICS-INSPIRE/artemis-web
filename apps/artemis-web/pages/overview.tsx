@@ -5,6 +5,9 @@ import Notifier, { openSnackbar } from '../components/notifier/notifier';
 import OngoingHijackTableComponent from '../components/ongoing-hijack-table/ongoing-hijack-table';
 import StatsTable from '../components/stats-table/stats-table';
 import { useGraphQl } from '../hooks/useGraphQL';
+import { useJWT } from '../hooks/useJWT';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const OverviewPage = (props) => {
   if (process.env.NODE_ENV === 'development') {
@@ -21,10 +24,9 @@ const OverviewPage = (props) => {
   const HIJACK_DATA = useGraphQl('ongoing_hijack', props.isProduction);
 
   useEffect(() => {
-    if (HIJACK_DATA && HIJACK_DATA.view_hijacks)
-      openSnackbar({
-        message: `${HIJACK_DATA.view_hijacks.length} hijacks found!`,
-      });
+    if (HIJACK_DATA && HIJACK_DATA.view_hijacks) {
+      notify(`${HIJACK_DATA.view_hijacks.length} hijacks found!`);
+    }
   });
 
   return (
@@ -33,8 +35,8 @@ const OverviewPage = (props) => {
         <title>ARTEMIS - Overview</title>
       </Head>
       <div id="page-container" style={{ paddingTop: '120px' }}>
-        <Notifier />
-        {user && (
+        <ToastContainer />
+        {user && !loading && (
           <div id="content-wrap" style={{ paddingBottom: '5rem' }}>
             <div className="row">
               <div className="col-lg-1" />
