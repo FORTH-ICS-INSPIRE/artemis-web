@@ -2,27 +2,13 @@ import Head from 'next/head';
 import React from 'react';
 import HijackTableComponent from '../components/hijack-table/hijack-table';
 import { useJWT } from '../hooks/useJWT';
-import DefaultErrorPage from 'next/error';
+import NotFoundHOC from '../components/404-hoc/404-hoc';
 
 const HijacksPage = (props) => {
   const [user, loading] = useJWT();
 
-  if (user && user.role === 'pending') {
-    return (
-      <>
-        <Head>
-          <meta name="robots" content="noindex" />
-        </Head>
-        <DefaultErrorPage
-          statusCode={404}
-          title={'You do not have the permission to access'}
-        />
-      </>
-    );
-  }
-
   return (
-    <>
+    <NotFoundHOC user={user} ACL={['admin', 'user']}>
       <Head>
         <title>ARTEMIS - Hijacks</title>
       </Head>
@@ -73,7 +59,7 @@ const HijacksPage = (props) => {
           </div>
         </div>
       )}
-    </>
+    </NotFoundHOC>
   );
 };
 

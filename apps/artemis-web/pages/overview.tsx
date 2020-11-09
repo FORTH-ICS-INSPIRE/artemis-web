@@ -5,7 +5,7 @@ import HijackTableComponent from '../components/ongoing-hijack-table/ongoing-hij
 import StatsTable from '../components/stats-table/stats-table';
 import { useGraphQl } from '../hooks/useGraphQL';
 import { useJWT } from '../hooks/useJWT';
-import DefaultErrorPage from 'next/error';
+import NotFoundHOC from '../components/404-hoc/404-hoc';
 
 const OverviewPage = (props) => {
   if (process.env.NODE_ENV === 'development') {
@@ -23,22 +23,8 @@ const OverviewPage = (props) => {
   const STATS_DATA = useGraphQl('stats', props.isProduction);
   const HIJACK_DATA = useGraphQl('hijack', props.isProduction);
 
-  if (user && user.role === 'pending') {
-    return (
-      <>
-        <Head>
-          <meta name="robots" content="noindex" />
-        </Head>
-        <DefaultErrorPage
-          statusCode={404}
-          title={'You do not have the permission to access'}
-        />
-      </>
-    );
-  }
-
   return (
-    <>
+    <NotFoundHOC user={user} ACL={['admin', 'user']}>
       <Head>
         <title>ARTEMIS - Overview</title>
       </Head>
@@ -117,7 +103,7 @@ const OverviewPage = (props) => {
           </div>
         )}
       </div>
-    </>
+    </NotFoundHOC>
   );
 };
 

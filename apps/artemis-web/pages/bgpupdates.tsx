@@ -3,7 +3,7 @@ import React from 'react';
 import BGPTableComponent from '../components/bgp-table/bgp-table';
 import { useGraphQl } from '../hooks/useGraphQL';
 import { useJWT } from '../hooks/useJWT';
-import DefaultErrorPage from 'next/error';
+import NotFoundHOC from '../components/404-hoc/404-hoc';
 
 const BGPUpdates = (props) => {
   if (process.env.NODE_ENV === 'development') {
@@ -14,25 +14,11 @@ const BGPUpdates = (props) => {
     }
   }
 
-  const [user, loading] = useJWT();
+  const [user] = useJWT();
   const BGP_DATA = useGraphQl('bgpupdates', props.isProduction);
 
-  if (user && user.role === 'pending') {
-    return (
-      <>
-        <Head>
-          <meta name="robots" content="noindex" />
-        </Head>
-        <DefaultErrorPage
-          statusCode={404}
-          title={'You do not have the permission to access'}
-        />
-      </>
-    );
-  }
-
   return (
-    <>
+    <NotFoundHOC user={user} ACL={['admin', 'user']}>
       <Head>
         <title>ARTEMIS - BGP Updates</title>
       </Head>
@@ -86,7 +72,7 @@ const BGPUpdates = (props) => {
           </div>
         </div>
       )}
-    </>
+    </NotFoundHOC>
   );
 };
 
