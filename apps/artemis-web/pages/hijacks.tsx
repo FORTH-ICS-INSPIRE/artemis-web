@@ -1,10 +1,10 @@
 import Head from 'next/head';
 import React from 'react';
+import NotFoundHOC from '../components/404-hoc/404-hoc';
 import HijackTableComponent from '../components/hijack-table/hijack-table';
-import { useJWT } from '../hooks/useJWT';
 
 const HijacksPage = (props) => {
-  const [user, loading] = useJWT();
+  const user = props.user;
 
   return (
     <>
@@ -62,4 +62,4 @@ const HijacksPage = (props) => {
   );
 };
 
-export default HijacksPage;
+export default NotFoundHOC(HijacksPage, ['admin', 'user']);

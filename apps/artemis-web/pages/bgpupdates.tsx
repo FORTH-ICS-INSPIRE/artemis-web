@@ -1,8 +1,8 @@
 import Head from 'next/head';
 import React from 'react';
+import NotFoundHOC from '../components/404-hoc/404-hoc';
 import BGPTableComponent from '../components/bgp-table/bgp-table';
 import { useGraphQl } from '../hooks/useGraphQL';
-import { useJWT } from '../hooks/useJWT';
 
 const BGPUpdates = (props) => {
   if (process.env.NODE_ENV === 'development') {
@@ -13,7 +13,7 @@ const BGPUpdates = (props) => {
     }
   }
 
-  const [user, loading] = useJWT();
+  const user = props.user;
   const BGP_DATA = useGraphQl('bgpupdates', props.isProduction);
 
   return (
@@ -75,4 +75,4 @@ const BGPUpdates = (props) => {
   );
 };
 
-export default BGPUpdates;
+export default NotFoundHOC(BGPUpdates, ['admin', 'user']);

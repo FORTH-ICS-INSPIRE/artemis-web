@@ -1,5 +1,3 @@
-import jwt from 'jsonwebtoken';
-
 export function extractUser(req) {
   if (!req.user) return null;
 
