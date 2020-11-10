@@ -7,7 +7,7 @@ import { useGraphQl } from '../hooks/useGraphQL';
 import { useJWT } from '../hooks/useJWT';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
+toast.configure();
 const OverviewPage = (props) => {
   if (process.env.NODE_ENV === 'development') {
     if (typeof window !== 'undefined') {
@@ -36,7 +36,6 @@ const OverviewPage = (props) => {
         <title>ARTEMIS - Overview</title>
       </Head>
       <div id="page-container" style={{ paddingTop: '120px' }}>
-        <ToastContainer />
         {user && !loading && (
           <div id="content-wrap" style={{ paddingBottom: '5rem' }}>
             <div className="row">
@@ -108,6 +107,7 @@ const OverviewPage = (props) => {
                 </div>
               </div>
             </div>
+            <ToastContainer />
           </div>
         )}
       </div>
