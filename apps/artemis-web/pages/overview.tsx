@@ -1,7 +1,9 @@
 import Head from 'next/head';
-import React from 'react';
+import React, { useEffect } from 'react';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import NotFoundHOC from '../components/404-hoc/404-hoc';
-import HijackTableComponent from '../components/ongoing-hijack-table/ongoing-hijack-table';
+import OngoingHijackTableComponent from '../components/ongoing-hijack-table/ongoing-hijack-table';
 import StatsTable from '../components/stats-table/stats-table';
 import { useGraphQl } from '../hooks/useGraphQL';
 
@@ -15,9 +17,16 @@ const OverviewPage = (props) => {
   }
 
   const user = props.user;
+  const notify = (message) => toast(message);
 
   const STATS_DATA = useGraphQl('stats', props.isProduction);
-  const HIJACK_DATA = useGraphQl('hijack', props.isProduction);
+  const HIJACK_DATA = useGraphQl('ongoing_hijack', props.isProduction);
+
+  useEffect(() => {
+    if (HIJACK_DATA && HIJACK_DATA.view_hijacks) {
+      notify(`${HIJACK_DATA.view_hijacks.length} hijacks found!`);
+    }
+  });
 
   return (
     <>
@@ -59,7 +68,7 @@ const OverviewPage = (props) => {
                     Ongoing, Non-Dormant Hijacks{' '}
                   </div>
                   <div className="card-body">
-                    <HijackTableComponent
+                    <OngoingHijackTableComponent
                       data={HIJACK_DATA ? HIJACK_DATA.view_hijacks : []}
                     />
                   </div>
@@ -96,6 +105,7 @@ const OverviewPage = (props) => {
                 </div>
               </div>
             </div>
+            <ToastContainer />
           </div>
         )}
       </div>

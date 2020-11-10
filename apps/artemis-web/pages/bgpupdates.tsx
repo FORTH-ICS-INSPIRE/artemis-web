@@ -1,5 +1,7 @@
 import Head from 'next/head';
-import React from 'react';
+import React, { useEffect } from 'react';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import NotFoundHOC from '../components/404-hoc/404-hoc';
 import BGPTableComponent from '../components/bgp-table/bgp-table';
 import { useGraphQl } from '../hooks/useGraphQL';
@@ -15,6 +17,12 @@ const BGPUpdates = (props) => {
 
   const user = props.user;
   const BGP_DATA = useGraphQl('bgpupdates', props.isProduction);
+  const notify = (message) => toast(message);
+
+  useEffect(() => {
+    if (BGP_DATA && BGP_DATA.view_bgpupdates)
+      notify(`${BGP_DATA.view_bgpupdates.length} updates found!`);
+  });
 
   return (
     <>
@@ -69,6 +77,7 @@ const BGPUpdates = (props) => {
               </div>
             </div>
           </div>
+          <ToastContainer />
         </div>
       )}
     </>

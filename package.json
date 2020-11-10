@@ -48,6 +48,7 @@
     "react": "16.13.1",
     "react-bootstrap-table-next": "^4.0.3",
     "react-dom": "16.13.1",
+    "react-toastify": "^6.1.0",
     "subscriptions-transport-ws": "^0.9.18",
     "swr": "^0.1.16",
     "tslib": "^2.0.3",

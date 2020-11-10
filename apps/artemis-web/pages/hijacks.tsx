@@ -1,10 +1,28 @@
 import Head from 'next/head';
-import React from 'react';
+import React, { useEffect } from 'react';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import NotFoundHOC from '../components/404-hoc/404-hoc';
 import HijackTableComponent from '../components/hijack-table/hijack-table';
+import { useGraphQl } from '../hooks/useGraphQL';
 
 const HijacksPage = (props) => {
+  if (process.env.NODE_ENV === 'development') {
+    if (typeof window !== 'undefined') {
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      const { worker } = require('../mocks/browser');
+      worker.start();
+    }
+  }
   const user = props.user;
+
+  const HIJACK_DATA = useGraphQl('hijack', props.isProduction);
+  const notify = (message) => toast(message);
+
+  useEffect(() => {
+    if (HIJACK_DATA && HIJACK_DATA.view_hijacks)
+      notify(`${HIJACK_DATA.view_hijacks.length} hijacks found!`);
+  });
 
   return (
     <>
@@ -29,7 +47,9 @@ const HijacksPage = (props) => {
               <div className="card">
                 <div className="card-header"> </div>
                 <div className="card-body">
-                  <HijackTableComponent />
+                  <HijackTableComponent
+                    data={HIJACK_DATA ? HIJACK_DATA.view_hijacks : []}
+                  />
                 </div>
               </div>
             </div>
@@ -56,6 +76,7 @@ const HijacksPage = (props) => {
               </div>
             </div>
           </div>
+          <ToastContainer />
         </div>
       )}
     </>
