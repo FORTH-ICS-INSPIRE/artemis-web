@@ -30,7 +30,6 @@ const BGPUpdates = (props) => {
       <Head>
         <title>ARTEMIS - BGP Updates</title>
       </Head>
-      <ToastContainer />
       {user && (
         <div
           className="container overview col-lg-12"
@@ -79,6 +78,7 @@ const BGPUpdates = (props) => {
               </div>
             </div>
           </div>
+          <ToastContainer />
         </div>
       )}
     </>

@@ -30,7 +30,6 @@ const HijacksPage = (props) => {
       <Head>
         <title>ARTEMIS - Hijacks</title>
       </Head>
-      <ToastContainer />
       {user && (
         <div
           className="container overview col-lg-12"
@@ -78,6 +77,7 @@ const HijacksPage = (props) => {
               </div>
             </div>
           </div>
+          <ToastContainer />
         </div>
       )}
     </>
