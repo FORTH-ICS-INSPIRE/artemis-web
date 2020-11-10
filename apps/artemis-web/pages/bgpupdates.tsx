@@ -1,11 +1,10 @@
 import Head from 'next/head';
 import React, { useEffect } from 'react';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import NotFoundHOC from '../components/404-hoc/404-hoc';
 import BGPTableComponent from '../components/bgp-table/bgp-table';
 import { useGraphQl } from '../hooks/useGraphQL';
-import { useJWT } from '../hooks/useJWT';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 
 const BGPUpdates = (props) => {
   if (process.env.NODE_ENV === 'development') {
