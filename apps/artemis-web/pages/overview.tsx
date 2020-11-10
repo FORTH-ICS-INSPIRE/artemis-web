@@ -6,7 +6,7 @@ import NotFoundHOC from '../components/404-hoc/404-hoc';
 import OngoingHijackTableComponent from '../components/ongoing-hijack-table/ongoing-hijack-table';
 import StatsTable from '../components/stats-table/stats-table';
 import { useGraphQl } from '../hooks/useGraphQL';
-toast.configure();
+
 const OverviewPage = (props) => {
   if (process.env.NODE_ENV === 'development') {
     if (typeof window !== 'undefined') {
