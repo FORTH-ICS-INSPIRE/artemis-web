@@ -1,14 +1,13 @@
 import Head from 'next/head';
 import React from 'react';
-import HijackTableComponent from '../components/hijack-table/hijack-table';
-import { useJWT } from '../hooks/useJWT';
 import NotFoundHOC from '../components/404-hoc/404-hoc';
+import HijackTableComponent from '../components/hijack-table/hijack-table';
 
 const HijacksPage = (props) => {
-  const [user, loading] = useJWT();
+  const user = props.user;
 
   return (
-    <NotFoundHOC user={user} ACL={['admin', 'user']}>
+    <>
       <Head>
         <title>ARTEMIS - Hijacks</title>
       </Head>
@@ -59,8 +58,8 @@ const HijacksPage = (props) => {
           </div>
         </div>
       )}
-    </NotFoundHOC>
+    </>
   );
 };
 
-export default HijacksPage;
+export default NotFoundHOC(HijacksPage, ['admin', 'user']);

@@ -1,11 +1,9 @@
 import Head from 'next/head';
-import { useRouter } from 'next/router';
 import React from 'react';
+import NotFoundHOC from '../components/404-hoc/404-hoc';
 import HijackTableComponent from '../components/ongoing-hijack-table/ongoing-hijack-table';
 import StatsTable from '../components/stats-table/stats-table';
 import { useGraphQl } from '../hooks/useGraphQL';
-import { useJWT } from '../hooks/useJWT';
-import NotFoundHOC from '../components/404-hoc/404-hoc';
 
 const OverviewPage = (props) => {
   if (process.env.NODE_ENV === 'development') {
@@ -15,21 +13,19 @@ const OverviewPage = (props) => {
       worker.start();
     }
   }
-  const [user, loading] = useJWT();
 
-  const router = useRouter();
-  if (!user && !loading) router.push('signin');
+  const user = props.user;
 
   const STATS_DATA = useGraphQl('stats', props.isProduction);
   const HIJACK_DATA = useGraphQl('hijack', props.isProduction);
 
   return (
-    <NotFoundHOC user={user} ACL={['admin', 'user']}>
+    <>
       <Head>
         <title>ARTEMIS - Overview</title>
       </Head>
       <div id="page-container" style={{ paddingTop: '120px' }}>
-        {user && !loading && (
+        {user && (
           <div id="content-wrap" style={{ paddingBottom: '5rem' }}>
             <div className="row">
               <div className="col-lg-1" />
@@ -103,8 +99,8 @@ const OverviewPage = (props) => {
           </div>
         )}
       </div>
-    </NotFoundHOC>
+    </>
   );
 };
 
-export default OverviewPage;
+export default NotFoundHOC(OverviewPage, ['admin', 'user']);

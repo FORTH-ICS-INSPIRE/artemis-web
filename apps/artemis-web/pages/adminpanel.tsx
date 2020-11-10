@@ -1,17 +1,10 @@
 import Head from 'next/head';
 import React from 'react';
-import { useJWT } from '../hooks/useJWT';
-import { useRouter } from 'next/router';
 import NotFoundHOC from '../components/404-hoc/404-hoc';
 
-const AdminPanelPage = (props) => {
-  const [user, loading] = useJWT();
-
-  const router = useRouter();
-  if (!user && !loading) router.push('signin');
-
+const AdminPanelPage = () => {
   return (
-    <NotFoundHOC user={user} ACL={['admin']}>
+    <>
       <Head>
         <title>ARTEMIS - Admin</title>
       </Head>
@@ -20,8 +13,8 @@ const AdminPanelPage = (props) => {
           <div> Welcome to admin dashboard... </div>
         </div>
       </div>
-    </NotFoundHOC>
+    </>
   );
 };
 
-export default AdminPanelPage;
+export default NotFoundHOC(AdminPanelPage, ['admin']);

@@ -54,7 +54,7 @@ const Header = (props) => {
             )}
             {user && user.role === 'admin' && (
               <li className="nav-item">
-                <Link href="/hijacks">
+                <Link href="/adminpanel">
                   <a href="/adminpanel" className="nav-link">
                     Admin Panel
                   </a>

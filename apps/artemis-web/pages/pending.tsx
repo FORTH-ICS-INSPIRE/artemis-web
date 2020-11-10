@@ -1,17 +1,10 @@
 import Head from 'next/head';
 import React from 'react';
-import { useJWT } from '../hooks/useJWT';
-import { useRouter } from 'next/router';
 import NotFoundHOC from '../components/404-hoc/404-hoc';
 
-const PendingPage = (props) => {
-  const [user, loading] = useJWT();
-
-  const router = useRouter();
-  if (!user && !loading) router.push('signin');
-
+const PendingPage = () => {
   return (
-    <NotFoundHOC user={user} ACL={['pending']}>
+    <>
       <Head>
         <title>ARTEMIS - Pending</title>
       </Head>
@@ -20,8 +13,8 @@ const PendingPage = (props) => {
           <div> Please wait for approval... </div>
         </div>
       </div>
-    </NotFoundHOC>
+    </>
   );
 };
 
-export default PendingPage;
+export default NotFoundHOC(PendingPage, ['pending']);
