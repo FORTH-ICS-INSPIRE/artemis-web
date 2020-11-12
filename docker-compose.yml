@@ -1,4 +1,4 @@
-version: "3"
+version: '3'
 services:
   mongodb:
     image: mongo:latest
@@ -10,13 +10,15 @@ services:
     env_file:
       - .env
     ports:
-      - "27017:27017"
+      - '27017:27017'
     volumes:
       - ./mongo-data:/data/db
-  web:
-    image: mongo:latest
+  app:
+    container_name: aremis-web
+    restart: always
+    build: .
+    env_file:
+      - .env
     depends_on:
       - mongodb
-    volumes:
-      - ./scripts:/scripts
-    command: /scripts/wait.sh
+    command: ./wait.sh ${DEFAULT_EMAIL} ${DEFAULT_PASS}
