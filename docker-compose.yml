@@ -16,9 +16,13 @@ services:
   app:
     container_name: aremis-web
     restart: always
-    build: .
+    build:
+      dockerfile: Dockerfile
+      args:
+        DEFAULT_EMAIL: ${DEFAULT_EMAIL}
+        DEFAULT_PASS: ${DEFAULT_PASS}
+        MONGO_URI: ${MONGO_URI}
     env_file:
       - .env
     depends_on:
       - mongodb
-    command: ./wait.sh ${DEFAULT_EMAIL} ${DEFAULT_PASS}
