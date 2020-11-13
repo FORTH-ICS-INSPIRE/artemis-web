@@ -1,7 +1,11 @@
 image: gitpod/workspace-mongodb
 tasks:
   - init: yarn install --frozen-lockfile
-    command: yarn run start
+    command: |
+      export $(cat .env | xargs)
+      ./apps/artemis-web/scripts/wait-for -h localhost -p ${MONGODB_PORT} -t 0
+      MONGODB_HOST=localhost node apps/artemis-web/scripts/query.js
+      MONGODB_HOST=localhost yarn run start
   - command: |
       mkdir -p /workspace/data && mongod --dbpath /workspace/data &
       sleep 5
