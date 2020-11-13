@@ -14,15 +14,8 @@ services:
     volumes:
       - ./mongo-data:/data/db
   app:
-    container_name: aremis-web
+    container_name: artemis-web
     restart: always
-    build:
-      dockerfile: Dockerfile
-      args:
-        DEFAULT_EMAIL: ${DEFAULT_EMAIL}
-        DEFAULT_PASS: ${DEFAULT_PASS}
-        MONGO_URI: ${MONGO_URI}
-    env_file:
-      - .env
+    build: .
     depends_on:
       - mongodb
