@@ -16,6 +16,12 @@ services:
   app:
     container_name: artemis-web
     restart: always
-    build: .
+    build:
+        context: .
+        dockerfile: apps/artemis-web/Dockerfile
+    env_file:
+      - .env
+    ports:
+      - 4200:4200
     depends_on:
       - mongodb
