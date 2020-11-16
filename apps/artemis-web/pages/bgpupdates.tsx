@@ -42,6 +42,7 @@ const BGPUpdates = (props) => {
   const [filter, setFilter] = useState(0);
   const [filterButton, setFilterButton] = useState(0);
   const [distinctValues, setDistinctValues] = useState([]);
+  const [selectState, setSelectState] = useState('');
 
   const user = props.user;
   const BGP_DATA = useGraphQl('bgpupdates', props.isProduction, isLive);
@@ -87,7 +88,8 @@ const BGPUpdates = (props) => {
                   <h1>BGP Updates</h1>
                 </div>
                 <div className="col-lg-2">
-                <h2 style={{ color: 'white' }}>Live Updates </h2> </div>
+                  <h2 style={{ color: 'white' }}>Live Updates </h2>{' '}
+                </div>
                 <div className="col-lg-1">
                   <FormGroup>
                     <FormControlLabel
@@ -103,7 +105,6 @@ const BGPUpdates = (props) => {
                       label=""
                     />
                   </FormGroup>
-                  
                 </div>
               </div>
 
@@ -123,6 +124,8 @@ const BGPUpdates = (props) => {
                     onClick={() => {
                       setFilterButton(0);
                       setFilter(0);
+                      setSelectState('select');
+                      setDistinctValues([]);
                     }}
                   >
                     All
@@ -135,6 +138,8 @@ const BGPUpdates = (props) => {
                     onClick={() => {
                       setFilterButton(1);
                       setFilter(1);
+                      setSelectState('select');
+                      setDistinctValues([]);
                     }}
                   >
                     Past 1h
@@ -147,6 +152,8 @@ const BGPUpdates = (props) => {
                     onClick={() => {
                       setFilterButton(2);
                       setFilter(24);
+                      setSelectState('select');
+                      setDistinctValues([]);
                     }}
                   >
                     Past 24h
@@ -158,6 +165,8 @@ const BGPUpdates = (props) => {
                     onClick={() => {
                       setFilterButton(3);
                       setFilter(48);
+                      setSelectState('select');
+                      setDistinctValues([]);
                     }}
                   >
                     Past 48h
@@ -179,6 +188,7 @@ const BGPUpdates = (props) => {
                     <select
                       className="form-control"
                       id="distinct_values_selection"
+                      value={selectState}
                       onChange={onChangeValue.bind(this)}
                     >
                       <option value="select">Select</option>

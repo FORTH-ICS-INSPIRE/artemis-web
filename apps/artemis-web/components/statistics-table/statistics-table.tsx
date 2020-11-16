@@ -30,7 +30,7 @@ class StatisticsTable extends Component<StatisticsType, {}> {
     return (
       <table id="modules" className="table table-hover">
         <tbody>
-          {STATISTICS_DATA && STATISTICS_DATA ? (
+          {STATISTICS_DATA && STATISTICS_DATA.view_index_all_stats ? (
             Object.entries(STATISTICS_DATA.view_index_all_stats[0]).map(
               (stat, i) => {
                 return (
