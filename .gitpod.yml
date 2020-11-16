@@ -6,7 +6,7 @@ tasks:
       ./apps/artemis-web/scripts/wait-for -h localhost -p ${MONGODB_PORT} -t 0
       MONGODB_HOST=localhost node apps/artemis-web/scripts/query.js
       MONGODB_HOST=localhost yarn run start
-  - command: |
+  - init: |
       mkdir -p /workspace/data && mongod --dbpath /workspace/data &
       sleep 5
       if [ -f .env ]; then export $(cat .env | sed 's/#.*//g' | xargs); fi

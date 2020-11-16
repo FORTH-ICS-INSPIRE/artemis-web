@@ -14,30 +14,37 @@ async function isInCollection(db, name) {
   const { nanoid } = require('nanoid');
 
   const client = new MongoClient(URI);
-  await client.connect();
+  try {
+    await client.connect();
 
-  const db = client.db('artemis-web');
-
-  if (!(await isInCollection(db, 'users'))) {
-    db.createCollection('users', function (err, res) {
-      if (err) throw err;
-    });
-    db.collection('users').insertOne(
-      {
-        _id: nanoid(12),
-        email: email,
-        password: await argon2.hash(password),
-        name: 'Admin',
-        lastLogin: new Date(),
-        currentLogin: new Date(),
-        role: 'admin',
-        token: '',
-      },
-      (err, res) => {
-        client.close();
-      }
-    );
-  } else {
+    const db = client.db('artemis-web');
+    if (!(await isInCollection(db, 'users'))) {
+      db.createCollection('users', function (err, res) {
+        if (err) throw err;
+      });
+    }
+    const user = await db.collection('users').findOne();
+    if (user == null) {
+      db.collection('users').insertOne(
+        {
+          _id: nanoid(12),
+          email: email,
+          password: await argon2.hash(password),
+          name: 'Admin',
+          lastLogin: new Date(),
+          currentLogin: new Date(),
+          role: 'admin',
+          token: '',
+        },
+        (err, res) => {
+          console.error(err);
+          client.close();
+        }
+      );
+    }
+  } catch (e) {
+    console.error(e);
+  } finally {
     client.close();
   }
 })();
