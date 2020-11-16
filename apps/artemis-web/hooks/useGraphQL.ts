@@ -12,12 +12,12 @@ import {
   STATS_SUB,
 } from '../utils/graphql';
 
-export function useGraphQl(module, isProduction) {
+export function useGraphQl(module, isProduction, isLive = true) {
   let data: any;
 
   switch (module) {
     case 'stats':
-      if (isProduction) {
+      if (isProduction && isLive) {
         // eslint-disable-next-line react-hooks/rules-of-hooks
         data = useSubscription(STATS_SUB).data;
       } else {
@@ -26,7 +26,7 @@ export function useGraphQl(module, isProduction) {
       }
       break;
     case 'ongoing_hijack':
-      if (isProduction) {
+      if (isProduction && isLive) {
         // eslint-disable-next-line react-hooks/rules-of-hooks
         data = useSubscription(ONGOING_HIJACK_SUB).data;
       } else {
@@ -35,7 +35,7 @@ export function useGraphQl(module, isProduction) {
       }
       break;
     case 'hijack':
-      if (isProduction) {
+      if (isProduction && isLive) {
         // eslint-disable-next-line react-hooks/rules-of-hooks
         data = useSubscription(HIJACK_SUB).data;
       } else {
@@ -44,7 +44,7 @@ export function useGraphQl(module, isProduction) {
       }
       break;
     case 'bgpupdates':
-      if (isProduction) {
+      if (isProduction && isLive) {
         // eslint-disable-next-line react-hooks/rules-of-hooks
         data = useSubscription(BGP_SUB).data;
       } else {
@@ -53,7 +53,7 @@ export function useGraphQl(module, isProduction) {
       }
       break;
     case 'index_stats':
-      if (isProduction) {
+      if (isProduction && isLive) {
         // eslint-disable-next-line react-hooks/rules-of-hooks
         data = useSubscription(IndexStats_SUB).data;
       } else {
