@@ -4,10 +4,11 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import NotFoundHOC from '../components/404-hoc/404-hoc';
 import OngoingHijackTableComponent from '../components/ongoing-hijack-table/ongoing-hijack-table';
-import StatsTable from '../components/stats-table/stats-table';
+import StatisticsTable from '../components/statistics-table/statistics-table';
+import StatsTable from '../components/status-table/status-table';
 import { useGraphQl } from '../hooks/useGraphQL';
 
-const OverviewPage = (props) => {
+const DashboardPage = (props) => {
   if (process.env.NODE_ENV === 'development') {
     if (typeof window !== 'undefined') {
       // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -21,6 +22,7 @@ const OverviewPage = (props) => {
 
   const STATS_DATA = useGraphQl('stats', props.isProduction);
   const HIJACK_DATA = useGraphQl('ongoing_hijack', props.isProduction);
+  const INDEX_DATA = useGraphQl('index_stats', props.isProduction);
 
   useEffect(() => {
     if (HIJACK_DATA && HIJACK_DATA.view_hijacks) {
@@ -89,18 +91,7 @@ const OverviewPage = (props) => {
                 <div className="card">
                   <div className="card-header"> Statistics </div>
                   <div className="card-body">
-                    <table className="table table-hover">
-                      <tbody>
-                        <tr>
-                          <td>Monitored Prefixes</td>
-                          <td>2</td>
-                        </tr>
-                        <tr>
-                          <td>Monitor Peers</td>
-                          <td> 286</td>
-                        </tr>
-                      </tbody>
-                    </table>
+                    <StatisticsTable data={INDEX_DATA} />
                   </div>
                 </div>
               </div>
@@ -113,4 +104,4 @@ const OverviewPage = (props) => {
   );
 };
 
-export default NotFoundHOC(OverviewPage, ['admin', 'user']);
+export default NotFoundHOC(DashboardPage, ['admin', 'user']);

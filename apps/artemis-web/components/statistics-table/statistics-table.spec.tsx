@@ -1,9 +1,9 @@
 import React from 'react';
 import { render } from '@testing-library/react';
 
-import StatsTable from './stats-table';
+import StatsTable from './statistics-table';
 
-describe('StatsTable', () => {
+describe('StatisticsTable', () => {
   it('should render successfully', () => {
     const { baseElement } = render(
       <StatsTable

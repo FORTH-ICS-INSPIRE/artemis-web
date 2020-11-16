@@ -124,8 +124,24 @@ const columns = [
 ];
 
 const BGPTableComponent = (props) => {
+  const filteredDate = new Date();
+  const filter = props.filter;
+
+  filteredDate.setHours(filteredDate.getHours() - filter);
+
   const bgp = props.data ?? mockBGP;
-  return <BootstrapTable keyField="timestamp" data={bgp} columns={columns} />;
+
+  const filteredBgp =
+    filter !== 0
+      ? bgp.filter((entry) => new Date(entry.timestamp) >= filteredDate)
+      : bgp;
+  return (
+    <BootstrapTable
+      keyField="timestamp"
+      data={filteredBgp}
+      columns={columns}
+    />
+  );
 };
 
 export default BGPTableComponent;

@@ -9,7 +9,7 @@ const SigninPage = (props) => {
   const router = useRouter();
   if (user && !loading) {
     if (user.role === 'pending') router.push('pending');
-    else router.push('overview');
+    else router.push('dashboard');
   }
   const SignInComponent = dynamic(() =>
     import('../components/sign-in/sign-in')

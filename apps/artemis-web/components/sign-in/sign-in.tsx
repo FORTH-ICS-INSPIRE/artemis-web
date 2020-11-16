@@ -93,7 +93,7 @@ const SignIn = (props) => {
       if (token.user.role === 'pending') {
         router.push('/pending');
       } else {
-        router.push('/overview');
+        router.push('/dashboard');
       }
       window.location.reload();
     } else {

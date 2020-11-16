@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import NotFoundHOC from '../components/404-hoc/404-hoc';
@@ -14,6 +14,8 @@ const BGPUpdates = (props) => {
       worker.start();
     }
   }
+
+  const [filter, setFilter] = useState(0);
 
   const user = props.user;
   const BGP_DATA = useGraphQl('bgpupdates', props.isProduction);
@@ -45,10 +47,24 @@ const BGPUpdates = (props) => {
             <div className="col-lg-1" />
             <div className="col-lg-10">
               <div className="card">
-                <div className="card-header"> </div>
+                <div className="card-header">
+                  <button type="button" onClick={() => setFilter(0)}>
+                    All
+                  </button>
+                  <button type="button" onClick={() => setFilter(1)}>
+                    Past 1h
+                  </button>
+                  <button type="button" onClick={() => setFilter(24)}>
+                    Past 24h
+                  </button>
+                  <button type="button" onClick={() => setFilter(48)}>
+                    Past 48h
+                  </button>
+                </div>
                 <div className="card-body">
                   <BGPTableComponent
                     data={BGP_DATA ? BGP_DATA.view_bgpupdates : []}
+                    filter={filter}
                   />
                 </div>
               </div>
