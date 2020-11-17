@@ -58,11 +58,6 @@ const HijacksPage = (props) => {
       ? hijacks.filter((entry) => new Date(entry.timestamp) >= filteredDate)
       : hijacks;
 
-  useEffect(() => {
-    if (HIJACK_DATA && HIJACK_DATA.view_hijacks)
-      notify(`${HIJACK_DATA.view_hijacks.length} hijacks found!`);
-  });
-
   const onChangeValue = (event) => {
     setDistinctValues(
       filteredHijacks.map((entry) => {
@@ -88,6 +83,23 @@ const HijacksPage = (props) => {
               <div className="row">
                 <div className="col-lg-8" style={{ color: 'white' }}>
                   <h1>Hijacks</h1>
+                </div>
+                <div className="col-lg-1">
+                  {process.env.NODE_ENV === 'development' && (
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={() => {
+                        if (HIJACK_DATA && HIJACK_DATA.view_hijacks)
+                          notify(
+                            `${HIJACK_DATA.view_hijacks.length} hijacks found!`
+                          );
+                      }}
+                    >
+                      {' '}
+                      NOTIFY ME!
+                    </Button>
+                  )}
                 </div>
                 <div className="col-lg-2">
                   <h2 style={{ color: 'white' }}>Live Updates </h2>{' '}

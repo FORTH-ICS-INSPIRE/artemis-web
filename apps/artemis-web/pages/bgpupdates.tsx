@@ -57,12 +57,9 @@ const BGPUpdates = (props) => {
       ? bgp.filter((entry) => new Date(entry.timestamp) >= filteredDate)
       : bgp;
 
-  useEffect(() => {
-    if (BGP_DATA && BGP_DATA.view_bgpupdates)
-      notify(`${BGP_DATA.view_bgpupdates.length} updates found!`);
-  });
-
   const onChangeValue = (event) => {
+    setSelectState(event.target.value);
+
     setDistinctValues(
       filteredBgp.map((entry) => {
         return entry[event.target.value];
@@ -86,6 +83,23 @@ const BGPUpdates = (props) => {
               <div className="row">
                 <div className="col-lg-8" style={{ color: 'white' }}>
                   <h1>BGP Updates</h1>
+                </div>
+                <div className="col-lg-1">
+                  {process.env.NODE_ENV === 'development' && (
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={() => {
+                        if (BGP_DATA && BGP_DATA.view_bgpupdates)
+                          notify(
+                            `${BGP_DATA.view_bgpupdates.length} updates found!`
+                          );
+                      }}
+                    >
+                      {' '}
+                      NOTIFY ME!
+                    </Button>
+                  )}
                 </div>
                 <div className="col-lg-2">
                   <h2 style={{ color: 'white' }}>Live Updates </h2>{' '}

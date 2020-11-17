@@ -1,3 +1,4 @@
+import { Button } from '@material-ui/core';
 import React, { Component } from 'react';
 
 type ProcessType = {
@@ -27,7 +28,17 @@ class StatsTable extends Component<StatsType, {}> {
               return (
                 <tr key={i}>
                   <td>{process.name}</td>
-                  <td>{process.running ? 'On' : 'Off'}</td>
+                  <td>
+                    {process.running ? (
+                      <Button variant="contained" color="primary">
+                        On
+                      </Button>
+                    ) : (
+                      <Button variant="contained" color="secondary">
+                        Off
+                      </Button>
+                    )}
+                  </td>
                   <td>
                     {process.running
                       ? new Date().getHours() -

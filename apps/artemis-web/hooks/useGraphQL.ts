@@ -4,8 +4,8 @@ import {
   BGP_SUB,
   HIJACK_QUERY,
   HIJACK_SUB,
-  IndexStats_QUERY,
-  IndexStats_SUB,
+  INDEXSTATS_QUERY,
+  INDEXSTATS_SUB,
   ONGOING_HIJACK_QUERY,
   ONGOING_HIJACK_SUB,
   STATS_QUERY,
@@ -55,10 +55,10 @@ export function useGraphQl(module, isProduction, isLive = true) {
     case 'index_stats':
       if (isProduction && isLive) {
         // eslint-disable-next-line react-hooks/rules-of-hooks
-        data = useSubscription(IndexStats_SUB).data;
+        data = useSubscription(INDEXSTATS_SUB).data;
       } else {
         // eslint-disable-next-line react-hooks/rules-of-hooks
-        data = useQuery(IndexStats_QUERY).data;
+        data = useQuery(INDEXSTATS_QUERY).data;
       }
       break;
   }

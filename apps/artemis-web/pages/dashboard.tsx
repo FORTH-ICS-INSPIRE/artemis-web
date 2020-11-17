@@ -1,3 +1,4 @@
+import { Button } from '@material-ui/core';
 import Head from 'next/head';
 import React, { useEffect } from 'react';
 import { toast, ToastContainer } from 'react-toastify';
@@ -24,12 +25,6 @@ const DashboardPage = (props) => {
   const HIJACK_DATA = useGraphQl('ongoing_hijack', props.isProduction);
   const INDEX_DATA = useGraphQl('index_stats', props.isProduction);
 
-  useEffect(() => {
-    if (HIJACK_DATA && HIJACK_DATA.view_hijacks) {
-      notify(`${HIJACK_DATA.view_hijacks.length} hijacks found!`);
-    }
-  });
-
   return (
     <>
       <Head>
@@ -41,7 +36,29 @@ const DashboardPage = (props) => {
             <div className="row">
               <div className="col-lg-1" />
               <div className="col-lg-10">
-                <h1 style={{ color: 'white' }}>Dashboard</h1>{' '}
+                <div className="row">
+                  <div className="col-lg-8">
+                    <h1 style={{ color: 'white' }}>Dashboard</h1>{' '}
+                  </div>
+                  <div className="col-lg-1">
+                    {process.env.NODE_ENV === 'development' && (
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={() => {
+                          if (HIJACK_DATA && HIJACK_DATA.view_hijacks) {
+                            notify(
+                              `${HIJACK_DATA.view_hijacks.length} hijacks found!`
+                            );
+                          }
+                        }}
+                      >
+                        {' '}
+                        NOTIFY ME!
+                      </Button>
+                    )}
+                  </div>
+                </div>
                 <hr style={{ backgroundColor: 'white' }} />
               </div>
             </div>

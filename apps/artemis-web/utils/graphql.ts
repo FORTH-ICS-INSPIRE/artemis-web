@@ -299,7 +299,7 @@ export const BGP_QUERY = gql`
   }
 `;
 
-export const IndexStats_SUB = gql`
+export const INDEXSTATS_SUB = gql`
   subscription getIndexAllStats {
     view_index_all_stats {
       monitored_prefixes
@@ -320,7 +320,7 @@ export const IndexStats_SUB = gql`
   }
 `;
 
-export const IndexStats_QUERY = gql`
+export const INDEXSTATS_QUERY = gql`
   query getIndexAllStats {
     view_index_all_stats {
       monitored_prefixes
