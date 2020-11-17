@@ -28,7 +28,7 @@ const DashboardPage = (props) => {
   return (
     <>
       <Head>
-        <title>ARTEMIS - Overview</title>
+        <title>ARTEMIS - Dashboard</title>
       </Head>
       <div id="page-container" style={{ paddingTop: '120px' }}>
         {user && (
