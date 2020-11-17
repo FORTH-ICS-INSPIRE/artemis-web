@@ -14,54 +14,36 @@ import {
 
 export function useGraphQl(module, isProduction, isLive = true) {
   let data: any;
+  const shallSubscribe = isProduction && isLive;
 
+  /* eslint-disable react-hooks/rules-of-hooks */
   switch (module) {
     case 'stats':
-      if (isProduction && isLive) {
-        // eslint-disable-next-line react-hooks/rules-of-hooks
-        data = useSubscription(STATS_SUB).data;
-      } else {
-        // eslint-disable-next-line react-hooks/rules-of-hooks
-        data = useQuery(STATS_QUERY).data;
-      }
+      data = shallSubscribe
+        ? useSubscription(STATS_SUB).data
+        : useQuery(STATS_QUERY).data;
       break;
     case 'ongoing_hijack':
-      if (isProduction && isLive) {
-        // eslint-disable-next-line react-hooks/rules-of-hooks
-        data = useSubscription(ONGOING_HIJACK_SUB).data;
-      } else {
-        // eslint-disable-next-line react-hooks/rules-of-hooks
-        data = useQuery(ONGOING_HIJACK_QUERY).data;
-      }
+      data = shallSubscribe
+        ? useSubscription(ONGOING_HIJACK_SUB).data
+        : useQuery(ONGOING_HIJACK_QUERY).data;
       break;
     case 'hijack':
-      if (isProduction && isLive) {
-        // eslint-disable-next-line react-hooks/rules-of-hooks
-        data = useSubscription(HIJACK_SUB).data;
-      } else {
-        // eslint-disable-next-line react-hooks/rules-of-hooks
-        data = useQuery(HIJACK_QUERY).data;
-      }
+      data = shallSubscribe
+        ? useSubscription(HIJACK_SUB).data
+        : useQuery(HIJACK_QUERY).data;
       break;
     case 'bgpupdates':
-      if (isProduction && isLive) {
-        // eslint-disable-next-line react-hooks/rules-of-hooks
-        data = useSubscription(BGP_SUB).data;
-      } else {
-        // eslint-disable-next-line react-hooks/rules-of-hooks
-        data = useQuery(BGP_QUERY).data;
-      }
+      data = shallSubscribe
+        ? useSubscription(BGP_SUB).data
+        : useQuery(BGP_QUERY).data;
       break;
     case 'index_stats':
-      if (isProduction && isLive) {
-        // eslint-disable-next-line react-hooks/rules-of-hooks
-        data = useSubscription(INDEXSTATS_SUB).data;
-      } else {
-        // eslint-disable-next-line react-hooks/rules-of-hooks
-        data = useQuery(INDEXSTATS_QUERY).data;
-      }
+      data = shallSubscribe
+        ? useSubscription(INDEXSTATS_SUB).data
+        : useQuery(INDEXSTATS_QUERY).data;
       break;
   }
-
+  /* eslint-enable react-hooks/rules-of-hooks */
   return data;
 }
