@@ -1,3 +1,4 @@
+import { Menu, MenuItem } from '@material-ui/core';
 import Link from 'next/link';
 import React from 'react';
 import { useFetch } from '../../hooks/useJWT';
@@ -7,6 +8,25 @@ const Header = (props) => {
   const { data } = useFetch('/api/jwt');
   const jwt = data ? parseJwt(data) : null;
   const user = jwt ? jwt.user : null;
+
+  const [anchorAdmin, setAnchorAdmin] = React.useState(null);
+  const [anchorAction, setAnchorAction] = React.useState(null);
+
+  const handleClickAdmin = (event) => {
+    setAnchorAdmin(event.currentTarget);
+  };
+
+  const handleClickAction = (event) => {
+    setAnchorAction(event.currentTarget);
+  };
+
+  const handleCloseAdmin = () => {
+    setAnchorAdmin(null);
+  };
+
+  const handleCloseAction = () => {
+    setAnchorAction(null);
+  };
 
   const handleLogout = async () => {
     await fetch('/api/logout', {
@@ -52,18 +72,54 @@ const Header = (props) => {
                 </li>
               </>
             )}
-            {user && user.role === 'admin' && (
-              <li className="nav-item">
-                <Link href="/adminpanel">
-                  <a href="/adminpanel" className="nav-link">
-                    Admin Panel
-                  </a>
-                </Link>
-              </li>
-            )}
           </ul>
           <ul className="navbar-nav mr-auto" />
           <ul className="nav navbar-nav navbar-right">
+            {user && user.role === 'admin' && (
+              <li className="nav-item">
+                <div>
+                  <a href="#" className="nav-link" onClick={handleClickAdmin}>
+                    Admin
+                  </a>
+
+                  <Menu
+                    id="simple-menu"
+                    anchorEl={anchorAdmin}
+                    keepMounted
+                    open={Boolean(anchorAdmin)}
+                    onClose={handleCloseAdmin}
+                  >
+                    <MenuItem onClick={handleCloseAdmin}>
+                      <Link href="/system">System</Link>
+                    </MenuItem>
+                    <MenuItem onClick={handleCloseAdmin}>
+                      <Link href="/user_management">User Management</Link>
+                    </MenuItem>
+                  </Menu>
+                </div>
+              </li>
+            )}
+            {user && user.role !== 'pending' && (
+              <li className="nav-item">
+                <div>
+                  <a href="#" className="nav-link" onClick={handleClickAction}>
+                    Actions
+                  </a>
+
+                  <Menu
+                    id="simple-menu"
+                    anchorEl={anchorAction}
+                    keepMounted
+                    open={Boolean(anchorAction)}
+                    onClose={handleCloseAction}
+                  >
+                    <MenuItem onClick={handleCloseAction}>
+                      <Link href="/password_change">Password Change</Link>
+                    </MenuItem>
+                  </Menu>
+                </div>
+              </li>
+            )}
             <li className="nav-item">
               <a
                 className="nav-link"
