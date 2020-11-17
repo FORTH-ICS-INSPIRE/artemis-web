@@ -7,7 +7,7 @@ const HomePage = (props) => {
   const router = useRouter();
   if (user && !loading && router) {
     if (user.role === 'pending') router.push('pending');
-    else router.push('overview');
+    else router.push('dashboard');
   } else if (!user && !loading && router) {
     router.push('/signin');
   }

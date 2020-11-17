@@ -299,6 +299,48 @@ export const BGP_QUERY = gql`
   }
 `;
 
+export const INDEXSTATS_SUB = gql`
+  subscription getIndexAllStats {
+    view_index_all_stats {
+      monitored_prefixes
+      configured_prefixes
+      monitor_peers
+      total_bgp_updates
+      total_unhandled_updates
+      total_hijacks
+      ignored_hijacks
+      resolved_hijacks
+      withdrawn_hijacks
+      mitigation_hijacks
+      ongoing_hijacks
+      dormant_hijacks
+      acknowledged_hijacks
+      outdated_hijacks
+    }
+  }
+`;
+
+export const INDEXSTATS_QUERY = gql`
+  query getIndexAllStats {
+    view_index_all_stats {
+      monitored_prefixes
+      configured_prefixes
+      monitor_peers
+      total_bgp_updates
+      total_unhandled_updates
+      total_hijacks
+      ignored_hijacks
+      resolved_hijacks
+      withdrawn_hijacks
+      mitigation_hijacks
+      ongoing_hijacks
+      dormant_hijacks
+      acknowledged_hijacks
+      outdated_hijacks
+    }
+  }
+`;
+
 export const useApollo = (initialState, GRAPHQL_URI, GRAPHQL_WS_URI) => {
   const store = useMemo(
     () => initializeApollo(initialState, GRAPHQL_URI, GRAPHQL_WS_URI),

@@ -1,23 +1,6 @@
 import React from 'react';
 import BootstrapTable from 'react-bootstrap-table-next';
 
-const mockHijacks = [
-  {
-    update: '2020-08-24 19:53:44',
-    time: '2020-08-24 09:01:50',
-    status: 'Withdrawn',
-    hprefix: '139.91.250.0/24',
-    mprefix: '139.91.250.0/24',
-    type: 'E|0|-|-',
-    as: '264409',
-    rpki: 'IA',
-    peers: 1,
-    ASes: 0,
-    ack: 0,
-    more: 'aa',
-  },
-];
-
 const columns = [
   {
     dataField: 'update',
@@ -213,7 +196,7 @@ const HijackTableComponent = (props) => {
       more: row.comment,
     }));
   } else {
-    hijacks = mockHijacks;
+    hijacks = [];
   }
 
   return <BootstrapTable keyField="update" data={hijacks} columns={columns} />;

@@ -1,38 +1,6 @@
 import React from 'react';
 import BootstrapTable from 'react-bootstrap-table-next';
 
-const mockBGP = [
-  {
-    timestamp: 20,
-    prefix: 'sfsf',
-    matched: 3,
-    mprefix: 3,
-    origin: 'fsdf',
-    path: 'dsfsd',
-    peer: 'dfssd',
-    peers: 3,
-    service: 2,
-    type: 0,
-    hijack: 9,
-    status: '',
-    more: 'aa',
-  },
-  {
-    timestamp: 10,
-    prefix: 'aa',
-    matched: 3,
-    mprefix: 3,
-    origin: 'aa',
-    path: 'dsd',
-    peer: 'dfssd',
-    peers: 3,
-    service: 2,
-    type: 0,
-    hijack: 9,
-    status: '',
-    more: 'aa',
-  },
-];
 const columns = [
   {
     dataField: 'timestamp',
@@ -124,7 +92,8 @@ const columns = [
 ];
 
 const BGPTableComponent = (props) => {
-  const bgp = props.data ?? mockBGP;
+  const bgp = props.data;
+
   return <BootstrapTable keyField="timestamp" data={bgp} columns={columns} />;
 };
 

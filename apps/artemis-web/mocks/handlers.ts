@@ -129,4 +129,28 @@ export const handlers = [
       })
     );
   }),
+  graphql.query('getIndexAllStats', (req, res, ctx) => {
+    return res(
+      ctx.data({
+        view_index_all_stats: [
+          {
+            monitored_prefixes: 3,
+            configured_prefixes: 4,
+            monitor_peers: 416,
+            total_bgp_updates: 1242,
+            total_unhandled_updates: 0,
+            total_hijacks: 1,
+            ignored_hijacks: 0,
+            resolved_hijacks: 0,
+            withdrawn_hijacks: 1,
+            mitigation_hijacks: 0,
+            ongoing_hijacks: 0,
+            dormant_hijacks: 0,
+            acknowledged_hijacks: 0,
+            outdated_hijacks: 0,
+          },
+        ],
+      })
+    );
+  }),
 ];

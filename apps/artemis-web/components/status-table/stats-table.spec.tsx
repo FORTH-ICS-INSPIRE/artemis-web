@@ -1,12 +1,12 @@
 import React from 'react';
 import { render } from '@testing-library/react';
 
-import StatsTable from './stats-table';
+import StatusTable from './status-table';
 
 describe('StatsTable', () => {
   it('should render successfully', () => {
     const { baseElement } = render(
-      <StatsTable
+      <StatusTable
         data={{
           view_processes: [
             { name: 'test', running: true, timestamp: Date.now() },

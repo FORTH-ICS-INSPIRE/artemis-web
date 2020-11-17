@@ -30,9 +30,9 @@ const Header = (props) => {
             {user && user.role !== 'pending' && (
               <>
                 <li className="nav-item">
-                  <Link href="/overview">
-                    <a href="/overview" className="nav-link">
-                      Overview
+                  <Link href="/dashboard">
+                    <a href="/dashboard" className="nav-link">
+                      Dashboard
                     </a>
                   </Link>
                 </li>

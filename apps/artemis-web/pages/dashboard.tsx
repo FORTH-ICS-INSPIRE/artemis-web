@@ -1,13 +1,15 @@
+import { Button } from '@material-ui/core';
 import Head from 'next/head';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import NotFoundHOC from '../components/404-hoc/404-hoc';
 import OngoingHijackTableComponent from '../components/ongoing-hijack-table/ongoing-hijack-table';
-import StatsTable from '../components/stats-table/stats-table';
+import StatisticsTable from '../components/statistics-table/statistics-table';
+import StatusTable from '../components/status-table/status-table';
 import { useGraphQl } from '../hooks/useGraphQL';
 
-const OverviewPage = (props) => {
+const DashboardPage = (props) => {
   if (process.env.NODE_ENV === 'development') {
     if (typeof window !== 'undefined') {
       // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -21,17 +23,12 @@ const OverviewPage = (props) => {
 
   const STATS_DATA = useGraphQl('stats', props.isProduction);
   const HIJACK_DATA = useGraphQl('ongoing_hijack', props.isProduction);
-
-  useEffect(() => {
-    if (HIJACK_DATA && HIJACK_DATA.view_hijacks) {
-      notify(`${HIJACK_DATA.view_hijacks.length} hijacks found!`);
-    }
-  });
+  const INDEX_DATA = useGraphQl('index_stats', props.isProduction);
 
   return (
     <>
       <Head>
-        <title>ARTEMIS - Overview</title>
+        <title>ARTEMIS - Dashboard</title>
       </Head>
       <div id="page-container" style={{ paddingTop: '120px' }}>
         {user && (
@@ -39,7 +36,27 @@ const OverviewPage = (props) => {
             <div className="row">
               <div className="col-lg-1" />
               <div className="col-lg-10">
-                <h1 style={{ color: 'white' }}>Dashboard</h1>{' '}
+                <div className="row">
+                  <div className="col-lg-8">
+                    <h1 style={{ color: 'white' }}>Dashboard</h1>{' '}
+                  </div>
+                  <div className="col-lg-1">
+                    {process.env.NODE_ENV === 'development' && (
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={() => {
+                          if (HIJACK_DATA && HIJACK_DATA.view_hijacks) {
+                            notify(`Example notification !`);
+                          }
+                        }}
+                      >
+                        {' '}
+                        NOTIFY ME!
+                      </Button>
+                    )}
+                  </div>
+                </div>
                 <hr style={{ backgroundColor: 'white' }} />
               </div>
             </div>
@@ -81,7 +98,7 @@ const OverviewPage = (props) => {
                 <div className="card">
                   <div className="card-header"> System Status </div>
                   <div className="card-body">
-                    <StatsTable data={STATS_DATA} />
+                    <StatusTable data={STATS_DATA} />
                   </div>
                 </div>
               </div>
@@ -89,18 +106,7 @@ const OverviewPage = (props) => {
                 <div className="card">
                   <div className="card-header"> Statistics </div>
                   <div className="card-body">
-                    <table className="table table-hover">
-                      <tbody>
-                        <tr>
-                          <td>Monitored Prefixes</td>
-                          <td>2</td>
-                        </tr>
-                        <tr>
-                          <td>Monitor Peers</td>
-                          <td> 286</td>
-                        </tr>
-                      </tbody>
-                    </table>
+                    <StatisticsTable data={INDEX_DATA} />
                   </div>
                 </div>
               </div>
@@ -113,4 +119,4 @@ const OverviewPage = (props) => {
   );
 };
 
-export default NotFoundHOC(OverviewPage, ['admin', 'user']);
+export default NotFoundHOC(DashboardPage, ['admin', 'user']);
