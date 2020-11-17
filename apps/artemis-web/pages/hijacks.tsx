@@ -1,14 +1,14 @@
 import {
-  makeStyles,
-  FormGroup,
-  FormControlLabel,
-  Switch,
   Button,
+  FormControlLabel,
+  FormGroup,
   Grid,
+  makeStyles,
   Paper,
+  Switch,
 } from '@material-ui/core';
 import Head from 'next/head';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import NotFoundHOC from '../components/404-hoc/404-hoc';
@@ -47,7 +47,6 @@ const HijacksPage = (props) => {
   const user = props.user;
 
   const HIJACK_DATA = useGraphQl('hijack', props.isProduction, isLive);
-  const notify = (message) => toast(message);
 
   const hijacks = HIJACK_DATA ? HIJACK_DATA.view_hijacks : [];
   const filteredDate = new Date();
@@ -84,23 +83,7 @@ const HijacksPage = (props) => {
                 <div className="col-lg-8" style={{ color: 'white' }}>
                   <h1>Hijacks</h1>
                 </div>
-                <div className="col-lg-1">
-                  {process.env.NODE_ENV === 'development' && (
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      onClick={() => {
-                        if (HIJACK_DATA && HIJACK_DATA.view_hijacks)
-                          notify(
-                            `${HIJACK_DATA.view_hijacks.length} hijacks found!`
-                          );
-                      }}
-                    >
-                      {' '}
-                      NOTIFY ME!
-                    </Button>
-                  )}
-                </div>
+                <div className="col-lg-1"></div>
                 <div className="col-lg-2">
                   <h2 style={{ color: 'white' }}>Live Updates </h2>{' '}
                 </div>

@@ -1,12 +1,12 @@
 import { Button } from '@material-ui/core';
 import Head from 'next/head';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import NotFoundHOC from '../components/404-hoc/404-hoc';
 import OngoingHijackTableComponent from '../components/ongoing-hijack-table/ongoing-hijack-table';
 import StatisticsTable from '../components/statistics-table/statistics-table';
-import StatsTable from '../components/status-table/status-table';
+import StatusTable from '../components/status-table/status-table';
 import { useGraphQl } from '../hooks/useGraphQL';
 
 const DashboardPage = (props) => {
@@ -47,9 +47,7 @@ const DashboardPage = (props) => {
                         color="primary"
                         onClick={() => {
                           if (HIJACK_DATA && HIJACK_DATA.view_hijacks) {
-                            notify(
-                              `${HIJACK_DATA.view_hijacks.length} hijacks found!`
-                            );
+                            notify(`Example notification !`);
                           }
                         }}
                       >
@@ -100,7 +98,7 @@ const DashboardPage = (props) => {
                 <div className="card">
                   <div className="card-header"> System Status </div>
                   <div className="card-body">
-                    <StatsTable data={STATS_DATA} />
+                    <StatusTable data={STATS_DATA} />
                   </div>
                 </div>
               </div>

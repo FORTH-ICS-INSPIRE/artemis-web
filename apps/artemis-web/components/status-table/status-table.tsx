@@ -9,7 +9,7 @@ type StatsType = {
   data: ProcessType;
 };
 
-class StatsTable extends Component<StatsType, {}> {
+class StatusTable extends Component<StatsType, {}> {
   render() {
     const STATS_DATA = this.props.data;
 
@@ -58,4 +58,4 @@ class StatsTable extends Component<StatsType, {}> {
   }
 }
 
-export default StatsTable;
+export default StatusTable;

@@ -8,8 +8,8 @@ import {
   Switch,
 } from '@material-ui/core';
 import Head from 'next/head';
-import React, { useEffect, useState } from 'react';
-import { toast, ToastContainer } from 'react-toastify';
+import React, { useState } from 'react';
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import NotFoundHOC from '../components/404-hoc/404-hoc';
 import BGPTableComponent from '../components/bgp-table/bgp-table';
@@ -46,7 +46,6 @@ const BGPUpdates = (props) => {
 
   const user = props.user;
   const BGP_DATA = useGraphQl('bgpupdates', props.isProduction, isLive);
-  const notify = (message) => toast(message);
 
   const bgp = BGP_DATA ? BGP_DATA.view_bgpupdates : [];
   const filteredDate = new Date();
@@ -84,23 +83,7 @@ const BGPUpdates = (props) => {
                 <div className="col-lg-8" style={{ color: 'white' }}>
                   <h1>BGP Updates</h1>
                 </div>
-                <div className="col-lg-1">
-                  {process.env.NODE_ENV === 'development' && (
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      onClick={() => {
-                        if (BGP_DATA && BGP_DATA.view_bgpupdates)
-                          notify(
-                            `${BGP_DATA.view_bgpupdates.length} updates found!`
-                          );
-                      }}
-                    >
-                      {' '}
-                      NOTIFY ME!
-                    </Button>
-                  )}
-                </div>
+                <div className="col-lg-1"></div>
                 <div className="col-lg-2">
                   <h2 style={{ color: 'white' }}>Live Updates </h2>{' '}
                 </div>
