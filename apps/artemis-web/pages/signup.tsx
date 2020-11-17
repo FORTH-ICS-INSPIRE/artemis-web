@@ -19,7 +19,6 @@ const SignupPage = (props) => {
   return (
     <>
       <Head>
-        overview
         <title>ARTEMIS - Sign Up</title>
       </Head>
       <div id="page-container">
