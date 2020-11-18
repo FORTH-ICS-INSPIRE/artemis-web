@@ -7,7 +7,6 @@ import {
   orange,
 } from '@material-ui/core/colors';
 import Container from '@material-ui/core/Container';
-import CssBaseline from '@material-ui/core/CssBaseline';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Grid from '@material-ui/core/Grid';
 import Link from '@material-ui/core/Link';
@@ -104,7 +103,6 @@ const SignIn = (props) => {
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="sm">
-        <CssBaseline />
         <div className={props.classes.paper}>
           <img
             width="150"

@@ -63,7 +63,6 @@ const PasswordChange = (props) => {
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="sm">
-        <CssBaseline />
         <div className={classes.paper}>
           <img
             width="150"

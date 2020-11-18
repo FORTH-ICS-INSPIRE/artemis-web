@@ -88,6 +88,7 @@ const Header = (props) => {
                     keepMounted
                     open={Boolean(anchorAdmin)}
                     onClose={handleCloseAdmin}
+                    style={{ top: '36px' }}
                   >
                     <MenuItem onClick={handleCloseAdmin}>
                       <Link href="/system">System</Link>
@@ -112,6 +113,7 @@ const Header = (props) => {
                     keepMounted
                     open={Boolean(anchorAction)}
                     onClose={handleCloseAction}
+                    style={{ top: '36px' }}
                   >
                     <MenuItem onClick={handleCloseAction}>
                       <Link href="/password_change">Password Change</Link>

@@ -21,12 +21,10 @@ const SignupPage = (props) => {
       <Head>
         <title>ARTEMIS - Sign Up</title>
       </Head>
-      <div id="page-container">
+      <div id="login-container">
         {!user && !loading && (
           <div id="content-wrap" style={{ paddingBottom: '5rem' }}>
-            <div className="container d-flex align-items-center flex-column">
-              <SignUpComponent />
-            </div>
+            <SignUpComponent />
           </div>
         )}
       </div>
