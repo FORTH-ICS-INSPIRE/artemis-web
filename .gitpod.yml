@@ -12,8 +12,7 @@ tasks:
       if [ -f .env ]; then export $(cat .env | sed 's/#.*//g' | xargs); fi
       mongo admin --eval "db.createUser({user:'"$MONGODB_USER"',pwd:'"$MONGODB_PASS"',roles:[{role:'root',db:'admin'}]})"
       killall mongod
-      sleep 5
-      mongod --auth --dbpath /workspace/data
+    command: mongod --auth --dbpath /workspace/data
 ports:
   - port: 4200
     onOpen: open-browser
