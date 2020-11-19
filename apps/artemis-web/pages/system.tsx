@@ -8,19 +8,37 @@ import {
 import Head from 'next/head';
 import React, { useState } from 'react';
 import NotFoundHOC from '../components/404-hoc/404-hoc';
+import { useGraphQl } from '../hooks/useGraphQL';
 
 const SystemPage = (props) => {
+  if (process.env.NODE_ENV === 'development') {
+    if (typeof window !== 'undefined') {
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      const { worker } = require('../mocks/browser');
+      worker.start();
+    }
+  }
+
   const user = props.user;
-  const modules = [
-    ['Monitor', false],
-    ['Detection', false],
-    ['Mitigation', false],
-  ];
+
+  const STATS_DATA = useGraphQl('stats', props.isProduction);
+
+  const processes = STATS_DATA ? STATS_DATA.view_processes : null;
+
+  const modules = processes
+    ? processes.map((ps) => {
+        return [ps['name'], ps['running']];
+      })
+    : [];
 
   const states = {};
+
   modules.forEach((module) => (states[module[0].toString()] = module[1]));
 
   const [state, setState] = useState(states);
+  const keys = Object.keys(state);
+
+  if (modules.length !== 0 && keys.length === 0) setState(states);
 
   return (
     <>
@@ -28,7 +46,7 @@ const SystemPage = (props) => {
         <title>ARTEMIS - System</title>
       </Head>
       <div id="page-container" style={{ paddingTop: '120px' }}>
-        {user && (
+        {user && state && (
           <div id="content-wrap" style={{ paddingBottom: '5rem' }}>
             <div className="row">
               <div className="col-lg-1" />
@@ -46,7 +64,7 @@ const SystemPage = (props) => {
               <div className="col-lg-1" />
               <div className="col-lg-10">
                 <Grid container spacing={3}>
-                  {Object.keys(state).map((module) => {
+                  {keys.map((module) => {
                     return (
                       <Grid item xs={4}>
                         <div className="card">
@@ -70,6 +88,7 @@ const SystemPage = (props) => {
                                   <FormControlLabel
                                     control={
                                       <Switch
+                                        checked={state[module]}
                                         onChange={() => {
                                           setState((prevState) => ({
                                             ...prevState,
