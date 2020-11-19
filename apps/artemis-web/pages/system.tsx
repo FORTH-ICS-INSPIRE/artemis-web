@@ -27,7 +27,10 @@ const SystemPage = (props) => {
 
   const modules = processes
     ? processes.map((ps) => {
-        return [ps['name'], ps['running']];
+        return [
+          ps['name'].charAt(0).toUpperCase() + ps['name'].slice(1),
+          ps['running'],
+        ];
       })
     : [];
 
