@@ -3,6 +3,7 @@ import argon2 from 'argon2';
 import { Strategy as LocalStrategy } from 'passport-local';
 import { Strategy as RememberMeStrategy } from 'passport-remember-me';
 import getRandomString from '../utils/token';
+const LdapStrategy = require('passport-ldapauth').Strategy;
 
 let dbInstance = null;
 
@@ -18,6 +19,28 @@ passport.deserializeUser((req, email, done) => {
       done(null, user);
     });
 });
+
+const getLDAPConfiguration = function (req, callback) {
+  process.nextTick(function () {
+    const OPTS = {
+      server: {
+        url: `${process.env['SECURITY_LDAP_URI']}://localhost:389`,
+        bindDn: process.env['SECURITY_LDAP_BIND_DN'],
+        bindCredentials: process.env['SECURITY_LDAP_BIND_PASSWORD'],
+        searchBase: process.env['SECURITY_LDAP_BASE_DN'],
+        searchFilter: process.env['SECURITY_LDAP_SEARCH_FILTER'],
+      },
+    };
+    callback(null, OPTS);
+  });
+};
+
+passport.use(
+  new LdapStrategy(getLDAPConfiguration, function (user, done) {
+    console.log(user);
+    return done(null, user);
+  })
+);
 
 passport.use(
   new LocalStrategy(

@@ -100,6 +100,26 @@ const SignIn = (props) => {
     }
   }
 
+  async function onLDAP(e) {
+    e.preventDefault();
+
+    const body = {
+      username: 'admin',
+      password: 'GoodNewsEveryone',
+    };
+
+    const res = await fetch('/api/ldap', {
+      method: 'POST',
+      // withCredentials: true,
+      credentials: 'include',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(body),
+    });
+  }
+
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="sm">
@@ -158,6 +178,15 @@ const SignIn = (props) => {
               className={props.classes.submit}
             >
               Sign In
+            </Button>
+            <Button
+              fullWidth
+              variant="contained"
+              color="primary"
+              className={props.classes.submit}
+              onClick={onLDAP}
+            >
+              LDAP
             </Button>
             <Grid container>
               <Grid style={{ textAlign: 'left' }} item xs></Grid>
