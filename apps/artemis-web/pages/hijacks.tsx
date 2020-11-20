@@ -9,7 +9,7 @@ import {
 } from '@material-ui/core';
 import Head from 'next/head';
 import React, { useState } from 'react';
-import { toast, ToastContainer } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import NotFoundHOC from '../components/404-hoc/404-hoc';
 import HijackTableComponent from '../components/hijack-table/hijack-table';

@@ -6,8 +6,8 @@ import {
   orange,
 } from '@material-ui/core/colors';
 import Container from '@material-ui/core/Container';
+import CssBaseline from '@material-ui/core/CssBaseline';
 import Grid from '@material-ui/core/Grid';
-import Link from '@material-ui/core/Link';
 import {
   createMuiTheme,
   makeStyles,
@@ -56,30 +56,9 @@ const useStyles = makeStyles((_theme) => ({
   },
 }));
 
-const SignUp = (props) => {
+const PasswordChange = (props) => {
   const { classes } = props;
-  const [errorMsg, setErrorMsg] = useState('');
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const body = {
-      email: e.currentTarget.email.value,
-      name: e.currentTarget.name.value,
-      password: e.currentTarget.password.value,
-    };
-
-    const res = await fetch('/api/users', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body),
-    });
-
-    if (res.status === 200) {
-      window.location.reload();
-    } else {
-      setErrorMsg(await res.text());
-    }
-  };
+  const [errorMsg, _] = useState('');
 
   return (
     <ThemeProvider theme={theme}>
@@ -92,22 +71,23 @@ const SignUp = (props) => {
             className="img-responsive"
           />
           <Typography className={classes.input} component="h1" variant="h5">
-            Sign up
+            Change Password
           </Typography>
-          <form method="post" onSubmit={handleSubmit} className={classes.form}>
+          <form method="post" className={classes.form}>
             {errorMsg ? <p style={{ color: 'red' }}>{errorMsg}</p> : null}
             <input name="emailVerified" type="hidden" defaultValue={'true'} />
             <input name="stype" type="hidden" defaultValue="signup" />
             <Grid container spacing={2}>
               <Grid item xs={12} sm={12}>
                 <TextField
-                  autoComplete="uname"
                   name="name"
                   variant="outlined"
                   required
                   fullWidth
-                  id="username"
-                  label="Username"
+                  id="old_password"
+                  label="Old Password"
+                  autoComplete="current-password"
+                  type="password"
                   autoFocus
                 />
               </Grid>
@@ -116,10 +96,10 @@ const SignUp = (props) => {
                   variant="outlined"
                   required
                   fullWidth
-                  id="email"
-                  label="Email Address"
-                  name="email"
-                  autoComplete="email"
+                  id="new_password"
+                  label="New Password"
+                  name="new_password"
+                  type="password"
                 />
               </Grid>
               <Grid item xs={12}>
@@ -127,11 +107,10 @@ const SignUp = (props) => {
                   variant="outlined"
                   required
                   fullWidth
-                  name="password"
-                  label="Password"
+                  name="repeat_password"
+                  label="Repeat Password"
                   type="password"
-                  id="password"
-                  autoComplete="current-password"
+                  id="repeat_password"
                 />
               </Grid>
             </Grid>
@@ -143,15 +122,8 @@ const SignUp = (props) => {
               color="primary"
               className={classes.submit}
             >
-              Sign Up
+              Change Password
             </Button>
-            <Grid container justify="flex-end">
-              <Grid item>
-                <Link href="/signin" variant="body2">
-                  Already have an account? Sign in
-                </Link>
-              </Grid>
-            </Grid>
           </form>
         </div>
       </Container>
@@ -159,9 +131,9 @@ const SignUp = (props) => {
   );
 };
 
-const SignUpComponent = (props) => {
+const PasswordChangeComponent = (props) => {
   const classes = useStyles();
-  return <SignUp classes={classes} />;
+  return <PasswordChange classes={classes} />;
 };
 
-export default SignUpComponent;
+export default PasswordChangeComponent;
