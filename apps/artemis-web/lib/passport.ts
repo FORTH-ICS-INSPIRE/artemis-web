@@ -20,18 +20,20 @@ passport.deserializeUser((req, email, done) => {
     });
 });
 
-const OPTS = {
-  server: {
-    url: 'ldap://localhost:389',
-    bindDn: 'cn=admin,dc=planetexpress,dc=com',
-    bindCredentials: 'GoodNewsEveryone',
-    searchBase: 'ou=people,dc=planetexpress,dc=com',
-    searchFilter: '(uid={{username}})',
-    // searchAttributes: ['mail', 'uid']
-  }
-};
-
-passport.use(new LdapStrategy(OPTS));
+passport.use(
+  new LdapStrategy(
+    {
+      server: {
+        url: 'ldap://localhost:389',
+        bindDn: 'cn=admin,dc=planetexpress,dc=com',
+        bindCredentials: 'GoodNewsEveryone',
+        searchBase: 'ou=people,dc=planetexpress,dc=com',
+        searchFilter: '(uid={{username}})',
+        // searchAttributes: ['mail', 'uid']
+      }
+    }
+  )
+);
 
 passport.use(
   new LocalStrategy(

@@ -11,7 +11,6 @@ const handler = nc()
   .post(
     passport.authenticate('ldapauth', { session: false }),
     (req: NextApiRequestExtended, res: NextApiResponseExtended) => {
-      console.log("test");
       res.send({ status: "ok" })
     }
   );
