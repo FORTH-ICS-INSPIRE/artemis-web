@@ -1,13 +1,19 @@
-import nextConnect from 'next-connect';
+import nc from 'next-connect';
 import passport from '../../lib/passport';
+import {
+  NextApiRequestExtended,
+  NextApiResponseExtended,
+} from '../../definitions';
 import auth from '../../middleware/auth';
 
-const handler = nextConnect()
+const handler = nc()
   .use(auth)
   .post(
-    passport.authenticate('ldapauth', {
-      session: false,
-    })
+    passport.authenticate('ldapauth', { session: false }),
+    (req: NextApiRequestExtended, res: NextApiResponseExtended) => {
+      console.log("test");
+      res.send({ status: "ok" })
+    }
   );
 
 export default handler;

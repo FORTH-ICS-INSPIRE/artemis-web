@@ -1,10 +1,10 @@
 import passport from 'passport';
 import argon2 from 'argon2';
+import getRandomString from '../utils/token';
 import { Strategy as LocalStrategy } from 'passport-local';
 import { Strategy as RememberMeStrategy } from 'passport-remember-me';
-import getRandomString from '../utils/token';
-const LdapStrategy = require('passport-ldapauth').Strategy;
 
+const LdapStrategy = require('passport-ldapauth');
 let dbInstance = null;
 
 passport.serializeUser((user, done) => {
@@ -20,27 +20,18 @@ passport.deserializeUser((req, email, done) => {
     });
 });
 
-const getLDAPConfiguration = function (req, callback) {
-  process.nextTick(function () {
-    const OPTS = {
-      server: {
-        url: `${process.env['SECURITY_LDAP_URI']}://localhost:389`,
-        bindDn: process.env['SECURITY_LDAP_BIND_DN'],
-        bindCredentials: process.env['SECURITY_LDAP_BIND_PASSWORD'],
-        searchBase: process.env['SECURITY_LDAP_BASE_DN'],
-        searchFilter: process.env['SECURITY_LDAP_SEARCH_FILTER'],
-      },
-    };
-    callback(null, OPTS);
-  });
+const OPTS = {
+  server: {
+    url: 'ldap://localhost:389',
+    bindDn: 'cn=admin,dc=planetexpress,dc=com',
+    bindCredentials: 'GoodNewsEveryone',
+    searchBase: 'ou=people,dc=planetexpress,dc=com',
+    searchFilter: '(uid={{username}})',
+    // searchAttributes: ['mail', 'uid']
+  }
 };
 
-passport.use(
-  new LdapStrategy(getLDAPConfiguration, function (user, done) {
-    console.log(user);
-    return done(null, user);
-  })
-);
+passport.use(new LdapStrategy(OPTS));
 
 passport.use(
   new LocalStrategy(

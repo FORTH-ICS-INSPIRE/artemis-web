@@ -1,4 +1,4 @@
 #!/bin/bash
 ./wait-for -h ${MONGODB_HOST} -p ${MONGODB_PORT} -t 0
 node query.js
-yarn run nx serve artemis-web --prod
+yarn run nx serve artemis-web

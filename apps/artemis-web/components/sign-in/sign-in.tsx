@@ -104,8 +104,8 @@ const SignIn = (props) => {
     e.preventDefault();
 
     const body = {
-      username: 'admin',
-      password: 'GoodNewsEveryone',
+      username: 'amy',
+      password: 'amy',
     };
 
     const res = await fetch('/api/ldap', {
