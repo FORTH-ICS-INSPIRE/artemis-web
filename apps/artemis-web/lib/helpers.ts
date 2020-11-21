@@ -15,6 +15,28 @@ export function extractLdapUser(req) {
   if (!req.user) return null;
 
   const { cn, mail, employeeType } = req.user;
+
+  const user = req.db.collection('users').updateOne(
+    {
+      email: mail,
+      name: cn,
+    },
+    {
+      $set: {
+        email: mail,
+        password: '<REDUCTED>',
+        name: cn,
+        lastLogin: new Date(),
+        currentLogin: new Date(),
+        role: 'user', // just for testing. normally it will be 'pending'
+        token: '',
+      },
+    },
+    {
+      upsert: true,
+    }
+  );
+
   return {
     _id: 999,
     name: cn,

@@ -176,7 +176,7 @@ const SignIn = (props) => {
               className={props.classes.submit}
               onClick={(e) => onClick(e, '/api/ldap')}
             >
-              Sign In with LDAP
+              Sign in with LDAP
             </Button>
             <Grid container>
               <Grid style={{ textAlign: 'left' }} item xs></Grid>
