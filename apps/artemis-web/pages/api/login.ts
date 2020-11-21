@@ -1,4 +1,4 @@
-import nextConnect from 'next-connect';
+import nc from 'next-connect';
 import auth from '../../middleware/auth';
 import passport from '../../lib/passport';
 import { extractUser } from '../../lib/helpers';
@@ -8,7 +8,7 @@ import {
   NextApiResponseExtended,
 } from '../../definitions';
 
-const handler = nextConnect()
+const handler = nc()
   .use(auth)
   .post(
     passport.authenticate('local'),

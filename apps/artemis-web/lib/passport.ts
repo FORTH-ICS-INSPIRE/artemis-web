@@ -3,8 +3,8 @@ import argon2 from 'argon2';
 import getRandomString from '../utils/token';
 import { Strategy as LocalStrategy } from 'passport-local';
 import { Strategy as RememberMeStrategy } from 'passport-remember-me';
+import { Strategy as LdapStrategy } from 'passport-ldapauth';
 
-const LdapStrategy = require('passport-ldapauth');
 let dbInstance = null;
 
 passport.serializeUser((user, done) => {
@@ -21,18 +21,17 @@ passport.deserializeUser((req, email, done) => {
 });
 
 passport.use(
-  new LdapStrategy(
-    {
-      server: {
-        url: 'ldap://localhost:389',
-        bindDn: 'cn=admin,dc=planetexpress,dc=com',
-        bindCredentials: 'GoodNewsEveryone',
-        searchBase: 'ou=people,dc=planetexpress,dc=com',
-        searchFilter: '(uid={{username}})',
-        // searchAttributes: ['mail', 'uid']
-      }
-    }
-  )
+  new LdapStrategy({
+    server: {
+      url: 'ldap://localhost:389',
+      bindDn: 'cn=admin,dc=planetexpress,dc=com',
+      bindCredentials: 'GoodNewsEveryone',
+      searchBase: 'ou=people,dc=planetexpress,dc=com',
+      searchFilter: '(uid={{username}})',
+      searchAttributes: ['mail', 'uid', 'employeeType'],
+    },
+    usernameField: 'email',
+  })
 );
 
 passport.use(

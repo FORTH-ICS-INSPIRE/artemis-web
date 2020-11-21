@@ -1,11 +1,11 @@
-import nextConnect from 'next-connect';
+import nc from 'next-connect';
 import auth from '../../middleware/auth';
 import {
   NextApiRequestExtended,
   NextApiResponseExtended,
 } from '../../definitions';
 
-const handler = nextConnect()
+const handler = nc()
   .use(auth)
   .get((req: NextApiRequestExtended, res: NextApiResponseExtended) => {
     req.logOut();

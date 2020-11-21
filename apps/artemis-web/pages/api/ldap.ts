@@ -5,13 +5,14 @@ import {
   NextApiResponseExtended,
 } from '../../definitions';
 import auth from '../../middleware/auth';
+import { extractLdapUser } from '../../lib/helpers';
 
 const handler = nc()
   .use(auth)
   .post(
     passport.authenticate('ldapauth', { session: false }),
     (req: NextApiRequestExtended, res: NextApiResponseExtended) => {
-      res.send({ status: "ok" })
+      res.json({ user: extractLdapUser(req) });
     }
   );
 

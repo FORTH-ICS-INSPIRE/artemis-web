@@ -1,9 +1,9 @@
-import nextConnect from 'next-connect';
+import nc from 'next-connect';
 import passport from '../lib/passport';
 import database from './database';
 import session from '../middleware/session';
 
-const auth = nextConnect()
+const auth = nc()
   .use(database)
   .use(session)
   .use(passport.initialize())

@@ -63,28 +63,24 @@ const useStyles = makeStyles((_theme) => ({
 
 const SignIn = (props) => {
   const [errorMsg, setErrorMsg] = useState('');
+  const [formData, setFormData] = useState({
+    email: '',
+    password: '',
+    rememberMe: false,
+  });
   const router = useRouter();
 
-  async function onSubmit(e) {
+  async function onClick(e, endpoint) {
     e.preventDefault();
 
-    const rememberMe = e.currentTarget.remember.checked;
-
-    const body = {
-      email: e.currentTarget.email.value,
-      password: e.currentTarget.password.value,
-      rememberMe: rememberMe,
-    };
-
-    const res = await fetch('/api/login', {
+    const res = await fetch(endpoint, {
       method: 'POST',
-      // withCredentials: true,
       credentials: 'include',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(body),
+      body: JSON.stringify(formData),
     });
 
     if (res.status === 200) {
@@ -98,26 +94,6 @@ const SignIn = (props) => {
     } else {
       setErrorMsg('Incorrect username or password. Try again!');
     }
-  }
-
-  async function onLDAP(e) {
-    e.preventDefault();
-
-    const body = {
-      username: 'bender',
-      password: 'bender',
-    };
-
-    const res = await fetch('/api/ldap', {
-      method: 'POST',
-      // withCredentials: true,
-      credentials: 'include',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(body),
-    });
   }
 
   return (
@@ -138,7 +114,7 @@ const SignIn = (props) => {
             Sign in
           </Typography>
           {errorMsg && <p className="error">{errorMsg}</p>}
-          <form method="post" onSubmit={onSubmit}>
+          <form method="post">
             <input name="stype" type="hidden" defaultValue="signin" />
             <TextField
               variant="outlined"
@@ -151,6 +127,9 @@ const SignIn = (props) => {
               name="email"
               autoComplete="email"
               autoFocus
+              onChange={(e) =>
+                setFormData({ ...formData, email: e.target.value })
+              }
             />
             <TextField
               variant="outlined"
@@ -162,11 +141,21 @@ const SignIn = (props) => {
               type="password"
               id="password"
               autoComplete="current-password"
+              onChange={(e) =>
+                setFormData({ ...formData, password: e.target.value })
+              }
             />
             <FormControlLabel
               className={props.classes.input}
               control={
-                <Checkbox value="remember" name="remember" color="primary" />
+                <Checkbox
+                  value="remember"
+                  name="remember"
+                  color="primary"
+                  onChange={(e) =>
+                    setFormData({ ...formData, rememberMe: e.target.checked })
+                  }
+                />
               }
               label="Remember me"
             />
@@ -176,6 +165,7 @@ const SignIn = (props) => {
               variant="contained"
               color="primary"
               className={props.classes.submit}
+              onClick={(e) => onClick(e, '/api/login')}
             >
               Sign In
             </Button>
@@ -184,9 +174,9 @@ const SignIn = (props) => {
               variant="contained"
               color="primary"
               className={props.classes.submit}
-              onClick={onLDAP}
+              onClick={(e) => onClick(e, '/api/ldap')}
             >
-              LDAP
+              Sign In with LDAP
             </Button>
             <Grid container>
               <Grid style={{ textAlign: 'left' }} item xs></Grid>

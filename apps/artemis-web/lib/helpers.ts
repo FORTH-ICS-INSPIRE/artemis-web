@@ -11,6 +11,19 @@ export function extractUser(req) {
   };
 }
 
+export function extractLdapUser(req) {
+  if (!req.user) return null;
+
+  const { cn, mail, employeeType } = req.user;
+  return {
+    _id: 999,
+    name: cn,
+    email: mail,
+    role: 'user',
+    lastLogin: new Date(),
+  };
+}
+
 export function parseJwt(token) {
   try {
     return JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());

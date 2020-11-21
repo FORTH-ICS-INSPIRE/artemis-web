@@ -1,4 +1,4 @@
-import nextConnect from 'next-connect';
+import nc from 'next-connect';
 import isEmail from 'validator/lib/isEmail';
 import normalizeEmail from 'validator/lib/normalizeEmail';
 import argon2 from 'argon2';
@@ -9,7 +9,7 @@ import {
   NextApiResponseExtended,
 } from '../../definitions';
 
-const handler = nextConnect()
+const handler = nc()
   .use(auth)
   .post(async (req: NextApiRequestExtended, res: NextApiResponseExtended) => {
     const { name, password } = req.body;

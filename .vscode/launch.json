@@ -5,9 +5,7 @@
       "type": "node",
       "request": "attach",
       "name": "Attach Debugger",
-      "skipFiles": [
-        "node_modules/**"
-      ],
+      "skipFiles": ["node_modules/**"],
       "port": 9229
     }
   ]
