@@ -1,3 +1,5 @@
+import getRandomString from '../utils/token';
+
 export function extractUser(req) {
   if (!req.user) return null;
 
@@ -29,7 +31,7 @@ export function extractLdapUser(req) {
         lastLogin: new Date(),
         currentLogin: new Date(),
         role: 'user', // just for testing. normally it will be 'pending'
-        token: '',
+        token: getRandomString(64),
       },
     },
     {

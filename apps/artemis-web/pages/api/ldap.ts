@@ -10,8 +10,8 @@ import { extractLdapUser } from '../../lib/helpers';
 const handler = nc()
   .use(auth)
   .post(
-    passport.authenticate('ldapauth', { session: false }),
-    (req: NextApiRequestExtended, res: NextApiResponseExtended) => {
+    passport.authenticate('ldapauth'),
+    (req: NextApiRequestExtended, res: NextApiResponseExtended, next) => {
       res.json({ user: extractLdapUser(req) });
     }
   );

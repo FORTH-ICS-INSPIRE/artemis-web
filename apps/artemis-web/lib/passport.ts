@@ -4,14 +4,16 @@ import getRandomString from '../utils/token';
 import { Strategy as LocalStrategy } from 'passport-local';
 import { Strategy as RememberMeStrategy } from 'passport-remember-me';
 import { Strategy as LdapStrategy } from 'passport-ldapauth';
+import { NextApiRequestExtended } from '../definitions';
 
 let dbInstance = null;
 
-passport.serializeUser((user, done) => {
-  done(null, user.email.toString());
+passport.serializeUser((user: any, done) => {
+  const email = user?.mail || user?.email;
+  done(null, email.toString());
 });
 
-passport.deserializeUser((req, email, done) => {
+passport.deserializeUser((req: NextApiRequestExtended, email: string, done) => {
   req.db
     .collection('users')
     .findOne({ email: email })
