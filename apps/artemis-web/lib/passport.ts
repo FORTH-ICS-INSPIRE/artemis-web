@@ -9,7 +9,7 @@ import { NextApiRequestExtended } from '../definitions';
 let dbInstance = null;
 
 passport.serializeUser((user: any, done) => {
-  const email = user?.mail || user?.email;
+  const email = user?.email || user[process.env.LDAP_EMAIL_FIELDNAME];
   done(null, email.toString());
 });
 
@@ -25,12 +25,12 @@ passport.deserializeUser((req: NextApiRequestExtended, email: string, done) => {
 passport.use(
   new LdapStrategy({
     server: {
-      url: 'ldap://localhost:389',
-      bindDn: 'cn=admin,dc=planetexpress,dc=com',
-      bindCredentials: 'GoodNewsEveryone',
-      searchBase: 'ou=people,dc=planetexpress,dc=com',
-      searchFilter: '(uid={{username}})',
-      searchAttributes: ['mail', 'uid', 'employeeType'],
+      url: process.env.LDAP_URI,
+      bindDn: process.env.LDAP_BIND_DN,
+      bindCredentials: process.env.LDAP_BIND_SECRET,
+      searchBase: process.env.LDAP_SEARCH_BASE,
+      searchFilter: process.env.LDAP_SEARCH_FILTER,
+      searchAttributes: process.env.LDAP_SEARCH_ATTRIBUTES.split(','),
     },
     usernameField: 'email',
   })

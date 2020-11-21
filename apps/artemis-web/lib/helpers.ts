@@ -16,18 +16,17 @@ export function extractUser(req) {
 export function extractLdapUser(req) {
   if (!req.user) return null;
 
-  const { cn, mail, employeeType } = req.user;
+  const mail = req.user[process.env.LDAP_EMAIL_FIELDNAME];
 
   const user = req.db.collection('users').updateOne(
     {
       email: mail,
-      name: cn,
     },
     {
       $set: {
+        name: mail,
         email: mail,
         password: '<REDUCTED>',
-        name: cn,
         lastLogin: new Date(),
         currentLogin: new Date(),
         role: 'user', // just for testing. normally it will be 'pending'
@@ -41,7 +40,7 @@ export function extractLdapUser(req) {
 
   return {
     _id: 999,
-    name: cn,
+    name: mail,
     email: mail,
     role: 'user',
     lastLogin: new Date(),
