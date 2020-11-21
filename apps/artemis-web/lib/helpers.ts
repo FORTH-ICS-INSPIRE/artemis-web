@@ -18,7 +18,7 @@ export function extractLdapUser(req) {
 
   const mail = req.user[process.env.LDAP_EMAIL_FIELDNAME];
 
-  const user = req.db.collection('users').updateOne(
+  req.db.collection('users').updateOne(
     {
       email: mail,
     },

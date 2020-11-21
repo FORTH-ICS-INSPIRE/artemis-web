@@ -135,7 +135,7 @@ const Header = (props) => {
             {!user && (
               <>
                 <li id="security.login" className="nav-item">
-                  <Link href="/signin">
+                  <Link href="/login">
                     <a href="/#" className="nav-link">
                       Login
                     </a>
@@ -153,7 +153,7 @@ const Header = (props) => {
             {user && (
               <li className="nav-item">
                 <a id="logout" className="nav-link" onClick={handleLogout}>
-                  Sign out
+                  Logout
                 </a>
               </li>
             )}

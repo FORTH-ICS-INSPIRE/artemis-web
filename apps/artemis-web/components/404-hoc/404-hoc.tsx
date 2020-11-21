@@ -8,7 +8,7 @@ const NotFoundHOC = (WrappedComponent, ACL = []) => {
   const Wrapped = (props) => {
     const [user, loading] = useJWT();
     const router = useRouter();
-    if (!user && !loading) router.push('signin');
+    if (!user && !loading) router.push('login');
 
     if (user && !loading && !ACL.includes(user.role)) {
       return (

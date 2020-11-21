@@ -23,11 +23,11 @@ describe('artemis-web', () => {
     // Custom command example, see `../support/commands.ts` file
     cy.get('#logout', { timeout: 4000 }).click({ force: true });
     cy.wait(2000);
-    cy.get('h1').should('have.text', 'Sign in');
+    cy.get('h1').should('have.text', 'Login');
   });
 
   it('logs in', () => {
-    cy.get('h1').should('have.text', 'Sign in');
+    cy.get('h1').should('have.text', 'Login');
     cy.typeLogin({ email: newEmail, password: newPass });
     cy.login();
   });

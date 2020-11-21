@@ -63,7 +63,7 @@ const useStyles = makeStyles((_theme) => ({
   },
 }));
 
-const SignIn = (props) => {
+const Login = (props) => {
   const [errorMsg, setErrorMsg] = useState('');
   const [formData, setFormData] = useState({
     email: '',
@@ -113,11 +113,11 @@ const SignIn = (props) => {
             component="h1"
             variant="h5"
           >
-            Sign in
+            Login
           </Typography>
           {errorMsg && <p className="error">{errorMsg}</p>}
           <form method="post">
-            <input name="stype" type="hidden" defaultValue="signin" />
+            <input name="stype" type="hidden" defaultValue="login" />
             <TextField
               variant="outlined"
               margin="normal"
@@ -169,7 +169,7 @@ const SignIn = (props) => {
               className={props.classes.submit}
               onClick={(e) => onClick(e, '/api/login')}
             >
-              Sign In
+              Login
             </Button>
             <Button
               fullWidth
@@ -178,7 +178,7 @@ const SignIn = (props) => {
               className={props.classes.submit}
               onClick={(e) => onClick(e, '/api/ldap')}
             >
-              Sign in with LDAP
+              Login with LDAP
             </Button>
             <Grid container>
               <Grid style={{ textAlign: 'left' }} item xs></Grid>
@@ -195,8 +195,8 @@ const SignIn = (props) => {
   );
 };
 
-const SignInComponent = (props) => {
+const LoginComponent = (props) => {
   const classes = useStyles();
-  return <SignIn {...props} classes={classes} />;
+  return <Login {...props} classes={classes} />;
 };
-export default SignInComponent;
+export default LoginComponent;

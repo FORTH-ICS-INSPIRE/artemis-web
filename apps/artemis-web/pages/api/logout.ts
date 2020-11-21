@@ -17,7 +17,7 @@ const handler = nc()
     req.logOut();
     res.clearCookie('remember_me');
     res.clearCookie('access_token');
-    res.writeHead(204, { Location: '/signin' });
+    res.writeHead(204, { Location: '/login' });
     res.end();
   });
 
