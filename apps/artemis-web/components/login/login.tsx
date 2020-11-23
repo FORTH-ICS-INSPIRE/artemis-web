@@ -94,7 +94,8 @@ const Login = (props) => {
       }
       window.location.reload();
     } else {
-      setErrorMsg('Incorrect username or password. Try again!');
+      const msg = await res.text();
+      setErrorMsg(msg);
     }
   }
 
@@ -167,7 +168,7 @@ const Login = (props) => {
               variant="contained"
               color="primary"
               className={props.classes.submit}
-              onClick={(e) => onClick(e, '/api/login')}
+              onClick={(e) => onClick(e, '/api/auth/login/credentials')}
             >
               Login
             </Button>
@@ -177,7 +178,7 @@ const Login = (props) => {
               color="primary"
               id="ldap_login"
               className={props.classes.submit}
-              onClick={(e) => onClick(e, '/api/ldap')}
+              onClick={(e) => onClick(e, '/api/auth/login/ldap')}
             >
               Login with LDAP
             </Button>

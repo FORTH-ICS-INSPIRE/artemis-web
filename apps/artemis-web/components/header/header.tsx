@@ -1,16 +1,14 @@
 import { Menu, MenuItem } from '@material-ui/core';
 import Link from 'next/link';
 import React from 'react';
-import { useFetch } from '../../hooks/useJWT';
-import { parseJwt } from '../../lib/helpers';
+import { useState } from 'react';
+import { useJWT } from '../../utils/hooks/use-jwt';
 
 const Header = (props) => {
-  const { data } = useFetch('/api/jwt');
-  const jwt = data ? parseJwt(data) : null;
-  const user = jwt ? jwt.user : null;
+  const [user, _] = useJWT();
 
-  const [anchorAdmin, setAnchorAdmin] = React.useState(null);
-  const [anchorAction, setAnchorAction] = React.useState(null);
+  const [anchorAdmin, setAnchorAdmin] = useState(null);
+  const [anchorAction, setAnchorAction] = useState(null);
 
   const handleClickAdmin = (event) => {
     setAnchorAdmin(event.currentTarget);
@@ -29,7 +27,7 @@ const Header = (props) => {
   };
 
   const handleLogout = async () => {
-    await fetch('/api/logout', {
+    await fetch('/api/auth/logout', {
       method: 'DELETE',
     });
 
@@ -91,10 +89,10 @@ const Header = (props) => {
                     style={{ top: '36px' }}
                   >
                     <MenuItem onClick={handleCloseAdmin}>
-                      <Link href="/system">System</Link>
+                      <Link href="/admin/system">System</Link>
                     </MenuItem>
                     <MenuItem onClick={handleCloseAdmin}>
-                      <Link href="/user_management">User Management</Link>
+                      <Link href="/admin/user_management">User Management</Link>
                     </MenuItem>
                   </Menu>
                 </div>

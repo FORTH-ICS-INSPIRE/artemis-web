@@ -1,9 +1,9 @@
 import nc from 'next-connect';
-import auth from '../../middleware/auth';
+import auth from '../../../middleware/auth';
 import {
   NextApiRequestExtended,
   NextApiResponseExtended,
-} from '../../definitions';
+} from '../../../definitions';
 
 const handler = nc()
   .use(auth)

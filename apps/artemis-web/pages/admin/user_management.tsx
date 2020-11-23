@@ -1,8 +1,8 @@
 import { Button } from '@material-ui/core';
 import Head from 'next/head';
 import React from 'react';
-import NotFoundHOC from '../components/404-hoc/404-hoc';
-import UserListComponent from '../components/user-list/user-list';
+import NotFoundHOC from '../../components/404-hoc/404-hoc';
+import UserListComponent from '../../components/user-list/user-list';
 
 const UserManagementPage = (props) => {
   const user = props.user;

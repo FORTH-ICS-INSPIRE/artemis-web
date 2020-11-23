@@ -53,7 +53,7 @@ describe('artemis-web', () => {
 
   it('logs in with ldap', () => {
     cy.get('h1').should('have.text', 'Login');
-    cy.typeLogin({ email: 'hermes', password: 'hermes' });
+    cy.typeLogin({ email: 'hermes@planetexpress.com', password: 'hermes' });
     cy.loginLDAP();
     cy.waitFor('h1');
     cy.get('h1').should('have.text', 'Dashboard');

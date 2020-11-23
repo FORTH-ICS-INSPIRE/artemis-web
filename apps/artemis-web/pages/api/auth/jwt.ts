@@ -1,10 +1,10 @@
 import nc from 'next-connect';
-import auth from '../../middleware/auth';
-import { extractUser } from '../../lib/helpers';
+import auth from '../../../middleware/auth';
+import { extractUser } from '../../../utils/parsers';
 import {
   NextApiRequestExtended,
   NextApiResponseExtended,
-} from '../../definitions';
+} from '../../../definitions';
 import jwt from 'jsonwebtoken';
 
 const handler = nc()

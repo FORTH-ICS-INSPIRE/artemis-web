@@ -10,7 +10,7 @@ import {
   ONGOING_HIJACK_SUB,
   STATS_QUERY,
   STATS_SUB,
-} from '../utils/graphql';
+} from '../../libs/graphql';
 
 export function useGraphQl(module, isProduction, isLive = true) {
   let data: any;

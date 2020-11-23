@@ -1,4 +1,4 @@
-const getRandomString = (len) => {
+export const getRandomString = (len) => {
   const buf = [],
     chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789',
     charlen = chars.length;
@@ -13,5 +13,3 @@ const getRandomString = (len) => {
 const getRandomInt = (min, max) => {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
-
-export default getRandomString;

@@ -13,7 +13,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import NotFoundHOC from '../components/404-hoc/404-hoc';
 import BGPTableComponent from '../components/bgp-table/bgp-table';
-import { useGraphQl } from '../hooks/useGraphQL';
+import { useGraphQl } from '../utils/hooks/use-graphql';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -32,7 +32,7 @@ const BGPUpdates = (props) => {
   if (process.env.NODE_ENV === 'development') {
     if (typeof window !== 'undefined') {
       // eslint-disable-next-line @typescript-eslint/no-var-requires
-      const { worker } = require('../mocks/browser');
+      const { worker } = require('../utils/mock-sw/browser');
       worker.start();
     }
   }

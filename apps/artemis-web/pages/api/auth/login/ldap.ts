@@ -1,11 +1,11 @@
 import nc from 'next-connect';
-import passport from '../../lib/passport';
+import passport from '../../../../libs/passport';
 import {
   NextApiRequestExtended,
   NextApiResponseExtended,
-} from '../../definitions';
-import auth from '../../middleware/auth';
-import { extractLdapUser } from '../../lib/helpers';
+} from '../../../../definitions';
+import auth from '../../../../middleware/auth';
+import { extractLdapUser } from '../../../../utils/parsers';
 
 const handler = nc()
   .use(auth)

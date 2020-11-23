@@ -1,6 +1,6 @@
 import nc from 'next-connect';
-import auth from '../../middleware/auth';
-import { extractUser } from '../../lib/helpers';
+import auth from '../../../middleware/auth';
+import { extractUser } from '../../../utils/parsers';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 const handler = nc()

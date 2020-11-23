@@ -1,4 +1,4 @@
-import { useJWT } from '../../hooks/useJWT';
+import { useJWT } from '../../utils/hooks/use-jwt';
 import DefaultErrorPage from 'next/error';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
@@ -8,7 +8,9 @@ const NotFoundHOC = (WrappedComponent, ACL = []) => {
   const Wrapped = (props) => {
     const [user, loading] = useJWT();
     const router = useRouter();
-    if (!user && !loading) router.push('login');
+    if (!user && !loading) {
+      router.push('/login');
+    }
 
     if (user && !loading && !ACL.includes(user.role)) {
       return (

@@ -7,19 +7,19 @@ import NotFoundHOC from '../components/404-hoc/404-hoc';
 import OngoingHijackTableComponent from '../components/ongoing-hijack-table/ongoing-hijack-table';
 import StatisticsTable from '../components/statistics-table/statistics-table';
 import StatusTable from '../components/status-table/status-table';
-import { useGraphQl } from '../hooks/useGraphQL';
+import { useGraphQl } from '../utils/hooks/use-graphql';
 
 const DashboardPage = (props) => {
   if (process.env.NODE_ENV === 'development') {
     if (typeof window !== 'undefined') {
       // eslint-disable-next-line @typescript-eslint/no-var-requires
-      const { worker } = require('../mocks/browser');
+      const { worker } = require('../utils/mock-sw/browser');
       worker.start();
     }
   }
 
   const user = props.user;
-  const notify = (message) => toast(message);
+  const notify = (message: React.ReactText) => toast(message);
 
   const STATS_DATA = useGraphQl('stats', props.isProduction);
   const HIJACK_DATA = useGraphQl('ongoing_hijack', props.isProduction);

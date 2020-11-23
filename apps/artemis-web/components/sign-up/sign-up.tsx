@@ -70,7 +70,7 @@ const SignUp = (props) => {
       password: e.currentTarget.password.value,
     };
 
-    const res = await fetch('/api/users', {
+    const res = await fetch('/api/auth/signup', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body),
