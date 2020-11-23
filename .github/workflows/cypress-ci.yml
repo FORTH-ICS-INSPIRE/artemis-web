@@ -21,22 +21,29 @@ jobs:
       mongodb:
         image: mongo
         ports:
-        - 27017:27017
+          - 27017:27017
         env:
           MONGO_INITDB_ROOT_USERNAME: admin
           MONGO_INITDB_ROOT_PASSWORD: pass
+      ldap:
+        image: rroemhild/test-openldap
+        container_name: ldap
+        restart: always
+        ports:
+          - '389:389'
+          - '636:636'
 
     steps:
-    - uses: actions/checkout@v1
-    - run: yarn install --frozen-lockfile
-    - run: yarn run nx e2e artemis-web-e2e
-      env:
-        MONGODB_HOST: mongodb
-        MONGODB_PORT: ${{ job.services.mongodb.ports[27017] }}
-    - name: 'Upload Artifact'
-      if: failure()
-      uses: actions/upload-artifact@v2
-      with:
-        name: cypress
-        path: dist/cypress
-        retention-days: 5
+      - uses: actions/checkout@v1
+      - run: yarn install --frozen-lockfile
+      - run: yarn run nx e2e artemis-web-e2e
+        env:
+          MONGODB_HOST: mongodb
+          MONGODB_PORT: ${{ job.services.mongodb.ports[27017] }}
+      - name: 'Upload Artifact'
+        if: failure()
+        uses: actions/upload-artifact@v2
+        with:
+          name: cypress
+          path: dist/cypress
+          retention-days: 5
