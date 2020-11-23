@@ -1,10 +1,8 @@
 import { MongoClient } from 'mongodb';
 
-const MONGODB_URI = `mongodb://${process.env.MONGODB_USER}:${process.env.MONGODB_PASS}@${process.env.MONGODB_HOST}:${process.env.MONGODB_PORT}`;
-
-const client = new MongoClient(MONGODB_URI, {
+const client = new MongoClient(process.env.MONGODB_URI, {
   useNewUrlParser: true,
-  useUnifiedTopology: true,
+  useUnifiedTopology: false,
 });
 
 export async function setUpDb(db) {

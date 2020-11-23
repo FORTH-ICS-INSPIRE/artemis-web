@@ -14,7 +14,7 @@ const cache = {};
 
 export const useFetch = (url) => {
   const [status, setStatus] = useState('idle');
-  const [data, setData] = useState("");
+  const [data, setData] = useState('');
 
   useEffect(() => {
     if (!url) return;
