@@ -7,13 +7,7 @@ const auth = nc()
   .use(database)
   .use(session)
   .use(passport.initialize())
-  .use(
-    passport.session({
-      cookie: {
-        secure: process.env.NODE_ENV === 'production',
-      },
-    })
-  )
+  .use(passport.session())
   .use(passport.authenticate('remember-me'));
 
 export default auth;

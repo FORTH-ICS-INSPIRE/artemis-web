@@ -3,9 +3,10 @@ import argon2 from 'argon2';
 import getRandomString from '../utils/token';
 import { Strategy as LocalStrategy } from 'passport-local';
 import { Strategy as RememberMeStrategy } from 'passport-remember-me';
-import { Strategy as LdapStrategy } from 'passport-ldapauth';
+import Strategy from 'passport-ldapauth';
 import { NextApiRequestExtended } from '../definitions';
 
+const LdapStrategy = Strategy;
 let dbInstance = null;
 
 passport.serializeUser((user: any, done) => {
@@ -26,7 +27,7 @@ passport.use(
   new LdapStrategy({
     server: {
       url: process.env.LDAP_URI,
-      bindDn: process.env.LDAP_BIND_DN,
+      bindDN: process.env.LDAP_BIND_DN,
       bindCredentials: process.env.LDAP_BIND_SECRET,
       searchBase: process.env.LDAP_SEARCH_BASE,
       searchFilter: process.env.LDAP_SEARCH_FILTER,
