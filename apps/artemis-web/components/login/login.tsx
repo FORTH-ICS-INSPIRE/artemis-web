@@ -175,6 +175,7 @@ const Login = (props) => {
               fullWidth
               variant="contained"
               color="primary"
+              id="ldap_login"
               className={props.classes.submit}
               onClick={(e) => onClick(e, '/api/ldap')}
             >

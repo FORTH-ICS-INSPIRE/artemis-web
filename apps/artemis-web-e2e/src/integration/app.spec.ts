@@ -43,4 +43,19 @@ describe('artemis-web', () => {
     // Custom command example, see `../support/commands.ts` file
     cy.get('#modules').find('tr').its('length').should('be.gt', 0);
   });
+
+  it('logs out', () => {
+    // Custom command example, see `../support/commands.ts` file
+    cy.get('#logout', { timeout: 4000 }).click({ force: true });
+    cy.wait(2000);
+    cy.get('h1').should('have.text', 'Login');
+  });
+
+  it('logs in with ldap', () => {
+    cy.get('h1').should('have.text', 'Login');
+    cy.typeLogin({ email: 'hermes', password: 'hermes' });
+    cy.loginLDAP();
+    cy.waitFor('h1');
+    cy.get('h1').should('have.text', 'Dashboard');
+  });
 });
