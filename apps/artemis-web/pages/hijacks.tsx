@@ -86,6 +86,7 @@ const HijacksPage = (props) => {
   const filteredDate = new Date();
   filteredDate.setHours(filteredDate.getHours() - filterDate);
 
+  console.log(filterDate);
   const filteredHijacks =
     filterDate !== 0
       ? hijacks.filter(
