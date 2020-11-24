@@ -104,7 +104,7 @@ export const handlers = [
             as_path: [64271, 6939, 56910, 8522],
             service: 'bgpstreamlive|ris|rrc01',
             type: 'A',
-            communities: [],
+            communities: ['a'],
             timestamp: '2020-11-04T12:07:25',
             hijack_key: [],
             handled: true,

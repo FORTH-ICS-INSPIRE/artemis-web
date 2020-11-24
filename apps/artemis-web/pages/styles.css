@@ -2,6 +2,11 @@
   text-align: center;
 }
 
+.expand-cell,
+.expand-cell-header {
+  cursor: pointer !important;
+}
+
 .hv-center {
   display: flex;
   justify-content: center;
