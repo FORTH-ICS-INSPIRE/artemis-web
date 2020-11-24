@@ -1,5 +1,118 @@
 import React from 'react';
-import BootstrapTable from 'react-bootstrap-table-next';
+import BootstrapTable, { ExpandRowProps } from 'react-bootstrap-table-next';
+import filterFactory, {
+  textFilter,
+  Comparator,
+  selectFilter,
+} from 'react-bootstrap-table2-filter';
+import paginationFActory from 'react-bootstrap-table2-paginator';
+
+const exactMatchFilter = textFilter({
+  placeholder: '', // custom the input placeholder
+  className: 'my-custom-text-filter', // custom classname on input
+  defaultValue: '', // default filtering value
+  comparator: Comparator.EQ, // default is Comparator.LIKE
+  caseSensitive: true, // default is false, and true will only work when comparator is LIKE
+  style: {}, // your custom styles on input
+  delay: 1000, // how long will trigger filtering after user typing, default is 500 ms
+  id: 'id', // assign a unique value for htmlFor attribute, it's useful when you have same dataField across multiple table in one page
+});
+
+const selectOptions = {
+  0: 'A',
+  1: 'W',
+};
+
+const expandRow: ExpandRowProps<any, number> = {
+  showExpandColumn: true,
+  expandByColumnOnly: true,
+  expandColumnPosition: 'right',
+  renderer: (row) => {
+    console.log(row);
+    return (
+      <table>
+        <tr>
+          <td>
+            <b>Prefix:</b>
+          </td>
+          <td>{row.prefix}</td>
+        </tr>
+        <tr>
+          <td>
+            <b>Origin AS:</b>
+          </td>
+          <td>{row.origin_as}</td>
+        </tr>
+        <tr>
+          <td>
+            <b>AS Path:</b>
+          </td>
+          <td>{row.orig_path}</td>
+        </tr>
+        <tr>
+          <td>
+            <b>Aux Path Information:</b>
+          </td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>
+            <b>Peer AS:</b>
+          </td>
+          <td>{row.peer_asn}</td>
+        </tr>
+        <tr>
+          <td>
+            <b>Service:</b>
+          </td>
+          <td>{row.service}</td>
+        </tr>
+        <tr>
+          <td>
+            <b>Type:</b>
+          </td>
+          <td>{row.type}</td>
+        </tr>
+        <tr>
+          <td>
+            <b>Communities:</b>
+          </td>
+          <td>{row.communities}</td>
+        </tr>
+        <tr>
+          <td>
+            <b>Timestamp:</b>
+          </td>
+          <td>{row.timestamp}</td>
+        </tr>
+        <tr>
+          <td>
+            <b>Hijack_key:</b>
+          </td>
+          <td>{row.hijack_key}</td>
+        </tr>
+        <tr>
+          <td>
+            <b>Matched Prefix:</b>
+          </td>
+          <td>{row.matched_prefix}</td>
+        </tr>
+        <tr>
+          <td>
+            <b>View Hijack:</b>
+          </td>
+          <td>{row.origin_as}</td>
+        </tr>
+        <tr>
+          <td>
+            <b>Handled:</b>
+          </td>
+          <td>{row.handled}</td>
+        </tr>
+      </table>
+    );
+  },
+};
 
 const columns = [
   {
@@ -38,39 +151,49 @@ const columns = [
     dataField: 'prefix',
     text: 'Prefix',
     headerTitle: () => 'The IPv4/IPv6 prefix related to the BGP update.',
+    filter: exactMatchFilter,
   },
   {
     dataField: 'matched_prefix',
     headerTitle: () => 'The IPv4/IPv6 prefix that was hijacked.',
     text: 'Matched Prefix',
+    filter: exactMatchFilter,
   },
   {
     dataField: 'origin_as',
     headerTitle: () => 'The AS that originated the BGP update.',
     text: 'Origin AS',
+    filter: exactMatchFilter,
   },
   {
     dataField: 'as_path',
     headerTitle: () => 'The AS-level path of the update.',
     text: 'AS Path',
+    filter: textFilter(),
   },
   {
     dataField: 'peer_asn',
     headerTitle: () =>
       'The route collector service that is connected to the monitor AS that observed the BGP update.',
     text: 'Peer As',
+    filter: exactMatchFilter,
   },
   {
     dataField: 'service',
     headerTitle: () =>
       'The route collector service that is connected to the monitor AS that observed the BGP update.',
     text: 'Service',
+    filter: textFilter(),
   },
   {
     dataField: 'type',
     text: 'Type',
     headerTitle: () =>
       '<ul><li>A → route announcement</li><li>W → route withdrawal</li></ul>',
+    formatter: (cell) => selectOptions[cell],
+    filter: selectFilter({
+      options: selectOptions,
+    }),
   },
   {
     dataField: 'hijack_key',
@@ -84,17 +207,22 @@ const columns = [
       'Whether the BGP update has been handled by the detection module or not.',
     text: 'Status',
   },
-  {
-    dataField: 'more',
-    headerTitle: () => 'Further information related to the BGP update.',
-    text: 'More',
-  },
 ];
 
 const BGPTableComponent = (props) => {
   const bgp = props.data;
 
-  return <BootstrapTable keyField="timestamp" data={bgp} columns={columns} />;
+  return (
+    <BootstrapTable
+      keyField="timestamp"
+      data={bgp}
+      columns={columns}
+      expandRow={expandRow}
+      filter={filterFactory()}
+      filterPosition="bottom"
+      pagination={paginationFActory({ sizePerPage: 10 })}
+    />
+  );
 };
 
 export default BGPTableComponent;

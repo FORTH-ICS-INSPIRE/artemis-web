@@ -1,5 +1,37 @@
 import React from 'react';
 import BootstrapTable from 'react-bootstrap-table-next';
+import filterFactory, {
+  textFilter,
+  Comparator,
+  selectFilter,
+} from 'react-bootstrap-table2-filter';
+import paginationFActory from 'react-bootstrap-table2-paginator';
+
+const exactMatchFilter = textFilter({
+  placeholder: '', // custom the input placeholder
+  className: 'my-custom-text-filter', // custom classname on input
+  defaultValue: '', // default filtering value
+  comparator: Comparator.EQ, // default is Comparator.LIKE
+  caseSensitive: true, // default is false, and true will only work when comparator is LIKE
+  style: {}, // your custom styles on input
+  delay: 1000, // how long will trigger filtering after user typing, default is 500 ms
+  id: 'id', // assign a unique value for htmlFor attribute, it's useful when you have same dataField across multiple table in one page
+});
+
+const selectType = {
+  0: 'E',
+  1: '0',
+  2: '-',
+};
+
+const selectRPKI = {
+  0: 'VD',
+  1: 'IA',
+  2: 'IL',
+  3: 'IU',
+  4: 'NF',
+  5: 'NA',
+};
 
 const columns = [
   {
@@ -76,29 +108,40 @@ const columns = [
     dataField: 'hprefix',
     headerTitle: () => 'The IPv4/IPv6 prefix that was hijacked.',
     text: 'Hijacked Prefix',
+    filter: exactMatchFilter,
   },
   {
     dataField: 'mprefix',
     headerTitle: () =>
       'The configured IPv4/IPv6 prefix that matched the hijacked prefix.',
     text: 'Matched Prefix',
+    filter: exactMatchFilter,
   },
   {
     dataField: 'type',
     headerTitle: () =>
       'The type of the hijack in 4 dimensions: prefix|path|data plane|policy<ul><li>[Prefix] S → Sub-prefix hijack</li>',
     text: 'Type',
+    formatter: (cell) => selectType[cell],
+    filter: selectFilter({
+      options: selectType,
+    }),
   },
   {
     dataField: 'as',
     headerTitle: () =>
       'The AS that is potentially responsible for the hijack.</br>Note that this is an experimental field.',
     text: 'Hijacked AS',
+    filter: exactMatchFilter,
   },
   {
     dataField: 'rpki',
     headerTitle: () => 'The RPKI status of the hijacked prefix.',
     text: 'RPKI',
+    formatter: (cell) => selectRPKI[cell],
+    filter: selectFilter({
+      options: selectRPKI,
+    }),
   },
   {
     dataField: 'peers',
@@ -188,18 +231,28 @@ const HijackTableComponent = (props) => {
       hprefix: row.prefix,
       mprefix: row.configured_prefix,
       type: row.type,
+      status: row.status,
       as: row.hijack_as,
       rpki: row.key,
       peers: row.num_peers_seen,
       ASes: row.num_asns_inf,
       ack: row.seen,
-      more: row.comment,
+      more: <a href={'/hijack?key=' + row.key}>View</a>,
     }));
   } else {
     hijacks = [];
   }
 
-  return <BootstrapTable keyField="update" data={hijacks} columns={columns} />;
+  return (
+    <BootstrapTable
+      keyField="update"
+      data={hijacks}
+      columns={columns}
+      filter={filterFactory()}
+      filterPosition="bottom"
+      pagination={paginationFActory({ sizePerPage: 10 })}
+    />
+  );
 };
 
 export default HijackTableComponent;
