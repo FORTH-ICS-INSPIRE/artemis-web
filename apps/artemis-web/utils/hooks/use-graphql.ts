@@ -13,37 +13,36 @@ import {
 } from '../../libs/graphql';
 
 export function useGraphQl(module, isProduction, isLive = true) {
-  let data: any;
+  let res: any;
   const shallSubscribe = isProduction && isLive;
 
   /* eslint-disable react-hooks/rules-of-hooks */
   switch (module) {
     case 'stats':
-      data = shallSubscribe
-        ? useSubscription(STATS_SUB).data
-        : useQuery(STATS_QUERY).data;
+      res = shallSubscribe ? useSubscription(STATS_SUB) : useQuery(STATS_QUERY);
       break;
     case 'ongoing_hijack':
-      data = shallSubscribe
-        ? useSubscription(ONGOING_HIJACK_SUB).data
-        : useQuery(ONGOING_HIJACK_QUERY).data;
+      res = shallSubscribe
+        ? useSubscription(ONGOING_HIJACK_SUB)
+        : useQuery(ONGOING_HIJACK_QUERY);
       break;
     case 'hijack':
-      data = shallSubscribe
-        ? useSubscription(HIJACK_SUB).data
-        : useQuery(HIJACK_QUERY).data;
+      res = shallSubscribe
+        ? useSubscription(HIJACK_SUB)
+        : useQuery(HIJACK_QUERY);
       break;
     case 'bgpupdates':
-      data = shallSubscribe
-        ? useSubscription(BGP_SUB).data
-        : useQuery(BGP_QUERY).data;
+      res = shallSubscribe ? useSubscription(BGP_SUB) : useQuery(BGP_QUERY);
       break;
     case 'index_stats':
-      data = shallSubscribe
-        ? useSubscription(INDEXSTATS_SUB).data
-        : useQuery(INDEXSTATS_QUERY).data;
+      res = shallSubscribe
+        ? useSubscription(INDEXSTATS_SUB)
+        : useQuery(INDEXSTATS_QUERY);
       break;
   }
-  /* eslint-enable react-hooks/rules-of-hooks */
+  const { loading, error, data } = res;
+  if (error) {
+    console.error(error);
+  }
   return data;
 }

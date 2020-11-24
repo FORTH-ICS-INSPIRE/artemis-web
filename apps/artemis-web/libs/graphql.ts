@@ -10,15 +10,13 @@ import { getMainDefinition } from '@apollo/client/utilities';
 import { WebSocketLink } from '@apollo/client/link/ws';
 import { setContext } from '@apollo/client/link/context';
 import { useMemo } from 'react';
-import { useFetch } from '../utils/hooks/use-jwt';
 
 let accessToken = null;
 const requestToken = async () => {
   if (!accessToken) {
-    const { status, data } = useFetch('/api/auth/jwt');
-    if (data) {
-      accessToken = JSON.parse(data).accessToken;
-    }
+    const res = await fetch('/api/auth/jwt');
+    accessToken = await res.json();
+    accessToken = accessToken.accessToken;
   }
 };
 
