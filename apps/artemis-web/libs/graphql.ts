@@ -294,6 +294,110 @@ export const BGP_QUERY = gql`
   }
 `;
 
+export const getHijackByKeySub = gql`
+  subscription getHijackByKey($key: String!) {
+    view_hijacks(where: { key: { _eq: $key } }, limit: 1) {
+      key
+      type
+      prefix
+      hijack_as
+      num_peers_seen
+      num_asns_inf
+      time_started
+      time_ended
+      time_last
+      mitigation_started
+      time_detected
+      timestamp_of_config
+      under_mitigation
+      resolved
+      active
+      dormant
+      ignored
+      configured_prefix
+      comment
+      seen
+      withdrawn
+      peers_withdrawn
+      peers_seen
+      outdated
+      community_annotation
+      rpki_status
+    }
+  }
+`;
+
+export const getHijackByKeyQuery = gql`
+  query getHijackByKey($key: String!) {
+    view_hijacks(where: { key: { _eq: $key } }, limit: 1) {
+      key
+      type
+      prefix
+      hijack_as
+      num_peers_seen
+      num_asns_inf
+      time_started
+      time_ended
+      time_last
+      mitigation_started
+      time_detected
+      timestamp_of_config
+      under_mitigation
+      resolved
+      active
+      dormant
+      ignored
+      configured_prefix
+      comment
+      seen
+      withdrawn
+      peers_withdrawn
+      peers_seen
+      outdated
+      community_annotation
+      rpki_status
+    }
+  }
+`;
+
+export const getBGPByKeyQuery = gql`
+  query getBGPByKey($key: String!) {
+    view_data(limit: 10, offset: 0, args: { key: $key }) {
+      prefix
+      origin_as
+      peer_asn
+      as_path
+      service
+      type
+      communities
+      timestamp
+      hijack_key
+      handled
+      matched_prefix
+      orig_path
+    }
+  }
+`;
+
+export const getBGPByKeySub = gql`
+  subscription getBGPByKey($key: String!) {
+    search_bgpupdates_by_hijack_key(offset: 0, args: { key: $key }) {
+      prefix
+      origin_as
+      peer_asn
+      as_path
+      service
+      type
+      communities
+      timestamp
+      hijack_key
+      handled
+      matched_prefix
+      orig_path
+    }
+  }
+`;
+
 export const INDEXSTATS_SUB = gql`
   subscription getIndexAllStats {
     view_index_all_stats {

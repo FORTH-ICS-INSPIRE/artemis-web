@@ -153,4 +153,93 @@ export const handlers = [
       })
     );
   }),
+  graphql.query('getHijackByKey', (req, res, ctx) => {
+    return res(
+      ctx.data({
+        view_hijacks: [
+          {
+            key: '79e522e81453a3a439aa581aab3e93e2',
+            type: 'E|0|-|-',
+            prefix: '139.91.250.0/24',
+            hijack_as: 264409,
+            num_peers_seen: 1,
+            num_asns_inf: 0,
+            time_started: '2020-08-24T05:50:07.968767',
+            time_ended: '2020-08-24T16:53:44.457036',
+            time_last: '2020-08-24T16:53:44.457036',
+            mitigation_started: null,
+            time_detected: '2020-08-24T06:01:50.275152',
+            timestamp_of_config: '2020-07-23T16:50:27.000966',
+            under_mitigation: false,
+            resolved: false,
+            active: false,
+            dormant: false,
+            ignored: false,
+            configured_prefix: '139.91.250.0/24',
+            comment: '',
+            seen: false,
+            withdrawn: true,
+            peers_withdrawn: [264409],
+            peers_seen: [264409],
+            outdated: false,
+            community_annotation: 'NA',
+            rpki_status: 'IA',
+          },
+        ],
+      })
+    );
+  }),
+  graphql.query('getBGPByKey', (req, res, ctx) => {
+    return res(
+      ctx.data({
+        view_data: [
+          {
+            prefix: '139.91.250.0/24',
+            origin_as: -1,
+            peer_asn: 264409,
+            as_path: [],
+            service: 'implicit-withdrawal',
+            type: 'W',
+            communities: [],
+            timestamp: '2020-08-24T16:53:44.457036',
+            hijack_key: ['79e522e81453a3a439aa581aab3e93e2'],
+            handled: true,
+            matched_prefix: '139.91.250.0/24',
+            orig_path: {
+              triggering_bgp_update: {
+                key: '8345c99d52e3ff23d13af95f92280b69',
+                type: 'A',
+                prefix: '139.91.250.0/24',
+                as_path: [264409, 6939, 56910, 8522],
+                handled: false,
+                service: 'bgpstreamlive|routeviews|route-views2.saopaulo',
+                peer_asn: 264409,
+                orig_path: null,
+                origin_as: 8522,
+                timestamp: 1598288023.457036,
+                hijack_key: [],
+                communities: [],
+                matched_prefix: '139.91.250.0/24',
+                path: [264409, 6939, 56910, 8522],
+              },
+            },
+          },
+          {
+            prefix: '139.91.250.0/24',
+            origin_as: 264409,
+            peer_asn: 264409,
+            as_path: [264409, 6939, 264409],
+            service: 'bgpstreamlive|routeviews|route-views2.saopaulo',
+            type: 'A',
+            communities: [],
+            timestamp: '2020-08-24T05:50:07.968767',
+            hijack_key: ['79e522e81453a3a439aa581aab3e93e2'],
+            handled: true,
+            matched_prefix: '139.91.250.0/24',
+            orig_path: null,
+          },
+        ],
+      })
+    );
+  }),
 ];
