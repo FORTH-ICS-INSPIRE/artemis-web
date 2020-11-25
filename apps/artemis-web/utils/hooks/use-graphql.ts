@@ -12,9 +12,9 @@ import {
   STATS_SUB,
 } from '../../libs/graphql';
 
-export function useGraphQl(module, isProduction, isLive = true) {
+export function useGraphQl(module, isLive = true) {
   let res: any;
-  const shallSubscribe = isProduction && isLive;
+  const shallSubscribe = process.env.NODE_ENV === 'production' && isLive;
 
   /* eslint-disable react-hooks/rules-of-hooks */
   switch (module) {

@@ -25,7 +25,7 @@ const NotFoundHOC = (WrappedComponent, ACL = []) => {
         </>
       );
     } else if (!loading) {
-      return <WrappedComponent user={user}></WrappedComponent>;
+      return <WrappedComponent {...props} user={user}></WrappedComponent>;
     } else {
       return <> </>;
     }

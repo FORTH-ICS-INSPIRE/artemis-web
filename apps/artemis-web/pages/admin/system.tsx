@@ -21,7 +21,7 @@ const SystemPage = (props) => {
 
   const user = props.user;
 
-  const STATS_DATA = useGraphQl('stats', props.isProduction);
+  const STATS_DATA = useGraphQl('stats');
 
   const processes = STATS_DATA ? STATS_DATA.view_processes : null;
 

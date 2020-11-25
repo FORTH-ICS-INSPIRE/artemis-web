@@ -5,11 +5,7 @@ import { useApollo } from '../libs/graphql';
 import Layout from '../components/layout/layout';
 
 function MyApp({ Component, pageProps }) {
-  const client = useApollo(
-    pageProps.initialApolloState,
-    process.env.GRAPHQL_URI,
-    process.env.GRAPHQL_WS_URI
-  );
+  const client = useApollo(pageProps.initialApolloState);
 
   return (
     <ApolloProvider client={client}>

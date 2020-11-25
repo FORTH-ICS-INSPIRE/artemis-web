@@ -22,11 +22,11 @@ const requestToken = async () => {
 
 let apolloClient: ApolloClient<NormalizedCacheObject>;
 
-const createApolloClient = (GRAPHQL_URI, GRAPHQL_WS_URI) => {
+const createApolloClient = () => {
   const httpLink =
     typeof window !== 'undefined'
       ? createHttpLink({
-          uri: GRAPHQL_URI,
+          uri: `https://${window.location.host}/api/graphql`,
           useGETForQueries: false,
         })
       : null;
@@ -47,7 +47,7 @@ const createApolloClient = (GRAPHQL_URI, GRAPHQL_WS_URI) => {
   const wsLink =
     typeof window !== 'undefined'
       ? new WebSocketLink({
-          uri: GRAPHQL_WS_URI,
+          uri: `wss://${window.location.host}/api/graphql`,
           options: {
             reconnect: true,
             lazy: true,
@@ -84,13 +84,8 @@ const createApolloClient = (GRAPHQL_URI, GRAPHQL_WS_URI) => {
   });
 };
 
-export const initializeApollo = (
-  initialState = null,
-  GRAPHQL_URI,
-  GRAPHQL_WS_URI
-) => {
-  const _apolloClient =
-    apolloClient ?? createApolloClient(GRAPHQL_URI, GRAPHQL_WS_URI);
+export const initializeApollo = (initialState = null) => {
+  const _apolloClient = apolloClient ?? createApolloClient();
   if (initialState) {
     _apolloClient.cache.restore(initialState);
   }
@@ -341,10 +336,7 @@ export const INDEXSTATS_QUERY = gql`
   }
 `;
 
-export const useApollo = (initialState, GRAPHQL_URI, GRAPHQL_WS_URI) => {
-  const store = useMemo(
-    () => initializeApollo(initialState, GRAPHQL_URI, GRAPHQL_WS_URI),
-    [initialState, GRAPHQL_URI, GRAPHQL_WS_URI]
-  );
+export const useApollo = (initialState) => {
+  const store = useMemo(() => initializeApollo(initialState), [initialState]);
   return store;
 };

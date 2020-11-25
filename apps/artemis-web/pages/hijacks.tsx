@@ -46,7 +46,7 @@ const HijacksPage = (props) => {
 
   const user = props.user;
 
-  const HIJACK_DATA = useGraphQl('hijack', props.isProduction, isLive);
+  const HIJACK_DATA = useGraphQl('hijack', isLive);
 
   const hijacks = HIJACK_DATA ? HIJACK_DATA.view_hijacks : [];
   const filteredDate = new Date();
