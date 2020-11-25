@@ -1,5 +1,20 @@
-version: '3'
+version: '3.5'
 services:
+  artemis-web:
+    image: artemis-web:latest
+    build:
+      context: .
+      dockerfile: apps/artemis-web/Dockerfile
+    restart: always
+    container_name: artemis-web
+    networks:
+      - proxy-net
+    env_file:
+      - .env
+    ports:
+      - 4200:4200
+    depends_on:
+      - mongodb
   mongodb:
     image: mongo:latest
     container_name: mongodb
@@ -9,10 +24,6 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: ${MONGODB_USER}
       MONGO_INITDB_ROOT_PASSWORD: ${MONGODB_PASS}
-    env_file:
-      - .env
-    ports:
-      - '27017:27017'
     volumes:
       - ./mongo-data:/data/db
   ldap:
@@ -21,9 +32,6 @@ services:
     restart: always
     networks:
       - proxy-net
-    ports:
-      - '389:389'
-      - '636:636'
 
 networks:
   proxy-net:

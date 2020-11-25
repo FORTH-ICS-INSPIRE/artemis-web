@@ -3,9 +3,9 @@ tasks:
   - init: yarn install --frozen-lockfile
     command: |
       export $(cat .env | xargs)
-      ./apps/artemis-web/scripts/wait-for -h localhost -p ${MONGODB_PORT} -t 0
-      MONGODB_HOST=localhost node apps/artemis-web/scripts/query.js
-      MONGODB_HOST=localhost yarn run start
+      ./apps/artemis-web/scripts/wait-for -h ${MONGODB_HOST} -p ${MONGODB_PORT} -t 0
+      node apps/artemis-web/scripts/query.js
+      yarn run start
   - init: |
       mkdir -p /workspace/data && mongod --dbpath /workspace/data &
       sleep 5
