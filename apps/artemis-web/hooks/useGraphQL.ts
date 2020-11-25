@@ -2,6 +2,10 @@ import { useQuery, useSubscription } from '@apollo/client';
 import {
   BGP_QUERY,
   BGP_SUB,
+  getBGPByKeyQuery,
+  getBGPByKeySub,
+  getHijackByKeyQuery,
+  getHijackByKeySub,
   HIJACK_QUERY,
   HIJACK_SUB,
   INDEXSTATS_QUERY,
@@ -12,7 +16,7 @@ import {
   STATS_SUB,
 } from '../utils/graphql';
 
-export function useGraphQl(module, isProduction, isLive = true) {
+export function useGraphQl(module, isProduction, isLive = true, key = '') {
   let data: any;
   const shallSubscribe = isProduction && isLive;
 
@@ -37,6 +41,24 @@ export function useGraphQl(module, isProduction, isLive = true) {
       data = shallSubscribe
         ? useSubscription(BGP_SUB).data
         : useQuery(BGP_QUERY).data;
+      break;
+    case 'hijackByKey':
+      data = shallSubscribe
+        ? useSubscription(getHijackByKeySub, {
+            variables: { key },
+          }).data
+        : useQuery(getHijackByKeyQuery, {
+            variables: { key },
+          }).data;
+      break;
+    case 'bgpByKey':
+      data = shallSubscribe
+        ? useSubscription(getBGPByKeySub, {
+            variables: { key },
+          }).data
+        : useQuery(getBGPByKeyQuery, {
+            variables: { key },
+          }).data;
       break;
     case 'index_stats':
       data = shallSubscribe
