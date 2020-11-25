@@ -13,11 +13,11 @@ export interface NextApiResponseExtended extends NextApiResponse {
     arg0: string,
     token: string,
     arg2: {
-      path: string;
-      httpOnly: boolean;
-      maxAge: number;
-      sameSite: string;
-      secure: boolean;
+      path?: string;
+      httpOnly?: boolean;
+      maxAge?: number;
+      sameSite?: string;
+      secure?: boolean;
     }
   );
   status(number);
