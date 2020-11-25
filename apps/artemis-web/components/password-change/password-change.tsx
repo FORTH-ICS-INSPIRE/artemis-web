@@ -59,7 +59,7 @@ const useStyles = makeStyles((_theme) => ({
 
 const PasswordChange = (props) => {
   const { classes } = props;
-  const [errorMsg, _] = useState('');
+  const [errorMsg] = useState('');
 
   return (
     <ThemeProvider theme={theme}>
@@ -132,7 +132,7 @@ const PasswordChange = (props) => {
   );
 };
 
-const PasswordChangeComponent = (props) => {
+const PasswordChangeComponent = () => {
   const classes = useStyles();
   return <PasswordChange classes={classes} />;
 };
