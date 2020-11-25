@@ -1,11 +1,11 @@
-import nextConnect from 'next-connect';
-import auth from '../../middleware/auth';
+import nc from 'next-connect';
+import auth from '../../../middleware/auth';
 import {
   NextApiRequestExtended,
   NextApiResponseExtended,
-} from '../../definitions';
+} from '../../../definitions';
 
-const handler = nextConnect()
+const handler = nc()
   .use(auth)
   .get((req: NextApiRequestExtended, res: NextApiResponseExtended) => {
     req.logOut();
@@ -17,7 +17,7 @@ const handler = nextConnect()
     req.logOut();
     res.clearCookie('remember_me');
     res.clearCookie('access_token');
-    res.writeHead(204, { Location: '/signin' });
+    res.writeHead(204, { Location: '/login' });
     res.end();
   });
 

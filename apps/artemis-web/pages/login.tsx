@@ -2,18 +2,19 @@ import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React from 'react';
-import { useJWT } from '../hooks/useJWT';
+import { useJWT } from '../utils/hooks/use-jwt';
 
-const SigninPage = (props) => {
+const LoginPage = (props) => {
   const [user, loading] = useJWT();
   const router = useRouter();
   if (user && !loading) {
-    if (user.role === 'pending') router.push('pending');
-    else router.push('dashboard');
+    if (user.role === 'pending') {
+      router.push('pending');
+    } else {
+      router.push('/dashboard');
+    }
   }
-  const SignInComponent = dynamic(() =>
-    import('../components/sign-in/sign-in')
-  );
+  const LoginComponent = dynamic(() => import('../components/login/login'));
 
   return (
     <>
@@ -23,7 +24,7 @@ const SigninPage = (props) => {
       <div id="login-container">
         {!user && !loading && (
           <div id="content-wrap" style={{ paddingBottom: '5rem' }}>
-            <SignInComponent {...props} />
+            <LoginComponent {...props} />
           </div>
         )}
       </div>
@@ -31,4 +32,4 @@ const SigninPage = (props) => {
   );
 };
 
-export default SigninPage;
+export default LoginPage;

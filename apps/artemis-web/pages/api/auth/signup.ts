@@ -1,15 +1,15 @@
-import nextConnect from 'next-connect';
+import nc from 'next-connect';
 import isEmail from 'validator/lib/isEmail';
 import normalizeEmail from 'validator/lib/normalizeEmail';
 import argon2 from 'argon2';
-import auth from '../../middleware/auth';
+import auth from '../../../middleware/auth';
 import { nanoid } from 'nanoid';
 import {
   NextApiRequestExtended,
   NextApiResponseExtended,
-} from '../../definitions';
+} from '../../../definitions';
 
-const handler = nextConnect()
+const handler = nc()
   .use(auth)
   .post(async (req: NextApiRequestExtended, res: NextApiResponseExtended) => {
     const { name, password } = req.body;

@@ -1,14 +1,14 @@
-import nextConnect from 'next-connect';
-import auth from '../../middleware/auth';
-import passport from '../../lib/passport';
-import { extractUser } from '../../lib/helpers';
-import getRandomString from '../../utils/token';
+import nc from 'next-connect';
+import auth from '../../../../middleware/auth';
+import passport from '../../../../libs/passport';
+import { extractUser } from '../../../../utils/parsers';
+import { getRandomString } from '../../../../utils/token';
 import {
   NextApiRequestExtended,
   NextApiResponseExtended,
-} from '../../definitions';
+} from '../../../../definitions';
 
-const handler = nextConnect()
+const handler = nc()
   .use(auth)
   .post(
     passport.authenticate('local'),

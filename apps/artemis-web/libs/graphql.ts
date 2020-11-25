@@ -14,7 +14,7 @@ import { useMemo } from 'react';
 let accessToken = null;
 const requestToken = async () => {
   if (!accessToken) {
-    const res = await fetch('/api/jwt');
+    const res = await fetch('/api/auth/jwt');
     accessToken = await res.json();
     accessToken = accessToken.accessToken;
   }

@@ -2,7 +2,7 @@ import Head from 'next/head';
 import React from 'react';
 import NotFoundHOC from '../components/404-hoc/404-hoc';
 import PasswordChangeComponent from '../components/password-change/password-change';
-import { useJWT } from '../hooks/useJWT';
+import { useJWT } from '../utils/hooks/use-jwt';
 
 const PasswordChangePage = (props) => {
   const [user, loading] = useJWT();

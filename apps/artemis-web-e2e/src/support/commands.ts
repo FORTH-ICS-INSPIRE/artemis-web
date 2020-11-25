@@ -14,6 +14,7 @@ declare namespace Cypress {
     login(): void;
     register(): void;
     typeRegister(user: any): void;
+    loginLDAP(): void;
   }
 }
 //
@@ -54,14 +55,13 @@ Cypress.Commands.add('login', () => {
   });
 });
 
-//
-// -- This is a child command --
-// Cypress.Commands.add("drag", { prevSubject: 'element'}, (subject, options) => { ... })
-//
-//
-// -- This is a dual command --
-// Cypress.Commands.add("dismiss", { prevSubject: 'optional'}, (subject, options) => { ... })
-//
-//
-// -- This will overwrite an existing command --
-// Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
+Cypress.Commands.add('loginLDAP', () => {
+  cy.get('body').then(($body) => {
+    // synchronously query from body
+    // to find which element was created
+    if ($body.find('input[name=email]').length) {
+      cy.get('#ldap_login').click();
+      cy.wait(1000);
+    }
+  });
+});

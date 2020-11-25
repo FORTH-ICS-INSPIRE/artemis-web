@@ -1,19 +1,19 @@
-import nextConnect from 'next-connect';
-import passport from '../lib/passport';
+import nc from 'next-connect';
+import passport from '../libs/passport';
 import database from './database';
-import session from '../middleware/session';
+import { session } from 'next-session';
 
-const auth = nextConnect()
+const auth = nc()
   .use(database)
-  .use(session)
-  .use(passport.initialize())
   .use(
-    passport.session({
+    session({
       cookie: {
         secure: process.env.NODE_ENV === 'production',
       },
     })
   )
+  .use(passport.initialize())
+  .use(passport.session())
   .use(passport.authenticate('remember-me'));
 
 export default auth;

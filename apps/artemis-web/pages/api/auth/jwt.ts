@@ -1,13 +1,13 @@
-import nextConnect from 'next-connect';
-import auth from '../../middleware/auth';
-import { extractUser } from '../../lib/helpers';
+import nc from 'next-connect';
+import auth from '../../../middleware/auth';
+import { extractUser } from '../../../utils/parsers';
 import {
   NextApiRequestExtended,
   NextApiResponseExtended,
-} from '../../definitions';
+} from '../../../definitions';
 import jwt from 'jsonwebtoken';
 
-const handler = nextConnect()
+const handler = nc()
   .use(auth)
   .get((req: NextApiRequestExtended, res: NextApiResponseExtended) => {
     if (!req.user) res.send({});

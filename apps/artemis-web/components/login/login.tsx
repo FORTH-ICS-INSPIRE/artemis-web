@@ -1,22 +1,24 @@
-import Button from '@material-ui/core/Button';
-import Checkbox from '@material-ui/core/Checkbox';
 import {
   deepOrange,
   deepPurple,
   lightBlue,
   orange,
 } from '@material-ui/core/colors';
-import Container from '@material-ui/core/Container';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Grid from '@material-ui/core/Grid';
-import Link from '@material-ui/core/Link';
+import {
+  Container,
+  Button,
+  Checkbox,
+  FormControlLabel,
+  Grid,
+  Link,
+  TextField,
+  Typography,
+} from '@material-ui/core';
 import {
   createMuiTheme,
   makeStyles,
   ThemeProvider,
 } from '@material-ui/core/styles';
-import TextField from '@material-ui/core/TextField';
-import Typography from '@material-ui/core/Typography';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 
@@ -61,30 +63,26 @@ const useStyles = makeStyles((_theme) => ({
   },
 }));
 
-const SignIn = (props) => {
+const Login = (props) => {
   const [errorMsg, setErrorMsg] = useState('');
+  const [formData, setFormData] = useState({
+    email: '',
+    password: '',
+    rememberMe: false,
+  });
   const router = useRouter();
 
-  async function onSubmit(e) {
+  async function onClick(e, endpoint) {
     e.preventDefault();
 
-    const rememberMe = e.currentTarget.remember.checked;
-
-    const body = {
-      email: e.currentTarget.email.value,
-      password: e.currentTarget.password.value,
-      rememberMe: rememberMe,
-    };
-
-    const res = await fetch('/api/login', {
+    const res = await fetch(endpoint, {
       method: 'POST',
-      // withCredentials: true,
       credentials: 'include',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(body),
+      body: JSON.stringify(formData),
     });
 
     if (res.status === 200) {
@@ -96,7 +94,8 @@ const SignIn = (props) => {
       }
       window.location.reload();
     } else {
-      setErrorMsg('Incorrect username or password. Try again!');
+      const msg = await res.text();
+      setErrorMsg(msg);
     }
   }
 
@@ -115,11 +114,11 @@ const SignIn = (props) => {
             component="h1"
             variant="h5"
           >
-            Sign in
+            Login
           </Typography>
           {errorMsg && <p className="error">{errorMsg}</p>}
-          <form method="post" onSubmit={onSubmit}>
-            <input name="stype" type="hidden" defaultValue="signin" />
+          <form method="post">
+            <input name="stype" type="hidden" defaultValue="login" />
             <TextField
               variant="outlined"
               margin="normal"
@@ -131,6 +130,9 @@ const SignIn = (props) => {
               name="email"
               autoComplete="email"
               autoFocus
+              onChange={(e) =>
+                setFormData({ ...formData, email: e.target.value })
+              }
             />
             <TextField
               variant="outlined"
@@ -142,11 +144,21 @@ const SignIn = (props) => {
               type="password"
               id="password"
               autoComplete="current-password"
+              onChange={(e) =>
+                setFormData({ ...formData, password: e.target.value })
+              }
             />
             <FormControlLabel
               className={props.classes.input}
               control={
-                <Checkbox value="remember" name="remember" color="primary" />
+                <Checkbox
+                  value="remember"
+                  name="remember"
+                  color="primary"
+                  onChange={(e) =>
+                    setFormData({ ...formData, rememberMe: e.target.checked })
+                  }
+                />
               }
               label="Remember me"
             />
@@ -156,8 +168,19 @@ const SignIn = (props) => {
               variant="contained"
               color="primary"
               className={props.classes.submit}
+              onClick={(e) => onClick(e, '/api/auth/login/credentials')}
             >
-              Sign In
+              Login
+            </Button>
+            <Button
+              fullWidth
+              variant="contained"
+              color="primary"
+              id="ldap_login"
+              className={props.classes.submit}
+              onClick={(e) => onClick(e, '/api/auth/login/ldap')}
+            >
+              Login with LDAP
             </Button>
             <Grid container>
               <Grid style={{ textAlign: 'left' }} item xs></Grid>
@@ -174,8 +197,8 @@ const SignIn = (props) => {
   );
 };
 
-const SignInComponent = (props) => {
+const LoginComponent = (props) => {
   const classes = useStyles();
-  return <SignIn {...props} classes={classes} />;
+  return <Login {...props} classes={classes} />;
 };
-export default SignInComponent;
+export default LoginComponent;
