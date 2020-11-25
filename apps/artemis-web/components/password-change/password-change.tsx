@@ -6,7 +6,6 @@ import {
   orange,
 } from '@material-ui/core/colors';
 import Container from '@material-ui/core/Container';
-import CssBaseline from '@material-ui/core/CssBaseline';
 import Grid from '@material-ui/core/Grid';
 import {
   createMuiTheme,
@@ -58,7 +57,7 @@ const useStyles = makeStyles((_theme) => ({
 
 const PasswordChange = (props) => {
   const { classes } = props;
-  const [errorMsg, _] = useState('');
+  const [errorMsg] = useState('');
 
   return (
     <ThemeProvider theme={theme}>
@@ -131,7 +130,7 @@ const PasswordChange = (props) => {
   );
 };
 
-const PasswordChangeComponent = (props) => {
+const PasswordChangeComponent = () => {
   const classes = useStyles();
   return <PasswordChange classes={classes} />;
 };

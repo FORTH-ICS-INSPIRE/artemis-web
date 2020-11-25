@@ -35,19 +35,19 @@ const expandRow: ExpandRowProps<any, number> = {
           <td>
             <b>Prefix:</b>
           </td>
-          <td>{row.prefix}</td>
+          <td>{row.prefix.toString()}</td>
         </tr>
         <tr>
           <td>
             <b>Origin AS:</b>
           </td>
-          <td>{row.origin_as}</td>
+          <td>{row.origin_as.toString()}</td>
         </tr>
         <tr>
           <td>
             <b>AS Path:</b>
           </td>
-          <td>{row.orig_path}</td>
+          <td>{row.orig_path ? row.orig_path.toString() : ''}</td>
         </tr>
         <tr>
           <td>
@@ -59,55 +59,55 @@ const expandRow: ExpandRowProps<any, number> = {
           <td>
             <b>Peer AS:</b>
           </td>
-          <td>{row.peer_asn}</td>
+          <td>{row.peer_asn.toString()}</td>
         </tr>
         <tr>
           <td>
             <b>Service:</b>
           </td>
-          <td>{row.service}</td>
+          <td>{row.service.toString()}</td>
         </tr>
         <tr>
           <td>
             <b>Type:</b>
           </td>
-          <td>{row.type}</td>
+          <td>{row.type.toString()}</td>
         </tr>
         <tr>
           <td>
             <b>Communities:</b>
           </td>
-          <td>{row.communities}</td>
+          <td>{row.communities.toString()}</td>
         </tr>
         <tr>
           <td>
             <b>Timestamp:</b>
           </td>
-          <td>{row.timestamp}</td>
+          <td>{row.timestamp.toString()}</td>
         </tr>
         <tr>
           <td>
             <b>Hijack_key:</b>
           </td>
-          <td>{row.hijack_key}</td>
+          <td>{row.hijack_key.toString()}</td>
         </tr>
         <tr>
           <td>
             <b>Matched Prefix:</b>
           </td>
-          <td>{row.matched_prefix}</td>
+          <td>{row.matched_prefix.toString()}</td>
         </tr>
         <tr>
           <td>
             <b>View Hijack:</b>
           </td>
-          <td>{row.origin_as}</td>
+          <td>{row.origin_as.toString()}</td>
         </tr>
         <tr>
           <td>
             <b>Handled:</b>
           </td>
-          <td>{row.handled}</td>
+          <td>{row.handled.toString()}</td>
         </tr>
       </table>
     );
@@ -211,12 +211,17 @@ const columns = [
 
 const BGPTableComponent = (props) => {
   const bgp = props.data;
+  const skippedCols = props.skippedCols ?? [];
+
+  const filteredCols = columns.filter(
+    (col) => !skippedCols.includes(col.dataField)
+  );
 
   return (
     <BootstrapTable
       keyField="timestamp"
       data={bgp}
-      columns={columns}
+      columns={filteredCols}
       expandRow={expandRow}
       filter={filterFactory()}
       filterPosition="bottom"

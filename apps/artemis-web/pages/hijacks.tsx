@@ -382,6 +382,7 @@ const HijacksPage = (props) => {
                             <Paper className={classes.paper}>{value}</Paper>
                           </Grid>
                         );
+                      else return <> </>;
                     })}
                   </Grid>
                 </div>

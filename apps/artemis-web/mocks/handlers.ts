@@ -176,7 +176,7 @@ export const handlers = [
             dormant: false,
             ignored: false,
             configured_prefix: '139.91.250.0/24',
-            comment: '',
+            comment: 'this is a sample comment',
             seen: false,
             withdrawn: true,
             peers_withdrawn: [264409],

@@ -3,7 +3,8 @@
 }
 
 .expand-cell,
-.expand-cell-header {
+.expand-cell-header,
+.sortable {
   cursor: pointer !important;
 }
 
