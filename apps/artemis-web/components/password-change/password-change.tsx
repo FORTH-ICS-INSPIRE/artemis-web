@@ -172,7 +172,7 @@ const PasswordChange = (props) => {
   );
 };
 
-const PasswordChangeComponent = (props) => {
+const PasswordChangeComponent = () => {
   const classes = useStyles();
   return <PasswordChange classes={classes} />;
 };
