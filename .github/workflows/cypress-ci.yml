@@ -27,8 +27,6 @@ jobs:
           MONGO_INITDB_ROOT_PASSWORD: pass
       ldap:
         image: rroemhild/test-openldap
-        container_name: ldap
-        restart: always
         ports:
           - '389:389'
           - '636:636'
