@@ -18,19 +18,13 @@ const exactMatchFilter = textFilter({
   id: 'id', // assign a unique value for htmlFor attribute, it's useful when you have same dataField across multiple table in one page
 });
 
-const selectType = {
-  0: 'E',
-  1: '0',
-  2: '-',
-};
-
 const selectRPKI = {
-  0: 'VD',
-  1: 'IA',
-  2: 'IL',
-  3: 'IU',
-  4: 'NF',
-  5: 'NA',
+  VD: 'VD',
+  IA: 'IA',
+  IL: 'IL',
+  IU: 'IU',
+  NF: 'NF',
+  NA: 'NA',
 };
 
 const columns = [
@@ -118,14 +112,11 @@ const columns = [
     filter: exactMatchFilter,
   },
   {
-    dataField: 'type',
+    dataField: 'htype',
     headerTitle: () =>
       'The type of the hijack in 4 dimensions: prefix|path|data plane|policy<ul><li>[Prefix] S → Sub-prefix hijack</li>',
     text: 'Type',
-    formatter: (cell) => selectType[cell],
-    filter: selectFilter({
-      options: selectType,
-    }),
+    filter: textFilter(),
   },
   {
     dataField: 'as',
@@ -230,10 +221,10 @@ const HijackTableComponent = (props) => {
       time: row.time_detected,
       hprefix: row.prefix,
       mprefix: row.configured_prefix,
-      type: row.type,
+      htype: row.type,
       status: row.status,
       as: row.hijack_as,
-      rpki: row.key,
+      rpki: row.rpki_status,
       peers: row.num_peers_seen,
       ASes: row.num_asns_inf,
       ack: row.seen,
