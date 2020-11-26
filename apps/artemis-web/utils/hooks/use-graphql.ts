@@ -18,7 +18,8 @@ import {
 
 export function useGraphQl(module, isLive = true, key = '') {
   let res: any;
-  const shallSubscribe = process.env.NODE_ENV === 'production' && isLive;
+  const isProduction = process.env.NODE_ENV === 'production';
+  const shallSubscribe = isProduction && isLive;
 
   /* eslint-disable react-hooks/rules-of-hooks */
   switch (module) {
@@ -63,7 +64,7 @@ export function useGraphQl(module, isLive = true, key = '') {
       break;
   }
 
-  const { loading, error, data } = res;
+  const { error, data } = res;
   if (error) {
     console.error(error);
   }
