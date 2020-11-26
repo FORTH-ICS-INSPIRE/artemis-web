@@ -6,7 +6,7 @@ export const LocalStrategy = new Strategy(
   async (req, email, password, done) => {
     try {
       const user = await req.db.collection('users').findOne({ email });
-      if (user.password === '<REDUCTED>') {
+      if (user?.password === '<REDUCTED>') {
         return done(null, false, {
           message: 'Trying to login with an LDAP account',
         });
