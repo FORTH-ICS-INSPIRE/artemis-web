@@ -2,6 +2,10 @@ import { useQuery, useSubscription } from '@apollo/client';
 import {
   BGP_QUERY,
   BGP_SUB,
+  getBGPByKeyQuery,
+  getBGPByKeySub,
+  getHijackByKeyQuery,
+  getHijackByKeySub,
   HIJACK_QUERY,
   HIJACK_SUB,
   INDEXSTATS_QUERY,
@@ -12,7 +16,7 @@ import {
   STATS_SUB,
 } from '../../libs/graphql';
 
-export function useGraphQl(module, isLive = true) {
+export function useGraphQl(module, isLive = true, key = '') {
   let res: any;
   const shallSubscribe = process.env.NODE_ENV === 'production' && isLive;
 
@@ -34,15 +38,36 @@ export function useGraphQl(module, isLive = true) {
     case 'bgpupdates':
       res = shallSubscribe ? useSubscription(BGP_SUB) : useQuery(BGP_QUERY);
       break;
+    case 'hijackByKey':
+      res = shallSubscribe
+        ? useSubscription(getHijackByKeySub, {
+            variables: { key },
+          })
+        : useQuery(getHijackByKeyQuery, {
+            variables: { key },
+          });
+      break;
+    case 'bgpByKey':
+      res = shallSubscribe
+        ? useSubscription(getBGPByKeySub, {
+            variables: { key },
+          })
+        : useQuery(getBGPByKeyQuery, {
+            variables: { key },
+          });
+      break;
     case 'index_stats':
       res = shallSubscribe
         ? useSubscription(INDEXSTATS_SUB)
         : useQuery(INDEXSTATS_QUERY);
       break;
   }
+
   const { loading, error, data } = res;
   if (error) {
     console.error(error);
   }
+
   return data;
+  /* eslint-enable react-hooks/rules-of-hooks */
 }

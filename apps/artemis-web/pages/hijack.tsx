@@ -12,9 +12,9 @@ import React, { useState } from 'react';
 import 'react-toastify/dist/ReactToastify.css';
 import NotFoundHOC from '../components/404-hoc/404-hoc';
 import BGPTableComponent from '../components/bgp-table/bgp-table';
-import { useGraphQl } from '../hooks/useGraphQL';
 import { Editor, EditorState } from 'draft-js';
 import 'draft-js/dist/Draft.css';
+import { useGraphQl } from '../utils/hooks/use-graphql';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -33,7 +33,7 @@ const ViewHijackPage = (props) => {
   if (process.env.NODE_ENV === 'development') {
     if (typeof window !== 'undefined') {
       // eslint-disable-next-line @typescript-eslint/no-var-requires
-      const { worker } = require('../mocks/browser');
+      const { worker } = require('../utils/mock-sw/browser');
       worker.start();
     }
   }
@@ -70,14 +70,9 @@ const ViewHijackPage = (props) => {
     EditorState.createEmpty()
   );
 
-  const HIJACK_DATA = useGraphQl(
-    'hijackByKey',
-    props.isProduction,
-    isLive,
-    key
-  );
+  const HIJACK_DATA = useGraphQl('hijackByKey', isLive, key);
 
-  const BGP_DATA = useGraphQl('bgpByKey', props.isProduction, isLive, key);
+  const BGP_DATA = useGraphQl('bgpByKey', isLive, key);
   const hijack = HIJACK_DATA ? HIJACK_DATA.view_hijacks[0] : [];
   const bgp = BGP_DATA ? BGP_DATA.view_data : [];
 

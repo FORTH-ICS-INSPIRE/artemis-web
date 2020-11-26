@@ -79,7 +79,7 @@ const HijacksPage = (props) => {
     }
   };
 
-  const HIJACK_DATA = useGraphQl('hijack', props.isProduction, isLive);
+  const HIJACK_DATA = useGraphQl('hijack', isLive);
 
   let hijacks = HIJACK_DATA ? HIJACK_DATA.view_hijacks : [];
   hijacks = hijacks.map((entry) => ({ ...entry, status: findStatus(entry) }));
