@@ -19,8 +19,8 @@ const exactMatchFilter = textFilter({
 });
 
 const selectOptions = {
-  0: 'A',
-  1: 'W',
+  A: 'A',
+  W: 'W',
 };
 
 const expandRow: ExpandRowProps<any, number> = {
