@@ -10,12 +10,13 @@ import StatusTable from '../components/status-table/status-table';
 import { useGraphQl } from '../utils/hooks/use-graphql';
 
 const DashboardPage = (props) => {
-  if (process.env.NODE_ENV === 'development') {
-    if (typeof window !== 'undefined') {
-      // eslint-disable-next-line @typescript-eslint/no-var-requires
-      const { worker } = require('../utils/mock-sw/browser');
-      worker.start();
-    }
+  const isDevelopment = process.env.NODE_ENV === 'development';
+  const isBrowser = typeof window !== 'undefined';
+
+  if (isDevelopment && isBrowser) {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const { worker } = require('../utils/mock-sw/browser');
+    worker.start();
   }
 
   const user = props.user;
