@@ -45,3 +45,6 @@ export const diffDate = (date1, date2) => {
   const sec = Math.floor(minutesms / 1000);
   return days + 'D ' + hours + 'H ' + minutes + 'M ' + sec + 'S';
 };
+
+export const fromEntries = (xs: [string | number | symbol, any][]) =>
+  xs.reduce((acc, [key, value]) => ({ ...acc, [key]: value }), {});

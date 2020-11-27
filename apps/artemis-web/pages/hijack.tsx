@@ -15,7 +15,7 @@ import BGPTableComponent from '../components/bgp-table/bgp-table';
 import { Editor, EditorState } from 'draft-js';
 import 'draft-js/dist/Draft.css';
 import { useGraphQl } from '../utils/hooks/use-graphql';
-import { formatDate } from '../utils/token';
+import { formatDate, fromEntries } from '../utils/token';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -80,7 +80,7 @@ const ViewHijackPage = (props) => {
   let bgp = BGP_DATA ? BGP_DATA.view_data : [];
 
   bgp = bgp.map((row) =>
-    Object.fromEntries(
+    fromEntries(
       Object.entries(row).map(([key, value]: [string, any]) => {
         if (key === 'timestamp') return [key, formatDate(new Date(value))];
         else if (key === 'service') return [key, value.replace(/\|/g, ' -> ')];
