@@ -8,6 +8,18 @@
   cursor: pointer !important;
 }
 
+td {
+  text-align: center;
+}
+
+#modules > tbody > tr > td {
+  text-align: left !important;
+}
+
+#modules {
+  border: 1px solid #dee2e6;
+}
+
 .hv-center {
   display: flex;
   justify-content: center;
@@ -38,7 +50,7 @@ footer > .MuiContainer-root {
 }
 
 #content-wrap > .row {
-  margin-left: 0px;
+  margin-left: 0;
   margin-right: 0%;
 }
 

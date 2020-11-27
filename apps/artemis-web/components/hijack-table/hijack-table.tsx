@@ -1,3 +1,4 @@
+import { formatDate } from '../../utils/token';
 import React from 'react';
 import BootstrapTable from 'react-bootstrap-table-next';
 import filterFactory, {
@@ -217,8 +218,8 @@ const HijackTableComponent = (props) => {
 
   if (HIJACK_DATA && HIJACK_DATA.length) {
     hijacks = HIJACK_DATA.map((row) => ({
-      update: row.time_last,
-      time: row.time_detected,
+      update: formatDate(new Date(row.time_last)),
+      time: formatDate(new Date(row.time_detected)),
       hprefix: row.prefix,
       mprefix: row.configured_prefix,
       htype: row.type,
@@ -227,7 +228,12 @@ const HijackTableComponent = (props) => {
       rpki: row.rpki_status,
       peers: row.num_peers_seen,
       ASes: row.num_asns_inf,
-      ack: row.seen,
+      ack:
+        row.resolved || row.under_mitigation ? (
+          <img src="./handled.png" />
+        ) : (
+          <img src="./unhadled.png" />
+        ),
       more: <a href={'/hijack?key=' + row.key}>View</a>,
     }));
   } else {

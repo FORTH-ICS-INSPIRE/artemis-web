@@ -1,34 +1,123 @@
+import { formatDate } from '../../utils/token';
 import React from 'react';
-import BootstrapTable from 'react-bootstrap-table-next';
+import BootstrapTable, { ExpandRowProps } from 'react-bootstrap-table-next';
+import filterFactory, {
+  textFilter,
+  Comparator,
+  selectFilter,
+} from 'react-bootstrap-table2-filter';
+import paginationFActory from 'react-bootstrap-table2-paginator';
 
-const mockHijacks = [
-  {
-    update: 20,
-    time: 'sfsf',
-    hprefix: 3,
-    mprefix: 3,
-    type: 'fsdf',
-    as: 'dsfsd',
-    rpki: 'dfssd',
-    peers: 3,
-    ASes: 2,
-    ack: 0,
-    more: 'aa',
+const exactMatchFilter = textFilter({
+  placeholder: '', // custom the input placeholder
+  className: 'my-custom-text-filter', // custom classname on input
+  defaultValue: '', // default filtering value
+  comparator: Comparator.EQ, // default is Comparator.LIKE
+  caseSensitive: true, // default is false, and true will only work when comparator is LIKE
+  style: {}, // your custom styles on input
+  delay: 1000, // how long will trigger filtering after user typing, default is 500 ms
+  id: 'id', // assign a unique value for htmlFor attribute, it's useful when you have same dataField across multiple table in one page
+});
+
+const selectOptions = {
+  NA: 'NA',
+  VD: 'VD',
+  IA: 'IA',
+  IL: 'IL',
+  IU: 'IU',
+  NF: 'NF',
+};
+
+const expandRow: ExpandRowProps<any, number> = {
+  showExpandColumn: true,
+  expandByColumnOnly: true,
+  expandColumnPosition: 'right',
+  renderer: (row) => {
+    return (
+      <table>
+        <tr>
+          <td>
+            <b>Prefix:</b>
+          </td>
+          <td>{row.prefix.toString()}</td>
+        </tr>
+        <tr>
+          <td>
+            <b>Origin AS:</b>
+          </td>
+          <td>{row.origin_as.toString()}</td>
+        </tr>
+        <tr>
+          <td>
+            <b>AS Path:</b>
+          </td>
+          <td>{row.orig_path ? row.orig_path.toString() : ''}</td>
+        </tr>
+        <tr>
+          <td>
+            <b>Aux Path Information:</b>
+          </td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>
+            <b>Peer AS:</b>
+          </td>
+          <td>{row.peer_asn.toString()}</td>
+        </tr>
+        <tr>
+          <td>
+            <b>Service:</b>
+          </td>
+          <td>{row.service.toString()}</td>
+        </tr>
+        <tr>
+          <td>
+            <b>Type:</b>
+          </td>
+          <td>{row.type.toString()}</td>
+        </tr>
+        <tr>
+          <td>
+            <b>Communities:</b>
+          </td>
+          <td>{row.communities.toString()}</td>
+        </tr>
+        <tr>
+          <td>
+            <b>Timestamp:</b>
+          </td>
+          <td>{row.timestamp.toString()}</td>
+        </tr>
+        <tr>
+          <td>
+            <b>Hijack_key:</b>
+          </td>
+          <td>{row.hijack_key.toString()}</td>
+        </tr>
+        <tr>
+          <td>
+            <b>Matched Prefix:</b>
+          </td>
+          <td>{row.matched_prefix.toString()}</td>
+        </tr>
+        <tr>
+          <td>
+            <b>View Hijack:</b>
+          </td>
+          <td>{row.origin_as.toString()}</td>
+        </tr>
+        <tr>
+          <td>
+            <b>Handled:</b>
+          </td>
+          <td>{row.handled.toString()}</td>
+        </tr>
+      </table>
+    );
   },
-  {
-    update: 23,
-    time: 'sfsf',
-    hprefix: 3,
-    mprefix: 3,
-    type: 'fsdf',
-    as: 'dsfsd',
-    rpki: 'dfssd',
-    peers: 3,
-    ASes: 2,
-    ack: 0,
-    more: 'aa',
-  },
-];
+};
+
 const columns = [
   {
     dataField: 'update',
@@ -98,29 +187,36 @@ const columns = [
     dataField: 'hprefix',
     headerTitle: () => 'The IPv4/IPv6 prefix that was hijacked.',
     text: 'Hijacked Prefix',
+    filter: exactMatchFilter,
   },
   {
     dataField: 'mprefix',
     headerTitle: () =>
       'The configured IPv4/IPv6 prefix that matched the hijacked prefix.',
     text: 'Matched Prefix',
+    filter: exactMatchFilter,
   },
   {
     dataField: 'type',
     headerTitle: () =>
       'The type of the hijack in 4 dimensions: prefix|path|data plane|policy<ul><li>[Prefix] S → Sub-prefix hijack</li>',
     text: 'Type',
+    filter: textFilter(),
   },
   {
     dataField: 'as',
     headerTitle: () =>
       'The AS that is potentially responsible for the hijack.</br>Note that this is an experimental field.',
     text: 'Hijacked AS',
+    filter: exactMatchFilter,
   },
   {
     dataField: 'rpki',
     headerTitle: () => 'The RPKI status of the hijacked prefix.',
     text: 'RPKI',
+    filter: selectFilter({
+      options: selectOptions,
+    }),
   },
   {
     dataField: 'peers',
@@ -204,24 +300,41 @@ const OngoingHijackTableComponent = (props) => {
   let hijacks;
 
   if (HIJACK_DATA && HIJACK_DATA.length) {
-    hijacks = HIJACK_DATA.map((row) => ({
-      update: row.time_last,
-      time: row.time_detected,
-      hprefix: row.prefix,
-      mprefix: row.configured_prefix,
-      type: row.type,
-      as: row.hijack_as,
-      rpki: row.key,
-      peers: row.num_peers_seen,
-      ASes: row.num_asns_inf,
-      ack: row.seen,
-      more: row.comment,
-    }));
+    hijacks = HIJACK_DATA.map((row) => {
+      return {
+        update: formatDate(new Date(row.time_last)),
+        time: formatDate(new Date(row.time_detected)),
+        hprefix: row.prefix,
+        mprefix: row.configured_prefix,
+        type: row.type,
+        as: row.hijack_as,
+        rpki: row.rpki_status,
+        peers: row.num_peers_seen,
+        ASes: row.num_asns_inf,
+        ack:
+          row.resolved || row.under_mitigation ? (
+            <img src="./handled.png" />
+          ) : (
+            <img src="./unhadled.png" />
+          ),
+        more: row.comment,
+      };
+    });
   } else {
-    hijacks = mockHijacks;
+    hijacks = [];
   }
 
-  return <BootstrapTable keyField="update" data={hijacks} columns={columns} />;
+  return (
+    <BootstrapTable
+      keyField="update"
+      data={hijacks}
+      columns={columns}
+      expandRow={expandRow}
+      filter={filterFactory()}
+      filterPosition="bottom"
+      pagination={paginationFActory({ sizePerPage: 10 })}
+    />
+  );
 };
 
 export default OngoingHijackTableComponent;

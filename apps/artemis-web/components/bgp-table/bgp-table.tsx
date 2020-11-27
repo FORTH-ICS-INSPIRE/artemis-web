@@ -209,6 +209,26 @@ const columns = [
   },
 ];
 
+const appendLeadingZeroes = (n) => {
+  if (n <= 9) {
+    return '0' + n;
+  }
+  return n;
+};
+
+const formatDate = (date) =>
+  date.getFullYear() +
+  '-' +
+  (date.getMonth() + 1) +
+  '-' +
+  date.getDate() +
+  ' ' +
+  appendLeadingZeroes(date.getHours()) +
+  ':' +
+  appendLeadingZeroes(date.getMinutes()) +
+  ':' +
+  appendLeadingZeroes(date.getSeconds());
+
 const BGPTableComponent = (props) => {
   const bgp = props.data;
   const skippedCols = props.skippedCols ?? [];
