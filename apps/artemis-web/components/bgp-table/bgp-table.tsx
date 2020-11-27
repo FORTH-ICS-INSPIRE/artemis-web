@@ -47,13 +47,20 @@ const expandRow: ExpandRowProps<any, number> = {
           <td>
             <b>AS Path:</b>
           </td>
-          <td>{row.orig_path ? row.orig_path.toString() : ''}</td>
+          <td>
+            {row.as_path
+              ? JSON.stringify(row.as_path)
+                  .replaceAll(',', ' ')
+                  .replaceAll('[', '')
+                  .replaceAll(']', '')
+              : ''}
+          </td>
         </tr>
         <tr>
           <td>
             <b>Aux Path Information:</b>
           </td>
-          <td></td>
+          <td>{row.orig_path ? JSON.stringify(row.orig_path) : ''}</td>
         </tr>
         <tr>
           <td>
@@ -65,7 +72,7 @@ const expandRow: ExpandRowProps<any, number> = {
           <td>
             <b>Service:</b>
           </td>
-          <td>{row.service.toString()}</td>
+          <td>{row.service.toString().replaceAll('|', ' -> ')}</td>
         </tr>
         <tr>
           <td>
@@ -101,13 +108,15 @@ const expandRow: ExpandRowProps<any, number> = {
           <td>
             <b>View Hijack:</b>
           </td>
-          <td>{row.origin_as.toString()}</td>
+          <td>
+            <a href={'/hijack?key=' + row.hijack_key}>View</a>
+          </td>
         </tr>
         <tr>
           <td>
             <b>Handled:</b>
           </td>
-          <td>{row.handled.toString()}</td>
+          <td>{row.handled}</td>
         </tr>
       </table>
     );
@@ -208,26 +217,6 @@ const columns = [
     text: 'Status',
   },
 ];
-
-const appendLeadingZeroes = (n) => {
-  if (n <= 9) {
-    return '0' + n;
-  }
-  return n;
-};
-
-const formatDate = (date) =>
-  date.getFullYear() +
-  '-' +
-  (date.getMonth() + 1) +
-  '-' +
-  date.getDate() +
-  ' ' +
-  appendLeadingZeroes(date.getHours()) +
-  ':' +
-  appendLeadingZeroes(date.getMinutes()) +
-  ':' +
-  appendLeadingZeroes(date.getSeconds());
 
 const BGPTableComponent = (props) => {
   const bgp = props.data;

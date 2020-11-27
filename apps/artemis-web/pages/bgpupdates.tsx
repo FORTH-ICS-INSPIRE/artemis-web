@@ -8,7 +8,7 @@ import {
   Switch,
 } from '@material-ui/core';
 import Head from 'next/head';
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import NotFoundHOC from '../components/404-hoc/404-hoc';
