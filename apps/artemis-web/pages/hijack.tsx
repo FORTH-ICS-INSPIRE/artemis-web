@@ -67,6 +67,8 @@ const ViewHijackPage = (props) => {
 
   const [distinctValues, setDistinctValues] = useState([]);
   const [selectState, setSelectState] = useState('');
+  const [seenState, setSeenState] = useState(false);
+  const [withdrawState, setWithdrawState] = useState(false);
   const [editorState, setEditorState] = useState(() =>
     EditorState.createEmpty()
   );
@@ -91,6 +93,9 @@ const ViewHijackPage = (props) => {
       })
     )
   );
+
+  const seen = hijack ? hijack.peers_seen ?? [] : [];
+  const withdrawn = hijack ? hijack.peers_withdrawn ?? [] : [];
 
   const onChangeValue = (event) => {
     setSelectState(event.target.value);
@@ -230,6 +235,34 @@ const ViewHijackPage = (props) => {
                           </div>
                         );
                       })}
+                      <div className="row" style={{ marginTop: '20px' }}>
+                        <div className="col-lg-4">
+                          <button
+                            onClick={() => setSeenState(!seenState)}
+                            className="btn btn-info"
+                            type="button"
+                            data-toggle="collapse"
+                            data-target="#seenHijackUpdate"
+                            aria-expanded="false"
+                            aria-controls="seenHijackUpdate"
+                          >
+                            BGP Announcement
+                          </button>
+                        </div>
+                        <div className="col-lg-8">
+                          <button
+                            onClick={() => setWithdrawState(!withdrawState)}
+                            className="btn btn-info"
+                            type="button"
+                            data-toggle="collapse"
+                            data-target="#seenHijackWithdraw"
+                            aria-expanded="false"
+                            aria-controls="seenHijackWithdraw"
+                          >
+                            BGP Withdrawal
+                          </button>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -249,6 +282,67 @@ const ViewHijackPage = (props) => {
                   ) : (
                     <> </>
                   )}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="row">
+            <div className="col-lg-1" />
+            <div className="col-lg-10">
+              <div className="card">
+                <div className="card-body">
+                  <div className="row">
+                    <div className="col-lg-6">
+                      <div className="card">
+                        <div
+                          className={
+                            'card-header multi-collapse collapse' +
+                            (seenState ? 'show' : '')
+                          }
+                        >
+                          Peers Seen Hijack BGP Announcement:
+                          <Grid container spacing={3}>
+                            {seen.map((value, i) => {
+                              if (value !== undefined)
+                                return (
+                                  <Grid key={i} item xs>
+                                    <Paper className={classes.paper}>
+                                      {value}
+                                    </Paper>
+                                  </Grid>
+                                );
+                              else return <> </>;
+                            })}
+                          </Grid>
+                        </div>{' '}
+                      </div>
+                    </div>
+                    <div className="col-lg-6">
+                      <div className="card">
+                        <div
+                          className={
+                            'card-header multi-collapse collapse' +
+                            (withdrawState ? 'show' : '')
+                          }
+                        >
+                          Peers Seen Hijack BGP Withdrawal:
+                          <Grid container spacing={3}>
+                            {withdrawn.map((value, i) => {
+                              if (value !== undefined)
+                                return (
+                                  <Grid key={i} item xs>
+                                    <Paper className={classes.paper}>
+                                      {value}
+                                    </Paper>
+                                  </Grid>
+                                );
+                              else return <> </>;
+                            })}
+                          </Grid>
+                        </div>{' '}
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>

@@ -172,7 +172,7 @@ export const handlers = [
             comment: 'this is a sample comment',
             seen: false,
             withdrawn: true,
-            peers_withdrawn: [264409],
+            peers_withdrawn: [264409, 294409],
             peers_seen: [264409],
             outdated: false,
             community_annotation: 'NA',
