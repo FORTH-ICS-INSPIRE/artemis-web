@@ -14,6 +14,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import NotFoundHOC from '../components/404-hoc/404-hoc';
 import BGPTableComponent from '../components/bgp-table/bgp-table';
 import { useGraphQl } from '../utils/hooks/use-graphql';
+import { formatDate } from '../utils/token';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -51,10 +52,24 @@ const BGPUpdates = (props) => {
   const filteredDate = new Date();
   filteredDate.setHours(filteredDate.getHours() - filter);
 
-  const filteredBgp =
+  let filteredBgp =
     filter !== 0
       ? bgp.filter((entry) => new Date(entry.timestamp) >= filteredDate)
       : bgp;
+  filteredBgp = filteredBgp.map((row) =>
+    Object.fromEntries(
+      Object.entries(row).map(([key, value]: [string, any]) => {
+        if (key === 'timestamp') return [key, formatDate(new Date(value))];
+        else if (key === 'service') return [key, value.replaceAll('|', ' -> ')];
+        else if (key === 'handled')
+          return [
+            key,
+            value ? <img src="handled.png" /> : <img src="./unhadled.png" />,
+          ];
+        else return [key, value];
+      })
+    )
+  );
 
   const onChangeValue = (event) => {
     setSelectState(event.target.value);

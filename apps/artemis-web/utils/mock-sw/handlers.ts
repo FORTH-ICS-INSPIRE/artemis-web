@@ -54,13 +54,6 @@ export const handlers = [
             timestamp: '2020-11-04T13:44:28.725199',
             __typename: 'view_processes',
           },
-          {
-            name: 'autoignore',
-            running: true,
-            loading: false,
-            timestamp: '2020-11-04T13:44:28.763277',
-            __typename: 'view_processes',
-          },
         ],
       })
     );

@@ -15,6 +15,7 @@ import BGPTableComponent from '../components/bgp-table/bgp-table';
 import { Editor, EditorState } from 'draft-js';
 import 'draft-js/dist/Draft.css';
 import { useGraphQl } from '../utils/hooks/use-graphql';
+import { formatDate } from '../utils/token';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -74,7 +75,22 @@ const ViewHijackPage = (props) => {
 
   const BGP_DATA = useGraphQl('bgpByKey', isLive, key);
   const hijack = HIJACK_DATA ? HIJACK_DATA.view_hijacks[0] : [];
-  const bgp = BGP_DATA ? BGP_DATA.view_data : [];
+  let bgp = BGP_DATA ? BGP_DATA.view_data : [];
+
+  bgp = bgp.map((row) =>
+    Object.fromEntries(
+      Object.entries(row).map(([key, value]: [string, any]) => {
+        if (key === 'timestamp') return [key, formatDate(new Date(value))];
+        else if (key === 'service') return [key, value.replaceAll('|', ' -> ')];
+        else if (key === 'handled')
+          return [
+            key,
+            value ? <img src="handled.png" /> : <img src="./unhadled.png" />,
+          ];
+        else return [key, value];
+      })
+    )
+  );
 
   const onChangeValue = (event) => {
     setSelectState(event.target.value);
@@ -93,15 +109,15 @@ const ViewHijackPage = (props) => {
     '# ASes Infected': hijack.num_asns_inf,
     Prefix: hijack.prefix,
     Matched: hijack.configured_prefix,
-    Config: hijack.timestamp_of_config,
+    Config: formatDate(new Date(hijack.timestamp_of_config)),
     Key: hijack.key,
   };
 
   const hijackInfo2 = {
-    'Time Started': hijack.time_started,
-    'Time Detected': hijack.time_detected,
-    'Last Update': hijack.time_last,
-    'Time Ended': hijack.time_ended,
+    'Time Started': formatDate(new Date(hijack.time_started)),
+    'Time Detected': formatDate(new Date(hijack.time_detected)),
+    'Last Update': formatDate(new Date(hijack.time_last)),
+    'Time Ended': formatDate(new Date(hijack.time_ended)),
     'Mitigation Started': hijack.mitigation_started ?? 'Never',
     'Community Annotation': hijack.community_annotation,
     'RPKI Status': hijack.rpki_status,
