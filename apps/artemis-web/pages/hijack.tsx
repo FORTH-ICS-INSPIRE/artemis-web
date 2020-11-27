@@ -83,7 +83,7 @@ const ViewHijackPage = (props) => {
     Object.fromEntries(
       Object.entries(row).map(([key, value]: [string, any]) => {
         if (key === 'timestamp') return [key, formatDate(new Date(value))];
-        else if (key === 'service') return [key, value.replaceAll('|', ' -> ')];
+        else if (key === 'service') return [key, value.replace(/\|/g, ' -> ')];
         else if (key === 'handled')
           return [
             key,

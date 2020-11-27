@@ -50,9 +50,9 @@ const expandRow: ExpandRowProps<any, number> = {
           <td>
             {row.as_path
               ? JSON.stringify(row.as_path)
-                  .replaceAll(',', ' ')
-                  .replaceAll('[', '')
-                  .replaceAll(']', '')
+                  .replace(/,/g, ' ')
+                  .replace(/\[/g, '')
+                  .replace(/\]/g, '')
               : ''}
           </td>
         </tr>
@@ -72,7 +72,7 @@ const expandRow: ExpandRowProps<any, number> = {
           <td>
             <b>Service:</b>
           </td>
-          <td>{row.service.toString().replaceAll('|', ' -> ')}</td>
+          <td>{row.service.toString().replace(/\|/g, ' -> ')}</td>
         </tr>
         <tr>
           <td>
