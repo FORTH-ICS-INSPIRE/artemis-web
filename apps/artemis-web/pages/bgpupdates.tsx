@@ -14,7 +14,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import NotFoundHOC from '../components/404-hoc/404-hoc';
 import BGPTableComponent from '../components/bgp-table/bgp-table';
 import { useGraphQl } from '../utils/hooks/use-graphql';
-import { formatDate } from '../utils/token';
+import { formatDate, fromEntries } from '../utils/token';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -57,7 +57,7 @@ const BGPUpdates = (props) => {
       ? bgp.filter((entry) => new Date(entry.timestamp) >= filteredDate)
       : bgp;
   filteredBgp = filteredBgp.map((row) =>
-    Object.fromEntries(
+    fromEntries(
       Object.entries(row).map(([key, value]: [string, any]) => {
         if (key === 'timestamp') return [key, formatDate(new Date(value))];
         else if (key === 'service') return [key, value.replace(/\|/g, ' -> ')];
