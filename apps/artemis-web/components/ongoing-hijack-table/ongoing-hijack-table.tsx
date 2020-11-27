@@ -1,12 +1,12 @@
-import { formatDate } from '../../utils/token';
 import React from 'react';
 import BootstrapTable, { ExpandRowProps } from 'react-bootstrap-table-next';
 import filterFactory, {
-  textFilter,
   Comparator,
   selectFilter,
+  textFilter,
 } from 'react-bootstrap-table2-filter';
 import paginationFActory from 'react-bootstrap-table2-paginator';
+import { formatDate } from '../../utils/token';
 
 const exactMatchFilter = textFilter({
   placeholder: '', // custom the input placeholder
@@ -37,39 +37,33 @@ const expandRow: ExpandRowProps<any, number> = {
       <table>
         <tr>
           <td>
-            <b>Prefix:</b>
+            <b>Hijacked Prefix:</b>
           </td>
-          <td>{row.prefix.toString()}</td>
+          <td>{row.hprefix.toString()}</td>
         </tr>
         <tr>
           <td>
-            <b>Origin AS:</b>
+            <b>Matched Prefix:</b>
           </td>
-          <td>{row.origin_as.toString()}</td>
+          <td>{row.mprefix.toString()}</td>
         </tr>
         <tr>
           <td>
-            <b>AS Path:</b>
+            <b>Type:</b>
           </td>
-          <td>{row.orig_path ? row.orig_path.toString() : ''}</td>
+          <td>{row.type}</td>
         </tr>
         <tr>
           <td>
-            <b>Aux Path Information:</b>
+            <b>Hijacked AS:</b>
           </td>
-          <td></td>
+          <td>{row.as.toString()}</td>
         </tr>
         <tr>
           <td>
-            <b>Peer AS:</b>
+            <b>RPKI:</b>
           </td>
-          <td>{row.peer_asn.toString()}</td>
-        </tr>
-        <tr>
-          <td>
-            <b>Service:</b>
-          </td>
-          <td>{row.service.toString()}</td>
+          <td>{row.rpki.toString()}</td>
         </tr>
         <tr>
           <td>
@@ -79,39 +73,27 @@ const expandRow: ExpandRowProps<any, number> = {
         </tr>
         <tr>
           <td>
-            <b>Communities:</b>
+            <b># Peers Seen</b>
           </td>
-          <td>{row.communities.toString()}</td>
+          <td>{row.peers.toString()}</td>
         </tr>
         <tr>
           <td>
-            <b>Timestamp:</b>
+            <b># ASes Infected:</b>
           </td>
-          <td>{row.timestamp.toString()}</td>
+          <td>{row.ASes.toString()}</td>
         </tr>
         <tr>
           <td>
-            <b>Hijack_key:</b>
+            <b>ACK:</b>
           </td>
-          <td>{row.hijack_key.toString()}</td>
-        </tr>
-        <tr>
           <td>
-            <b>Matched Prefix:</b>
+            {row.resolved || row.under_mitigation ? (
+              <img src="./handled.png" />
+            ) : (
+              <img src="./unhadled.png" />
+            )}
           </td>
-          <td>{row.matched_prefix.toString()}</td>
-        </tr>
-        <tr>
-          <td>
-            <b>View Hijack:</b>
-          </td>
-          <td>{row.origin_as.toString()}</td>
-        </tr>
-        <tr>
-          <td>
-            <b>Handled:</b>
-          </td>
-          <td>{row.handled.toString()}</td>
         </tr>
       </table>
     );
@@ -288,11 +270,6 @@ const columns = [
       'Whether the user has acknowledged/confirmed the hijack as a true positive.<br>If the resolve|mitigate buttons are pressed this<br>is automatically set to True (default value: False).',
     text: 'Ack',
   },
-  {
-    dataField: 'more',
-    headerTitle: () => 'Further information related to the hijack.',
-    text: 'More',
-  },
 ];
 
 const OngoingHijackTableComponent = (props) => {
@@ -317,7 +294,6 @@ const OngoingHijackTableComponent = (props) => {
           ) : (
             <img src="./unhadled.png" />
           ),
-        more: row.comment,
       };
     });
   } else {

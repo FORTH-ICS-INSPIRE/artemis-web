@@ -1,5 +1,3 @@
-import { getRandomString } from './token';
-
 export function extractUser(req) {
   if (!req.user) return null;
 

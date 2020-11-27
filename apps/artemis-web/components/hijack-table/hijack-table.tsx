@@ -1,12 +1,12 @@
-import { formatDate } from '../../utils/token';
 import React from 'react';
 import BootstrapTable from 'react-bootstrap-table-next';
 import filterFactory, {
-  textFilter,
   Comparator,
   selectFilter,
+  textFilter,
 } from 'react-bootstrap-table2-filter';
 import paginationFActory from 'react-bootstrap-table2-paginator';
+import { formatDate } from '../../utils/token';
 
 const exactMatchFilter = textFilter({
   placeholder: '', // custom the input placeholder

@@ -14,7 +14,6 @@ import 'react-toastify/dist/ReactToastify.css';
 import NotFoundHOC from '../components/404-hoc/404-hoc';
 import HijackTableComponent from '../components/hijack-table/hijack-table';
 import { useGraphQl } from '../utils/hooks/use-graphql';
-import { formatDate } from '../utils/token';
 
 const useStyles = makeStyles((theme) => ({
   root: {

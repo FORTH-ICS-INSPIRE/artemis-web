@@ -1,4 +1,5 @@
 import { Button } from '@material-ui/core';
+import { diffDate } from '../../utils/token';
 import React, { Component } from 'react';
 
 type ProcessType = {
@@ -9,7 +10,15 @@ type StatsType = {
   data: ProcessType;
 };
 
-class StatusTable extends Component<StatsType, {}> {
+class StatusTable extends Component<StatsType, any> {
+  constructor(props) {
+    super(props);
+    this.state = { date: new Date() };
+  }
+
+  componentDidMount() {
+    setInterval(() => this.setState({ date: new Date() }), 1000);
+  }
   render() {
     const STATS_DATA = this.props.data;
     const tooltips = {
@@ -64,10 +73,8 @@ class StatusTable extends Component<StatsType, {}> {
                   </td>
                   <td>
                     {process.running
-                      ? new Date().getHours() -
-                        new Date(process.timestamp).getHours() +
-                        'h'
-                      : '0h'}
+                      ? diffDate(new Date(process.timestamp), this.state.date)
+                      : '-'}
                   </td>
                 </tr>
               );
