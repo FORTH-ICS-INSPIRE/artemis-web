@@ -51,7 +51,7 @@ const BGPUpdates = (props) => {
   const bgp = BGP_DATA ? BGP_DATA.view_bgpupdates : [];
   const filteredDate = new Date();
   filteredDate.setHours(filteredDate.getHours() - filter);
-
+  console.log(bgp);
   let filteredBgp =
     filter !== 0
       ? bgp.filter((entry) => new Date(entry.timestamp) >= filteredDate)
@@ -60,7 +60,8 @@ const BGPUpdates = (props) => {
     Object.fromEntries(
       Object.entries(row).map(([key, value]: [string, any]) => {
         if (key === 'timestamp') return [key, formatDate(new Date(value))];
-        else if (key === 'service') return [key, value.replaceAll('|', ' -> ')];
+        else if (key === 'service') return [key, value.replace(/\|/g, ' -> ')];
+        else if (key === 'as_path') return [key, value.join(' ')];
         else if (key === 'handled')
           return [
             key,
