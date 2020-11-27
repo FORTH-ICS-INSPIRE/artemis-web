@@ -68,6 +68,10 @@ footer > .MuiContainer-root {
   max-width: 85% !important;
 }
 
+.card {
+  border: 0px;
+}
+
 .caret {
   top: -25px;
   left: 50%;
