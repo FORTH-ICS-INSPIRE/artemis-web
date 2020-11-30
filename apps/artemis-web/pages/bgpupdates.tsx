@@ -186,8 +186,17 @@ const BGPUpdates = (props) => {
                     Past 48h
                   </Button>
                 </div>
-                <div className="card-body">
-                  <BGPTableComponent data={filteredBgp} />
+                <div className="card-body" style={{ textAlign: 'center' }}>
+                  {filteredBgp.length > 0 ? (
+                    <BGPTableComponent data={filteredBgp} />
+                  ) : (
+                    <div>
+                      <p>
+                        <img src="checkmark.png"></img>
+                      </p>
+                      <h3>No bgp updates.</h3>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

@@ -356,11 +356,20 @@ const ViewHijackPage = (props) => {
             <div className="col-lg-10">
               <div className="card">
                 <div className="card-header">Related BGP Updates</div>
-                <div className="card-body">
-                  <BGPTableComponent
-                    data={bgp}
-                    skippedCols={['as_path', 'hijack_key']}
-                  />
+                <div className="card-body" style={{ textAlign: 'center' }}>
+                  {bgp.length > 0 ? (
+                    <BGPTableComponent
+                      data={bgp}
+                      skippedCols={['as_path', 'hijack_key']}
+                    />
+                  ) : (
+                    <div>
+                      <p>
+                        <img src="checkmark.png"></img>
+                      </p>
+                      <h3>No related bgp updates.</h3>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
