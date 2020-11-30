@@ -21,9 +21,11 @@ export const useFetch = (url) => {
     const fetchData = async () => {
       setStatus('fetching');
       if (cache[url]) {
-        const data = cache[url];
-        setData(data);
-        setStatus('fetched');
+        act(() => {
+          const data = cache[url];
+          setData(data);
+          setStatus('fetched');
+        });
       } else {
         const response = await fetch(url);
         const body = await response.text();
