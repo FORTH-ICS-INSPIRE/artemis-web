@@ -18,17 +18,11 @@ const exactMatchFilter = textFilter({
   id: 'id', // assign a unique value for htmlFor attribute, it's useful when you have same dataField across multiple table in one page
 });
 
-const selectOptions = {
-  A: 'A',
-  W: 'W',
-};
-
 const expandRow: ExpandRowProps<any, number> = {
   showExpandColumn: true,
   expandByColumnOnly: true,
   expandColumnPosition: 'right',
   renderer: (row) => {
-    console.log(row);
     return (
       <table>
         <tr>
@@ -94,7 +88,7 @@ const expandRow: ExpandRowProps<any, number> = {
         </tr>
         <tr>
           <td>
-            <b>Hijack_key:</b>
+            <b>Hijack Key:</b>
           </td>
           <td>{row.hijack_key.toString()}</td>
         </tr>
@@ -199,9 +193,11 @@ const columns = [
     text: 'Type',
     headerTitle: () =>
       '<ul><li>A → route announcement</li><li>W → route withdrawal</li></ul>',
-    formatter: (cell) => selectOptions[cell],
     filter: selectFilter({
-      options: selectOptions,
+      options: ['A', 'W'].reduce((acc, elem) => {
+        acc[elem] = elem; // or what ever object you want inside
+        return acc;
+      }, {}),
     }),
   },
   {

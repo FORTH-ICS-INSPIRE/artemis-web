@@ -19,15 +19,6 @@ const exactMatchFilter = textFilter({
   id: 'id', // assign a unique value for htmlFor attribute, it's useful when you have same dataField across multiple table in one page
 });
 
-const selectRPKI = {
-  VD: 'VD',
-  IA: 'IA',
-  IL: 'IL',
-  IU: 'IU',
-  NF: 'NF',
-  NA: 'NA',
-};
-
 const columns = [
   {
     dataField: 'update',
@@ -130,9 +121,11 @@ const columns = [
     dataField: 'rpki',
     headerTitle: () => 'The RPKI status of the hijacked prefix.',
     text: 'RPKI',
-    formatter: (cell) => selectRPKI[cell],
     filter: selectFilter({
-      options: selectRPKI,
+      options: ['VD', 'IA', 'IL', 'IU', 'NF', 'NA'].reduce((acc, elem) => {
+        acc[elem] = elem; // or what ever object you want inside
+        return acc;
+      }, {}),
     }),
   },
   {
@@ -212,6 +205,16 @@ const columns = [
   },
 ];
 
+const statuses = {
+  Ongoing: 'danger',
+  Dormant: 'secondary',
+  Resolved: 'success',
+  Ignored: 'warning',
+  'Under Mitigation': 'primary',
+  Withdrawn: 'info',
+  Outdated: 'dark',
+};
+
 const HijackTableComponent = (props) => {
   const HIJACK_DATA = props.data;
   let hijacks;
@@ -223,7 +226,11 @@ const HijackTableComponent = (props) => {
       hprefix: row.prefix,
       mprefix: row.configured_prefix,
       htype: row.type,
-      status: row.status,
+      status: (
+        <span className={'badge badge-pill badge-' + statuses[row.status]}>
+          {row.status}
+        </span>
+      ),
       as: row.hijack_as,
       rpki: row.rpki_status,
       peers: row.num_peers_seen,
