@@ -85,10 +85,20 @@ const DashboardPage = (props) => {
                   <div className="card-header">
                     Ongoing, Non-Dormant Hijacks{' '}
                   </div>
-                  <div className="card-body">
-                    <OngoingHijackTableComponent
-                      data={HIJACK_DATA ? HIJACK_DATA.view_hijacks : []}
-                    />
+                  <div className="card-body" style={{ textAlign: 'center' }}>
+                    {' '}
+                    {HIJACK_DATA && HIJACK_DATA.view_hijacks.length > 0 ? (
+                      <OngoingHijackTableComponent
+                        data={HIJACK_DATA ? HIJACK_DATA.view_hijacks : []}
+                      />
+                    ) : (
+                      <div>
+                        <p>
+                          <img src="checkmark.png"></img>
+                        </p>
+                        <h3>No hijack alerts.</h3>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>

@@ -237,8 +237,17 @@ const HijacksPage = (props) => {
                     </div>
                   </div>
                 </div>
-                <div className="card-body">
-                  <HijackTableComponent data={filteredHijacks} />
+                <div className="card-body" style={{ textAlign: 'center' }}>
+                  {filteredHijacks.length > 0 ? (
+                    <HijackTableComponent data={filteredHijacks} />
+                  ) : (
+                    <div>
+                      <p>
+                        <img src="checkmark.png"></img>
+                      </p>
+                      <h3>No hijack alerts.</h3>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
