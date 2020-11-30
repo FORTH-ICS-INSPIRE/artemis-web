@@ -145,7 +145,7 @@ const HijacksPage = (props) => {
           </div>
           <div className="row" style={{ marginTop: '20px' }}>
             <div className="col-lg-1" />
-            <div className="col-lg-10">
+            <div className="col-lg-5">
               <div className="card">
                 <div className="card-header">
                   <Button
@@ -208,6 +208,13 @@ const HijacksPage = (props) => {
                   <HijackTableComponent data={filteredHijacks} />
                 </div>
               </div>
+            </div>
+            <div className="col-lg-5">
+              <input
+                className="form-control"
+                placeholder="Type hijack key..."
+                id="hijack-key-input"
+              />
             </div>
           </div>
           <div className="row">
