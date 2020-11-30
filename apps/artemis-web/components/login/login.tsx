@@ -1,67 +1,17 @@
 import {
-  deepOrange,
-  deepPurple,
-  lightBlue,
-  orange,
-} from '@material-ui/core/colors';
-import {
-  Container,
   Button,
   Checkbox,
+  Container,
   FormControlLabel,
   Grid,
   Link,
   TextField,
   Typography,
 } from '@material-ui/core';
-import {
-  createMuiTheme,
-  makeStyles,
-  ThemeProvider,
-} from '@material-ui/core/styles';
+import { ThemeProvider } from '@material-ui/core/styles';
+import { theme, useStyles } from '../../utils/styles';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
-
-const palletType = 'dark';
-const darkState = false;
-const mainPrimaryColor = darkState ? orange[500] : lightBlue[500];
-const mainSecondaryColor = darkState ? deepOrange[900] : deepPurple[500];
-
-const theme = createMuiTheme({
-  palette: {
-    type: palletType,
-    primary: {
-      main: mainPrimaryColor,
-    },
-    secondary: {
-      main: mainSecondaryColor,
-    },
-  },
-});
-
-const useStyles = makeStyles((_theme) => ({
-  paper: {
-    marginTop: _theme.spacing(16),
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-  },
-  avatar: {
-    margin: _theme.spacing(1),
-    backgroundColor: _theme.palette.secondary.main,
-  },
-  form: {
-    width: '100%', // Fix IE 11 issue.
-    marginTop: _theme.spacing(1),
-  },
-  main: {},
-  submit: {
-    margin: _theme.spacing(3, 0, 2),
-  },
-  input: {
-    color: '#ffff',
-  },
-}));
 
 const Login = (props) => {
   const [errorMsg, setErrorMsg] = useState('');

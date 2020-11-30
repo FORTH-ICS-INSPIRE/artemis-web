@@ -237,9 +237,9 @@ const HijackTableComponent = (props) => {
       ASes: row.num_asns_inf,
       ack:
         row.resolved || row.under_mitigation ? (
-          <img src="./handled.png" />
+          <img alt="" src="./handled.png" />
         ) : (
-          <img src="./unhadled.png" />
+          <img alt="" src="./unhadled.png" />
         ),
       more: <a href={'/hijack?key=' + row.key}>View</a>,
     }));
