@@ -45,6 +45,7 @@ const HijacksPage = (props) => {
   const [distinctValues, setDistinctValues] = useState([]);
   const [selectState, setSelectState] = useState('');
   const [statusButton, setStatusButton] = useState('');
+  const [key, setKey] = useState(' ');
 
   const user = props.user;
 
@@ -145,76 +146,101 @@ const HijacksPage = (props) => {
           </div>
           <div className="row" style={{ marginTop: '20px' }}>
             <div className="col-lg-1" />
-            <div className="col-lg-5">
+            <div className="col-lg-10">
               <div className="card">
                 <div className="card-header">
-                  <Button
-                    className={0 === filterButton ? 'selectedButton' : ''}
-                    style={{ marginRight: '5px' }}
-                    variant="outlined"
-                    color="primary"
-                    onClick={() => {
-                      setFilterButton(0);
-                      setFilterDate(0);
-                      setSelectState('select');
-                      setDistinctValues([]);
-                    }}
-                  >
-                    All
-                  </Button>
-                  <Button
-                    className={1 === filterButton ? 'selectedButton' : ''}
-                    style={{ marginRight: '5px' }}
-                    variant="outlined"
-                    color="primary"
-                    onClick={() => {
-                      setFilterButton(1);
-                      setFilterDate(1);
-                      setSelectState('select');
-                      setDistinctValues([]);
-                    }}
-                  >
-                    Past 1h
-                  </Button>
-                  <Button
-                    className={2 === filterButton ? 'selectedButton' : ''}
-                    style={{ marginRight: '5px' }}
-                    variant="outlined"
-                    color="primary"
-                    onClick={() => {
-                      setFilterButton(2);
-                      setFilterDate(24);
-                      setSelectState('select');
-                      setDistinctValues([]);
-                    }}
-                  >
-                    Past 24h
-                  </Button>
-                  <Button
-                    className={3 === filterButton ? 'selectedButton' : ''}
-                    variant="outlined"
-                    color="primary"
-                    onClick={() => {
-                      setFilterButton(3);
-                      setFilterDate(48);
-                      setSelectState('select');
-                      setDistinctValues([]);
-                    }}
-                  >
-                    Past 48h
-                  </Button>
+                  <div className="row">
+                    <div className="col-lg-7">
+                      <Button
+                        className={0 === filterButton ? 'selectedButton' : ''}
+                        style={{ marginRight: '5px' }}
+                        variant="outlined"
+                        color="primary"
+                        onClick={() => {
+                          setFilterButton(0);
+                          setFilterDate(0);
+                          setSelectState('select');
+                          setDistinctValues([]);
+                        }}
+                      >
+                        All
+                      </Button>
+                      <Button
+                        className={1 === filterButton ? 'selectedButton' : ''}
+                        style={{ marginRight: '5px' }}
+                        variant="outlined"
+                        color="primary"
+                        onClick={() => {
+                          setFilterButton(1);
+                          setFilterDate(1);
+                          setSelectState('select');
+                          setDistinctValues([]);
+                        }}
+                      >
+                        Past 1h
+                      </Button>
+                      <Button
+                        className={2 === filterButton ? 'selectedButton' : ''}
+                        style={{ marginRight: '5px' }}
+                        variant="outlined"
+                        color="primary"
+                        onClick={() => {
+                          setFilterButton(2);
+                          setFilterDate(24);
+                          setSelectState('select');
+                          setDistinctValues([]);
+                        }}
+                      >
+                        Past 24h
+                      </Button>
+                      <Button
+                        className={3 === filterButton ? 'selectedButton' : ''}
+                        variant="outlined"
+                        color="primary"
+                        onClick={() => {
+                          setFilterButton(3);
+                          setFilterDate(48);
+                          setSelectState('select');
+                          setDistinctValues([]);
+                        }}
+                      >
+                        Past 48h
+                      </Button>
+                    </div>
+                    <div className="col-lg-3">
+                      <div
+                        className="form-group row"
+                        style={{ textAlign: 'right' }}
+                      >
+                        {/* <div className="col-sm-4"> </div> */}
+                        <div className="col-sm-11">
+                          <input
+                            onChange={(event) => setKey(event.target.value)}
+                            className="form-control"
+                            placeholder="Type hijack key..."
+                            id="hijack-key-input"
+                          />
+                        </div>
+                        <div className="col-sm-1">
+                          <button
+                            onClick={() =>
+                              window.location.replace('/hijack?key=' + key)
+                            }
+                            type="button"
+                            className="btn btn-secondary"
+                            id="view-hijack-by-key-button"
+                          >
+                            View
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
                 <div className="card-body">
                   <HijackTableComponent data={filteredHijacks} />
                 </div>
               </div>
-            </div>
-            <div className="col-lg-5">
-              <input
-                className="form-control"
-                placeholder="Type hijack key..."
-                id="hijack-key-input"
-              />
             </div>
           </div>
           <div className="row">
