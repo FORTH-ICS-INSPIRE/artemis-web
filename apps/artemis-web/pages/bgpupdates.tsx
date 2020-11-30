@@ -3,7 +3,6 @@ import {
   FormControlLabel,
   FormGroup,
   Grid,
-  makeStyles,
   Paper,
   Switch,
 } from '@material-ui/core';
@@ -14,18 +13,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import NotFoundHOC from '../components/404-hoc/404-hoc';
 import BGPTableComponent from '../components/bgp-table/bgp-table';
 import { useGraphQl } from '../utils/hooks/use-graphql';
+import { useStyles } from '../utils/styles';
 import { formatDate, fromEntries } from '../utils/token';
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-  },
-  paper: {
-    padding: theme.spacing(2),
-    textAlign: 'center',
-    color: theme.palette.text.secondary,
-  },
-}));
 
 const BGPUpdates = (props) => {
   const [isLive, setIsLive] = useState(true);

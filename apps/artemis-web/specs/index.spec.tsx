@@ -7,7 +7,7 @@ require('jest-fetch-mock').enableMocks();
 describe('Index', () => {
   it('should render successfully', async () => {
     const promise = Promise.resolve();
-    const handle = jest.fn(() => promise);
+    jest.fn(() => promise);
     const { baseElement } = render(<HomePage />);
     expect(baseElement).toBeTruthy();
 

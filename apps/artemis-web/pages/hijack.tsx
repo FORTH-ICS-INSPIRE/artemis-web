@@ -2,31 +2,20 @@ import {
   FormControlLabel,
   FormGroup,
   Grid,
-  makeStyles,
   Paper,
   Switch,
 } from '@material-ui/core';
+import { Editor, EditorState } from 'draft-js';
+import 'draft-js/dist/Draft.css';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import 'react-toastify/dist/ReactToastify.css';
 import NotFoundHOC from '../components/404-hoc/404-hoc';
 import BGPTableComponent from '../components/bgp-table/bgp-table';
-import { Editor, EditorState } from 'draft-js';
-import 'draft-js/dist/Draft.css';
 import { useGraphQl } from '../utils/hooks/use-graphql';
+import { useStyles } from '../utils/styles';
 import { formatDate, fromEntries } from '../utils/token';
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-  },
-  paper: {
-    padding: theme.spacing(2),
-    textAlign: 'center',
-  color: theme.palette.text.secondary,
-  },
-}));
 
 const ViewHijackPage = (props) => {
   const [isLive, setIsLive] = useState(true);
@@ -90,7 +79,7 @@ const ViewHijackPage = (props) => {
         else if (key === 'handled')
           return [
             key,
-            value ? <img src="handled.png" /> : <img src="./unhadled.png" />,
+            value ? <img  alt="" src="handled.png" /> : <img alt="" src="./unhadled.png" />,
           ];
         else return [key, value];
       })
@@ -365,7 +354,7 @@ const ViewHijackPage = (props) => {
                   ) : (
                     <div>
                       <p>
-                        <img src="checkmark.png"></img>
+                        <img alt="" src="checkmark.png" />
                       </p>
                       <h3>No related bgp updates.</h3>
                     </div>

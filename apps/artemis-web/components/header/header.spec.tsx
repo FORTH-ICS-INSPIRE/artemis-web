@@ -11,7 +11,7 @@ configure({ adapter: new Adapter() });
 describe('Header', () => {
   it('should render successfully', async () => {
     const promise = Promise.resolve();
-    const handle = jest.fn(() => promise);
+    jest.fn(() => promise);
     const { baseElement } = render(<Header />);
     expect(baseElement).toBeTruthy();
 
@@ -20,7 +20,7 @@ describe('Header', () => {
 
   it('should render the login and create account options if not logged in', async () => {
     const promise = Promise.resolve();
-    const handle = jest.fn(() => promise);
+    jest.fn(() => promise);
     const wrapper = shallow(<Header />);
     expect(wrapper.find(Link)).toHaveLength(2);
     await act(() => promise);

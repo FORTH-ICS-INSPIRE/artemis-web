@@ -80,9 +80,9 @@ const expandRow: ExpandRowProps<any, number> = {
           </td>
           <td>
             {row.resolved || row.under_mitigation ? (
-              <img src="./handled.png" />
+              <img alt="" src="./handled.png" />
             ) : (
-              <img src="./unhadled.png" />
+              <img alt="" src="./unhadled.png" />
             )}
           </td>
         </tr>
@@ -284,9 +284,9 @@ const OngoingHijackTableComponent = (props) => {
         ASes: row.num_asns_inf,
         ack:
           row.resolved || row.under_mitigation ? (
-            <img src="./handled.png" />
+            <img alt="" src="./handled.png" />
           ) : (
-            <img src="./unhadled.png" />
+            <img alt="" src="./unhadled.png" />
           ),
       };
     });

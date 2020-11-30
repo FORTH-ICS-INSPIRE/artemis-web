@@ -3,7 +3,6 @@ import {
   FormControlLabel,
   FormGroup,
   Grid,
-  makeStyles,
   Paper,
   Switch,
 } from '@material-ui/core';
@@ -14,17 +13,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import NotFoundHOC from '../components/404-hoc/404-hoc';
 import HijackTableComponent from '../components/hijack-table/hijack-table';
 import { useGraphQl } from '../utils/hooks/use-graphql';
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-  },
-  paper: {
-    padding: theme.spacing(2),
-    textAlign: 'center',
-    color: theme.palette.text.secondary,
-  },
-}));
+import { useStyles } from '../utils/styles';
 
 const HijacksPage = (props) => {
   const [isLive, setIsLive] = useState(true);
@@ -243,7 +232,7 @@ const HijacksPage = (props) => {
                   ) : (
                     <div>
                       <p>
-                        <img src="checkmark.png"></img>
+                        <img alt="" src="checkmark.png"></img>
                       </p>
                       <h3>No hijack alerts.</h3>
                     </div>
