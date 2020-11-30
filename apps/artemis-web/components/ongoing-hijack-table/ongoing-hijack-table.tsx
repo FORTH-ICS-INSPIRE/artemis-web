@@ -19,15 +19,6 @@ const exactMatchFilter = textFilter({
   id: 'id', // assign a unique value for htmlFor attribute, it's useful when you have same dataField across multiple table in one page
 });
 
-const selectOptions = {
-  NA: 'NA',
-  VD: 'VD',
-  IA: 'IA',
-  IL: 'IL',
-  IU: 'IU',
-  NF: 'NF',
-};
-
 const expandRow: ExpandRowProps<any, number> = {
   showExpandColumn: true,
   expandByColumnOnly: true,
@@ -197,7 +188,10 @@ const columns = [
     headerTitle: () => 'The RPKI status of the hijacked prefix.',
     text: 'RPKI',
     filter: selectFilter({
-      options: selectOptions,
+      options: ['VD', 'IA', 'IL', 'IU', 'NF', 'NA'].reduce((acc, elem) => {
+        acc[elem] = elem; // or what ever object you want inside
+        return acc;
+      }, {}),
     }),
   },
   {

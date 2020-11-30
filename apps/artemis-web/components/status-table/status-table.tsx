@@ -55,7 +55,7 @@ class StatusTable extends Component<StatsType, any> {
                   <td
                     data-toggle="tooltip"
                     data-placement="top"
-                    title={tooltips[process.name]}
+                    title={tooltips[process.name] ?? ''}
                   >
                     {process.name.charAt(0).toUpperCase() +
                       process.name.slice(1)}

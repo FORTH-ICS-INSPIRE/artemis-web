@@ -50,19 +50,22 @@ const ViewHijackPage = (props) => {
   };
 
   const findStatus = (row) => {
-    if (row.withdrawn) return 'Withdrawn';
-    else if (row.resolved) return 'Resolved';
-    else if (row.ignored) return 'Ignored';
-    else if (row.active) return 'Active';
-    else if (row.dormant) return 'Dormant';
-    else if (row.under_mitigation) return 'Under Mitigation';
-    else if (row.outdated) return 'Outdated';
-    else return '';
+    const statuses = [];
+
+    if (row.withdrawn) statuses.push('Withdrawn');
+    if (row.resolved) statuses.push('Resolved');
+    if (row.ignored) statuses.push('Ignored');
+    if (row.active) statuses.push('Active');
+    if (row.dormant) statuses.push('Dormant');
+    if (row.under_mitigation) statuses.push('Under Mitigation');
+    if (row.outdated) statuses.push('Outdated');
+
+    return statuses;
   };
 
   const classes = useStyles();
   const router = useRouter();
-  const key: any = router.query.key;
+  const key: string = props.key ?? router.query.key ?? '';
   const user = props.user;
 
   const [distinctValues, setDistinctValues] = useState([]);
@@ -147,15 +150,16 @@ const ViewHijackPage = (props) => {
                   <h1>
                     Viewing Hijack
                     <small id="hijack_status">
-                      <span
-                        style={{ marginLeft: '10px' }}
-                        className={
-                          'badge badge-pill badge-' +
-                          statuses[findStatus(hijack)]
-                        }
-                      >
-                        {findStatus(hijack)}
-                      </span>
+                      {findStatus(hijack).map((status) => (
+                        <span
+                          style={{ marginLeft: '10px' }}
+                          className={
+                            'badge badge-pill badge-' + statuses[status]
+                          }
+                        >
+                          {status}
+                        </span>
+                      ))}
                     </small>
                   </h1>
                 </div>

@@ -44,45 +44,41 @@ const HijacksPage = (props) => {
   const [filterButton, setFilterButton] = useState(0);
   const [distinctValues, setDistinctValues] = useState([]);
   const [selectState, setSelectState] = useState('');
-  const [statusButton, setStatusButton] = useState(-1);
-
-  const statuses = [
-    'Ongoing',
-    'Dormant',
-    'Resolved',
-    'Ignored',
-    'Under Mitigation',
-    'Withdrawn',
-    'Outdated',
-  ];
+  const [statusButton, setStatusButton] = useState('');
 
   const user = props.user;
 
   const findStatus = (row) => {
-    if (row.withdrawn) return 'Withdrawn';
-    else if (row.resolved) return 'Resolved';
-    else if (row.ignored) return 'Ignored';
-    else if (row.active) return 'Active';
-    else if (row.dormant) return 'Dormant';
-    else if (row.under_mitigation) return 'Under Mitigation';
-    else if (row.outdated) return 'Outdated';
-    else return '';
+    const statuses = [];
+
+    if (row.withdrawn) statuses.push('Withdrawn');
+    if (row.resolved) statuses.push('Resolved');
+    if (row.ignored) statuses.push('Ignored');
+    if (row.active) statuses.push('Active');
+    if (row.dormant) statuses.push('Dormant');
+    if (row.under_mitigation) statuses.push('Under Mitigation');
+    if (row.outdated) statuses.push('Outdated');
+
+    return statuses;
   };
 
-  const setStatus = (id) => {
-    if (id === statusButton) {
+  const setStatus = (status) => {
+    if (status === statusButton) {
       setFilterStatus('');
-      setStatusButton(-1);
+      setStatusButton('');
     } else {
-      setFilterStatus(statuses[id]);
-      setStatusButton(id);
+      setFilterStatus(status);
+      setStatusButton(status);
     }
   };
 
   const HIJACK_DATA = useGraphQl('hijack', isLive);
 
   let hijacks = HIJACK_DATA ? HIJACK_DATA.view_hijacks : [];
-  hijacks = hijacks.map((entry) => ({ ...entry, status: findStatus(entry) }));
+  hijacks = hijacks.map((entry) => ({
+    ...entry,
+    status: findStatus(entry)[0] ?? '',
+  }));
   const filteredDate = new Date();
   filteredDate.setHours(filteredDate.getHours() - filterDate);
 
@@ -221,13 +217,15 @@ const HijacksPage = (props) => {
                 <div className="card-header">
                   Select Status:
                   <button
-                    onClick={() => setStatus(0)}
+                    onClick={() => setStatus('Ongoing')}
                     type="button"
                     id="status_active_button"
                     style={{ marginLeft: '5px' }}
                     className={
                       'btn btn-sm ' +
-                      (0 === statusButton ? 'btn-danger' : 'btn-outline-danger')
+                      ('Ongoing' === statusButton
+                        ? 'btn-danger'
+                        : 'btn-outline-danger')
                     }
                     title=""
                     data-toggle="tooltip"
@@ -238,13 +236,13 @@ const HijacksPage = (props) => {
                   </button>{' '}
                   /
                   <button
-                    onClick={() => setStatus(1)}
+                    onClick={() => setStatus('Dormant')}
                     type="button"
                     id="status_dormant_button"
                     style={{ marginLeft: '5px' }}
                     className={
                       'btn btn-sm ' +
-                      (1 === statusButton
+                      ('Dormant' === statusButton
                         ? 'btn-secondary'
                         : 'btn-outline-secondary')
                     }
@@ -257,13 +255,13 @@ const HijacksPage = (props) => {
                   </button>{' '}
                   /
                   <button
-                    onClick={() => setStatus(2)}
+                    onClick={() => setStatus('Resolved')}
                     type="button"
                     id="status_resolved_button"
                     style={{ marginLeft: '5px' }}
                     className={
                       'btn btn-sm ' +
-                      (2 === statusButton
+                      ('Resolved' === statusButton
                         ? 'btn-success'
                         : 'btn-outline-success')
                     }
@@ -276,13 +274,13 @@ const HijacksPage = (props) => {
                   </button>{' '}
                   /
                   <button
-                    onClick={() => setStatus(3)}
+                    onClick={() => setStatus('Ignored')}
                     type="button"
                     id="status_ignored_button"
                     style={{ marginLeft: '5px' }}
                     className={
                       'btn btn-sm ' +
-                      (3 === statusButton
+                      ('Ignored' === statusButton
                         ? 'btn-warning'
                         : 'btn-outline-warning')
                     }
@@ -295,13 +293,13 @@ const HijacksPage = (props) => {
                   </button>{' '}
                   /
                   <button
-                    onClick={() => setStatus(4)}
+                    onClick={() => setStatus('Under Mitigation')}
                     type="button"
                     id="status_under_mitigation_button"
                     style={{ marginLeft: '5px' }}
                     className={
                       'btn btn-sm ' +
-                      (4 === statusButton
+                      ('Under Mitigation' === statusButton
                         ? 'btn-primary'
                         : 'btn-outline-primary')
                     }
@@ -314,13 +312,15 @@ const HijacksPage = (props) => {
                   </button>{' '}
                   /
                   <button
-                    onClick={() => setStatus(5)}
+                    onClick={() => setStatus('Withdrawn')}
                     type="button"
                     id="status_withdrawn_button"
                     style={{ marginLeft: '5px' }}
                     className={
                       'btn btn-sm ' +
-                      (5 === statusButton ? 'btn-info' : 'btn-outline-info')
+                      ('Withdrawn' === statusButton
+                        ? 'btn-info'
+                        : 'btn-outline-info')
                     }
                     title=""
                     data-toggle="tooltip"
@@ -331,13 +331,15 @@ const HijacksPage = (props) => {
                   </button>{' '}
                   /
                   <button
-                    onClick={() => setStatus(6)}
+                    onClick={() => setStatus('Outdated')}
                     type="button"
                     id="status_outdated_button"
                     style={{ marginLeft: '5px' }}
                     className={
                       'btn btn-sm ' +
-                      (6 === statusButton ? 'btn-dark' : 'btn-outline-dark')
+                      ('Outdated' === statusButton
+                        ? 'btn-dark'
+                        : 'btn-outline-dark')
                     }
                     title=""
                     data-toggle="tooltip"

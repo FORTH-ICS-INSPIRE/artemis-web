@@ -51,11 +51,12 @@ const BGPUpdates = (props) => {
   const bgp = BGP_DATA ? BGP_DATA.view_bgpupdates : [];
   const filteredDate = new Date();
   filteredDate.setHours(filteredDate.getHours() - filter);
-  console.log(bgp);
+
   let filteredBgp =
     filter !== 0
       ? bgp.filter((entry) => new Date(entry.timestamp) >= filteredDate)
       : bgp;
+
   filteredBgp = filteredBgp.map((row) =>
     fromEntries(
       Object.entries(row).map(([key, value]: [string, any]) => {
