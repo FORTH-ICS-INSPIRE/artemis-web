@@ -292,6 +292,7 @@ const BGPTableComponent = (props) => {
 
   return (
     <BootstrapTable
+      wrapperClasses="table-responsive"
       keyField="timestamp"
       data={bgp}
       columns={columns}
