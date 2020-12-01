@@ -1,4 +1,7 @@
-import React from 'react';
+import { fetchASNData } from '../../utils/fetch-data';
+import { parseASNData } from '../../utils/parsers';
+import Link from 'next/link';
+import React, { useEffect } from 'react';
 import BootstrapTable from 'react-bootstrap-table-next';
 import filterFactory, {
   Comparator,
@@ -218,9 +221,10 @@ const statuses = {
 const HijackTableComponent = (props) => {
   const HIJACK_DATA = props.data;
   let hijacks;
+  const [ASNTitle, setASNTitle] = React.useState([]);
 
   if (HIJACK_DATA && HIJACK_DATA.length) {
-    hijacks = HIJACK_DATA.map((row) => ({
+    hijacks = HIJACK_DATA.map((row, i) => ({
       update: formatDate(new Date(row.time_last)),
       time: formatDate(new Date(row.time_detected)),
       hprefix: row.prefix,
@@ -231,7 +235,12 @@ const HijackTableComponent = (props) => {
           {row.status}
         </span>
       ),
-      as: row.hijack_as,
+      as_original: row.hijack_as,
+      as: (
+        <div data-toggle="tooltip" title={ASNTitle[i]}>
+          {row.hijack_as}
+        </div>
+      ),
       rpki: row.rpki_status,
       peers: row.num_peers_seen,
       ASes: row.num_asns_inf,
@@ -241,11 +250,31 @@ const HijackTableComponent = (props) => {
         ) : (
           <img alt="" src="./unhadled.png" />
         ),
-      more: <a href={'/hijack?key=' + row.key}>View</a>,
+      more: (
+        <Link href={`/hijack?key=${row.key}`}>
+          <a href={'/hijack?key=' + row.key}>View</a>
+        </Link>
+      ),
     }));
   } else {
     hijacks = [];
   }
+
+  useEffect(() => {
+    (async function setStateFn() {
+      const tooltips = [];
+      for (let i = 0; i < hijacks.length; i++) {
+        if (hijacks.length < ASNTitle.length) return;
+        const ASN_int: number = hijacks[i].as_original;
+        const [name, countries, abuse] = await fetchASNData(ASN_int);
+
+        const tooltip = parseASNData(ASN_int, name, countries, abuse);
+        tooltips.push(tooltip);
+      }
+      if (JSON.stringify(tooltips) !== JSON.stringify(ASNTitle))
+        setASNTitle(tooltips);
+    })();
+  }, [hijacks]);
 
   return (
     <BootstrapTable

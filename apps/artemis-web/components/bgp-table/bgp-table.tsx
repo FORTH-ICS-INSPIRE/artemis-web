@@ -1,4 +1,6 @@
-import React from 'react';
+import { fetchASNData } from '../../utils/fetch-data';
+import { parseASNData } from '../../utils/parsers';
+import React, { useEffect } from 'react';
 import BootstrapTable, { ExpandRowProps } from 'react-bootstrap-table-next';
 import filterFactory, {
   textFilter,
@@ -35,7 +37,7 @@ const expandRow: ExpandRowProps<any, number> = {
           <td>
             <b>Origin AS:</b>
           </td>
-          <td>{row.origin_as.toString()}</td>
+          <td>{row.origin_as_original}</td>
         </tr>
         <tr>
           <td>
@@ -60,7 +62,7 @@ const expandRow: ExpandRowProps<any, number> = {
           <td>
             <b>Peer AS:</b>
           </td>
-          <td>{row.peer_asn.toString()}</td>
+          <td>{row.peer_asn_original}</td>
         </tr>
         <tr>
           <td>
@@ -163,7 +165,7 @@ const columns = [
     filter: exactMatchFilter,
   },
   {
-    dataField: 'origin_as',
+    dataField: 'origin_as_original',
     headerTitle: () => 'The AS that originated the BGP update.',
     text: 'Origin AS',
     filter: exactMatchFilter,
@@ -175,7 +177,7 @@ const columns = [
     filter: textFilter(),
   },
   {
-    dataField: 'peer_asn',
+    dataField: 'peer_asn_original',
     headerTitle: () =>
       'The route collector service that is connected to the monitor AS that observed the BGP update.',
     text: 'Peer As',
@@ -215,18 +217,84 @@ const columns = [
 ];
 
 const BGPTableComponent = (props) => {
-  const bgp = props.data;
+  let bgp;
+  const bgpData = props.data;
+  const [ASNTitle, setASNTitle] = React.useState([]);
+
+  if (bgpData && bgpData.length) {
+    bgp = props.data.map((row, i) => {
+      const origin_as = (
+        <div data-toggle="tooltip" title={ASNTitle[i] ? ASNTitle[i][0] : ''}>
+          {row['origin_as']}
+        </div>
+      );
+      const peer_as = (
+        <div data-toggle="tooltip" title={ASNTitle[i] ? ASNTitle[i][1] : ''}>
+          {row['peer_asn']}
+        </div>
+      );
+      row.as_path = JSON.stringify(row.as_path)
+        .replace(/,/g, ' ')
+        .replace(/\[/g, '')
+        .replace(/\]/g, '')
+        .replace(/\"/g, '');
+      return {
+        ...row,
+        origin_as_original: origin_as,
+        peer_asn_original: peer_as,
+      };
+    });
+  } else {
+    bgp = [];
+  }
+
   const skippedCols = props.skippedCols ?? [];
 
   const filteredCols = columns.filter(
     (col) => !skippedCols.includes(col.dataField)
   );
 
+  useEffect(() => {
+    (async function setStateFn() {
+      const tooltips = [];
+
+      for (let i = 0; i < bgp.length; i++) {
+        const ASN_int_origin: number = bgp[i].origin_as;
+        const ASN_int_peer: number = bgp[i].peer_asn;
+        const [
+          name_origin,
+          countries_origin,
+          abuse_origin,
+        ] = await fetchASNData(ASN_int_origin);
+        const [name_peer, countries_peer, abuse_peer] = await fetchASNData(
+          ASN_int_peer
+        );
+        const tooltip1 = parseASNData(
+          ASN_int_origin,
+          name_origin,
+          countries_origin,
+          abuse_origin
+        );
+        const tooltip2 = parseASNData(
+          ASN_int_peer,
+          name_peer,
+          countries_peer,
+          abuse_peer
+        );
+
+        tooltips.push([tooltip1, tooltip2]);
+      }
+
+      if (JSON.stringify(tooltips) !== JSON.stringify(ASNTitle))
+        setASNTitle(tooltips);
+    })();
+  }, [bgp]);
+
   return (
     <BootstrapTable
       keyField="timestamp"
       data={bgp}
-      columns={filteredCols}
+      columns={columns}
       expandRow={expandRow}
       filter={filterFactory()}
       filterPosition="bottom"

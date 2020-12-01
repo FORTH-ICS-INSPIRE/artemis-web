@@ -1,4 +1,6 @@
-import React from 'react';
+import { fetchASNData } from '../../utils/fetch-data';
+import { parseASNData } from '../../utils/parsers';
+import React, { useEffect } from 'react';
 import BootstrapTable, { ExpandRowProps } from 'react-bootstrap-table-next';
 import filterFactory, {
   Comparator,
@@ -43,12 +45,6 @@ const expandRow: ExpandRowProps<any, number> = {
             <b>Type:</b>
           </td>
           <td>{row.type}</td>
-        </tr>
-        <tr>
-          <td>
-            <b>Hijacked AS:</b>
-          </td>
-          <td>{row.as.toString()}</td>
         </tr>
         <tr>
           <td>
@@ -269,16 +265,22 @@ const columns = [
 const OngoingHijackTableComponent = (props) => {
   const HIJACK_DATA = props.data;
   let hijacks;
+  const [ASNTitle, setASNTitle] = React.useState([]);
 
   if (HIJACK_DATA && HIJACK_DATA.length) {
-    hijacks = HIJACK_DATA.map((row) => {
+    hijacks = HIJACK_DATA.map((row, i) => {
       return {
         update: formatDate(new Date(row.time_last)),
         time: formatDate(new Date(row.time_detected)),
         hprefix: row.prefix,
         mprefix: row.configured_prefix,
         type: row.type,
-        as: row.hijack_as,
+        as_original: row.hijack_as,
+        as: (
+          <div data-toggle="tooltip" title={ASNTitle[i]}>
+            {row.hijack_as}
+          </div>
+        ),
         rpki: row.rpki_status,
         peers: row.num_peers_seen,
         ASes: row.num_asns_inf,
@@ -293,6 +295,22 @@ const OngoingHijackTableComponent = (props) => {
   } else {
     hijacks = [];
   }
+
+  useEffect(() => {
+    (async function setStateFn() {
+      const tooltips = [];
+      for (let i = 0; i < hijacks.length; i++) {
+        if (hijacks.length < ASNTitle.length) return;
+        const ASN_int: number = hijacks[i].as_original;
+        const [name, countries, abuse] = await fetchASNData(ASN_int);
+
+        const tooltip = parseASNData(ASN_int, name, countries, abuse);
+        tooltips.push(tooltip);
+      }
+      if (JSON.stringify(tooltips) !== JSON.stringify(ASNTitle))
+        setASNTitle(tooltips);
+    })();
+  }, [hijacks]);
 
   return (
     <BootstrapTable
