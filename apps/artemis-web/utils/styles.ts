@@ -13,10 +13,12 @@ const mainSecondaryColor = darkState ? deepOrange[900] : deepPurple[500];
 
 export const useStyles = makeStyles((_theme) => ({
   paper: {
-    marginTop: _theme.spacing(16),
+    // marginTop: _theme.spacing(16),
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
+    height: '2.5rem',
+    paddingTop: '8px',
   },
   avatar: {
     margin: _theme.spacing(1),

@@ -91,20 +91,6 @@ export const handlers = [
       ctx.data({
         view_bgpupdates: [
           {
-            prefix: '139.91.250.0/24',
-            origin_as: 8522,
-            peer_asn: 64271,
-            as_path: [64271, 6939, 56910, 8522],
-            service: 'bgpstreamlive|ris|rrc01',
-            type: 'A',
-            communities: ['a'],
-            timestamp: '2020-11-04T12:07:25',
-            hijack_key: [],
-            handled: true,
-            matched_prefix: '139.91.250.0/24',
-            orig_path: null,
-          },
-          {
             prefix: '2001:648:2c30::/48',
             origin_as: 8522,
             peer_asn: 20811,

@@ -79,7 +79,11 @@ const ViewHijackPage = (props) => {
         else if (key === 'handled')
           return [
             key,
-            value ? <img  alt="" src="handled.png" /> : <img alt="" src="./unhadled.png" />,
+            value ? (
+              <img alt="" src="handled.png" />
+            ) : (
+              <img alt="" src="./unhadled.png" />
+            ),
           ];
         else return [key, value];
       })
