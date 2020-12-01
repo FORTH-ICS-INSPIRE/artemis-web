@@ -49,8 +49,19 @@ footer > .MuiContainer-root {
   margin-left: 8%;
 }
 
+@media all and (max-width: 700px) and (min-width: 300px) {
+  .col-lg-1 {
+    display: none;
+  }
+
+  .col-lg-10 {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+}
+
 #content-wrap > .row {
-  margin-left: 0;
+  margin-left: '0px';
   margin-right: 0%;
 }
 

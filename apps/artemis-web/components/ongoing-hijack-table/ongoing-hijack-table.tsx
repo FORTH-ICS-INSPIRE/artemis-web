@@ -314,6 +314,7 @@ const OngoingHijackTableComponent = (props) => {
 
   return (
     <BootstrapTable
+      wrapperClasses="table-responsive"
       keyField="update"
       data={hijacks}
       columns={columns}
