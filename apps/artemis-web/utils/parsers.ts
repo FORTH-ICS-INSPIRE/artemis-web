@@ -150,7 +150,7 @@ export function parseASNData(ASN_int, name, countries, abuse) {
   html.push('<small>(Click on AS number to copy on clickboard)</small>');
   html.push('</p>');
 
-  const join_text = inner_html.join('').replace(/<\/br>|<br>/g, '\n');
+  const join_text = inner_html.join(''); //.replace(/<\/br>|<br>/g, '\n');
 
   return join_text;
 }
