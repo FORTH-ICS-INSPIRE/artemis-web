@@ -8,6 +8,8 @@ import filterFactory, {
   selectFilter,
 } from 'react-bootstrap-table2-filter';
 import paginationFActory from 'react-bootstrap-table2-paginator';
+import ReactTooltip from 'react-tooltip';
+import Link from 'next/link';
 
 const exactMatchFilter = textFilter({
   placeholder: '', // custom the input placeholder
@@ -49,6 +51,7 @@ const expandRow: ExpandRowProps<any, number> = {
                   .replace(/,/g, ' ')
                   .replace(/\[/g, '')
                   .replace(/\]/g, '')
+                  .replace(/\"/g, '')
               : ''}
           </td>
         </tr>
@@ -105,7 +108,13 @@ const expandRow: ExpandRowProps<any, number> = {
             <b>View Hijack:</b>
           </td>
           <td>
-            <a href={'/hijack?key=' + row.hijack_key}>View</a>
+            {row.hijack_key.toString().length > 0 ? (
+              <Link href={`/hijack?key=${row.hijack_key}`}>
+                <a href={'/hijack?key=' + row.hijack_key}>View</a>
+              </Link>
+            ) : (
+              ''
+            )}
           </td>
         </tr>
         <tr>
@@ -224,14 +233,24 @@ const BGPTableComponent = (props) => {
   if (bgpData && bgpData.length) {
     bgp = props.data.map((row, i) => {
       const origin_as = (
-        <div data-toggle="tooltip" title={ASNTitle[i] ? ASNTitle[i][0] : ''}>
-          {row['origin_as']}
-        </div>
+        <>
+          <div data-tip data-for={'origin' + i}>
+            {row['origin_as']}
+          </div>
+          <ReactTooltip html={true} id={'origin' + i}>
+            {ASNTitle[i] ? ASNTitle[i][0] : ''}
+          </ReactTooltip>
+        </>
       );
       const peer_as = (
-        <div data-toggle="tooltip" title={ASNTitle[i] ? ASNTitle[i][1] : ''}>
-          {row['peer_asn']}
-        </div>
+        <>
+          <div data-tip data-for={'peer' + i}>
+            {row['peer_asn']}
+          </div>
+          <ReactTooltip html={true} id={'peer' + i}>
+            {ASNTitle[i] ? ASNTitle[i][1] : ''}
+          </ReactTooltip>
+        </>
       );
       row.as_path = JSON.stringify(row.as_path)
         .replace(/,/g, ' ')

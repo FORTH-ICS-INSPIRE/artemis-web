@@ -9,6 +9,7 @@ import filterFactory, {
 } from 'react-bootstrap-table2-filter';
 import paginationFActory from 'react-bootstrap-table2-paginator';
 import { formatDate } from '../../utils/token';
+import ReactTooltip from 'react-tooltip';
 
 const exactMatchFilter = textFilter({
   placeholder: '', // custom the input placeholder
@@ -277,9 +278,14 @@ const OngoingHijackTableComponent = (props) => {
         type: row.type,
         as_original: row.hijack_as,
         as: (
-          <div data-toggle="tooltip" title={ASNTitle[i]}>
-            {row.hijack_as}
-          </div>
+          <>
+            <div data-tip data-for={'hijack_as'}>
+              {row.hijack_as}
+            </div>
+            <ReactTooltip html={true} id={'hijack_as'}>
+              {ASNTitle[i]}
+            </ReactTooltip>
+          </>
         ),
         rpki: row.rpki_status,
         peers: row.num_peers_seen,
