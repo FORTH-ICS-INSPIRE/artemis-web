@@ -114,7 +114,9 @@ const Header = (props) => {
                     style={{ top: '36px' }}
                   >
                     <MenuItem onClick={handleCloseAction}>
-                      <Link id='pass_change' href="/password_change">Password Change</Link>
+                      <Link href="/password_change">
+                        Password Change
+                      </Link>
                     </MenuItem>
                   </Menu>
                 </div>

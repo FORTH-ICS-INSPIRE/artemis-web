@@ -45,7 +45,6 @@ describe('artemis-web', () => {
     // Custom command example, see `../support/commands.ts` file
     cy.get('#modules').find('tr').its('length').should('be.gt', 0);
   });
-  
 
   it('logs out', () => {
     // Custom command example, see `../support/commands.ts` file
@@ -53,7 +52,6 @@ describe('artemis-web', () => {
     cy.wait(2000);
     cy.get('h1').should('have.text', 'Login');
   });
-
 
   it('logs in', () => {
     cy.get('h1').should('have.text', 'Login');
@@ -64,7 +62,11 @@ describe('artemis-web', () => {
   it('change password', () => {
     // Custom command example, see `../support/commands.ts` file
     cy.visit('/password_change');
-    cy.typeChangePass({old_pass: newPass, new_pass: '1234', repeat_pass: '1234'})
+    cy.typeChangePass({
+      old_pass: newPass,
+      new_pass: '1234',
+      repeat_pass: '1234',
+    });
     cy.get('#submit').click();
     cy.wait(1000);
     cy.get('#password_change_form').contains('has been updated');

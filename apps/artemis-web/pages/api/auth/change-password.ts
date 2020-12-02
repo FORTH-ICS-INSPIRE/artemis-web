@@ -11,11 +11,11 @@ import {
 
 const handler = nc()
   .use(auth)
-  .put(async (req, res) => {
+  .put(async (req: NextApiRequestExtended, res: NextApiResponseExtended) => {
     try {
-        const { old_password, new_password } = req.body;
+      const { old_password, new_password } = req.body;
       if (!req.user) throw new Error('You need to be logged in.');
-      if (! await argon2.verify(req.user.password, old_password))
+      if (!(await argon2.verify(req.user.password, old_password)))
         throw new Error('Old password is wrong.');
 
       const password = await argon2.hash(new_password);
@@ -26,7 +26,7 @@ const handler = nc()
       res.status(200);
       res.json({ message: 'Your password has been updated.' });
     } catch (error) {
-        res.status(300);
+      res.status(300);
       res.json({
         ok: false,
         message: error.toString(),

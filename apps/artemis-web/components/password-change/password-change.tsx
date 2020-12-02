@@ -106,10 +106,15 @@ const PasswordChange = (props) => {
           <Typography className={classes.input} component="h1" variant="h5">
             Change Password
           </Typography>
-          <form id="password_change_form" method="post" onSubmit={handleSubmit} className={classes.form}>
+          <form
+            id="password_change_form"
+            method="post"
+            onSubmit={handleSubmit}
+            className={classes.form}
+          >
             {errorMsg ? <p style={{ color: 'red' }}>{errorMsg}</p> : null}
             {successMsg ? <p style={{ color: 'green' }}>{successMsg}</p> : null}
-            
+
             <input name="emailVerified" type="hidden" defaultValue={'true'} />
             <input name="stype" type="hidden" defaultValue="signup" />
             <Grid container spacing={2}>
