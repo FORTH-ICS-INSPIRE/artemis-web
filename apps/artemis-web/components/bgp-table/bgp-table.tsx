@@ -111,9 +111,7 @@ const expandRow: ExpandRowProps<any, number> = {
           </td>
           <td>
             {row.hijack_key.toString().length > 0 ? (
-              <Link href={`/hijack?key=${row.hijack_key}`}>
-                <a href={'/hijack?key=' + row.hijack_key}>View</a>
-              </Link>
+              <Link href={`/hijack?key=${row.hijack_key}`}>View</Link>
             ) : (
               ''
             )}
@@ -280,28 +278,29 @@ const BGPTableComponent = (props) => {
       const tooltips = [];
 
       for (let i = 0; i < bgp.length; i++) {
-        const ASN_int_origin: number = bgp[i].origin_as;
-        const ASN_int_peer: number = bgp[i].peer_asn;
-        const [
-          name_origin,
-          countries_origin,
-          abuse_origin,
-        ] = await fetchASNData(ASN_int_origin);
-        const [name_peer, countries_peer, abuse_peer] = await fetchASNData(
-          ASN_int_peer
-        );
-        const tooltip1 = parseASNData(
-          ASN_int_origin,
-          name_origin,
-          countries_origin,
-          abuse_origin
-        );
-        const tooltip2 = parseASNData(
-          ASN_int_peer,
-          name_peer,
-          countries_peer,
-          abuse_peer
-        );
+        const ASN_int_origin: number | string = bgp[i].origin_as;
+        const ASN_int_peer: number | string = bgp[i].peer_asn;
+
+        const [name_origin, countries_origin, abuse_origin] =
+          ASN_int_origin == '-'
+            ? ['', '', '']
+            : await fetchASNData(ASN_int_origin);
+        const [name_peer, countries_peer, abuse_peer] =
+          ASN_int_peer == '-' ? ['', '', ''] : await fetchASNData(ASN_int_peer);
+
+        const tooltip1 =
+          ASN_int_origin == '-'
+            ? ''
+            : parseASNData(
+                ASN_int_origin,
+                name_origin,
+                countries_origin,
+                abuse_origin
+              );
+        const tooltip2 =
+          ASN_int_peer == '-'
+            ? ''
+            : parseASNData(ASN_int_peer, name_peer, countries_peer, abuse_peer);
 
         tooltips.push([tooltip1, tooltip2]);
       }
