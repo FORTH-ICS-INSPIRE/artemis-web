@@ -11,6 +11,8 @@ import paginationFActory from 'react-bootstrap-table2-paginator';
 import ReactTooltip from 'react-tooltip';
 import Link from 'next/link';
 
+import paginationFactory from 'react-bootstrap-table2-paginator';
+
 const exactMatchFilter = textFilter({
   placeholder: '', // custom the input placeholder
   className: 'my-custom-text-filter', // custom classname on input
@@ -309,6 +311,46 @@ const BGPTableComponent = (props) => {
     })();
   }, [bgp]);
 
+  const customTotal = (from, to, size) => (
+    <span className="react-bootstrap-table-pagination-total">
+      Showing {from} to {to} of {size} entries
+    </span>
+  );
+
+  const options = {
+    pageStartIndex: 0,
+    withFirstAndLast: false, // Hide the going to First and Last page button
+    firstPageText: 'First',
+    prePageText: 'Back',
+    nextPageText: 'Next',
+    lastPageText: 'Last',
+    nextPageTitle: 'First page',
+    prePageTitle: 'Pre page',
+    firstPageTitle: 'Next page',
+    lastPageTitle: 'Last page',
+    showTotal: true,
+    paginationTotalRenderer: customTotal,
+    disablePageTitle: true,
+    sizePerPageList: [
+      {
+        text: '10',
+        value: 10,
+      },
+      {
+        text: '25',
+        value: 25,
+      },
+      {
+        text: '50',
+        value: 50,
+      },
+      {
+        text: '100',
+        value: 100,
+      },
+    ], // A numeric array is also available. the purpose of above example is custom the text
+  };
+
   return (
     <BootstrapTable
       wrapperClasses="table-responsive"
@@ -318,7 +360,7 @@ const BGPTableComponent = (props) => {
       expandRow={expandRow}
       filter={filterFactory()}
       filterPosition="bottom"
-      pagination={paginationFActory({ sizePerPage: 10 })}
+      pagination={paginationFactory(options)}
     />
   );
 };
