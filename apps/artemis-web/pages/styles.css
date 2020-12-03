@@ -2,6 +2,16 @@
   text-align: center;
 }
 
+.react-bootstrap-table-page-btns-ul {
+  float: right;
+}
+
+.react-bs-table-sizePerPage-dropdown,
+.react-bootstrap-table-pagination-total {
+  float: left;
+  margin-left: 10px;
+}
+
 .expand-cell,
 .expand-cell-header,
 .sortable {
