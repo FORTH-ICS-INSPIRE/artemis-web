@@ -9,11 +9,14 @@ import { Editor, EditorState } from 'draft-js';
 import 'draft-js/dist/Draft.css';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import 'react-toastify/dist/ReactToastify.css';
+import ReactTooltip from 'react-tooltip';
 import NotFoundHOC from '../components/404-hoc/404-hoc';
 import BGPTableComponent from '../components/bgp-table/bgp-table';
+import { fetchASNData } from '../utils/fetch-data';
 import { useGraphQl } from '../utils/hooks/use-graphql';
+import { parseASNData } from '../utils/parsers';
 import { useStyles } from '../utils/styles';
 import { formatDate, fromEntries } from '../utils/token';
 
@@ -64,6 +67,7 @@ const ViewHijackPage = (props) => {
   const [editorState, setEditorState] = useState(() =>
     EditorState.createEmpty()
   );
+  const [ASNTitle, setASNTitle] = React.useState([]);
 
   const HIJACK_DATA = useGraphQl('hijackByKey', isLive, key);
 
@@ -104,7 +108,22 @@ const ViewHijackPage = (props) => {
   };
 
   const hijackInfo = {
-    'Hijacker AS': hijack.hijack_as,
+    'Hijacker AS': (
+      <>
+        <div data-tip data-for={'hijack_as'}>
+          <input
+            id="info_type"
+            className="form-control"
+            type="text"
+            readOnly={true}
+            value={hijack.hijack_as}
+          />
+        </div>
+        <ReactTooltip html={true} id={'hijack_as'}>
+          {ASNTitle[0]}
+        </ReactTooltip>
+      </>
+    ),
     Type: hijack.type,
     '# Peers Seen': hijack.num_peers_seen,
     '# ASes Infected': hijack.num_asns_inf,
@@ -122,8 +141,51 @@ const ViewHijackPage = (props) => {
     'Mitigation Started': hijack.mitigation_started ?? 'Never',
     'Community Annotation': hijack.community_annotation,
     'RPKI Status': hijack.rpki_status,
-    'Display Peers Seen Hijack': hijack.peers_seen,
+    'Display Peers Seen Hijack': (
+      <>
+        <div data-tip data-for={'peer_as'}>
+          <input
+            id="info_type"
+            className="form-control"
+            type="text"
+            readOnly={true}
+            value={hijack.peers_seen}
+          />
+        </div>
+        <ReactTooltip html={true} id={'peer_as'}>
+          {ASNTitle[0]}
+        </ReactTooltip>
+      </>
+    ),
   };
+
+  useEffect(() => {
+    (async function setStateFn() {
+      const ASN_int_origin: number = hijack.hijack_as;
+      const ASN_int_peers: number = hijack.peers_seen;
+      const [name_origin, countries_origin, abuse_origin] = await fetchASNData(
+        ASN_int_origin
+      );
+      const [name_peers, countries_peers, abuse_peers] = await fetchASNData(
+        ASN_int_peers
+      );
+
+      const tooltip1 = parseASNData(
+        ASN_int_origin,
+        name_origin,
+        countries_origin,
+        abuse_origin
+      );
+      const tooltip2 = parseASNData(
+        ASN_int_peers,
+        name_peers,
+        countries_peers,
+        abuse_peers
+      );
+
+      setASNTitle([tooltip1, tooltip2]);
+    })();
+  }, [hijack]);
 
   return (
     <>
@@ -143,8 +205,9 @@ const ViewHijackPage = (props) => {
                   <h1>
                     Viewing Hijack
                     <small id="hijack_status">
-                      {findStatus(hijack).map((status) => (
+                      {findStatus(hijack).map((status, i) => (
                         <span
+                          key={i}
                           style={{ marginLeft: '10px' }}
                           className={
                             'badge badge-pill badge-' + statuses[status]
@@ -190,7 +253,7 @@ const ViewHijackPage = (props) => {
                     <div className="col-lg-6">
                       {Object.keys(hijackInfo).map((key) => {
                         return (
-                          <div className="row">
+                          <div key={key} className="row">
                             <div
                               className="col-lg-4"
                               style={{ fontWeight: 'bold' }}
@@ -198,13 +261,17 @@ const ViewHijackPage = (props) => {
                               {key}:
                             </div>
                             <div className="col-lg-8">
-                              <input
-                                id="info_type"
-                                className="form-control"
-                                type="text"
-                                readOnly={true}
-                                value={hijackInfo[key]}
-                              />
+                              {typeof hijackInfo[key] !== 'object' ? (
+                                <input
+                                  id="info_type"
+                                  className="form-control"
+                                  type="text"
+                                  readOnly={true}
+                                  value={hijackInfo[key]}
+                                />
+                              ) : (
+                                hijackInfo[key]
+                              )}
                             </div>
                           </div>
                         );
@@ -213,7 +280,7 @@ const ViewHijackPage = (props) => {
                     <div className="col-lg-6">
                       {Object.keys(hijackInfo2).map((key) => {
                         return (
-                          <div className="row">
+                          <div key={key} className="row">
                             <div
                               className="col-lg-4"
                               style={{ fontWeight: 'bold' }}
@@ -221,13 +288,17 @@ const ViewHijackPage = (props) => {
                               {key}:
                             </div>
                             <div className="col-lg-8">
-                              <input
-                                id="info_type"
-                                className="form-control"
-                                type="text"
-                                readOnly={true}
-                                value={hijackInfo2[key]}
-                              />
+                              {typeof hijackInfo2[key] !== 'object' ? (
+                                <input
+                                  id="info_type"
+                                  className="form-control"
+                                  type="text"
+                                  readOnly={true}
+                                  value={hijackInfo2[key]}
+                                />
+                              ) : (
+                                hijackInfo2[key]
+                              )}
                             </div>
                           </div>
                         );
