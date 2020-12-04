@@ -6,6 +6,14 @@
   float: right;
 }
 
+.show.react-bs-table-sizePerPage-dropdown ul:last-child {
+  display: block;
+}
+
+#paging {
+  float: left;
+}
+
 .react-bs-table-sizePerPage-dropdown,
 .react-bootstrap-table-pagination-total {
   float: left;

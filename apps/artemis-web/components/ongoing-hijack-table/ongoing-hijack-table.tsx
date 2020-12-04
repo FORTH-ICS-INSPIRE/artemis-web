@@ -324,7 +324,38 @@ const OngoingHijackTableComponent = (props) => {
     </span>
   );
 
+  const sizePerPageRenderer = ({
+    options,
+    currSizePerPage,
+    onSizePerPageChange,
+  }) => (
+    <div id="paging" className="btn-group" role="group">
+      Show
+      <select
+        style={{ width: '80px' }}
+        className="custom-select custom-select-sm form-control form-control-sm"
+      >
+        {options.map((option) => (
+          <option
+            key={option.text}
+            value={option.text}
+            onClick={() => onSizePerPageChange(option.page)}
+            className={`btn ${
+              currSizePerPage === `${option.page}`
+                ? 'btn-secondary'
+                : 'btn-warning'
+            }`}
+          >
+            {option.text}
+          </option>
+        ))}
+      </select>
+      entries
+    </div>
+  );
+
   const options = {
+    sizePerPageRenderer,
     pageStartIndex: 0,
     withFirstAndLast: false, // Hide the going to First and Last page button
     firstPageText: 'First',
