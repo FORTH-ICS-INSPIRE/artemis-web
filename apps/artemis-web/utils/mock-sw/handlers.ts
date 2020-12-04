@@ -65,6 +65,20 @@ export const handlers = [
       })
     );
   }),
+  graphql.query('getConfig', (req, res, ctx) => {
+    return res(
+      ctx.data({
+        view_configs: [
+          {
+            raw_config:
+              "#\n# ARTEMIS Configuration File (default config, please change in your deployment)\n#\n# Defining a named variable:\n#     named_variable: &named_variable\n#         value_of_variable\n# Use named variable:\n#     *named_variable\n# - denotes an entry\n#\n# Start of Prefix Definitions (IPv4 and IPv6 are supported)\nprefixes:\n    super_prefix: &super_prefix\n        - 139.91.0.0/16\n    sub_prefix_1: &sub_prefix_1\n        139.91.250.0/24\n    sub_prefix_2: &sub_prefix_2\n        139.91.2.0/24\n# End of Prefix Definitions\n#\n# Start of Monitor Definitions\nmonitors:\n    riperis: [''] # by default this uses all available monitors\n    bgpstreamlive:\n        - routeviews\n        - ris\n        - caida\n    # bgpstreamkafka:\n    #     host: bmp.bgpstream.caida.org\n    #     port: 9092\n    #     topic: '^openbmp\\.router--.+\\.peer-as--.+\\.bmp_raw'\n    # exabgp:\n    #     - ip: exabgp\n    #       port: 5000\n    # bgpstreamhist:\n    #     - <csv_dir_with_formatted_BGP_updates>\n# End of Monitor Definitions\n#\n# Start of ASN Definitions\nasns:\n    my_asn: &my_asn\n        8522\n    primary_upstream: &primary_upstream\n        5408\n    backup_upstream_1: &backup_upstream_1\n        56910\n    backup_upstream_2: &backup_upstream_2\n        12361\n# End of ASN Definitions\n#\n# Start of Rule Definitions\nrules:\n- prefixes:\n    - *super_prefix\n  origin_asns:\n    - *my_asn\n  neighbors:\n    - *primary_upstream\n    - *backup_upstream_1\n    - *backup_upstream_2\n  mitigation:\n      manual\n- prefixes:\n    - *sub_prefix_1\n  origin_asns:\n    - *my_asn\n  neighbors:\n    - *backup_upstream_1\n  mitigation:\n    manual\n- prefixes:\n    - *sub_prefix_2\n  origin_asns:\n    - *my_asn\n  neighbors:\n    - *backup_upstream_2\n  mitigation:\n    manual\n# End of Rule Definitions\n",
+            comment: '',
+            time_modified: '2020-11-17T15:14:53.674807',
+          },
+        ],
+      })
+    );
+  }),
   graphql.query('hijacks', (req, res, ctx) => {
     return res(
       ctx.data({

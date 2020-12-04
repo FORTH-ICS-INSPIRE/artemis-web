@@ -116,6 +116,9 @@ const Header = (props) => {
                     <MenuItem onClick={handleCloseAction}>
                       <Link href="/password_change">Password Change</Link>
                     </MenuItem>
+                    <MenuItem onClick={handleCloseAction}>
+                      <Link href="/config_comparison">Config Comparison</Link>
+                    </MenuItem>
                   </Menu>
                 </div>
               </li>

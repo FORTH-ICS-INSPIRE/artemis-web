@@ -9,6 +9,9 @@ import Head from 'next/head';
 import React, { useState } from 'react';
 import NotFoundHOC from '../../components/404-hoc/404-hoc';
 import { useGraphQl } from '../../utils/hooks/use-graphql';
+import { Controlled as CodeMirror } from 'react-codemirror2';
+import 'codemirror/lib/codemirror.css';
+import 'codemirror/theme/material.css';
 
 const SystemPage = (props) => {
   if (process.env.NODE_ENV === 'development') {
@@ -22,6 +25,9 @@ const SystemPage = (props) => {
   const user = props.user;
 
   const STATS_DATA = useGraphQl('stats');
+  const CONFIG_DATA = useGraphQl('config');
+
+  console.log(CONFIG_DATA);
 
   const processes = STATS_DATA ? STATS_DATA.view_processes : null;
 
@@ -112,6 +118,86 @@ const SystemPage = (props) => {
                     );
                   })}
                 </Grid>
+              </div>
+            </div>
+            <div style={{ marginTop: '20px' }} className="row">
+              <div className="col-lg-1" />
+              <div className="col-lg-10">
+                <div className="card">
+                  <div className="card-header"> Current Configuration </div>
+                  <div id="config" className="card-body">
+                    <CodeMirror
+                      value={
+                        CONFIG_DATA
+                          ? CONFIG_DATA.view_configs[0].raw_config
+                          : ''
+                      }
+                      options={{
+                        mode: 'yaml',
+                        styleActiveLine: true,
+                        foldGutter: true,
+                        gutters: [
+                          'CodeMirror-linenumbers',
+                          'CodeMirror-foldgutter',
+                        ],
+                        theme: 'material',
+                        lineNumbers: true,
+                      }}
+                      onBeforeChange={(editor, data, value) => {
+                        return;
+                      }}
+                      onChange={(editor, data, value) => {
+                        return;
+                      }}
+                    />
+                    <div>
+                      <span style={{ float: 'left' }}>
+                        Last Update:{' '}
+                        {CONFIG_DATA
+                          ? CONFIG_DATA.view_configs[0].time_modified
+                          : 'Never'}
+                      </span>
+                      <span style={{ float: 'right' }}>
+                        Times are shown in your local time zone GMT
+                        {new Date().getTimezoneOffset() < 0 ? '+' : ''}
+                        {-(new Date().getTimezoneOffset() / 60)} (
+                        {Intl.DateTimeFormat().resolvedOptions().timeZone}).
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="row">
+              <div className="col-lg-1" />
+              <div className="col-lg-10">
+                <div className="card">
+                  <div className="card-header">Comment for config</div>
+                  <div className="card-body">
+                    <CodeMirror
+                      value={
+                        CONFIG_DATA ? CONFIG_DATA.view_configs[0].comment : ''
+                      }
+                      options={{
+                        mode: 'yaml',
+                        styleActiveLine: true,
+                        foldGutter: true,
+                        gutters: [
+                          'CodeMirror-linenumbers',
+                          'CodeMirror-foldgutter',
+                        ],
+                        theme: 'material',
+                        lineNumbers: true,
+                      }}
+                      onBeforeChange={(editor, data, value) => {
+                        return;
+                      }}
+                      onChange={(editor, data, value) => {
+                        return;
+                      }}
+                    />
+                  </div>
+                </div>
               </div>
             </div>
           </div>

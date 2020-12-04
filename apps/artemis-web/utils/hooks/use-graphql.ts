@@ -2,6 +2,8 @@ import { useQuery, useSubscription } from '@apollo/client';
 import {
   BGP_QUERY,
   BGP_SUB,
+  CONFIG_QUERY,
+  CONFIG_SUB,
   HIJACK_QUERY,
   HIJACK_SUB,
   INDEXSTATS_QUERY,
@@ -20,6 +22,11 @@ export function useGraphQl(module, isLive = true) {
   switch (module) {
     case 'stats':
       res = shallSubscribe ? useSubscription(STATS_SUB) : useQuery(STATS_QUERY);
+      break;
+    case 'config':
+      res = shallSubscribe
+        ? useSubscription(CONFIG_SUB)
+        : useQuery(CONFIG_QUERY);
       break;
     case 'ongoing_hijack':
       res = shallSubscribe
