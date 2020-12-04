@@ -187,6 +187,7 @@ If you wish to mock an error response, please refer to this guide: https://mswjs
         request.url,
         error
       );
+      return resolve(createResponse(error));
     })
   );
 });
