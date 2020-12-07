@@ -15,6 +15,7 @@ declare namespace Cypress {
     register(): void;
     typeRegister(user: any): void;
     loginLDAP(): void;
+    typeChangePass(user: any): void;
   }
 }
 //
@@ -37,6 +38,12 @@ Cypress.Commands.add('typeRegister', (user) => {
   cy.get('#username').type(user.name);
   cy.get('#email').type(user.email);
   cy.get('#password').type(user.password);
+});
+
+Cypress.Commands.add('typeChangePass', (user) => {
+  cy.get('#old_password').type(user.old_pass);
+  cy.get('#new_password').type(user.new_pass);
+  cy.get('#repeat_password').type(user.repeat_pass);
 });
 
 Cypress.Commands.add('register', () => {

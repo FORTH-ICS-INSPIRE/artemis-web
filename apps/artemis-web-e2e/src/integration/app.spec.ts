@@ -26,10 +26,12 @@ describe('artemis-web', () => {
     cy.get('h1').should('have.text', 'Login');
   });
 
-  it('logs in', () => {
+  it('logs in with ldap', () => {
     cy.get('h1').should('have.text', 'Login');
-    cy.typeLogin({ email: newEmail, password: newPass });
-    cy.login();
+    cy.typeLogin({ email: 'hermes@planetexpress.com', password: 'hermes' });
+    cy.loginLDAP();
+    cy.waitFor('h1');
+    cy.get('h1').should('have.text', 'Dashboard');
   });
 
   it('after login > Dashboard', () => {
@@ -51,11 +53,22 @@ describe('artemis-web', () => {
     cy.get('h1').should('have.text', 'Login');
   });
 
-  it('logs in with ldap', () => {
+  it('logs in', () => {
     cy.get('h1').should('have.text', 'Login');
-    cy.typeLogin({ email: 'hermes@planetexpress.com', password: 'hermes' });
-    cy.loginLDAP();
-    cy.waitFor('h1');
-    cy.get('h1').should('have.text', 'Dashboard');
+    cy.typeLogin({ email: newEmail, password: newPass });
+    cy.login();
+  });
+
+  it('change password', () => {
+    // Custom command example, see `../support/commands.ts` file
+    cy.visit('/password_change');
+    cy.typeChangePass({
+      old_pass: newPass,
+      new_pass: '1234',
+      repeat_pass: '1234',
+    });
+    cy.get('#submit').click();
+    cy.wait(1000);
+    cy.get('#password_change_form').contains('has been updated');
   });
 });

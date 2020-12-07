@@ -59,7 +59,39 @@ const useStyles = makeStyles((_theme) => ({
 
 const PasswordChange = (props) => {
   const { classes } = props;
-  const [errorMsg, _] = useState('');
+  const [errorMsg, setErrorMsg] = useState('');
+  const [successMsg, setSuccessMsg] = useState('');
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const old_password = e.currentTarget.old_password.value;
+    const new_password = e.currentTarget.new_password.value;
+    const repeat_password = e.currentTarget.new_password.repeat_password;
+
+    if (new_password === repeat_password) {
+      setErrorMsg('New password and repeat password must be the same');
+      return;
+    }
+
+    const body = {
+      old_password: old_password,
+      new_password: new_password,
+    };
+
+    const res = await fetch('/api/auth/change-password', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    });
+
+    if (res.status === 200) {
+      setSuccessMsg((await res.json()).message);
+      setErrorMsg('');
+    } else {
+      setErrorMsg(await res.text());
+      setSuccessMsg('');
+    }
+  };
 
   return (
     <ThemeProvider theme={theme}>
@@ -74,8 +106,15 @@ const PasswordChange = (props) => {
           <Typography className={classes.input} component="h1" variant="h5">
             Change Password
           </Typography>
-          <form method="post" className={classes.form}>
+          <form
+            id="password_change_form"
+            method="post"
+            onSubmit={handleSubmit}
+            className={classes.form}
+          >
             {errorMsg ? <p style={{ color: 'red' }}>{errorMsg}</p> : null}
+            {successMsg ? <p style={{ color: 'green' }}>{successMsg}</p> : null}
+
             <input name="emailVerified" type="hidden" defaultValue={'true'} />
             <input name="stype" type="hidden" defaultValue="signup" />
             <Grid container spacing={2}>
@@ -122,6 +161,7 @@ const PasswordChange = (props) => {
               variant="contained"
               color="primary"
               className={classes.submit}
+              id="submit"
             >
               Change Password
             </Button>
