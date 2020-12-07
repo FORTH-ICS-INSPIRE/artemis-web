@@ -52,30 +52,43 @@ export function parseJwt(token) {
   }
 }
 
+function hasProperty(name, property) {
+  return Object.prototype.hasOwnProperty.call(name, property);
+}
+
 export function parseASNData(ASN_int, name, countries, abuse) {
   const data_ = {};
   data_['name'] = name.data.names ? name.data.names[ASN_int] : '';
 
   const countries_set = new Set();
   for (const resource in countries.data.located_resources) {
-    for (const location in countries.data.located_resources[resource]
-      .locations) {
-      if (
-        countries.data.located_resources[resource].locations[
-          location
-        ].country.includes('-')
-      ) {
-        countries_set.add(
-          countries.data.located_resources[resource].locations[
+    if (hasProperty(countries.data.located_resources, resource))
+      for (const location in countries.data.located_resources[resource]
+        .locations) {
+        if (
+          hasProperty(
+            countries.data.located_resources[resource].locations,
             location
-          ].country.split('-')[0]
-        );
-      } else {
-        countries_set.add(
-          countries.data.located_resources[resource].locations[location].country
-        );
+          )
+        ) {
+          if (
+            countries.data.located_resources[resource].locations[
+              location
+            ].country.includes('-')
+          ) {
+            countries_set.add(
+              countries.data.located_resources[resource].locations[
+                location
+              ].country.split('-')[0]
+            );
+          } else {
+            countries_set.add(
+              countries.data.located_resources[resource].locations[location]
+                .country
+            );
+          }
+        }
       }
-    }
   }
   data_['countries'] = Array.from(countries_set).join(', ');
   data_['asn_dot'] = ASN_int / 65536 + '.' + (ASN_int % 65536);
@@ -92,7 +105,9 @@ export function parseASNData(ASN_int, name, countries, abuse) {
   if (abuse.data.authorities && abuse.data.authorities.length > 0) {
     const authorities = [];
     for (const authority in abuse.data.authorities) {
-      authorities.push(abuse.data.authorities[authority]);
+      if (hasProperty(abuse.data.authorities, authority)) {
+        authorities.push(abuse.data.authorities[authority]);
+      }
     }
     if (authorities) {
       abuse_html.push('Authorities: ');
@@ -107,22 +122,26 @@ export function parseASNData(ASN_int, name, countries, abuse) {
   ) {
     const anti_abuse_contacts_abuse_c_html = [];
     for (const item in abuse.data.anti_abuse_contacts.abuse_c) {
-      const abuse_c_html = [];
-      abuse_c_html.push('Description: ');
-      abuse_c_html.push(
-        abuse.data.anti_abuse_contacts.abuse_c[item].description
-      );
-      abuse_c_html.push('</br>Key: ');
-      abuse_c_html.push(abuse.data.anti_abuse_contacts.abuse_c[item].key);
-      abuse_c_html.push('</br>Email: ');
-      abuse_c_html.push(abuse.data.anti_abuse_contacts.abuse_c[item].email);
-      abuse_c_html.push('</br>');
-      anti_abuse_contacts_abuse_c_html.push(abuse_c_html.join(''));
+      if (hasProperty(abuse.data.anti_abuse_contacts.abuse_c, item)) {
+        const abuse_c_html = [];
+        abuse_c_html.push('Description: ');
+        abuse_c_html.push(
+          abuse.data.anti_abuse_contacts.abuse_c[item].description
+        );
+        abuse_c_html.push('</br>Key: ');
+        abuse_c_html.push(abuse.data.anti_abuse_contacts.abuse_c[item].key);
+        abuse_c_html.push('</br>Email: ');
+        abuse_c_html.push(abuse.data.anti_abuse_contacts.abuse_c[item].email);
+        abuse_c_html.push('</br>');
+        anti_abuse_contacts_abuse_c_html.push(abuse_c_html.join(''));
+      }
     }
     if (anti_abuse_contacts_abuse_c_html.length > 0) {
       for (const entry in anti_abuse_contacts_abuse_c_html) {
-        abuse_html.push(anti_abuse_contacts_abuse_c_html[entry]);
-        abuse_html.push('</br>');
+        if (hasProperty(anti_abuse_contacts_abuse_c_html, entry)) {
+          abuse_html.push(anti_abuse_contacts_abuse_c_html[entry]);
+          abuse_html.push('</br>');
+        }
       }
     }
   }
