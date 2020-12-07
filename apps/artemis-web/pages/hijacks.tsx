@@ -17,11 +17,12 @@ import { useGraphQl } from '../utils/hooks/use-graphql';
 import { useStyles } from '../utils/styles';
 
 const HijacksPage = (props) => {
-  const [isLive, setIsLive] = useState(true);
-  const isDevelopment = process.env.NODE_ENV === 'development';
-  const isBrowser = typeof window !== 'undefined';
+  const isDevelopment = () => process.env.NODE_ENV === 'development';
+  const isBrowser = () => typeof window !== 'undefined';
 
-  if (isDevelopment && isBrowser) {
+  const [isLive, setIsLive] = useState(true);
+
+  if (isDevelopment() && isBrowser()) {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const { worker } = require('../utils/mock-sw/browser');
     worker.start();
