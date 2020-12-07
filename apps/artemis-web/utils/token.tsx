@@ -1,3 +1,6 @@
+import React from 'react';
+import ReactTooltip from 'react-tooltip';
+
 export const getRandomString = (len) => {
   const buf = [],
     chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789',
@@ -48,3 +51,18 @@ export const diffDate = (date1, date2) => {
 
 export const fromEntries = (xs: [string | number | symbol, any][]) =>
   xs.reduce((acc, [key, value]) => ({ ...acc, [key]: value }), {});
+
+export const genTooltip = (column, components, label, text): any => (
+  <>
+    <div data-tip data-for={label}>
+      {
+        <span>
+          {column.text ?? column} {components ? components.sortElement : ''}
+        </span>
+      }
+    </div>
+    <ReactTooltip html={true} id={label}>
+      {text}
+    </ReactTooltip>
+  </>
+);
