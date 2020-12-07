@@ -10,30 +10,15 @@ const UserManagementPage = (props) => {
   const [pendingList, setPendingList] = useState([]);
   const [normalList, setNormalList] = useState([]);
   const [adminList, setAdminList] = useState([]);
+  const [errorMsg, setErrorMsg] = useState('');
 
   const approvalRef = React.createRef();
   const promoteRef = React.createRef();
   const demoteRef = React.createRef();
   const deleteRef = React.createRef();
 
-  const manageUser = async (e, action) => {
+  const manageUser = async (e, action, userName) => {
     e.preventDefault();
-    let userName;
-
-    switch (action) {
-      case 'approval':
-        userName = approvalRef.current.value;
-        break;
-      case 'promote':
-        userName = promoteRef.current.value;
-        break;
-      case 'demote':
-        userName = demoteRef.current.value;
-        break;
-      case 'delete':
-        userName = deleteRef.current.value;
-        break;
-    }
 
     const res = await fetch('/api/usermanagement', {
       method: 'POST',
@@ -65,7 +50,7 @@ const UserManagementPage = (props) => {
         setNormalList(list.filter((user) => user.role === 'user'));
         setAdminList(list.filter((user) => user.role === 'admin'));
       } else {
-        // setErrorMsg(await res.text());
+        setErrorMsg(await res.text());
       }
     })();
   }, []);
@@ -78,6 +63,7 @@ const UserManagementPage = (props) => {
       <div id="page-container" style={{ paddingTop: '120px' }}>
         {user && (
           <div id="content-wrap" style={{ paddingBottom: '5rem' }}>
+            {errorMsg && <p className="error">{errorMsg}</p>}
             <div className="row">
               <div className="col-lg-1" />
               <div className="col-lg-10">
@@ -119,7 +105,9 @@ const UserManagementPage = (props) => {
                     <div className="row" style={{ marginTop: '30px' }}>
                       <div className="col-lg-8">
                         <Button
-                          onClick={(e) => manageUser(e, 'approval')}
+                          onClick={(e) =>
+                            manageUser(e, 'approval', approvalRef.current.value)
+                          }
                           id="approval"
                           variant="outlined"
                           color="primary"
@@ -156,7 +144,9 @@ const UserManagementPage = (props) => {
                     <div className="row" style={{ marginTop: '30px' }}>
                       <div className="col-lg-8">
                         <Button
-                          onClick={(e) => manageUser(e, 'promote')}
+                          onClick={(e) =>
+                            manageUser(e, 'promote', promoteRef.current.value)
+                          }
                           id="promote"
                           variant="outlined"
                           color="primary"
@@ -193,7 +183,9 @@ const UserManagementPage = (props) => {
                     <div className="row" style={{ marginTop: '30px' }}>
                       <div className="col-lg-8">
                         <Button
-                          onClick={(e) => manageUser(e, 'demote')}
+                          onClick={(e) =>
+                            manageUser(e, 'demote', demoteRef.current.value)
+                          }
                           id="demote"
                           variant="outlined"
                           color="primary"
@@ -230,7 +222,9 @@ const UserManagementPage = (props) => {
                     <div className="row" style={{ marginTop: '30px' }}>
                       <div className="col-lg-8">
                         <Button
-                          onClick={(e) => manageUser(e, 'delete')}
+                          onClick={(e) =>
+                            manageUser(e, 'delete', deleteRef.current.value)
+                          }
                           id="delete"
                           variant="outlined"
                           color="primary"
