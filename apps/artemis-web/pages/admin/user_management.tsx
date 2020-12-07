@@ -12,10 +12,10 @@ const UserManagementPage = (props) => {
   const [adminList, setAdminList] = useState([]);
   const [errorMsg, setErrorMsg] = useState('');
 
-  const approvalRef = React.createRef();
-  const promoteRef = React.createRef();
-  const demoteRef = React.createRef();
-  const deleteRef = React.createRef();
+  const approvalRef = React.createRef<HTMLSelectElement>();
+  const promoteRef = React.createRef<HTMLSelectElement>();
+  const demoteRef = React.createRef<HTMLSelectElement>();
+  const deleteRef = React.createRef<HTMLSelectElement>();
 
   const manageUser = async (e, action, userName) => {
     e.preventDefault();
