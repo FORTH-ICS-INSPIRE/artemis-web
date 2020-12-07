@@ -263,7 +263,7 @@ const HijackTableComponent = (props) => {
         ),
       more: (
         <Link href={`/hijack?key=${row.key}`}>
-          <a href={'/hijack?key=' + row.key}>View</a>
+          View
         </Link>
       ),
     }));
