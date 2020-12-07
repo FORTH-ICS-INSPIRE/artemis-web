@@ -31,49 +31,102 @@ const expandRow: ExpandRowProps<any, number> = {
       <table>
         <tr>
           <td>
-            <b>Hijacked Prefix:</b>
+            <b>
+              <div data-tip data-for={'hprefix_exp'}>
+                {<span>{'Hijacked Prefix'}</span>}
+              </div>
+              <ReactTooltip html={true} id={'hprefix_exp'}>
+                {'The IPv4/IPv6 prefix that was hijacked.'}
+              </ReactTooltip>
+            </b>
           </td>
           <td>{row.hprefix.toString()}</td>
         </tr>
         <tr>
           <td>
-            <b>Matched Prefix:</b>
+            <b>
+              <div data-tip data-for={'mprefix_exp'}>
+                {<span>{'Hijacked Prefix'}</span>}
+              </div>
+              <ReactTooltip html={true} id={'mprefix_exp'}>
+                {
+                  'The configured IPv4/IPv6 prefix that matched the hijacked prefix.'
+                }
+              </ReactTooltip>
+            </b>
           </td>
           <td>{row.mprefix.toString()}</td>
         </tr>
         <tr>
           <td>
-            <b>Type:</b>
+            <b>
+              <div data-tip data-for={'type_exp'}>
+                {<span>{'Type'}</span>}
+              </div>
+              <ReactTooltip html={true} id={'type_exp'}>
+                {
+                  'The type of the hijack in 4 dimensions: prefix|path|data plane|policy.'
+                }
+              </ReactTooltip>
+            </b>
           </td>
           <td>{row.type}</td>
         </tr>
         <tr>
           <td>
-            <b>RPKI:</b>
+            <b>
+              <div data-tip data-for={'rpki_exp'}>
+                {<span>{'RPKI'}</span>}
+              </div>
+              <ReactTooltip html={true} id={'rpki_exp'}>
+                {'The RPKI status of the hijacked prefix.'}
+              </ReactTooltip>
+            </b>
           </td>
           <td>{row.rpki.toString()}</td>
         </tr>
         <tr>
           <td>
-            <b>Type:</b>
-          </td>
-          <td>{row.type.toString()}</td>
-        </tr>
-        <tr>
-          <td>
-            <b># Peers Seen</b>
+            <b>
+              <div data-tip data-for={'seen_exp'}>
+                {<span>{'# Peers Seen'}</span>}
+              </div>
+              <ReactTooltip html={true} id={'seen_exp'}>
+                {
+                  'Number of peers/monitors (i.e., ASNs)<br>that have seen hijack updates.'
+                }
+              </ReactTooltip>
+            </b>
           </td>
           <td>{row.peers.toString()}</td>
         </tr>
         <tr>
           <td>
-            <b># ASes Infected:</b>
+            <b>
+              <div data-tip data-for={'inf_exp'}>
+                {<span>{'# ASes Infected'}</span>}
+              </div>
+              <ReactTooltip html={true} id={'inf_exp'}>
+                {
+                  'Number of infected ASes that seem to<br>route traffic towards the hijacker AS.<br>Note that this is an experimental field.'
+                }
+              </ReactTooltip>
+            </b>
           </td>
           <td>{row.ASes.toString()}</td>
         </tr>
         <tr>
           <td>
-            <b>ACK:</b>
+            <b>
+              <div data-tip data-for={'ack_exp'}>
+                {<span>{'ACK'}</span>}
+              </div>
+              <ReactTooltip html={true} id={'ack_exp'}>
+                {
+                  'Whether the user has acknowledged/confirmed the hijack as a true positive.<br>If the resolve|mitigate buttons are pressed this<br>is automatically set to True (default value: False).'
+                }
+              </ReactTooltip>
+            </b>
           </td>
           <td>
             {row.resolved || row.under_mitigation ? (
@@ -93,8 +146,23 @@ const columns = [
     dataField: 'update',
     text: 'Last Update',
     sort: true,
-    headerTitle: () =>
-      'The timestamp of the newest known (to the system) BGP update that is related to the hijack.',
+    headerTitle: false,
+    headerFormatter: (column, colIndex, components) => (
+      <>
+        <div data-tip data-for={'last_update_title'}>
+          {
+            <span>
+              {column.text} {components.sortElement}
+            </span>
+          }
+        </div>
+        <ReactTooltip html={true} id={'last_update_title'}>
+          {
+            'The timestamp of the newest known (to the system) BGP update that is related to the hijack.'
+          }
+        </ReactTooltip>
+      </>
+    ),
     sortCaret: (order) => {
       if (!order)
         return (
@@ -125,8 +193,21 @@ const columns = [
     dataField: 'time',
     text: 'Time Detected',
     sort: true,
-    headerTitle: () =>
-      'The time when a hijack event was first detected by the system.',
+    headerTitle: false,
+    headerFormatter: (column, colIndex, components) => (
+      <>
+        <div data-tip data-for={'time_detected_title'}>
+          {
+            <span>
+              {column.text} {components.sortElement}
+            </span>
+          }
+        </div>
+        <ReactTooltip html={true} id={'time_detected_title'}>
+          {'The time when a hijack event was first detected by the system.'}
+        </ReactTooltip>
+      </>
+    ),
     sortCaret: (order) => {
       if (!order)
         return (
@@ -155,34 +236,85 @@ const columns = [
   },
   {
     dataField: 'hprefix',
-    headerTitle: () => 'The IPv4/IPv6 prefix that was hijacked.',
+    headerTitle: false,
+    headerFormatter: (column, colIndex) => (
+      <>
+        <div data-tip data-for={'hprefix_title'}>
+          {column.text}
+        </div>
+        <ReactTooltip html={true} id={'hprefix_title'}>
+          {'The IPv4/IPv6 prefix that was hijacked.'}
+        </ReactTooltip>
+      </>
+    ),
     text: 'Hijacked Prefix',
     filter: exactMatchFilter,
   },
   {
     dataField: 'mprefix',
-    headerTitle: () =>
-      'The configured IPv4/IPv6 prefix that matched the hijacked prefix.',
+    headerTitle: false,
+    headerFormatter: (column, colIndex) => (
+      <>
+        <div data-tip data-for={'mprefix_title'}>
+          {column.text}
+        </div>
+        <ReactTooltip html={true} id={'mprefix_title'}>
+          {'The configured IPv4/IPv6 prefix that matched the hijacked prefix.'}
+        </ReactTooltip>
+      </>
+    ),
     text: 'Matched Prefix',
     filter: exactMatchFilter,
   },
   {
     dataField: 'type',
-    headerTitle: () =>
-      'The type of the hijack in 4 dimensions: prefix|path|data plane|policy<ul><li>[Prefix] S → Sub-prefix hijack</li>',
+    headerTitle: false,
+    headerFormatter: (column, colIndex) => (
+      <>
+        <div data-tip data-for={'type_title'}>
+          {column.text}
+        </div>
+        <ReactTooltip html={true} id={'type_title'}>
+          {
+            'The type of the hijack in 4 dimensions: prefix|path|data plane|policy<ul><li>[Prefix] S → Sub-prefix hijack</li>'
+          }
+        </ReactTooltip>
+      </>
+    ),
     text: 'Type',
     filter: textFilter(),
   },
   {
     dataField: 'as',
-    headerTitle: () =>
-      'The AS that is potentially responsible for the hijack.</br>Note that this is an experimental field.',
+    headerTitle: false,
+    headerFormatter: (column, colIndex) => (
+      <>
+        <div data-tip data-for={'as_title'}>
+          {column.text}
+        </div>
+        <ReactTooltip html={true} id={'as_title'}>
+          {
+            'The AS that is potentially responsible for the hijack.</br>Note that this is an experimental field.'
+          }
+        </ReactTooltip>
+      </>
+    ),
     text: 'Hijacked AS',
     filter: exactMatchFilter,
   },
   {
     dataField: 'rpki',
-    headerTitle: () => 'The RPKI status of the hijacked prefix.',
+    headerTitle: false,
+    headerFormatter: (column, colIndex) => (
+      <>
+        <div data-tip data-for={'rpki_title'}>
+          {column.text}
+        </div>
+        <ReactTooltip html={true} id={'rpki_title'}>
+          {'The RPKI status of the hijacked prefix.'}
+        </ReactTooltip>
+      </>
+    ),
     text: 'RPKI',
     filter: selectFilter({
       options: ['VD', 'IA', 'IL', 'IU', 'NF', 'NA'].reduce((acc, elem) => {
@@ -193,8 +325,23 @@ const columns = [
   },
   {
     dataField: 'peers',
-    headerTitle: () =>
-      'Number of peers/monitors (i.e., ASNs)</br>that have seen hijack updates.',
+    headerTitle: false,
+    headerFormatter: (column, colIndex, components) => (
+      <>
+        <div data-tip data-for={'peers_title'}>
+          {
+            <span>
+              {column.text} {components.sortElement}
+            </span>
+          }
+        </div>
+        <ReactTooltip html={true} id={'peers_title'}>
+          {
+            'Number of peers/monitors (i.e., ASNs)</br>that have seen hijack updates.'
+          }
+        </ReactTooltip>
+      </>
+    ),
     text: '# Peers Seen',
     sort: true,
     sortCaret: (order) => {
@@ -226,8 +373,23 @@ const columns = [
   {
     dataField: 'ASes',
     text: '# ASes Infected',
-    headerTitle: () =>
-      'Number of infected ASes that seem to</br>route traffic towards the hijacker AS.</br>Note that this is an experimental field',
+    headerTitle: false,
+    headerFormatter: (column, colIndex, components) => (
+      <>
+        <div data-tip data-for={'ASes_title'}>
+          {
+            <span>
+              {column.text} {components.sortElement}
+            </span>
+          }
+        </div>
+        <ReactTooltip html={true} id={'ASes_title'}>
+          {
+            'Number of infected ASes that seem to</br>route traffic towards the hijacker AS.</br>Note that this is an experimental field '
+          }
+        </ReactTooltip>
+      </>
+    ),
     sort: true,
     sortCaret: (order) => {
       if (!order)
@@ -257,8 +419,19 @@ const columns = [
   },
   {
     dataField: 'ack',
-    headerTitle: () =>
-      'Whether the user has acknowledged/confirmed the hijack as a true positive.<br>If the resolve|mitigate buttons are pressed this<br>is automatically set to True (default value: False).',
+    headerTitle: false,
+    headerFormatter: (column, colIndex) => (
+      <>
+        <div data-tip data-for={'ack_title'}>
+          {column.text}
+        </div>
+        <ReactTooltip html={true} id={'ack_title'}>
+          {
+            'Whether the user has acknowledged/confirmed the hijack as a true positive.<br>If the resolve|mitigate buttons are pressed this<br>is automatically set to True (default value: False).'
+          }
+        </ReactTooltip>
+      </>
+    ),
     text: 'Ack',
   },
 ];
@@ -279,10 +452,10 @@ const OngoingHijackTableComponent = (props) => {
         as_original: row.hijack_as,
         as: (
           <>
-            <div data-tip data-for={'hijack_as'}>
+            <div data-tip data-for={'hijack_as' + i}>
               {row.hijack_as}
             </div>
-            <ReactTooltip html={true} id={'hijack_as'}>
+            <ReactTooltip html={true} id={'hijack_as' + i}>
               {ASNTitle[i]}
             </ReactTooltip>
           </>
