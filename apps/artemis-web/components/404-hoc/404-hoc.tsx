@@ -19,7 +19,7 @@ const NotFoundHOC = (WrappedComponent, ACL = []) => {
             <meta name="robots" content="noindex" />
           </Head>
           <DefaultErrorPage
-            statusCode={404}
+            statusCode={401}
             title={'You do not have the permission to access'}
           />
         </>

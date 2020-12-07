@@ -64,11 +64,11 @@ export function useGraphQl(module, isLive = true, key = '') {
       break;
   }
 
-  const { error, data } = res;
+  const { loading, error, data } = res;
   if (error) {
     console.error(error);
   }
 
-  return data;
+  return res;
   /* eslint-enable react-hooks/rules-of-hooks */
 }

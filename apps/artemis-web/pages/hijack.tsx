@@ -19,6 +19,7 @@ import { useGraphQl } from '../utils/hooks/use-graphql';
 import { parseASNData } from '../utils/parsers';
 import { useStyles } from '../utils/styles';
 import { formatDate, fromEntries } from '../utils/token';
+import DefaultErrorPage from 'next/error';
 
 const ViewHijackPage = (props) => {
   const [isLive, setIsLive] = useState(true);
@@ -69,9 +70,10 @@ const ViewHijackPage = (props) => {
   );
   const [ASNTitle, setASNTitle] = React.useState([]);
 
-  const HIJACK_DATA = useGraphQl('hijackByKey', isLive, key);
+  const { loading, data } = useGraphQl('hijackByKey', isLive, key);
+  const HIJACK_DATA = data;
 
-  const BGP_DATA = useGraphQl('bgpByKey', isLive, key);
+  const BGP_DATA = useGraphQl('bgpByKey', isLive, key).data;
   const hijack = HIJACK_DATA ? HIJACK_DATA.view_hijacks[0] : [];
   let bgp = BGP_DATA ? BGP_DATA.view_data : [];
 
@@ -192,7 +194,7 @@ const ViewHijackPage = (props) => {
       <Head>
         <title>ARTEMIS - Hijack</title>
       </Head>
-      {user && (
+      {user && (HIJACK_DATA || loading) && (
         <div
           className="container overview col-lg-12"
           style={{ paddingTop: '120px' }}
@@ -478,6 +480,14 @@ const ViewHijackPage = (props) => {
           </div>
         </div>
       )}
+      {user &&
+        (!HIJACK_DATA || !HIJACK_DATA.view_hijacks.length) &&
+        !loading && (
+          <DefaultErrorPage
+            statusCode={404}
+            title={'This hijack does not exist'}
+          />
+        )}
     </>
   );
 };
