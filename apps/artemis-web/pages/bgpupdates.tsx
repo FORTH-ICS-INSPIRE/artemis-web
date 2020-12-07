@@ -35,7 +35,7 @@ const BGPUpdates = (props) => {
   const [selectState, setSelectState] = useState('');
 
   const user = props.user;
-  const BGP_DATA = useGraphQl('bgpupdates', isLive);
+  const BGP_DATA = useGraphQl('bgpupdates', isLive).data;
 
   const bgp = BGP_DATA ? BGP_DATA.view_bgpupdates : [];
   const filteredDate = new Date();

@@ -22,9 +22,9 @@ const DashboardPage = (props) => {
   const user = props.user;
   const notify = (message: React.ReactText) => toast(message);
 
-  const STATS_DATA = useGraphQl('stats');
-  const HIJACK_DATA = useGraphQl('ongoing_hijack');
-  const INDEX_DATA = useGraphQl('index_stats');
+  const STATS_DATA = useGraphQl('stats').data;
+  const HIJACK_DATA = useGraphQl('ongoing_hijack').data;
+  const INDEX_DATA = useGraphQl('index_stats').data;
 
   return (
     <>

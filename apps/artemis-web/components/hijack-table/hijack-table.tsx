@@ -261,11 +261,7 @@ const HijackTableComponent = (props) => {
         ) : (
           <img alt="" src="./unhadled.png" />
         ),
-      more: (
-        <Link href={`/hijack?key=${row.key}`}>
-          View
-        </Link>
-      ),
+      more: <Link href={`/hijack?key=${row.key}`}>View</Link>,
     }));
   } else {
     hijacks = [];

@@ -7,6 +7,7 @@ import {
   Switch,
 } from '@material-ui/core';
 import Head from 'next/head';
+import Link from 'next/link';
 import React, { useState } from 'react';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -62,7 +63,7 @@ const HijacksPage = (props) => {
     }
   };
 
-  const HIJACK_DATA = useGraphQl('hijack', isLive);
+  const HIJACK_DATA = useGraphQl('hijack', isLive).data;
 
   let hijacks = HIJACK_DATA ? HIJACK_DATA.view_hijacks : [];
   hijacks = hijacks.map((entry) => ({
@@ -201,7 +202,6 @@ const HijacksPage = (props) => {
                         className="form-group row"
                         style={{ textAlign: 'right' }}
                       >
-                        {/* <div className="col-sm-4"> </div> */}
                         <div className="col-sm-11">
                           <input
                             onChange={(event) => setKey(event.target.value)}
@@ -211,16 +211,15 @@ const HijacksPage = (props) => {
                           />
                         </div>
                         <div className="col-sm-1">
-                          <button
-                            onClick={() =>
-                              window.location.replace('/hijack?key=' + key)
-                            }
-                            type="button"
-                            className="btn btn-secondary"
-                            id="view-hijack-by-key-button"
-                          >
-                            View
-                          </button>
+                          <Link href={'/hijack?key=' + key}>
+                            <button
+                              type="button"
+                              className="btn btn-secondary"
+                              id="view-hijack-by-key-button"
+                            >
+                              View
+                            </button>
+                          </Link>
                         </div>
                       </div>
                     </div>
