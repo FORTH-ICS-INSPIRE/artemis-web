@@ -11,7 +11,7 @@ import Link from 'next/link';
 import React, { useState } from 'react';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import NotFoundHOC from '../components/404-hoc/404-hoc';
+import NotAuthHOC from '../components/401-hoc/401-hoc';
 import HijackTableComponent from '../components/hijack-table/hijack-table';
 import { useGraphQl } from '../utils/hooks/use-graphql';
 import { useStyles } from '../utils/styles';
@@ -429,4 +429,4 @@ const HijacksPage = (props) => {
   );
 };
 
-export default NotFoundHOC(HijacksPage, ['admin', 'user']);
+export default NotAuthHOC(HijacksPage, ['admin', 'user']);
