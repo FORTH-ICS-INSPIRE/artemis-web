@@ -1,7 +1,7 @@
 import { Button } from '@material-ui/core';
 import Head from 'next/head';
 import React from 'react';
-import NotFoundHOC from '../../components/404-hoc/404-hoc';
+import NotAuthHOC from '../../components/401-hoc/401-hoc';
 import UserListComponent from '../../components/user-list/user-list';
 
 const UserManagementPage = (props) => {
@@ -160,4 +160,4 @@ const UserManagementPage = (props) => {
   );
 };
 
-export default NotFoundHOC(UserManagementPage, ['admin']);
+export default NotAuthHOC(UserManagementPage, ['admin']);

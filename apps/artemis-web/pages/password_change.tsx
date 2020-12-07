@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import React from 'react';
-import NotFoundHOC from '../components/404-hoc/404-hoc';
+import NotAuthHOC from '../components/401-hoc/401-hoc';
 import PasswordChangeComponent from '../components/password-change/password-change';
 import { useJWT } from '../utils/hooks/use-jwt';
 
@@ -23,4 +23,4 @@ const PasswordChangePage = (props) => {
   );
 };
 
-export default NotFoundHOC(PasswordChangePage, ['admin', 'user']);
+export default NotAuthHOC(PasswordChangePage, ['admin', 'user']);

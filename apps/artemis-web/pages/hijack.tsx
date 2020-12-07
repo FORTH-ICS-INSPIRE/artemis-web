@@ -12,7 +12,7 @@ import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import 'react-toastify/dist/ReactToastify.css';
 import ReactTooltip from 'react-tooltip';
-import NotFoundHOC from '../components/404-hoc/404-hoc';
+import NotAuthHOC from '../components/401-hoc/401-hoc';
 import BGPTableComponent from '../components/bgp-table/bgp-table';
 import { fetchASNData } from '../utils/fetch-data';
 import { useGraphQl } from '../utils/hooks/use-graphql';
@@ -69,6 +69,8 @@ const ViewHijackPage = (props) => {
     EditorState.createEmpty()
   );
   const [ASNTitle, setASNTitle] = React.useState([]);
+  const [ASNWithdrawnTitle, setASNWithdrawnTitle] = React.useState([]);
+  const [ASNSeenTitle, setASNSeenTitle] = React.useState([]);
 
   const { loading, data } = useGraphQl('hijackByKey', isLive, key);
   const HIJACK_DATA = data;
@@ -309,6 +311,35 @@ const ViewHijackPage = (props) => {
         ASN_int_peers
       );
 
+      const tooltipsWithdrawn = [];
+      const tooltipsSeen = [];
+      const waitData1 = [];
+      const waitData2 = [];
+
+      for (let i = 0; i < withdrawn.length; i++) {
+        waitData1.push(await fetchASNData(withdrawn[i]));
+        tooltipsWithdrawn.push(
+          parseASNData(
+            withdrawn[i],
+            waitData1[i][0],
+            waitData1[i][1],
+            waitData1[i][2]
+          )
+        );
+      }
+
+      for (let i = 0; i < seen.length; i++) {
+        waitData2.push(await fetchASNData(seen[i]));
+        tooltipsSeen.push(
+          parseASNData(
+            seen[i],
+            waitData2[i][0],
+            waitData2[i][1],
+            waitData2[i][2]
+          )
+        );
+      }
+
       const tooltip1 = parseASNData(
         ASN_int_origin,
         name_origin,
@@ -321,7 +352,8 @@ const ViewHijackPage = (props) => {
         countries_peers,
         abuse_peers
       );
-
+      setASNWithdrawnTitle(tooltipsWithdrawn);
+      setASNSeenTitle(tooltipsSeen);
       setASNTitle([tooltip1, tooltip2]);
     })();
   }, [hijack]);
@@ -514,7 +546,15 @@ const ViewHijackPage = (props) => {
                                 return (
                                   <Grid key={i} item xs>
                                     <Paper className={classes.paper}>
-                                      {value}
+                                      <div data-tip data-for={'withdrawn' + i}>
+                                        {value}
+                                      </div>
+                                      <ReactTooltip
+                                        html={true}
+                                        id={'withdrawn' + i}
+                                      >
+                                        {ASNSeenTitle[i] ? ASNSeenTitle[i] : ''}
+                                      </ReactTooltip>
                                     </Paper>
                                   </Grid>
                                 );
@@ -539,7 +579,17 @@ const ViewHijackPage = (props) => {
                                 return (
                                   <Grid key={i} item xs>
                                     <Paper className={classes.paper}>
-                                      {value}
+                                      <div data-tip data-for={'withdrawn' + i}>
+                                        {value}
+                                      </div>
+                                      <ReactTooltip
+                                        html={true}
+                                        id={'withdrawn' + i}
+                                      >
+                                        {ASNWithdrawnTitle[i]
+                                          ? ASNWithdrawnTitle[i]
+                                          : ''}
+                                      </ReactTooltip>
                                     </Paper>
                                   </Grid>
                                 );
@@ -629,4 +679,4 @@ const ViewHijackPage = (props) => {
   );
 };
 
-export default NotFoundHOC(ViewHijackPage, ['admin', 'user']);
+export default NotAuthHOC(ViewHijackPage, ['admin', 'user']);
