@@ -7,6 +7,7 @@ import {
   Switch,
 } from '@material-ui/core';
 import Head from 'next/head';
+import Link from 'next/link';
 import React, { useState } from 'react';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -211,16 +212,7 @@ const HijacksPage = (props) => {
                           />
                         </div>
                         <div className="col-sm-1">
-                          <button
-                            onClick={() =>
-                              window.location.replace('/hijack?key=' + key)
-                            }
-                            type="button"
-                            className="btn btn-secondary"
-                            id="view-hijack-by-key-button"
-                          >
-                            View
-                          </button>
+                          <Link href={'/hijack?key=' + key}>View</Link>
                         </div>
                       </div>
                     </div>
