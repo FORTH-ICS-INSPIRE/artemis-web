@@ -7,7 +7,7 @@ import {
 } from '@material-ui/core';
 import Head from 'next/head';
 import React, { useState } from 'react';
-import NotAuthHOC from '../../components/401-hoc/401-hoc';
+import AuthHOC from '../../components/401-hoc/401-hoc';
 import { useGraphQl } from '../../utils/hooks/use-graphql';
 
 const SystemPage = (props) => {
@@ -121,4 +121,4 @@ const SystemPage = (props) => {
   );
 };
 
-export default NotAuthHOC(SystemPage, ['admin']);
+export default AuthHOC(SystemPage, ['admin']);

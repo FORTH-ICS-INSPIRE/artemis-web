@@ -4,7 +4,7 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React from 'react';
 
-const NotAuthHOC = (WrappedComponent, ACL = []) => {
+const AuthHOC = (WrappedComponent, ACL = []) => {
   const Wrapped = (props) => {
     const [user, loading] = useJWT();
     const router = useRouter();
@@ -34,4 +34,4 @@ const NotAuthHOC = (WrappedComponent, ACL = []) => {
   return Wrapped;
 };
 
-export default NotAuthHOC;
+export default AuthHOC;

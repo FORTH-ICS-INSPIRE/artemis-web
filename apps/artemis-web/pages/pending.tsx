@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import React from 'react';
-import NotAuthHOC from '../components/401-hoc/401-hoc';
+import AuthHOC from '../components/401-hoc/401-hoc';
 
 const PendingPage = () => {
   return (
@@ -43,4 +43,4 @@ const PendingPage = () => {
   );
 };
 
-export default NotAuthHOC(PendingPage, ['pending']);
+export default AuthHOC(PendingPage, ['pending']);
