@@ -1,5 +1,4 @@
-import { fetchASNData } from '../../utils/fetch-data';
-import { parseASNData } from '../../utils/parsers';
+import { Button } from '@material-ui/core';
 import Link from 'next/link';
 import React, { useEffect } from 'react';
 import BootstrapTable from 'react-bootstrap-table-next';
@@ -9,13 +8,16 @@ import filterFactory, {
   textFilter,
 } from 'react-bootstrap-table2-filter';
 import paginationFactory, {
-  PaginationProvider,
   PaginationListStandalone,
+  PaginationProvider,
   PaginationTotalStandalone,
   SizePerPageDropdownStandalone,
 } from 'react-bootstrap-table2-paginator';
-import { formatDate, genTooltip } from '../../utils/token';
+import ToolkitProvider from 'react-bootstrap-table2-toolkit';
 import ReactTooltip from 'react-tooltip';
+import { fetchASNData } from '../../utils/fetch-data';
+import { parseASNData } from '../../utils/parsers';
+import { formatDate, genTooltip } from '../../utils/token';
 
 const exactMatchFilter = textFilter({
   placeholder: '', // custom the input placeholder
@@ -407,6 +409,7 @@ const HijackTableComponent = (props) => {
     firstPageTitle: 'Next page',
     lastPageTitle: 'Last page',
     showTotal: true,
+    custom: true,
     paginationTotalRenderer: customTotal,
     disablePageTitle: true,
     sizePerPageList: [
@@ -429,16 +432,63 @@ const HijackTableComponent = (props) => {
     ], // A numeric array is also available. the purpose of above example is custom the text
   };
 
-  return (
-    <BootstrapTable
-      wrapperClasses="table-responsive"
+  const MyExportCSV = (props) => {
+    const handleClick = () => {
+      props.onExport();
+    };
+    return (
+      <div>
+        <Button
+          className="btn btn-success"
+          style={{ float: 'right' }}
+          variant="contained"
+          color="primary"
+          onClick={handleClick}
+        >
+          Download Table
+        </Button>
+      </div>
+    );
+  };
+
+  const contentTable = ({ paginationProps, paginationTableProps }) => (
+    <ToolkitProvider
       keyField="update"
-      data={hijacks}
       columns={columns}
-      filter={filterFactory()}
-      filterPosition="bottom"
-      pagination={paginationFactory(options)}
-    />
+      data={hijacks}
+      exportCSV={{ onlyExportFiltered: true, exportAll: false }}
+    >
+      {(toolkitprops) => (
+        <>
+          <div className="header-filter">
+            <SizePerPageDropdownStandalone {...paginationProps} />
+            <MyExportCSV {...toolkitprops.csvProps}>Export CSV!!</MyExportCSV>
+          </div>
+          <BootstrapTable
+            wrapperClasses="table-responsive"
+            keyField="update"
+            data={hijacks}
+            columns={columns}
+            filter={filterFactory()}
+            filterPosition="bottom"
+            striped
+            condensed
+            hover
+            {...toolkitprops.baseProps}
+            {...paginationTableProps}
+          />
+
+          <PaginationTotalStandalone {...paginationProps} />
+          <PaginationListStandalone {...paginationProps} />
+        </>
+      )}
+    </ToolkitProvider>
+  );
+
+  return (
+    <PaginationProvider pagination={paginationFactory(options)}>
+      {contentTable}
+    </PaginationProvider>
   );
 };
 

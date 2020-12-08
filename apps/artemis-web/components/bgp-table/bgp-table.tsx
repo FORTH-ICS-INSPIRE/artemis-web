@@ -1,16 +1,22 @@
-import { fetchASNData } from '../../utils/fetch-data';
-import { parseASNData } from '../../utils/parsers';
+import { Button } from '@material-ui/core';
+import Link from 'next/link';
 import React, { useEffect } from 'react';
 import BootstrapTable, { ExpandRowProps } from 'react-bootstrap-table-next';
 import filterFactory, {
-  textFilter,
   Comparator,
   selectFilter,
+  textFilter,
 } from 'react-bootstrap-table2-filter';
+import paginationFactory, {
+  PaginationListStandalone,
+  PaginationProvider,
+  PaginationTotalStandalone,
+  SizePerPageDropdownStandalone,
+} from 'react-bootstrap-table2-paginator';
+import ToolkitProvider from 'react-bootstrap-table2-toolkit';
 import ReactTooltip from 'react-tooltip';
-import Link from 'next/link';
-
-import paginationFactory from 'react-bootstrap-table2-paginator';
+import { fetchASNData } from '../../utils/fetch-data';
+import { parseASNData } from '../../utils/parsers';
 import { genTooltip } from '../../utils/token';
 
 const exactMatchFilter = textFilter({
@@ -514,6 +520,8 @@ const BGPTableComponent = (props) => {
     firstPageTitle: 'Next page',
     lastPageTitle: 'Last page',
     showTotal: true,
+    custom: true,
+    hidePageListOnlyOnePage: true,
     paginationTotalRenderer: customTotal,
     disablePageTitle: true,
     sizePerPageList: [
@@ -535,18 +543,63 @@ const BGPTableComponent = (props) => {
       },
     ], // A numeric array is also available. the purpose of above example is custom the text
   };
+  const MyExportCSV = (props) => {
+    const handleClick = () => {
+      props.onExport();
+    };
+    return (
+      <div>
+        <Button
+          className="btn btn-success"
+          style={{ float: 'right' }}
+          variant="contained"
+          color="primary"
+          onClick={handleClick}
+        >
+          Download Table
+        </Button>
+      </div>
+    );
+  };
+
+  const contentTable = ({ paginationProps, paginationTableProps }) => (
+    <ToolkitProvider
+      keyField="timestamp"
+      columns={columns}
+      data={bgp}
+      exportCSV={{ onlyExportFiltered: true, exportAll: false }}
+    >
+      {(toolkitprops) => (
+        <>
+          <div className="header-filter">
+            <SizePerPageDropdownStandalone {...paginationProps} />
+            <MyExportCSV {...toolkitprops.csvProps}>Export CSV!!</MyExportCSV>
+          </div>
+          <BootstrapTable
+            wrapperClasses="table-responsive"
+            keyField="timestamp"
+            data={bgp}
+            columns={columns}
+            expandRow={expandRow}
+            filter={filterFactory()}
+            striped
+            hover
+            condensed
+            filterPosition="bottom"
+            {...toolkitprops.baseProps}
+            {...paginationTableProps}
+          />
+          <PaginationTotalStandalone {...paginationProps} />
+          <PaginationListStandalone {...paginationProps} />
+        </>
+      )}
+    </ToolkitProvider>
+  );
 
   return (
-    <BootstrapTable
-      wrapperClasses="table-responsive"
-      keyField="timestamp"
-      data={bgp}
-      columns={columns}
-      expandRow={expandRow}
-      filter={filterFactory()}
-      filterPosition="bottom"
-      pagination={paginationFactory(options)}
-    />
+    <PaginationProvider pagination={paginationFactory(options)}>
+      {contentTable}
+    </PaginationProvider>
   );
 };
 
