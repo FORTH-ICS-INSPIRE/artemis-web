@@ -69,6 +69,7 @@ const ViewHijackPage = (props) => {
     EditorState.createEmpty()
   );
   const [ASNTitle, setASNTitle] = React.useState([]);
+  const [ASNDistinctTitle, setASNDistinctTitle] = React.useState({});
   const [ASNWithdrawnTitle, setASNWithdrawnTitle] = React.useState([]);
   const [ASNSeenTitle, setASNSeenTitle] = React.useState([]);
 
@@ -300,6 +301,12 @@ const ViewHijackPage = (props) => {
     ],
   };
 
+  const asns = [];
+  bgp.forEach((entry) => {
+    if (!asns.includes(entry.origin_as)) asns.push(entry.origin_as);
+    if (!asns.includes(entry.peer_asn)) asns.push(entry.peer_asn);
+  });
+
   useEffect(() => {
     (async function setStateFn() {
       const ASN_int_origin: number = hijack.hijack_as;
@@ -352,11 +359,33 @@ const ViewHijackPage = (props) => {
         countries_peers,
         abuse_peers
       );
+
+      const tooltips = {};
+
+      for (let i = 0; i < asns.length; i++) {
+        const ASN_int: number | string = asns[i];
+
+        const [name_origin, countries_origin, abuse_origin] =
+          ASN_int == '-' ? ['', '', ''] : await fetchASNData(ASN_int);
+
+        const tooltip =
+          ASN_int == '-'
+            ? ''
+            : parseASNData(
+                ASN_int,
+                name_origin,
+                countries_origin,
+                abuse_origin
+              );
+        tooltips[ASN_int] = tooltip;
+      }
+
+      setASNDistinctTitle(tooltips);
       setASNWithdrawnTitle(tooltipsWithdrawn);
       setASNSeenTitle(tooltipsSeen);
       setASNTitle([tooltip1, tooltip2]);
     })();
-  }, [hijack]);
+  }, [bgp.length]);
 
   return (
     <>
@@ -544,7 +573,7 @@ const ViewHijackPage = (props) => {
                             {seen.map((value, i) => {
                               if (value !== undefined)
                                 return (
-                                  <Grid key={i} item xs>
+                                  <Grid key={i} item xs={3}>
                                     <Paper className={classes.paper}>
                                       <div data-tip data-for={'withdrawn' + i}>
                                         {value}
@@ -652,13 +681,27 @@ const ViewHijackPage = (props) => {
                 <div className="card-header">
                   <Grid container spacing={3}>
                     {distinctValues.map((value, i) => {
-                      if (value !== undefined)
+                      if (value !== undefined) {
+                        if (
+                          selectState === 'origin_as' ||
+                          selectState === 'peer_asn'
+                        )
+                          value = (
+                            <>
+                              <div data-tip data-for={'origin' + i}>
+                                {value}
+                              </div>
+                              <ReactTooltip html={true} id={'origin' + i}>
+                                {ASNDistinctTitle[value] ?? ''}
+                              </ReactTooltip>
+                            </>
+                          );
                         return (
                           <Grid key={i} item xs>
                             <Paper className={classes.paper}>{value}</Paper>
                           </Grid>
                         );
-                      else return <> </>;
+                      } else return <> </>;
                     })}
                   </Grid>
                 </div>

@@ -7,12 +7,15 @@ import {
   Switch,
 } from '@material-ui/core';
 import Head from 'next/head';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import AuthHOC from '../components/401-hoc/401-hoc';
+import ReactTooltip from 'react-tooltip';
+import NotAuthHOC from '../components/401-hoc/401-hoc';
 import BGPTableComponent from '../components/bgp-table/bgp-table';
+import { fetchASNData } from '../utils/fetch-data';
 import { useGraphQl } from '../utils/hooks/use-graphql';
+import { parseASNData } from '../utils/parsers';
 import { useStyles } from '../utils/styles';
 import { formatDate, fromEntries } from '../utils/token';
 
@@ -33,6 +36,7 @@ const BGPUpdates = (props) => {
   const [filterButton, setFilterButton] = useState(0);
   const [distinctValues, setDistinctValues] = useState([]);
   const [selectState, setSelectState] = useState('');
+  const [ASNTitle, setASNTitle] = React.useState({});
 
   const user = props.user;
   const BGP_DATA = useGraphQl('bgpupdates', isLive).data;
@@ -61,6 +65,37 @@ const BGPUpdates = (props) => {
       })
     )
   );
+
+  const asns = [];
+  filteredBgp.forEach((entry) => {
+    if (!asns.includes(entry.origin_as)) asns.push(entry.origin_as);
+    if (!asns.includes(entry.peer_asn)) asns.push(entry.peer_asn);
+  });
+
+  useEffect(() => {
+    (async function setStateFn() {
+      const tooltips = {};
+      for (let i = 0; i < asns.length; i++) {
+        const ASN_int: number | string = asns[i];
+
+        const [name_origin, countries_origin, abuse_origin] =
+          ASN_int == '-' ? ['', '', ''] : await fetchASNData(ASN_int);
+
+        const tooltip =
+          ASN_int == '-'
+            ? ''
+            : parseASNData(
+                ASN_int,
+                name_origin,
+                countries_origin,
+                abuse_origin
+              );
+
+        tooltips[ASN_int] = tooltip;
+      }
+      setASNTitle(tooltips);
+    })();
+  }, [bgp.length]);
 
   const onChangeValue = (event) => {
     setSelectState(event.target.value);
@@ -217,12 +252,27 @@ const BGPUpdates = (props) => {
                 <div className="card-header">
                   <Grid container spacing={3}>
                     {distinctValues.map((value, i) => {
-                      if (value !== undefined)
+                      if (value !== undefined) {
+                        if (
+                          selectState === 'origin_as' ||
+                          selectState === 'peer_asn'
+                        )
+                          value = (
+                            <>
+                              <div data-tip data-for={'origin' + i}>
+                                {value}
+                              </div>
+                              <ReactTooltip html={true} id={'origin' + i}>
+                                {ASNTitle[value] ?? ''}
+                              </ReactTooltip>
+                            </>
+                          );
                         return (
-                          <Grid key={i} item xs>
+                          <Grid key={i} item xs={3}>
                             <Paper className={classes.paper}>{value}</Paper>
                           </Grid>
                         );
+                      } else return <> </>;
                     })}
                   </Grid>
                 </div>
@@ -236,4 +286,4 @@ const BGPUpdates = (props) => {
   );
 };
 
-export default AuthHOC(BGPUpdates, ['admin', 'user']);
+export default NotAuthHOC(BGPUpdates, ['admin', 'user']);

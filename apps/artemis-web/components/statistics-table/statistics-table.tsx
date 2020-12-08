@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import ReactTooltip from 'react-tooltip';
 
 type IndexType = {
   view_index_all_stats: {
@@ -63,12 +64,13 @@ class StatisticsTable extends Component<StatisticsType, {}> {
 
                 return (
                   <tr key={i}>
-                    <td
-                      data-toggle="tooltip"
-                      data-placement="top"
-                      title={tooltips[i]}
-                    >
-                      {firstCaps}
+                    <td>
+                      <div data-tip data-for={'stats' + i}>
+                        {firstCaps}
+                      </div>
+                      <ReactTooltip html={true} id={'stats' + i}>
+                        {tooltips[i]}
+                      </ReactTooltip>
                     </td>
                     <td>{stat[1]}</td>
                   </tr>

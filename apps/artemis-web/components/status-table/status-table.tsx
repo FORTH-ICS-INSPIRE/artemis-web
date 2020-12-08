@@ -1,6 +1,7 @@
 import { Button } from '@material-ui/core';
 import { diffDate } from '../../utils/token';
 import React, { Component } from 'react';
+import ReactTooltip from 'react-tooltip';
 
 type ProcessType = {
   view_processes: { name: string; running: boolean; timestamp: number }[];
@@ -52,13 +53,14 @@ class StatusTable extends Component<StatsType, any> {
             STATS_DATA.view_processes.map((process, i) => {
               return (
                 <tr key={i}>
-                  <td
-                    data-toggle="tooltip"
-                    data-placement="top"
-                    title={tooltips[process.name] ?? ''}
-                  >
-                    {process.name.charAt(0).toUpperCase() +
-                      process.name.slice(1)}
+                  <td>
+                    <div data-tip data-for={'module' + i}>
+                      {process.name.charAt(0).toUpperCase() +
+                        process.name.slice(1)}
+                    </div>
+                    <ReactTooltip html={true} id={'module' + i}>
+                      {tooltips[process.name] ?? ''}
+                    </ReactTooltip>
                   </td>
                   <td>
                     {process.running ? (
