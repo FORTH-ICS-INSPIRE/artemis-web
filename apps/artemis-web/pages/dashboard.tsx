@@ -3,7 +3,7 @@ import Head from 'next/head';
 import React from 'react';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import NotAuthHOC from '../components/401-hoc/401-hoc';
+import AuthHOC from '../components/401-hoc/401-hoc';
 import OngoingHijackTableComponent from '../components/ongoing-hijack-table/ongoing-hijack-table';
 import StatisticsTable from '../components/statistics-table/statistics-table';
 import StatusTable from '../components/status-table/status-table';
@@ -130,4 +130,4 @@ const DashboardPage = (props) => {
   );
 };
 
-export default NotAuthHOC(DashboardPage, ['admin', 'user']);
+export default AuthHOC(DashboardPage, ['admin', 'user']);

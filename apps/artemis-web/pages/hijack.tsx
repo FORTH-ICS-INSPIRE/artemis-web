@@ -12,7 +12,7 @@ import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import 'react-toastify/dist/ReactToastify.css';
 import ReactTooltip from 'react-tooltip';
-import NotAuthHOC from '../components/401-hoc/401-hoc';
+import AuthHOC from '../components/401-hoc/401-hoc';
 import BGPTableComponent from '../components/bgp-table/bgp-table';
 import { fetchASNData } from '../utils/fetch-data';
 import { useGraphQl } from '../utils/hooks/use-graphql';
@@ -679,4 +679,4 @@ const ViewHijackPage = (props) => {
   );
 };
 
-export default NotAuthHOC(ViewHijackPage, ['admin', 'user']);
+export default AuthHOC(ViewHijackPage, ['admin', 'user']);
