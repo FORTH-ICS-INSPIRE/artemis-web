@@ -58,7 +58,7 @@ const ViewHijackPage = (props) => {
 
   const classes = useStyles();
   const router = useRouter();
-  const key: string = props.key ?? router.query.key ?? '';
+  const key: string = router.query.key.toString() ?? '';
   const user = props.user;
 
   const [distinctValues, setDistinctValues] = useState([]);
