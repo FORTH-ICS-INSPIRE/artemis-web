@@ -31,6 +31,8 @@ const UserManagementPage = (props) => {
 
     if (res.status === 200) {
       window.location.reload();
+    } else {
+      setErrorMsg((await res.json()).message);
     }
   };
 
@@ -50,7 +52,7 @@ const UserManagementPage = (props) => {
         setNormalList(list.filter((user) => user.role === 'user'));
         setAdminList(list.filter((user) => user.role === 'admin'));
       } else {
-        setErrorMsg(await res.text());
+        setErrorMsg((await res.json()).message);
       }
     })();
   }, []);

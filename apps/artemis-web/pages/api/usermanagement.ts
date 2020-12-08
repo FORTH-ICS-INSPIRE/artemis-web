@@ -10,7 +10,10 @@ const handler = nc()
   .post(async (req: NextApiRequestExtended, res: NextApiResponseExtended) => {
     if (!req.user || req.user.role !== 'admin') {
       res.status(401);
-      res.json('You do not have permission to access this api!');
+      res.json({
+        code: 401,
+        message: 'Login Required',
+      });
     } else {
       const { userName, action } = req.body;
 
@@ -51,7 +54,10 @@ const handler = nc()
       }
 
       res.status(200);
-      res.json({});
+      res.json({
+        code: 200,
+        message: 'Requested action was successful',
+      });
     }
   });
 

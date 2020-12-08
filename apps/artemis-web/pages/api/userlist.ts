@@ -10,7 +10,10 @@ const handler = nc()
   .get(async (req: NextApiRequestExtended, res: NextApiResponseExtended) => {
     if (!req.user || req.user.role !== 'admin') {
       res.status(401);
-      res.json('You do not have permission to access this api!');
+      res.json({
+        code: 401,
+        message: 'Login Required',
+      });
     } else {
       const users = await req.db
         .collection('users')
