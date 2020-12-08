@@ -141,7 +141,7 @@ const HijacksPage = (props) => {
               <div className="card">
                 <div className="card-header">
                   <div className="row">
-                    <div className="col-lg-7">
+                    <div className="col-lg-4">
                       <Button
                         className={0 === filterButton ? 'selectedButton' : ''}
                         style={{ marginRight: '5px' }}
@@ -198,12 +198,12 @@ const HijacksPage = (props) => {
                         Past 48h
                       </Button>
                     </div>
-                    <div className="col-lg-3">
+                    <div className="col-lg-5 offset-lg-3">
                       <div
                         className="form-group row"
                         style={{ textAlign: 'right' }}
                       >
-                        <div className="col-sm-11">
+                        <div className="col-sm-10">
                           <input
                             onChange={(event) => setKey(event.target.value)}
                             className="form-control"
