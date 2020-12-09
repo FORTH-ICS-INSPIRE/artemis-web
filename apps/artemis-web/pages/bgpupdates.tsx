@@ -36,7 +36,7 @@ const BGPUpdates = (props) => {
   const [filterButton, setFilterButton] = useState(0);
   const [distinctValues, setDistinctValues] = useState([]);
   const [selectState, setSelectState] = useState('');
-  const [ASNTitle, setASNTitle] = React.useState({});
+  const [ASNTitle, setASNTitle] = useState({});
 
   const user = props.user;
   const BGP_DATA = useGraphQl('bgpupdates', isLive).data;
@@ -50,7 +50,7 @@ const BGPUpdates = (props) => {
       ? bgp.filter((entry) => new Date(entry.timestamp) >= filteredDate)
       : bgp;
 
-  filteredBgp = filteredBgp.map((row) =>
+  filteredBgp = filteredBgp.map((row, i) =>
     fromEntries(
       Object.entries(row).map(([key, value]: [string, any]) => {
         if (key === 'timestamp') return [key, formatDate(new Date(value))];
@@ -67,11 +67,13 @@ const BGPUpdates = (props) => {
   );
 
   const asns = [];
-  filteredBgp.forEach((entry) => {
+  filteredBgp.forEach((entry, i) => {
     if (!asns.includes(entry.origin_as)) asns.push(entry.origin_as);
     if (!asns.includes(entry.peer_asn)) asns.push(entry.peer_asn);
-  });
 
+    entry.id = i;
+  });
+  
   useEffect(() => {
     (async function setStateFn() {
       const tooltips = {};
@@ -212,7 +214,7 @@ const BGPUpdates = (props) => {
                 </div>
                 <div className="card-body" style={{ textAlign: 'center' }}>
                   {filteredBgp.length > 0 ? (
-                    <BGPTableComponent data={filteredBgp} />
+                    <BGPTableComponent asns={asns} data={filteredBgp} />
                   ) : (
                     <div>
                       <p>

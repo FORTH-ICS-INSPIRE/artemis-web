@@ -345,7 +345,9 @@ const HijackTableComponent = (props) => {
   }
 
   useEffect(() => {
+    let isMounted = true;
     (async function setStateFn() {
+      if (!isMounted) return;
       const tooltips = [];
       for (let i = 0; i < hijacks.length; i++) {
         if (hijacks.length < ASNTitle.length) return;
@@ -358,6 +360,7 @@ const HijackTableComponent = (props) => {
       if (JSON.stringify(tooltips) !== JSON.stringify(ASNTitle))
         setASNTitle(tooltips);
     })();
+    return () => { isMounted = false };
   }, [hijacks]);
 
   const customTotal = (from, to, size) => (
@@ -450,15 +453,17 @@ const HijackTableComponent = (props) => {
       </div>
     );
   };
-
+  
   const contentTable = ({ paginationProps, paginationTableProps }) => (
     <ToolkitProvider
-      keyField="update"
+      keyField="id"
       columns={columns}
       data={hijacks}
       exportCSV={{ onlyExportFiltered: true, exportAll: false }}
     >
-      {(toolkitprops) => (
+      {(toolkitprops) => {
+        paginationProps.dataSize = hijacks.length; 
+        return (
         <>
           <div className="header-filter">
             <SizePerPageDropdownStandalone {...paginationProps} />
@@ -466,7 +471,7 @@ const HijackTableComponent = (props) => {
           </div>
           <BootstrapTable
             wrapperClasses="table-responsive"
-            keyField="update"
+            keyField="id"
             data={hijacks}
             columns={columns}
             filter={filterFactory()}
@@ -481,7 +486,7 @@ const HijackTableComponent = (props) => {
           <PaginationTotalStandalone {...paginationProps} />
           <PaginationListStandalone {...paginationProps} />
         </>
-      )}
+      )}}
     </ToolkitProvider>
   );
 
