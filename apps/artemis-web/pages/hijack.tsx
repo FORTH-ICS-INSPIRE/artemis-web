@@ -7,9 +7,11 @@ import {
 } from '@material-ui/core';
 import { Editor, EditorState } from 'draft-js';
 import 'draft-js/dist/Draft.css';
+import DefaultErrorPage from 'next/error';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
+import { animated, useTransition } from 'react-spring';
 import 'react-toastify/dist/ReactToastify.css';
 import ReactTooltip from 'react-tooltip';
 import AuthHOC from '../components/401-hoc/401-hoc';
@@ -19,7 +21,6 @@ import { useGraphQl } from '../utils/hooks/use-graphql';
 import { parseASNData } from '../utils/parsers';
 import { useStyles } from '../utils/styles';
 import { formatDate, fromEntries, genTooltip } from '../utils/token';
-import DefaultErrorPage from 'next/error';
 
 const ViewHijackPage = (props) => {
   const [isLive, setIsLive] = useState(true);
@@ -72,6 +73,16 @@ const ViewHijackPage = (props) => {
   const [ASNDistinctTitle, setASNDistinctTitle] = React.useState({});
   const [ASNWithdrawnTitle, setASNWithdrawnTitle] = React.useState([]);
   const [ASNSeenTitle, setASNSeenTitle] = React.useState([]);
+  const seenTransitions = useTransition(seenState, null, {
+    from: { opacity: 0 },
+    enter: { opacity: 1 },
+    leave: { opacity: 0 },
+  });
+  const withdrawnTransitions = useTransition(withdrawState, null, {
+    from: { opacity: 0 },
+    enter: { opacity: 1 },
+    leave: { opacity: 0 },
+  });
 
   const { loading, data } = useGraphQl('hijackByKey', isLive, key);
   const HIJACK_DATA = data;
@@ -552,68 +563,87 @@ const ViewHijackPage = (props) => {
                   <div className="row">
                     <div className="col-lg-6">
                       <div className="card">
-                        <div
-                          className={
-                            'card-header multi-collapse collapse' +
-                            (seenState ? 'show' : '')
-                          }
-                        >
-                          Peers Seen Hijack BGP Announcement:
-                          <Grid container spacing={3}>
-                            {seen.map((value, i) => {
-                              if (value !== undefined)
-                                return (
-                                  <Grid key={i} item xs={3}>
-                                    <Paper className={classes.paper}>
-                                      <div data-tip data-for={'withdrawn' + i}>
-                                        {value}
-                                      </div>
-                                      <ReactTooltip
-                                        html={true}
-                                        id={'withdrawn' + i}
-                                      >
-                                        {ASNSeenTitle[i] ?? 'Loading...'}
-                                      </ReactTooltip>
-                                    </Paper>
-                                  </Grid>
-                                );
-                              else return <> </>;
-                            })}
-                          </Grid>
-                        </div>{' '}
+                        {seenTransitions.map(({ item, key, props }) =>
+                          item ? (
+                            <animated.div
+                              style={props}
+                              className={
+                                'card-header multi-collapse collapse show'
+                              }
+                            >
+                              Peers Seen Hijack BGP Announcement:
+                              <Grid container spacing={3}>
+                                {seen.map((value, i) => {
+                                  if (value !== undefined)
+                                    return (
+                                      <Grid key={i} item xs={3}>
+                                        <Paper className={classes.paper}>
+                                          <div
+                                            data-tip
+                                            data-for={'withdrawn' + i}
+                                          >
+                                            {value}
+                                          </div>
+                                          <ReactTooltip
+                                            html={true}
+                                            id={'withdrawn' + i}
+                                          >
+                                            {ASNSeenTitle[i] ?? 'Loading...'}
+                                          </ReactTooltip>
+                                        </Paper>
+                                      </Grid>
+                                    );
+                                  else return <> </>;
+                                })}
+                              </Grid>
+                            </animated.div>
+                          ) : (
+                            <animated.div></animated.div>
+                          )
+                        )}
                       </div>
                     </div>
                     <div className="col-lg-6">
                       <div className="card">
-                        <div
-                          className={
-                            'card-header multi-collapse collapse' +
-                            (withdrawState ? 'show' : '')
-                          }
-                        >
-                          Peers Seen Hijack BGP Withdrawal:
-                          <Grid container spacing={3}>
-                            {withdrawn.map((value, i) => {
-                              if (value !== undefined)
-                                return (
-                                  <Grid key={i} item xs>
-                                    <Paper className={classes.paper}>
-                                      <div data-tip data-for={'withdrawn' + i}>
-                                        {value}
-                                      </div>
-                                      <ReactTooltip
-                                        html={true}
-                                        id={'withdrawn' + i}
-                                      >
-                                        {ASNWithdrawnTitle[i] ?? 'Loading...'}
-                                      </ReactTooltip>
-                                    </Paper>
-                                  </Grid>
-                                );
-                              else return <> </>;
-                            })}
-                          </Grid>
-                        </div>{' '}
+                        {withdrawnTransitions.map(({ item, key, props }) =>
+                          item ? (
+                            <animated.div
+                              style={props}
+                              className={
+                                'card-header multi-collapse collapse show'
+                              }
+                            >
+                              Peers Seen Hijack BGP Withdrawal:
+                              <Grid container spacing={3}>
+                                {withdrawn.map((value, i) => {
+                                  if (value !== undefined)
+                                    return (
+                                      <Grid key={i} item xs>
+                                        <Paper className={classes.paper}>
+                                          <div
+                                            data-tip
+                                            data-for={'withdrawn' + i}
+                                          >
+                                            {value}
+                                          </div>
+                                          <ReactTooltip
+                                            html={true}
+                                            id={'withdrawn' + i}
+                                          >
+                                            {ASNWithdrawnTitle[i] ??
+                                              'Loading...'}
+                                          </ReactTooltip>
+                                        </Paper>
+                                      </Grid>
+                                    );
+                                  else return <> </>;
+                                })}
+                              </Grid>
+                            </animated.div>
+                          ) : (
+                            <animated.div></animated.div>
+                          )
+                        )}
                       </div>
                     </div>
                   </div>
