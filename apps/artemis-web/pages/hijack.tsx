@@ -388,7 +388,9 @@ const ViewHijackPage = (props) => {
       setASNSeenTitle(tooltipsSeen);
       setASNTitle([tooltip1, tooltip2]);
     })();
-    return () => { isMounted = false };
+    return () => {
+      isMounted = false;
+    };
   }, [bgp.length]);
 
   return (
@@ -612,7 +614,7 @@ const ViewHijackPage = (props) => {
                         {withdrawnTransitions.map(({ item, key, props }) =>
                           item ? (
                             <animated.div
-                            key={key}
+                              key={key}
                               style={props}
                               className={
                                 'card-header multi-collapse collapse show'

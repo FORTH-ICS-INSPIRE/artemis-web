@@ -443,9 +443,7 @@ const BGPTableComponent = (props) => {
         const ASN_int: number | string = asns[i];
 
         const [name_origin, countries_origin, abuse_origin] =
-          ASN_int == '-'
-            ? ['', '', '']
-            : await fetchASNData(ASN_int);
+          ASN_int == '-' ? ['', '', ''] : await fetchASNData(ASN_int);
 
         const tooltip1 =
           ASN_int == '-'
@@ -562,32 +560,33 @@ const BGPTableComponent = (props) => {
       dataSize={bgp.length}
       exportCSV={{ onlyExportFiltered: true, exportAll: false }}
     >
-      {(toolkitprops) => { 
-        paginationProps.dataSize = bgp.length; 
+      {(toolkitprops) => {
+        paginationProps.dataSize = bgp.length;
         return (
-        <>
-          <div className="header-filter">
-            <SizePerPageDropdownStandalone {...paginationProps} />
-            <MyExportCSV {...toolkitprops.csvProps}>Export CSV!!</MyExportCSV>
-          </div>
-          <BootstrapTable
-            wrapperClasses="table-responsive"
-            keyField="id"
-            data={bgp}
-            columns={filteredCols}
-            expandRow={expandRow}
-            filter={filterFactory()}
-            striped
-            hover
-            condensed
-            filterPosition="bottom"
-            {...toolkitprops.baseProps}
-            {...paginationTableProps}
-          />
-          <PaginationTotalStandalone {...paginationProps} />
-          <PaginationListStandalone {...paginationProps} />
-        </>
-      )}}
+          <>
+            <div className="header-filter">
+              <SizePerPageDropdownStandalone {...paginationProps} />
+              <MyExportCSV {...toolkitprops.csvProps}>Export CSV!!</MyExportCSV>
+            </div>
+            <BootstrapTable
+              wrapperClasses="table-responsive"
+              keyField="id"
+              data={bgp}
+              columns={filteredCols}
+              expandRow={expandRow}
+              filter={filterFactory()}
+              striped
+              hover
+              condensed
+              filterPosition="bottom"
+              {...toolkitprops.baseProps}
+              {...paginationTableProps}
+            />
+            <PaginationTotalStandalone {...paginationProps} />
+            <PaginationListStandalone {...paginationProps} />
+          </>
+        );
+      }}
     </ToolkitProvider>
   );
 
