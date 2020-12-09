@@ -515,9 +515,9 @@ const OngoingHijackTableComponent = (props) => {
         style={{ width: '80px' }}
         className="custom-select custom-select-sm form-control form-control-sm"
       >
-        {options.map((option) => (
+        {options.map((option, i) => (
           <option
-            key={option.text}
+            key={i}
             value={option.text}
             onClick={() => onSizePerPageChange(option.page)}
             className={`btn ${

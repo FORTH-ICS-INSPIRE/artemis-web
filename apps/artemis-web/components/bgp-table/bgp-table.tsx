@@ -389,7 +389,8 @@ const columns = [
 const BGPTableComponent = (props) => {
   let bgp;
   const bgpData = props.data;
-  const [ASNTitle, setASNTitle] = React.useState([]);
+  const asns = props.asns ?? [];
+  const [ASNTitle, setASNTitle] = React.useState({});
 
   if (bgpData && bgpData.length) {
     bgp = props.data.map((row, i) => {
@@ -399,7 +400,7 @@ const BGPTableComponent = (props) => {
             {row['origin_as']}
           </div>
           <ReactTooltip html={true} id={'origin' + i}>
-            {ASNTitle[i] ? ASNTitle[i][0] : 'Loading...'}
+            {ASNTitle[row['origin_as']] ?? 'Loading...'}
           </ReactTooltip>
         </>
       );
@@ -409,7 +410,7 @@ const BGPTableComponent = (props) => {
             {row['peer_asn']}
           </div>
           <ReactTooltip html={true} id={'peer' + i}>
-            {ASNTitle[i] ? ASNTitle[i][1] : 'Loading...'}
+            {ASNTitle[row['peer_asn']] ?? 'Loading...'}
           </ReactTooltip>
         </>
       );
@@ -436,40 +437,31 @@ const BGPTableComponent = (props) => {
 
   useEffect(() => {
     (async function setStateFn() {
-      const tooltips = [];
+      const tooltips = {};
 
-      for (let i = 0; i < bgp.length; i++) {
-        const ASN_int_origin: number | string = bgp[i].origin_as;
-        const ASN_int_peer: number | string = bgp[i].peer_asn;
+      for (let i = 0; i < asns.length; i++) {
+        const ASN_int: number | string = asns[i];
 
         const [name_origin, countries_origin, abuse_origin] =
-          ASN_int_origin == '-'
+          ASN_int == '-'
             ? ['', '', '']
-            : await fetchASNData(ASN_int_origin);
-        const [name_peer, countries_peer, abuse_peer] =
-          ASN_int_peer == '-' ? ['', '', ''] : await fetchASNData(ASN_int_peer);
+            : await fetchASNData(ASN_int);
 
         const tooltip1 =
-          ASN_int_origin == '-'
+          ASN_int == '-'
             ? ''
             : parseASNData(
-                ASN_int_origin,
+                ASN_int,
                 name_origin,
                 countries_origin,
                 abuse_origin
               );
-        const tooltip2 =
-          ASN_int_peer == '-'
-            ? ''
-            : parseASNData(ASN_int_peer, name_peer, countries_peer, abuse_peer);
-
-        tooltips.push([tooltip1, tooltip2]);
+        tooltips[ASN_int] = tooltip1;
       }
 
-      if (JSON.stringify(tooltips) !== JSON.stringify(ASNTitle))
-        setASNTitle(tooltips);
+      setASNTitle(tooltips);
     })();
-  }, [bgp]);
+  }, [bgp.length]);
 
   const customTotal = (from, to, size) => (
     <span className="react-bootstrap-table-pagination-total">
@@ -564,12 +556,15 @@ const BGPTableComponent = (props) => {
 
   const contentTable = ({ paginationProps, paginationTableProps }) => (
     <ToolkitProvider
-      keyField="timestamp"
-      columns={columns}
+      keyField="id"
+      columns={filteredCols}
       data={bgp}
+      dataSize={bgp.length}
       exportCSV={{ onlyExportFiltered: true, exportAll: false }}
     >
-      {(toolkitprops) => (
+      {(toolkitprops) => { 
+        paginationProps.dataSize = bgp.length; 
+        return (
         <>
           <div className="header-filter">
             <SizePerPageDropdownStandalone {...paginationProps} />
@@ -577,9 +572,9 @@ const BGPTableComponent = (props) => {
           </div>
           <BootstrapTable
             wrapperClasses="table-responsive"
-            keyField="timestamp"
+            keyField="id"
             data={bgp}
-            columns={columns}
+            columns={filteredCols}
             expandRow={expandRow}
             filter={filterFactory()}
             striped
@@ -592,7 +587,7 @@ const BGPTableComponent = (props) => {
           <PaginationTotalStandalone {...paginationProps} />
           <PaginationListStandalone {...paginationProps} />
         </>
-      )}
+      )}}
     </ToolkitProvider>
   );
 

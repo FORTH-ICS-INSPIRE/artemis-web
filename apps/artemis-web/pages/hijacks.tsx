@@ -90,7 +90,8 @@ const HijacksPage = (props) => {
         );
 
   const asns = [];
-  filteredHijacks.forEach((entry) => {
+  filteredHijacks.forEach((entry, i) => {
+    entry.id = i;
     if (!asns.includes(entry.hijack_as)) asns.push(entry.hijack_as);
   });
 

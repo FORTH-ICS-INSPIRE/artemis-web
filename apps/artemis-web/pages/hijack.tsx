@@ -309,7 +309,9 @@ const ViewHijackPage = (props) => {
   });
 
   useEffect(() => {
+    let isMounted = true;
     (async function setStateFn() {
+      if (!isMounted) return;
       const ASN_int_origin: number = hijack.hijack_as;
       const ASN_int_peers: number = hijack.peers_seen;
       const [name_origin, countries_origin, abuse_origin] = await fetchASNData(
@@ -386,6 +388,7 @@ const ViewHijackPage = (props) => {
       setASNSeenTitle(tooltipsSeen);
       setASNTitle([tooltip1, tooltip2]);
     })();
+    return () => { isMounted = false };
   }, [bgp.length]);
 
   return (
@@ -566,6 +569,7 @@ const ViewHijackPage = (props) => {
                         {seenTransitions.map(({ item, key, props }) =>
                           item ? (
                             <animated.div
+                              key={key}
                               style={props}
                               className={
                                 'card-header multi-collapse collapse show'
@@ -598,7 +602,7 @@ const ViewHijackPage = (props) => {
                               </Grid>
                             </animated.div>
                           ) : (
-                            <animated.div></animated.div>
+                            <animated.div key={key}></animated.div>
                           )
                         )}
                       </div>
@@ -608,6 +612,7 @@ const ViewHijackPage = (props) => {
                         {withdrawnTransitions.map(({ item, key, props }) =>
                           item ? (
                             <animated.div
+                            key={key}
                               style={props}
                               className={
                                 'card-header multi-collapse collapse show'
@@ -641,7 +646,7 @@ const ViewHijackPage = (props) => {
                               </Grid>
                             </animated.div>
                           ) : (
-                            <animated.div></animated.div>
+                            <animated.div key={key}></animated.div>
                           )
                         )}
                       </div>
@@ -705,14 +710,14 @@ const ViewHijackPage = (props) => {
                           selectState === 'peer_asn'
                         )
                           value = (
-                            <>
+                            <div key={i}>
                               <div data-tip data-for={'origin' + i}>
                                 {value}
                               </div>
                               <ReactTooltip html={true} id={'origin' + i}>
                                 {ASNDistinctTitle[value] ?? 'Loading...'}
                               </ReactTooltip>
-                            </>
+                            </div>
                           );
                         return (
                           <Grid key={i} item xs>
