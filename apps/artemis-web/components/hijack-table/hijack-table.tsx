@@ -325,7 +325,7 @@ const HijackTableComponent = (props) => {
             {row.hijack_as}
           </div>
           <ReactTooltip html={true} id={'hijack_as'}>
-            {ASNTitle[i]}
+            {ASNTitle[i] ?? 'Loading...'}
           </ReactTooltip>
         </>
       ),
@@ -440,7 +440,7 @@ const HijackTableComponent = (props) => {
       <div>
         <Button
           className="btn btn-success"
-          style={{ float: 'right' }}
+          style={{ float: 'right', marginBottom: '10px' }}
           variant="contained"
           color="primary"
           onClick={handleClick}
