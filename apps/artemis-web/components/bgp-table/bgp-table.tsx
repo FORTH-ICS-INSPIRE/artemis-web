@@ -399,7 +399,7 @@ const BGPTableComponent = (props) => {
             {row['origin_as']}
           </div>
           <ReactTooltip html={true} id={'origin' + i}>
-            {ASNTitle[i] ? ASNTitle[i][0] : ''}
+            {ASNTitle[i] ? ASNTitle[i][0] : 'Loading...'}
           </ReactTooltip>
         </>
       );
@@ -409,7 +409,7 @@ const BGPTableComponent = (props) => {
             {row['peer_asn']}
           </div>
           <ReactTooltip html={true} id={'peer' + i}>
-            {ASNTitle[i] ? ASNTitle[i][1] : ''}
+            {ASNTitle[i] ? ASNTitle[i][1] : 'Loading...'}
           </ReactTooltip>
         </>
       );
@@ -551,7 +551,7 @@ const BGPTableComponent = (props) => {
       <div>
         <Button
           className="btn btn-success"
-          style={{ float: 'right' }}
+          style={{ float: 'right', marginBottom: '10px' }}
           variant="contained"
           color="primary"
           onClick={handleClick}

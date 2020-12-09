@@ -125,7 +125,7 @@ const ViewHijackPage = (props) => {
           />
         </div>
         <ReactTooltip html={true} id={'hijack_as'}>
-          {ASNTitle[0]}
+          {ASNTitle[0] ?? 'Loading...'}
         </ReactTooltip>
       </>,
       genTooltip(
@@ -283,21 +283,11 @@ const ViewHijackPage = (props) => {
       ),
     ],
     'Display Peers Seen Hijack': [
-      <>
-        <div data-tip data-for={'peer_as'}>
-          <input
-            id="info_type"
-            className="form-control"
-            type="text"
-            readOnly={true}
-            value={hijack.peers_seen}
-          />
-        </div>
-        <ReactTooltip html={true} id={'peer_as'}>
-          {ASNTitle[0]}
-        </ReactTooltip>
-      </>,
-      genTooltip('Display Peers Seen Hijack:', null, 'peers_title_info', ``),
+      <></>,
+      <span>
+        <br />
+        Display Peers Seen Hijack
+      </span>,
     ],
   };
 
@@ -582,7 +572,7 @@ const ViewHijackPage = (props) => {
                                         html={true}
                                         id={'withdrawn' + i}
                                       >
-                                        {ASNSeenTitle[i] ? ASNSeenTitle[i] : ''}
+                                        {ASNSeenTitle[i] ?? 'Loading...'}
                                       </ReactTooltip>
                                     </Paper>
                                   </Grid>
@@ -615,9 +605,7 @@ const ViewHijackPage = (props) => {
                                         html={true}
                                         id={'withdrawn' + i}
                                       >
-                                        {ASNWithdrawnTitle[i]
-                                          ? ASNWithdrawnTitle[i]
-                                          : ''}
+                                        {ASNWithdrawnTitle[i] ?? 'Loading...'}
                                       </ReactTooltip>
                                     </Paper>
                                   </Grid>
@@ -692,7 +680,7 @@ const ViewHijackPage = (props) => {
                                 {value}
                               </div>
                               <ReactTooltip html={true} id={'origin' + i}>
-                                {ASNDistinctTitle[value] ?? ''}
+                                {ASNDistinctTitle[value] ?? 'Loading...'}
                               </ReactTooltip>
                             </>
                           );

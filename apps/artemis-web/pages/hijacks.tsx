@@ -451,7 +451,7 @@ const HijacksPage = (props) => {
                                 {value}
                               </div>
                               <ReactTooltip html={true} id={'origin' + i}>
-                                {ASNTitle[value] ?? ''}
+                                {ASNTitle[value] ?? 'Loading...'}
                               </ReactTooltip>
                             </>
                           );
