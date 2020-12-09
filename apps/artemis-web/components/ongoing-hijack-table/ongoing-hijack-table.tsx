@@ -310,7 +310,7 @@ const columns = [
     filter: exactMatchFilter,
   },
   {
-    dataField: 'rpki',
+    dataField: 'rpki_status',
     headerTitle: false,
     headerFormatter: (column, colIndex) => (
       <>

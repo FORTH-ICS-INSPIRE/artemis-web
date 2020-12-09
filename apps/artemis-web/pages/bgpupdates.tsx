@@ -73,7 +73,7 @@ const BGPUpdates = (props) => {
 
     entry.id = i;
   });
-  
+
   useEffect(() => {
     (async function setStateFn() {
       const tooltips = {};

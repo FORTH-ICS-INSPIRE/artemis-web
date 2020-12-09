@@ -172,7 +172,7 @@ const columns = [
     filter: exactMatchFilter,
   },
   {
-    dataField: 'rpki',
+    dataField: 'rpki_status',
     headerTitle: false,
     headerFormatter: (column, colIndex, components) =>
       genTooltip(
@@ -360,7 +360,9 @@ const HijackTableComponent = (props) => {
       if (JSON.stringify(tooltips) !== JSON.stringify(ASNTitle))
         setASNTitle(tooltips);
     })();
-    return () => { isMounted = false };
+    return () => {
+      isMounted = false;
+    };
   }, [hijacks]);
 
   const customTotal = (from, to, size) => (
@@ -453,7 +455,7 @@ const HijackTableComponent = (props) => {
       </div>
     );
   };
-  
+
   const contentTable = ({ paginationProps, paginationTableProps }) => (
     <ToolkitProvider
       keyField="id"
@@ -462,31 +464,32 @@ const HijackTableComponent = (props) => {
       exportCSV={{ onlyExportFiltered: true, exportAll: false }}
     >
       {(toolkitprops) => {
-        paginationProps.dataSize = hijacks.length; 
+        paginationProps.dataSize = hijacks.length;
         return (
-        <>
-          <div className="header-filter">
-            <SizePerPageDropdownStandalone {...paginationProps} />
-            <MyExportCSV {...toolkitprops.csvProps}>Export CSV!!</MyExportCSV>
-          </div>
-          <BootstrapTable
-            wrapperClasses="table-responsive"
-            keyField="id"
-            data={hijacks}
-            columns={columns}
-            filter={filterFactory()}
-            filterPosition="bottom"
-            striped
-            condensed
-            hover
-            {...toolkitprops.baseProps}
-            {...paginationTableProps}
-          />
+          <>
+            <div className="header-filter">
+              <SizePerPageDropdownStandalone {...paginationProps} />
+              <MyExportCSV {...toolkitprops.csvProps}>Export CSV!!</MyExportCSV>
+            </div>
+            <BootstrapTable
+              wrapperClasses="table-responsive"
+              keyField="id"
+              data={hijacks}
+              columns={columns}
+              filter={filterFactory()}
+              filterPosition="bottom"
+              striped
+              condensed
+              hover
+              {...toolkitprops.baseProps}
+              {...paginationTableProps}
+            />
 
-          <PaginationTotalStandalone {...paginationProps} />
-          <PaginationListStandalone {...paginationProps} />
-        </>
-      )}}
+            <PaginationTotalStandalone {...paginationProps} />
+            <PaginationListStandalone {...paginationProps} />
+          </>
+        );
+      }}
     </ToolkitProvider>
   );
 
