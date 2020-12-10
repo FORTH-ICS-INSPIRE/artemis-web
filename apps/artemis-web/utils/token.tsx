@@ -1,5 +1,21 @@
 import React from 'react';
 import ReactTooltip from 'react-tooltip';
+import {
+  STATS_SUB,
+  ONGOING_HIJACK_SUB,
+  HIJACK_SUB,
+  BGP_SUB,
+  getHijackByKeySub,
+  getBGPByKeySub,
+  INDEXSTATS_SUB,
+  BGP_QUERY,
+  getBGPByKeyQuery,
+  getHijackByKeyQuery,
+  HIJACK_QUERY,
+  INDEXSTATS_QUERY,
+  ONGOING_HIJACK_QUERY,
+  STATS_QUERY,
+} from '../libs/graphql';
 
 export const getRandomString = (len) => {
   const buf = [],
@@ -70,5 +86,34 @@ export const genTooltip = (column, components, label, text): any => (
 const isDevelopment = () => process.env.NODE_ENV === 'development';
 const isBrowser = () => typeof window !== 'undefined';
 export const shallMock = () => isDevelopment() && isBrowser();
+
 const isProduction = () => process.env.NODE_ENV === 'production';
 export const shallSubscribe = (isLive) => isProduction() && isLive;
+
+const actionSubMap = {
+  stats: STATS_SUB,
+  ongoing_hijack: ONGOING_HIJACK_SUB,
+  hijack: HIJACK_SUB,
+  bgpupdates: BGP_SUB,
+  hijackByKey: getHijackByKeySub,
+  bgpByKey: getBGPByKeySub,
+  index_stats: INDEXSTATS_SUB,
+};
+
+const actionQueryMap = {
+  stats: STATS_QUERY,
+  ongoing_hijack: ONGOING_HIJACK_QUERY,
+  hijack: HIJACK_QUERY,
+  bgpupdates: BGP_QUERY,
+  hijackByKey: getHijackByKeyQuery,
+  bgpByKey: getBGPByKeyQuery,
+  index_stats: INDEXSTATS_QUERY,
+};
+
+export const findSubscription = (action) => {
+  return actionSubMap[action];
+};
+
+export const findQuery = (action) => {
+  return actionQueryMap[action];
+};

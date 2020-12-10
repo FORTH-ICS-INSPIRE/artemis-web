@@ -56,10 +56,7 @@ function hasProperty(name, property) {
   return Object.prototype.hasOwnProperty.call(name, property);
 }
 
-export function parseASNData(ASN_int, name, countries, abuse) {
-  const data_ = {};
-  data_['name'] = name.data.names ? name.data.names[ASN_int] : '';
-
+function extractCountries(countries) {
   const countries_set = new Set();
   for (const resource in countries.data.located_resources) {
     if (hasProperty(countries.data.located_resources, resource))
@@ -90,17 +87,10 @@ export function parseASNData(ASN_int, name, countries, abuse) {
         }
       }
   }
-  data_['countries'] = Array.from(countries_set).join(', ');
-  data_['asn_dot'] = ASN_int / 65536 + '.' + (ASN_int % 65536);
+  return countries_set;
+}
 
-  if (
-    (ASN_int >= 64512 && ASN_int <= 65534) ||
-    (ASN_int >= 4200000000 && ASN_int <= 4294967294)
-  ) {
-    data_['type'] = 'Private';
-  } else {
-    data_['type'] = 'Non-Private';
-  }
+function extractAbuse(abuse) {
   const abuse_html = [];
   if (abuse.data.authorities && abuse.data.authorities.length > 0) {
     const authorities = [];
@@ -145,9 +135,11 @@ export function parseASNData(ASN_int, name, countries, abuse) {
       }
     }
   }
-  data_['abuse_html'] = abuse_html.join('');
-  data_['abuse_text'] = data_['abuse_html'].replace(/<\/br>/g, '\n');
 
+  return abuse_html;
+}
+
+function extractInnerHTML(data_, ASN_int) {
   const html = [];
   const inner_html = [];
   html.push('<p class="tooltip-custom-margin">ASN: ');
@@ -169,7 +161,29 @@ export function parseASNData(ASN_int, name, countries, abuse) {
   html.push('<small>(Click on AS number to copy on clickboard)</small>');
   html.push('</p>');
 
-  const join_text = inner_html.join(''); //.replace(/<\/br>|<br>/g, '\n');
+  return html;
+}
+
+export function parseASNData(ASN_int, name, countries, abuse) {
+  const data_ = {};
+  data_['name'] = name.data.names ? name.data.names[ASN_int] : '';
+
+  data_['countries'] = Array.from(extractCountries(countries)).join(', ');
+  data_['asn_dot'] = ASN_int / 65536 + '.' + (ASN_int % 65536);
+
+  if (
+    (ASN_int >= 64512 && ASN_int <= 65534) ||
+    (ASN_int >= 4200000000 && ASN_int <= 4294967294)
+  ) {
+    data_['type'] = 'Private';
+  } else {
+    data_['type'] = 'Non-Private';
+  }
+
+  data_['abuse_html'] = extractAbuse(abuse).join('');
+  data_['abuse_text'] = data_['abuse_html'].replace(/<\/br>/g, '\n');
+
+  const join_text = extractInnerHTML(data_, ASN_int).join(''); //.replace(/<\/br>|<br>/g, '\n');
 
   return join_text;
 }

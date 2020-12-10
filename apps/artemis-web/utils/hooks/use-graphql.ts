@@ -15,59 +15,19 @@ import {
   STATS_QUERY,
   STATS_SUB,
 } from '../../libs/graphql';
-import { shallSubscribe } from '../token';
+import { findQuery, findSubscription, shallSubscribe } from '../token';
 
 export function useGraphQl(module, isLive = true, key = '') {
-  let res: any;
-
   /* eslint-disable react-hooks/rules-of-hooks */
-  switch (module) {
-    case 'stats':
-      res = shallSubscribe(isLive)
-        ? useSubscription(STATS_SUB)
-        : useQuery(STATS_QUERY);
-      break;
-    case 'ongoing_hijack':
-      res = shallSubscribe(isLive)
-        ? useSubscription(ONGOING_HIJACK_SUB)
-        : useQuery(ONGOING_HIJACK_QUERY);
-      break;
-    case 'hijack':
-      res = shallSubscribe(isLive)
-        ? useSubscription(HIJACK_SUB)
-        : useQuery(HIJACK_QUERY);
-      break;
-    case 'bgpupdates':
-      res = shallSubscribe(isLive)
-        ? useSubscription(BGP_SUB)
-        : useQuery(BGP_QUERY);
-      break;
-    case 'hijackByKey':
-      res = shallSubscribe(isLive)
-        ? useSubscription(getHijackByKeySub, {
-            variables: { key },
-          })
-        : useQuery(getHijackByKeyQuery, {
-            variables: { key },
-          });
-      break;
-    case 'bgpByKey':
-      res = shallSubscribe(isLive)
-        ? useSubscription(getBGPByKeySub, {
-            variables: { key },
-          })
-        : useQuery(getBGPByKeyQuery, {
-            variables: { key },
-          });
-      break;
-    case 'index_stats':
-      res = shallSubscribe(isLive)
-        ? useSubscription(INDEXSTATS_SUB)
-        : useQuery(INDEXSTATS_QUERY);
-      break;
-  }
+  const res = shallSubscribe(isLive)
+    ? useSubscription(findSubscription(module), {
+        variables: { key },
+      })
+    : useQuery(findQuery(module), {
+        variables: { key },
+      });
 
-  const { loading, error, data } = res;
+  const { error } = res;
   if (error) {
     console.error(error);
   }
