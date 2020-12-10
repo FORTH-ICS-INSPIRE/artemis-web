@@ -66,3 +66,9 @@ export const genTooltip = (column, components, label, text): any => (
     </ReactTooltip>
   </>
 );
+
+const isDevelopment = () => process.env.NODE_ENV === 'development';
+const isBrowser = () => typeof window !== 'undefined';
+export const shallMock = () => isDevelopment() && isBrowser();
+const isProduction = () => process.env.NODE_ENV === 'production';
+export const shallSubscribe = (isLive) => isProduction() && isLive;

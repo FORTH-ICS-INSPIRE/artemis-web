@@ -18,14 +18,12 @@ import { fetchASNData } from '../utils/fetch-data';
 import { useGraphQl } from '../utils/hooks/use-graphql';
 import { parseASNData } from '../utils/parsers';
 import { useStyles } from '../utils/styles';
+import { shallMock } from '../utils/token';
 
 const HijacksPage = (props) => {
-  const isDevelopment = () => process.env.NODE_ENV === 'development';
-  const isBrowser = () => typeof window !== 'undefined';
-
   const [isLive, setIsLive] = useState(true);
 
-  if (isDevelopment() && isBrowser()) {
+  if (shallMock()) {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const { worker } = require('../utils/mock-sw/browser');
     worker.start();

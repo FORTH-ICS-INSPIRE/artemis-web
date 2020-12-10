@@ -20,14 +20,12 @@ import { fetchASNData } from '../utils/fetch-data';
 import { useGraphQl } from '../utils/hooks/use-graphql';
 import { parseASNData } from '../utils/parsers';
 import { useStyles } from '../utils/styles';
-import { formatDate, fromEntries, genTooltip } from '../utils/token';
+import { formatDate, fromEntries, genTooltip, shallMock } from '../utils/token';
 
 const ViewHijackPage = (props) => {
   const [isLive, setIsLive] = useState(true);
-  const isDevelopment = () => process.env.NODE_ENV === 'development';
-  const isBrowser = () => typeof window !== 'undefined';
 
-  if (isDevelopment() && isBrowser()) {
+  if (shallMock()) {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const { worker } = require('../utils/mock-sw/browser');
     worker.start();
@@ -307,18 +305,19 @@ const ViewHijackPage = (props) => {
     entry.id = i;
     if (!asns.includes(entry.origin_as))
       asns.push(
-        entry.origin_as === '-' ? entry.origin_as : parseInt(entry.origin_as)
+        entry.origin_as === '-'
+          ? entry.origin_as
+          : parseInt(entry.origin_as, 10)
       );
     if (!asns.includes(entry.peer_asn))
       asns.push(
-        entry.peer_asn === '-' ? entry.peer_asn : parseInt(entry.peer_asn)
+        entry.peer_asn === '-' ? entry.peer_asn : parseInt(entry.peer_asn, 10)
       );
   });
 
   useEffect(() => {
     let isMounted = true;
     (async function setStateFn() {
-      if (!isMounted) return;
       const ASN_int_origin: number = hijack.hijack_as;
       const ASN_int_peers: number = hijack.peers_seen;
 
@@ -384,7 +383,7 @@ const ViewHijackPage = (props) => {
 
       for (let i = 0; i < asns.length; i++) {
         const ASN_int: number | string =
-          asns[i] !== '-' ? parseInt(asns[i]) : '-';
+          asns[i] !== '-' ? parseInt(asns[i], 10) : '-';
         const [name_origin, countries_origin, abuse_origin] =
           ASN_int == '-' ? ['', '', ''] : await fetchASNData(ASN_int);
 
@@ -399,11 +398,12 @@ const ViewHijackPage = (props) => {
               );
         tooltips[ASN_int] = tooltip;
       }
-
-      setASNDistinctTitle(tooltips);
-      setASNWithdrawnTitle(tooltipsWithdrawn);
-      setASNSeenTitle(tooltipsSeen);
-      setASNTitle([tooltip1, tooltip2]);
+      if (isMounted) {
+        setASNDistinctTitle(tooltips);
+        setASNWithdrawnTitle(tooltipsWithdrawn);
+        setASNSeenTitle(tooltipsSeen);
+        setASNTitle([tooltip1, tooltip2]);
+      }
     })();
 
     return () => {
