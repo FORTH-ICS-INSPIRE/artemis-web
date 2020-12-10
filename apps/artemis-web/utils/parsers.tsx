@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactTooltip from 'react-tooltip';
+import { fetchASNData } from './fetch-data';
 import { genTooltip, formatDate } from './token';
 
 export function extractUser(req) {
@@ -206,7 +207,7 @@ function extractHijackInfoLeft(hijack, ASNTitle) {
           />
         </div>
         <ReactTooltip html={true} id={'hijack_as'}>
-          {ASNTitle[0] ?? 'Loading...'}
+          {ASNTitle[0] && ASNTitle[0].length ? ASNTitle[0] : 'Loading...'}
         </ReactTooltip>
       </>,
       genTooltip(
@@ -381,4 +382,84 @@ export function extractHijackInfos(hijack, ASNTitle) {
     extractHijackInfoLeft(hijack, ASNTitle),
     extractHijackInfoRight(hijack, ASNTitle),
   ];
+}
+
+export async function extractWithDrawnSeen(withdrawn, seen) {
+  const tooltipsWithdrawn = [];
+  const tooltipsSeen = [];
+  const waitData1 = [];
+  const waitData2 = [];
+
+  for (let i = 0; i < withdrawn.length; i++) {
+    waitData1.push(await fetchASNData(withdrawn[i]));
+    tooltipsWithdrawn.push(
+      parseASNData(
+        withdrawn[i],
+        waitData1[i][0],
+        waitData1[i][1],
+        waitData1[i][2]
+      )
+    );
+  }
+
+  for (let i = 0; i < seen.length; i++) {
+    waitData2.push(await fetchASNData(seen[i]));
+    tooltipsSeen.push(
+      parseASNData(seen[i], waitData2[i][0], waitData2[i][1], waitData2[i][2])
+    );
+  }
+  return {
+    tooltipsWithdrawn: tooltipsWithdrawn,
+    tooltipsSeen: tooltipsSeen,
+  };
+}
+
+export async function extractDistinctTooltips(asns) {
+  const tooltips = {};
+
+  for (let i = 0; i < asns.length; i++) {
+    const ASN_int: number | string =
+      asns[i] !== '-' ? parseInt(asns[i], 10) : '-';
+    const [name_origin, countries_origin, abuse_origin] =
+      ASN_int == '-' ? ['', '', ''] : await fetchASNData(ASN_int);
+
+    const tooltip =
+      ASN_int == '-'
+        ? ''
+        : parseASNData(ASN_int, name_origin, countries_origin, abuse_origin);
+    tooltips[ASN_int] = tooltip;
+  }
+
+  return tooltips;
+}
+
+export async function extractHijackTooltips(hijack) {
+  const ASN_int_origin: number = hijack.hijack_as;
+  const ASN_int_peers: number = hijack.peers_seen;
+
+  const [name_origin, countries_origin, abuse_origin] =
+    ASN_int_origin && ASN_int_origin.toString() !== '-'
+      ? await fetchASNData(ASN_int_origin)
+      : ['', '', ''];
+  const [name_peers, countries_peers, abuse_peers] =
+    ASN_int_peers && ASN_int_peers.toString() !== '-'
+      ? await fetchASNData(ASN_int_peers)
+      : ['', '', ''];
+
+  const tooltip1 =
+    ASN_int_origin && ASN_int_origin.toString() !== '-'
+      ? parseASNData(
+          ASN_int_origin,
+          name_origin,
+          countries_origin,
+          abuse_origin
+        )
+      : '';
+
+  const tooltip2 =
+    ASN_int_peers && ASN_int_peers.toString() !== '-'
+      ? parseASNData(ASN_int_peers, name_peers, countries_peers, abuse_peers)
+      : '';
+
+  return [tooltip1, tooltip2];
 }
