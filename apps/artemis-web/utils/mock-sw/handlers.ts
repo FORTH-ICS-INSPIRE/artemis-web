@@ -671,7 +671,7 @@ export const handlers = [
         view_data: [
           {
             prefix: '139.91.250.0/24',
-            origin_as: '-',
+            origin_as: '294409',
             peer_asn: 264409,
             as_path: [],
             service: 'implicit-withdrawal',

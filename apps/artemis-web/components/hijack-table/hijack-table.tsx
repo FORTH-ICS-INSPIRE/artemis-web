@@ -308,6 +308,7 @@ const HijackTableComponent = (props) => {
 
   if (HIJACK_DATA && HIJACK_DATA.length) {
     hijacks = HIJACK_DATA.map((row, i) => ({
+      id: row.id,
       update: formatDate(new Date(row.time_last)),
       time: formatDate(new Date(row.time_detected)),
       hprefix: row.prefix,

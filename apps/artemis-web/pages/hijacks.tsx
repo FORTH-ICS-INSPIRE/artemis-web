@@ -40,7 +40,7 @@ const HijacksPage = (props) => {
   const [selectState, setSelectState] = useState('');
   const [statusButton, setStatusButton] = useState('');
   const [key, setKey] = useState(' ');
-  const [ASNTitle, setASNTitle] = React.useState({});
+  const [ASNTitle, setASNTitle] = useState({});
 
   const user = props.user;
 

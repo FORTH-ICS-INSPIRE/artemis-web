@@ -441,7 +441,6 @@ const BGPTableComponent = (props) => {
 
       for (let i = 0; i < asns.length; i++) {
         const ASN_int: number | string = asns[i];
-
         const [name_origin, countries_origin, abuse_origin] =
           ASN_int == '-' ? ['', '', ''] : await fetchASNData(ASN_int);
 
@@ -456,7 +455,6 @@ const BGPTableComponent = (props) => {
               );
         tooltips[ASN_int] = tooltip1;
       }
-
       setASNTitle(tooltips);
     })();
   }, [bgp.length]);

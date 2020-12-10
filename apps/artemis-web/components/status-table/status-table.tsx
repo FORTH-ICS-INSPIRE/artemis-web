@@ -12,14 +12,26 @@ type StatsType = {
 };
 
 class StatusTable extends Component<StatsType, any> {
+  _isMounted: boolean;
+
   constructor(props) {
     super(props);
     this.state = { date: new Date() };
   }
 
   componentDidMount() {
-    setInterval(() => this.setState({ date: new Date() }), 1000);
+    this._isMounted = true;
+
+    setInterval(
+      () => (this._isMounted ? this.setState({ date: new Date() }) : ''),
+      1000
+    );
   }
+
+  componentWillUnmount() {
+    this._isMounted = false;
+  }
+
   render() {
     const STATS_DATA = this.props.data;
     const tooltips = {

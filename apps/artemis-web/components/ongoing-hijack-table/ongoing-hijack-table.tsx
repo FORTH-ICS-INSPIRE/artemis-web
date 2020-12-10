@@ -310,7 +310,7 @@ const columns = [
     filter: exactMatchFilter,
   },
   {
-    dataField: 'rpki_status',
+    dataField: 'rpki',
     headerTitle: false,
     headerFormatter: (column, colIndex) => (
       <>
@@ -451,6 +451,7 @@ const OngoingHijackTableComponent = (props) => {
   if (HIJACK_DATA && HIJACK_DATA.length) {
     hijacks = HIJACK_DATA.map((row, i) => {
       return {
+        id: row.id,
         update: formatDate(new Date(row.time_last)),
         time: formatDate(new Date(row.time_detected)),
         hprefix: row.prefix,
@@ -591,34 +592,37 @@ const OngoingHijackTableComponent = (props) => {
 
   const contentTable = ({ paginationProps, paginationTableProps }) => (
     <ToolkitProvider
-      keyField="timestamp"
+      keyField="id"
       columns={columns}
       data={hijacks}
       exportCSV={{ onlyExportFiltered: true, exportAll: false }}
     >
-      {(toolkitprops) => (
-        <>
-          <div className="header-filter">
-            <SizePerPageDropdownStandalone {...paginationProps} />
-            <MyExportCSV {...toolkitprops.csvProps}>Export CSV!!</MyExportCSV>
-          </div>
-          <BootstrapTable
-            wrapperClasses="table-responsive"
-            keyField="update"
-            data={hijacks}
-            columns={columns}
-            expandRow={expandRow}
-            filter={filterFactory()}
-            filterPosition="bottom"
-            striped
-            hover
-            {...toolkitprops.baseProps}
-            {...paginationTableProps}
-          />
-          <PaginationTotalStandalone {...paginationProps} />
-          <PaginationListStandalone {...paginationProps} />
-        </>
-      )}
+      {(toolkitprops) => {
+        paginationProps.dataSize = hijacks.length;
+        return (
+          <>
+            <div className="header-filter">
+              <SizePerPageDropdownStandalone {...paginationProps} />
+              <MyExportCSV {...toolkitprops.csvProps}>Export CSV!!</MyExportCSV>
+            </div>
+            <BootstrapTable
+              wrapperClasses="table-responsive"
+              keyField="id"
+              data={hijacks}
+              columns={columns}
+              expandRow={expandRow}
+              filter={filterFactory()}
+              filterPosition="bottom"
+              striped
+              hover
+              {...toolkitprops.baseProps}
+              {...paginationTableProps}
+            />
+            <PaginationTotalStandalone {...paginationProps} />
+            <PaginationListStandalone {...paginationProps} />
+          </>
+        );
+      }}
     </ToolkitProvider>
   );
 

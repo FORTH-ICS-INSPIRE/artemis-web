@@ -24,7 +24,13 @@ const DashboardPage = (props) => {
 
   const STATS_DATA = useGraphQl('stats').data;
   const HIJACK_DATA = useGraphQl('ongoing_hijack').data;
+  let hijacks = HIJACK_DATA ? HIJACK_DATA.view_hijacks : [];
   const INDEX_DATA = useGraphQl('index_stats').data;
+
+  hijacks = hijacks.map((entry, i) => ({
+    ...entry,
+    id: i,
+  }));
 
   return (
     <>
@@ -47,7 +53,7 @@ const DashboardPage = (props) => {
                         variant="contained"
                         color="primary"
                         onClick={() => {
-                          if (HIJACK_DATA && HIJACK_DATA.view_hijacks) {
+                          if (hijacks.length) {
                             notify(`Example notification !`);
                           }
                         }}
@@ -87,10 +93,8 @@ const DashboardPage = (props) => {
                   </div>
                   <div className="card-body" style={{ textAlign: 'center' }}>
                     {' '}
-                    {HIJACK_DATA && HIJACK_DATA.view_hijacks.length > 0 ? (
-                      <OngoingHijackTableComponent
-                        data={HIJACK_DATA ? HIJACK_DATA.view_hijacks : []}
-                      />
+                    {hijacks.length ? (
+                      <OngoingHijackTableComponent data={hijacks} />
                     ) : (
                       <div>
                         <p>

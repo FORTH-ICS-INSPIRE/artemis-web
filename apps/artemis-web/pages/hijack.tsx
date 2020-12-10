@@ -132,7 +132,7 @@ const ViewHijackPage = (props) => {
             className="form-control"
             type="text"
             readOnly={true}
-            value={hijack.hijack_as}
+            value={hijack.hijack_as ?? ''}
           />
         </div>
         <ReactTooltip html={true} id={'hijack_as'}>
@@ -303,9 +303,16 @@ const ViewHijackPage = (props) => {
   };
 
   const asns = [];
-  bgp.forEach((entry) => {
-    if (!asns.includes(entry.origin_as)) asns.push(entry.origin_as);
-    if (!asns.includes(entry.peer_asn)) asns.push(entry.peer_asn);
+  bgp.forEach((entry, i) => {
+    entry.id = i;
+    if (!asns.includes(entry.origin_as))
+      asns.push(
+        entry.origin_as === '-' ? entry.origin_as : parseInt(entry.origin_as)
+      );
+    if (!asns.includes(entry.peer_asn))
+      asns.push(
+        entry.peer_asn === '-' ? entry.peer_asn : parseInt(entry.peer_asn)
+      );
   });
 
   useEffect(() => {
@@ -314,12 +321,15 @@ const ViewHijackPage = (props) => {
       if (!isMounted) return;
       const ASN_int_origin: number = hijack.hijack_as;
       const ASN_int_peers: number = hijack.peers_seen;
-      const [name_origin, countries_origin, abuse_origin] = await fetchASNData(
-        ASN_int_origin
-      );
-      const [name_peers, countries_peers, abuse_peers] = await fetchASNData(
-        ASN_int_peers
-      );
+
+      const [name_origin, countries_origin, abuse_origin] =
+        ASN_int_origin && ASN_int_origin.toString() !== '-'
+          ? await fetchASNData(ASN_int_origin)
+          : ['', '', ''];
+      const [name_peers, countries_peers, abuse_peers] =
+        ASN_int_peers && ASN_int_peers.toString() !== '-'
+          ? await fetchASNData(ASN_int_peers)
+          : ['', '', ''];
 
       const tooltipsWithdrawn = [];
       const tooltipsSeen = [];
@@ -350,24 +360,31 @@ const ViewHijackPage = (props) => {
         );
       }
 
-      const tooltip1 = parseASNData(
-        ASN_int_origin,
-        name_origin,
-        countries_origin,
-        abuse_origin
-      );
-      const tooltip2 = parseASNData(
-        ASN_int_peers,
-        name_peers,
-        countries_peers,
-        abuse_peers
-      );
+      const tooltip1 =
+        ASN_int_origin && ASN_int_origin.toString() !== '-'
+          ? parseASNData(
+              ASN_int_origin,
+              name_origin,
+              countries_origin,
+              abuse_origin
+            )
+          : '';
+
+      const tooltip2 =
+        ASN_int_peers && ASN_int_peers.toString() !== '-'
+          ? parseASNData(
+              ASN_int_peers,
+              name_peers,
+              countries_peers,
+              abuse_peers
+            )
+          : '';
 
       const tooltips = {};
 
       for (let i = 0; i < asns.length; i++) {
-        const ASN_int: number | string = asns[i];
-
+        const ASN_int: number | string =
+          asns[i] !== '-' ? parseInt(asns[i]) : '-';
         const [name_origin, countries_origin, abuse_origin] =
           ASN_int == '-' ? ['', '', ''] : await fetchASNData(ASN_int);
 
@@ -388,6 +405,7 @@ const ViewHijackPage = (props) => {
       setASNSeenTitle(tooltipsSeen);
       setASNTitle([tooltip1, tooltip2]);
     })();
+
     return () => {
       isMounted = false;
     };
@@ -473,10 +491,10 @@ const ViewHijackPage = (props) => {
                                   className="form-control"
                                   type="text"
                                   readOnly={true}
-                                  value={hijackInfo[key][0]}
+                                  value={hijackInfo[key][0] ?? ''}
                                 />
                               ) : (
-                                hijackInfo[key][0]
+                                hijackInfo[key][0] ?? ''
                               )}
                             </div>
                           </div>
@@ -491,7 +509,7 @@ const ViewHijackPage = (props) => {
                               className="col-lg-4"
                               style={{ fontWeight: 'bold' }}
                             >
-                              {hijackInfo2[key][1]}
+                              {hijackInfo2[key][1] ?? ''}
                             </div>
                             <div className="col-lg-8">
                               {typeof hijackInfo2[key][0] !== 'object' ? (
@@ -500,10 +518,10 @@ const ViewHijackPage = (props) => {
                                   className="form-control"
                                   type="text"
                                   readOnly={true}
-                                  value={hijackInfo2[key][0]}
+                                  value={hijackInfo2[key][0] ?? ''}
                                 />
                               ) : (
-                                hijackInfo2[key][0]
+                                hijackInfo2[key][0] ?? ''
                               )}
                             </div>
                           </div>
@@ -667,6 +685,7 @@ const ViewHijackPage = (props) => {
                   {bgp.length > 0 ? (
                     <BGPTableComponent
                       data={bgp}
+                      asns={asns}
                       skippedCols={['as_path', 'hijack_key']}
                     />
                   ) : (
