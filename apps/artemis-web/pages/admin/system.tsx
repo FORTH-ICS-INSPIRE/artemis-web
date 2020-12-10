@@ -71,7 +71,7 @@ const SystemPage = (props) => {
                     return (
                       <Grid item xs={4}>
                         <div className="card">
-                          <div className="card-header"> {module} Module</div>
+                          <div className="card-header"> {module} </div>
                           <div className="card-body">
                             <div className="row">
                               <div className="col-lg-3">
