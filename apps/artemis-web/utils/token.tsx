@@ -131,5 +131,3 @@ export const findStatus = (row) => {
 
   return statuses;
 };
-
-
