@@ -117,3 +117,19 @@ export const findSubscription = (action) => {
 export const findQuery = (action) => {
   return actionQueryMap[action];
 };
+
+export const findStatus = (row) => {
+  const statuses = [];
+
+  if (row.withdrawn) statuses.push('Withdrawn');
+  if (row.resolved) statuses.push('Resolved');
+  if (row.ignored) statuses.push('Ignored');
+  if (row.active) statuses.push('Active');
+  if (row.dormant) statuses.push('Dormant');
+  if (row.under_mitigation) statuses.push('Under Mitigation');
+  if (row.outdated) statuses.push('Outdated');
+
+  return statuses;
+};
+
+

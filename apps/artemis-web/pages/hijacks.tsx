@@ -18,7 +18,7 @@ import { fetchASNData } from '../utils/fetch-data';
 import { useGraphQl } from '../utils/hooks/use-graphql';
 import { parseASNData } from '../utils/parsers';
 import { useStyles } from '../utils/styles';
-import { shallMock } from '../utils/token';
+import { findStatus, shallMock } from '../utils/token';
 
 const HijacksPage = (props) => {
   const [isLive, setIsLive] = useState(true);
@@ -30,6 +30,15 @@ const HijacksPage = (props) => {
   }
 
   const classes = useStyles();
+  const setStatus = (status) => {
+    if (status === statusButton) {
+      setFilterStatus('');
+      setStatusButton('');
+    } else {
+      setFilterStatus(status);
+      setStatusButton(status);
+    }
+  };
 
   const [filterDate, setFilterDate] = useState(0);
   const [filterStatus, setFilterStatus] = useState('');
@@ -42,30 +51,6 @@ const HijacksPage = (props) => {
 
   const user = props.user;
 
-  const findStatus = (row) => {
-    const statuses = [];
-
-    if (row.withdrawn) statuses.push('Withdrawn');
-    if (row.resolved) statuses.push('Resolved');
-    if (row.ignored) statuses.push('Ignored');
-    if (row.active) statuses.push('Active');
-    if (row.dormant) statuses.push('Dormant');
-    if (row.under_mitigation) statuses.push('Under Mitigation');
-    if (row.outdated) statuses.push('Outdated');
-
-    return statuses;
-  };
-
-  const setStatus = (status) => {
-    if (status === statusButton) {
-      setFilterStatus('');
-      setStatusButton('');
-    } else {
-      setFilterStatus(status);
-      setStatusButton(status);
-    }
-  };
-
   const HIJACK_DATA = useGraphQl('hijack', isLive).data;
 
   let hijacks = HIJACK_DATA ? HIJACK_DATA.view_hijacks : [];
@@ -73,6 +58,7 @@ const HijacksPage = (props) => {
     ...entry,
     status: findStatus(entry)[0] ?? '',
   }));
+
   const filteredDate = new Date();
   filteredDate.setHours(filteredDate.getHours() - filterDate);
 

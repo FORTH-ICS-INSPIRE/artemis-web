@@ -63,7 +63,7 @@ export const useFooterStyles = makeStyles((theme) => ({
     marginTop: 'auto',
     position: 'absolute',
     height: '4.5rem',
-    bottom: '0',
+    bottom: '0px',
     width: '100%',
     backgroundColor: theme.palette.grey[800],
   },

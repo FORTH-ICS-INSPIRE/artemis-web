@@ -18,7 +18,7 @@ import AuthHOC from '../components/401-hoc/401-hoc';
 import BGPTableComponent from '../components/bgp-table/bgp-table';
 import { fetchASNData } from '../utils/fetch-data';
 import { useGraphQl } from '../utils/hooks/use-graphql';
-import { parseASNData } from '../utils/parsers';
+import { extractHijackInfos, parseASNData } from '../utils/parsers';
 import { useStyles } from '../utils/styles';
 import { formatDate, fromEntries, genTooltip, shallMock } from '../utils/token';
 
@@ -121,184 +121,10 @@ const ViewHijackPage = (props) => {
     );
   };
 
-  const hijackInfo = {
-    'Hijacker AS:': [
-      <>
-        <div data-tip data-for={'hijack_as'}>
-          <input
-            id="info_type"
-            className="form-control"
-            type="text"
-            readOnly={true}
-            value={hijack.hijack_as ?? ''}
-          />
-        </div>
-        <ReactTooltip html={true} id={'hijack_as'}>
-          {ASNTitle[0] ?? 'Loading...'}
-        </ReactTooltip>
-      </>,
-      genTooltip(
-        'Hijacker AS:',
-        null,
-        'hijack_title_info',
-        'The AS that is potentially responsible for the hijack.</br>Note that this is an experimental field.'
-      ),
-    ],
-    Type: [
-      hijack.type,
-      genTooltip(
-        'Type:',
-        null,
-        'type_title_info',
-        `The type of the hijack in 4 dimensions: prefix|path|data plane|policy<ul>
-      <li>[Prefix] "S" → Sub-prefix hijack</li>
-      <li>[Prefix] "E" → Exact-prefix hijack</li>
-      <li>[Prefix] "Q" → Squatting hijack</li>
-      <li>[Path] "0" → Type-0 hijack</li>
-      <li>[Path] "1" → Type-1 hijack</li>
-      <li>[Path] "P" → Type-P hijack</li>
-      <li>[Path] "-" → Type-N or Type-U hijack (N/A)</li>
-      <li>[Data plane] "-" → Blackholing, Imposture or MitM hijack (N/A)</li>
-      <li>[Policy] "L" → Route Leak due to no-export policy violation</li>
-      <li>[Policy] "-" → Other policy violation (N/A)</li></ul>`
-      ),
-    ],
-    '# Peers Seen': [
-      hijack.num_peers_seen,
-      genTooltip(
-        '# Peers Seen:',
-        null,
-        'peers_title_info',
-        `Number of peers/monitors (i.e., ASNs)</br>that have seen hijack updates.`
-      ),
-    ],
-    '# ASes Infected': [
-      hijack.num_asns_inf,
-      genTooltip(
-        '# ASes Infected:',
-        null,
-        'infected_title_info',
-        `Number of infected ASes that seem to</br>route traffic towards the hijacker AS.</br>Note that this is an experimental field.`
-      ),
-    ],
-    Prefix: [
-      hijack.prefix,
-      genTooltip(
-        'Prefix:',
-        null,
-        'prefix_title_info',
-        `The IPv4/IPv6 prefix related to the BGP update.`
-      ),
-    ],
-    Matched: [
-      hijack.configured_prefix,
-      genTooltip(
-        'Matched:',
-        null,
-        'matched_title_info',
-        `The prefix that was matched in the configuration (note: this might differ from the actually hijacked prefix in the case of a sub-prefix hijack).`
-      ),
-    ],
-    Config: [
-      formatDate(new Date(hijack.timestamp_of_config)),
-      genTooltip(
-        'Config:',
-        null,
-        'config_title_info',
-        `The timestamp (i.e., unique ID) of the configuration based on which this hijack event was triggered.`
-      ),
-    ],
-    Key: [
-      hijack.key,
-      genTooltip(
-        'Key:',
-        null,
-        'key_title_info',
-        `The unique key of a hijack event.`
-      ),
-    ],
-  };
-
-  const hijackInfo2 = {
-    'Time Started': [
-      formatDate(new Date(hijack.time_started)),
-      genTooltip(
-        'Time Started:',
-        null,
-        'timestart_title_info',
-        `The timestamp of the oldest known (to the system) BGP update that is related to the hijack.`
-      ),
-    ],
-    'Time Detected': [
-      formatDate(new Date(hijack.time_detected)),
-      genTooltip(
-        'Time Detected:',
-        null,
-        'timedetect_title_info',
-        `The time when a hijack event was first detected by the system.`
-      ),
-    ],
-    'Last Update': [
-      formatDate(new Date(hijack.time_last)),
-      genTooltip(
-        'Last Update:',
-        null,
-        'lastupdate_title_info',
-        `The timestamp of the newest known (to the system) BGP update that is related to the hijack.`
-      ),
-    ],
-    'Time Ended': [
-      formatDate(new Date(hijack.time_ended)),
-      genTooltip(
-        'Time Ended:',
-        null,
-        'timeended_title_info',
-        `The timestamp when the hijack was ended. It can be set in the following ways:
-      <ul><li>Manually, when the user presses the “resolved” button.</li>
-      <li>Automatically, when a hijack is completely withdrawn (all monitors that saw hijack updates for a certain prefix have seen the respective withdrawals).</li></ul>`
-      ),
-    ],
-    'Mitigation Started': [
-      hijack.mitigation_started ?? 'Never',
-      genTooltip(
-        'Mitigation Started:',
-        null,
-        'mitigationstarted_title_info',
-        `The timestamp when the mitigation was triggered by the user (“mitigate” button).`
-      ),
-    ],
-    'Community Annotation': [
-      hijack.community_annotation,
-      genTooltip(
-        'Community Annotation:',
-        null,
-        'communityannotation_title_info',
-        `The user-defined annotation of the hijack according to the communities of hijacked BGP updates.`
-      ),
-    ],
-    'RPKI Status': [
-      hijack.rpki_status,
-      genTooltip(
-        'RPKI Status:',
-        null,
-        'rpkistatus_title_info',
-        `The RPKI status of the hijacked prefix.<ul>
-      <li>"NA" → Non Applicable</li>
-      <li>"VD" → Valid</li>
-      <li>"IA" → Invalid ASN</li>
-      <li>"IL" → Invalid Prefix Length</li>
-      <li>"IU" → Invalid Unknown</li>
-      <li>"NF" → Not found</li></ul>`
-      ),
-    ],
-    'Display Peers Seen Hijack': [
-      <></>,
-      <span>
-        <br />
-        Display Peers Seen Hijack
-      </span>,
-    ],
-  };
+  const [hijackInfoLeft, hijackInfoRight] = extractHijackInfos(
+    hijack,
+    ASNTitle
+  );
 
   const asns = [];
   bgp.forEach((entry, i) => {
@@ -475,26 +301,26 @@ const ViewHijackPage = (props) => {
                 <div className="card-body">
                   <div className="row">
                     <div className="col-lg-6">
-                      {Object.keys(hijackInfo).map((key) => {
+                      {Object.keys(hijackInfoLeft).map((key) => {
                         return (
                           <div key={key} className="row">
                             <div
                               className="col-lg-4"
                               style={{ fontWeight: 'bold' }}
                             >
-                              {hijackInfo[key][1]}
+                              {hijackInfoLeft[key][1]}
                             </div>
                             <div className="col-lg-8">
-                              {typeof hijackInfo[key][0] !== 'object' ? (
+                              {typeof hijackInfoLeft[key][0] !== 'object' ? (
                                 <input
                                   id="info_type"
                                   className="form-control"
                                   type="text"
                                   readOnly={true}
-                                  value={hijackInfo[key][0] ?? ''}
+                                  value={hijackInfoLeft[key][0] ?? ''}
                                 />
                               ) : (
-                                hijackInfo[key][0] ?? ''
+                                hijackInfoLeft[key][0] ?? ''
                               )}
                             </div>
                           </div>
@@ -502,26 +328,26 @@ const ViewHijackPage = (props) => {
                       })}
                     </div>
                     <div className="col-lg-6">
-                      {Object.keys(hijackInfo2).map((key) => {
+                      {Object.keys(hijackInfoRight).map((key) => {
                         return (
                           <div key={key} className="row">
                             <div
                               className="col-lg-4"
                               style={{ fontWeight: 'bold' }}
                             >
-                              {hijackInfo2[key][1] ?? ''}
+                              {hijackInfoRight[key][1] ?? ''}
                             </div>
                             <div className="col-lg-8">
-                              {typeof hijackInfo2[key][0] !== 'object' ? (
+                              {typeof hijackInfoRight[key][0] !== 'object' ? (
                                 <input
                                   id="info_type"
                                   className="form-control"
                                   type="text"
                                   readOnly={true}
-                                  value={hijackInfo2[key][0] ?? ''}
+                                  value={hijackInfoRight[key][0] ?? ''}
                                 />
                               ) : (
-                                hijackInfo2[key][0] ?? ''
+                                hijackInfoRight[key][0] ?? ''
                               )}
                             </div>
                           </div>
