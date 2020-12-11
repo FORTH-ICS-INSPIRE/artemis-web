@@ -3,7 +3,7 @@ import BootstrapTable from 'react-bootstrap-table-next';
 
 const columns = [
   {
-    dataField: 'id',
+    dataField: '_id',
     text: 'ID',
     sort: true,
     sortCaret: (order) => {
@@ -33,7 +33,7 @@ const columns = [
     },
   },
   {
-    dataField: 'username',
+    dataField: 'name',
     text: 'Username',
     sort: true,
     sortCaret: (order) => {
@@ -123,7 +123,7 @@ const columns = [
     },
   },
   {
-    dataField: 'last_login',
+    dataField: 'lastLogin',
     text: 'Last Login',
     sort: true,
     sortCaret: (order) => {
