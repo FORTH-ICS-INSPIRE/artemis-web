@@ -6,7 +6,7 @@ let newPass;
 describe('artemis-web', () => {
   beforeEach(() => {
     Cypress.Cookies.preserveOnce('remember_me', 'sid', 'access_token');
-    cy.visit('/');
+    // cy.visit('/');
   });
 
   it('signs up a new user', () => {
