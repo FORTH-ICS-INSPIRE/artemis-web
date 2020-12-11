@@ -5,20 +5,13 @@ import {
   NextApiResponseExtended,
 } from '../../../definitions';
 
-const handler = nc()
-  .use(auth)
-  .get((req: NextApiRequestExtended, res: NextApiResponseExtended) => {
-    req.logOut();
-    res.clearCookie('remember_me');
-    res.clearCookie('access_token');
-    res.status(204).end();
-  })
-  .delete((req: NextApiRequestExtended, res: NextApiResponseExtended) => {
-    req.logOut();
-    res.clearCookie('remember_me');
-    res.clearCookie('access_token');
-    res.writeHead(204, { Location: '/login' });
-    res.end();
-  });
+const logout = (req: NextApiRequestExtended, res: NextApiResponseExtended) => {
+  req.logOut();
+  res.clearCookie('remember_me');
+  res.clearCookie('access_token');
+  res.status(204).end();
+};
+
+const handler = nc().use(auth).get(logout).delete(logout);
 
 export default handler;

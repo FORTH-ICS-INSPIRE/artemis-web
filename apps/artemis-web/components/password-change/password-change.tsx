@@ -18,9 +18,10 @@ const PasswordChange = (props) => {
     e.preventDefault();
     const old_password = e.currentTarget.old_password.value;
     const new_password = e.currentTarget.new_password.value;
-    const repeat_password = e.currentTarget.new_password.repeat_password;
+    const repeat_password = e.currentTarget.repeat_password.value;
 
-    if (new_password === repeat_password) {
+    if (new_password !== repeat_password) {
+      setSuccessMsg('');
       setErrorMsg('New password and repeat password must be the same');
       return;
     }
@@ -40,7 +41,7 @@ const PasswordChange = (props) => {
       setSuccessMsg((await res.json()).message);
       setErrorMsg('');
     } else {
-      setErrorMsg(await res.text());
+      setErrorMsg((await res.json()).message);
       setSuccessMsg('');
     }
   };
