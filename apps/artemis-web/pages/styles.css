@@ -58,6 +58,10 @@ body {
   background-color: #121212 !important;
 }
 
+#config > .react-codemirror2 > .CodeMirror {
+  height: 500px !important;
+}
+
 main {
   margin-top: 80px;
   height: 100%;

@@ -15,6 +15,8 @@ import {
   INDEXSTATS_QUERY,
   ONGOING_HIJACK_QUERY,
   STATS_QUERY,
+  CONFIG_SUB,
+  CONFIG_QUERY,
 } from '../libs/graphql';
 
 export const getRandomString = (len) => {
@@ -98,6 +100,7 @@ const actionSubMap = {
   hijackByKey: getHijackByKeySub,
   bgpByKey: getBGPByKeySub,
   index_stats: INDEXSTATS_SUB,
+  config: CONFIG_SUB,
 };
 
 const actionQueryMap = {
@@ -108,6 +111,7 @@ const actionQueryMap = {
   hijackByKey: getHijackByKeyQuery,
   bgpByKey: getBGPByKeyQuery,
   index_stats: INDEXSTATS_QUERY,
+  config: CONFIG_QUERY,
 };
 
 export const findSubscription = (action) => {

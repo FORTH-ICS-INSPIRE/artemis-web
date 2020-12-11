@@ -440,6 +440,26 @@ export const INDEXSTATS_QUERY = gql`
   }
 `;
 
+export const CONFIG_SUB = gql`
+  subscription getConfig {
+    view_configs(limit: 1, order_by: { time_modified: desc }) {
+      raw_config
+      comment
+      time_modified
+    }
+  }
+`;
+
+export const CONFIG_QUERY = gql`
+  query getConfig {
+    view_configs(limit: 1, order_by: { time_modified: desc }) {
+      raw_config
+      comment
+      time_modified
+    }
+  }
+`;
+
 export const useApollo = (initialState) => {
   const store = useMemo(() => initializeApollo(initialState), [initialState]);
   return store;
