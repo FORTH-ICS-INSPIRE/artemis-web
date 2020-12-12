@@ -11,7 +11,7 @@ import { useGraphQl } from '../../utils/hooks/use-graphql';
 import { Controlled as CodeMirror } from 'react-codemirror2';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/material.css';
-import AuthHOC from 'apps/artemis-web/components/401-hoc/401-hoc';
+import AuthHOC from '../../components/401-hoc/401-hoc';
 
 const SystemPage = (props) => {
   if (process.env.NODE_ENV === 'development') {
