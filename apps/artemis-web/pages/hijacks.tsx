@@ -19,6 +19,7 @@ import { useGraphQl } from '../utils/hooks/use-graphql';
 import { parseASNData } from '../utils/parsers';
 import { useStyles } from '../utils/styles';
 import { findStatus, shallMock } from '../utils/token';
+import ErrorBoundary from '../components/error-boundary/error-boundary';
 
 const HijacksPage = (props) => {
   const [isLive, setIsLive] = useState(true);
@@ -51,7 +52,8 @@ const HijacksPage = (props) => {
 
   const user = props.user;
 
-  const HIJACK_DATA = useGraphQl('hijack', isLive).data;
+  const HIJACK_RES = useGraphQl('hijack', isLive);
+  const HIJACK_DATA = HIJACK_RES.data;
 
   let hijacks = HIJACK_DATA ? HIJACK_DATA.view_hijacks : [];
   hijacks = hijacks.map((entry) => ({
@@ -246,16 +248,13 @@ const HijacksPage = (props) => {
                   </div>
                 </div>
                 <div className="card-body" style={{ textAlign: 'center' }}>
-                  {filteredHijacks.length > 0 ? (
+                  <ErrorBoundary
+                    containsData={filteredHijacks.length > 0}
+                    noDataMessage={'No hijack alerts.'}
+                    customError={HIJACK_RES.error}
+                  >
                     <HijackTableComponent data={filteredHijacks} />
-                  ) : (
-                    <div>
-                      <p>
-                        <img alt="" src="checkmark.png"></img>
-                      </p>
-                      <h3>No hijack alerts.</h3>
-                    </div>
-                  )}
+                  </ErrorBoundary>
                 </div>
               </div>
             </div>

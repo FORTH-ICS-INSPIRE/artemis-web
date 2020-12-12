@@ -8,6 +8,7 @@ import OngoingHijackTableComponent from '../components/ongoing-hijack-table/ongo
 import StatisticsTable from '../components/statistics-table/statistics-table';
 import StatusTable from '../components/status-table/status-table';
 import { useGraphQl } from '../utils/hooks/use-graphql';
+import ErrorBoundary from '../components/error-boundary/error-boundary';
 
 const DashboardPage = (props) => {
   const isDevelopment = process.env.NODE_ENV === 'development';
@@ -22,10 +23,13 @@ const DashboardPage = (props) => {
   const user = props.user;
   const notify = (message: React.ReactText) => toast(message);
 
-  const STATS_DATA = useGraphQl('stats').data;
-  const HIJACK_DATA = useGraphQl('ongoing_hijack').data;
+  const STATS_RES = useGraphQl('stats');
+  const STATS_DATA = STATS_RES.data;
+  const HIJACK_RES = useGraphQl('ongoing_hijack');
+  const HIJACK_DATA = HIJACK_RES.data;
   let hijacks = HIJACK_DATA ? HIJACK_DATA.view_hijacks : [];
-  const INDEX_DATA = useGraphQl('index_stats').data;
+  const INDEX_RES = useGraphQl('index_stats');
+  const INDEX_DATA = INDEX_RES.data;
 
   hijacks = hijacks.map((entry, i) => ({
     ...entry,
@@ -93,16 +97,13 @@ const DashboardPage = (props) => {
                   </div>
                   <div className="card-body" style={{ textAlign: 'center' }}>
                     {' '}
-                    {hijacks.length ? (
+                    <ErrorBoundary
+                      containsData={hijacks.length > 0}
+                      noDataMessage={'No hijack alerts.'}
+                      customError={HIJACK_RES.error}
+                    >
                       <OngoingHijackTableComponent data={hijacks} />
-                    ) : (
-                      <div>
-                        <p>
-                          <img src="checkmark.png"></img>
-                        </p>
-                        <h3>No hijack alerts.</h3>
-                      </div>
-                    )}
+                    </ErrorBoundary>
                   </div>
                 </div>
               </div>
@@ -112,16 +113,28 @@ const DashboardPage = (props) => {
               <div className="col-lg-5">
                 <div className="card">
                   <div className="card-header"> System Status </div>
-                  <div className="card-body">
-                    <StatusTable data={STATS_DATA} />
+                  <div className="card-body" style={{ textAlign: 'center' }}>
+                    <ErrorBoundary
+                      containsData={STATS_DATA}
+                      noDataMessage={'No modules found.'}
+                      customError={STATS_RES.error}
+                    >
+                      <StatusTable data={STATS_DATA} />
+                    </ErrorBoundary>
                   </div>
                 </div>
               </div>
               <div className="col-lg-5">
                 <div className="card">
                   <div className="card-header"> Statistics </div>
-                  <div className="card-body">
-                    <StatisticsTable data={INDEX_DATA} />
+                  <div className="card-body" style={{ textAlign: 'center' }}>
+                    <ErrorBoundary
+                      containsData={INDEX_DATA}
+                      noDataMessage={'No statistics found.'}
+                      customError={INDEX_RES.error}
+                    >
+                      <StatisticsTable data={INDEX_DATA} />
+                    </ErrorBoundary>
                   </div>
                 </div>
               </div>

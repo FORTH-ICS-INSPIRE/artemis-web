@@ -18,6 +18,7 @@ import { useGraphQl } from '../utils/hooks/use-graphql';
 import { parseASNData } from '../utils/parsers';
 import { useStyles } from '../utils/styles';
 import { formatDate, fromEntries } from '../utils/token';
+import ErrorBoundary from '../components/error-boundary/error-boundary';
 
 const BGPUpdates = (props) => {
   const [isLive, setIsLive] = useState(true);
@@ -39,7 +40,8 @@ const BGPUpdates = (props) => {
   const [ASNTitle, setASNTitle] = useState({});
 
   const user = props.user;
-  const BGP_DATA = useGraphQl('bgpupdates', isLive).data;
+  const BGP_RES = useGraphQl('bgpupdates', isLive);
+  const BGP_DATA = BGP_RES.data;
 
   const bgp = BGP_DATA ? BGP_DATA.view_bgpupdates : [];
   const filteredDate = new Date();
@@ -213,16 +215,13 @@ const BGPUpdates = (props) => {
                   </Button>
                 </div>
                 <div className="card-body" style={{ textAlign: 'center' }}>
-                  {filteredBgp.length > 0 ? (
+                  <ErrorBoundary
+                    containsData={filteredBgp.length > 0}
+                    noDataMessage={'No bgp updates.'}
+                    customError={BGP_RES.error}
+                  >
                     <BGPTableComponent asns={asns} data={filteredBgp} />
-                  ) : (
-                    <div>
-                      <p>
-                        <img src="checkmark.png"></img>
-                      </p>
-                      <h3>No bgp updates.</h3>
-                    </div>
-                  )}
+                  </ErrorBoundary>
                 </div>
               </div>
             </div>
@@ -265,7 +264,7 @@ const BGPUpdates = (props) => {
                                 {value}
                               </div>
                               <ReactTooltip html={true} id={'origin' + i}>
-                                {ASNTitle[value] ?? ''}
+                                {ASNTitle[value] ? ASNTitle[value] : ''}
                               </ReactTooltip>
                             </>
                           );
