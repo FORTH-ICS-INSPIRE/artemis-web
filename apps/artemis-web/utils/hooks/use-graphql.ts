@@ -1,48 +1,21 @@
 import { useQuery, useSubscription } from '@apollo/client';
-import {
-  BGP_QUERY,
-  BGP_SUB,
-  HIJACK_QUERY,
-  HIJACK_SUB,
-  INDEXSTATS_QUERY,
-  INDEXSTATS_SUB,
-  ONGOING_HIJACK_QUERY,
-  ONGOING_HIJACK_SUB,
-  STATS_QUERY,
-  STATS_SUB,
-} from '../../libs/graphql';
+import { findQuery, findSubscription, shallSubscribe } from '../token';
 
-export function useGraphQl(module, isLive = true) {
-  let res: any;
-  const shallSubscribe = process.env.NODE_ENV === 'production' && isLive;
-
+export function useGraphQl(module, isLive = true, key = '') {
   /* eslint-disable react-hooks/rules-of-hooks */
-  switch (module) {
-    case 'stats':
-      res = shallSubscribe ? useSubscription(STATS_SUB) : useQuery(STATS_QUERY);
-      break;
-    case 'ongoing_hijack':
-      res = shallSubscribe
-        ? useSubscription(ONGOING_HIJACK_SUB)
-        : useQuery(ONGOING_HIJACK_QUERY);
-      break;
-    case 'hijack':
-      res = shallSubscribe
-        ? useSubscription(HIJACK_SUB)
-        : useQuery(HIJACK_QUERY);
-      break;
-    case 'bgpupdates':
-      res = shallSubscribe ? useSubscription(BGP_SUB) : useQuery(BGP_QUERY);
-      break;
-    case 'index_stats':
-      res = shallSubscribe
-        ? useSubscription(INDEXSTATS_SUB)
-        : useQuery(INDEXSTATS_QUERY);
-      break;
-  }
-  const { loading, error, data } = res;
+  const res = shallSubscribe(isLive)
+    ? useSubscription(findSubscription(module), {
+        variables: { key },
+      })
+    : useQuery(findQuery(module), {
+        variables: { key },
+      });
+
+  const { error } = res;
   if (error) {
     console.error(error);
   }
-  return data;
+
+  return res;
+  /* eslint-enable react-hooks/rules-of-hooks */
 }

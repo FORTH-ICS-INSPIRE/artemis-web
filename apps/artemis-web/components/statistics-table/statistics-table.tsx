@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import ReactTooltip from 'react-tooltip';
 
 type IndexType = {
   view_index_all_stats: {
@@ -26,6 +27,22 @@ type StatisticsType = {
 class StatisticsTable extends Component<StatisticsType, {}> {
   render() {
     const STATISTICS_DATA = this.props.data;
+    const tooltips = [
+      'The total number of IPv4/IPv6 prefixes that are actually monitored (super-prefixes include sub-prefixes).',
+      'The total number of IPv4/IPv6 prefixes that are configured (as appearing in ARTEMIS rules).',
+      'The total number of monitors (ASNs) that peer with routing collector services, as observed by the system.',
+      'The total number of BGP updates seen on the monitors.',
+      'The total number of BGP updates not processed by the detection (either because they are in the queue, or because the detection was not running when they were fed to the monitors).',
+      'The total number of hijack events stored in the system.',
+      'The number of ignored hijack events (that were marked by the user).',
+      'The number of resolved hijack events (that were marked by the user).',
+      'The number of withdrawn hijack events.',
+      'The number of hijack events that are currently under mitigation (triggered by the user).',
+      'The number of ongoing hijack events (not ignored or resolved or withdrawn or outdated).',
+      'The number of dormant hijack events (ongoing, but not updated within the last X hours).',
+      'The number of acknowledged hijack events (confirmed as true positives).',
+      'The number of hijack events that are currently outdated (matching deprecated configurations, but benign now).',
+    ];
 
     return (
       <table id="modules" className="table table-hover">
@@ -33,15 +50,28 @@ class StatisticsTable extends Component<StatisticsType, {}> {
           {STATISTICS_DATA && STATISTICS_DATA.view_index_all_stats ? (
             Object.entries(STATISTICS_DATA.view_index_all_stats[0]).map(
               (stat, i) => {
-                const firstWord = stat[0].split('_')[0];
-                const secondWord = stat[0].split('_')[1];
-                const firstCaps = `${
-                  firstWord.charAt(0).toUpperCase() + firstWord.slice(1)
-                } ${secondWord.charAt(0).toUpperCase() + secondWord.slice(1)}`;
+                let firstCaps = '';
+                stat[0]
+                  .split('_')
+                  .forEach(
+                    (word) =>
+                      (firstCaps =
+                        firstCaps +
+                        word.charAt(0).toUpperCase() +
+                        word.slice(1) +
+                        ' ')
+                  );
 
                 return (
                   <tr key={i}>
-                    <td>{firstCaps}</td>
+                    <td>
+                      <div data-tip data-for={'stats' + i}>
+                        {firstCaps}
+                      </div>
+                      <ReactTooltip html={true} id={'stats' + i}>
+                        {tooltips[i]}
+                      </ReactTooltip>
+                    </td>
                     <td>{stat[1]}</td>
                   </tr>
                 );

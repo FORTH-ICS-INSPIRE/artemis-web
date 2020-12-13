@@ -4,7 +4,7 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React from 'react';
 
-const NotFoundHOC = (WrappedComponent, ACL = []) => {
+const AuthHOC = (WrappedComponent, ACL = []) => {
   const Wrapped = (props) => {
     const [user, loading] = useJWT();
     const router = useRouter();
@@ -19,8 +19,8 @@ const NotFoundHOC = (WrappedComponent, ACL = []) => {
             <meta name="robots" content="noindex" />
           </Head>
           <DefaultErrorPage
-            statusCode={404}
-            title={'You do not have the permission to access'}
+            statusCode={401}
+            title={'You do not have the permission to access.'}
           />
         </>
       );
@@ -34,4 +34,4 @@ const NotFoundHOC = (WrappedComponent, ACL = []) => {
   return Wrapped;
 };
 
-export default NotFoundHOC;
+export default AuthHOC;

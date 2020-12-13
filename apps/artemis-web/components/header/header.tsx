@@ -31,7 +31,7 @@ const Header = (props) => {
       method: 'DELETE',
     });
 
-    window.location.reload();
+    document.location.href = '/login';
   };
 
   return (
@@ -114,9 +114,10 @@ const Header = (props) => {
                     style={{ top: '36px' }}
                   >
                     <MenuItem onClick={handleCloseAction}>
-                      <Link href="/password_change">
-                        Password Change
-                      </Link>
+                      <Link href="/password_change">Password Change</Link>
+                    </MenuItem>
+                    <MenuItem onClick={handleCloseAction}>
+                      <Link href="/config_comparison">Config Comparison</Link>
                     </MenuItem>
                   </Menu>
                 </div>

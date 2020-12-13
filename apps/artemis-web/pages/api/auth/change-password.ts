@@ -15,6 +15,7 @@ const handler = nc()
     try {
       const { old_password, new_password } = req.body;
       if (!req.user) throw new Error('You need to be logged in.');
+      console.log(req.user.password);
       if (!(await argon2.verify(req.user.password, old_password)))
         throw new Error('Old password is wrong.');
 

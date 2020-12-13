@@ -2,6 +2,42 @@
   text-align: center;
 }
 
+.react-bootstrap-table-page-btns-ul {
+  float: right;
+}
+
+.show.react-bs-table-sizePerPage-dropdown ul:last-child {
+  display: block;
+}
+
+#paging {
+  float: left;
+}
+
+.react-bs-table-sizePerPage-dropdown,
+.react-bootstrap-table-pagination-total {
+  float: left;
+  margin-left: 10px;
+}
+
+.expand-cell,
+.expand-cell-header,
+.sortable {
+  cursor: pointer !important;
+}
+
+td {
+  text-align: center;
+}
+
+#modules > tbody > tr > td {
+  text-align: left !important;
+}
+
+#modules {
+  border: 1px solid #dee2e6;
+}
+
 .hv-center {
   display: flex;
   justify-content: center;
@@ -22,6 +58,10 @@ body {
   background-color: #121212 !important;
 }
 
+#config > .react-codemirror2 > .CodeMirror {
+  height: 500px !important;
+}
+
 main {
   margin-top: 80px;
   height: 100%;
@@ -31,8 +71,18 @@ footer > .MuiContainer-root {
   margin-left: 8%;
 }
 
+@media all and (max-width: 700px) and (min-width: 300px) {
+  .col-lg-1 {
+    display: none;
+  }
+
+  .col-lg-10 {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+}
+
 #content-wrap > .row {
-  margin-left: 0px;
   margin-right: 0%;
 }
 

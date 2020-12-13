@@ -1,11 +1,61 @@
 import { Button } from '@material-ui/core';
 import Head from 'next/head';
-import React from 'react';
-import NotFoundHOC from '../../components/404-hoc/404-hoc';
+import React, { useEffect, useState } from 'react';
+import AuthHOC from '../../components/401-hoc/401-hoc';
 import UserListComponent from '../../components/user-list/user-list';
 
 const UserManagementPage = (props) => {
   const user = props.user;
+  const [userList, setUserList] = useState([]);
+  const [pendingList, setPendingList] = useState([]);
+  const [normalList, setNormalList] = useState([]);
+  const [adminList, setAdminList] = useState([]);
+  const [errorMsg, setErrorMsg] = useState('');
+
+  const approvalRef = React.createRef<HTMLSelectElement>();
+  const promoteRef = React.createRef<HTMLSelectElement>();
+  const demoteRef = React.createRef<HTMLSelectElement>();
+  const deleteRef = React.createRef<HTMLSelectElement>();
+
+  const manageUser = async (e, action, userName) => {
+    e.preventDefault();
+
+    const res = await fetch('/api/usermanagement', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ action: action, userName: userName }),
+    });
+
+    if (res.status === 200) {
+      window.location.reload();
+    } else {
+      setErrorMsg((await res.json()).message);
+    }
+  };
+
+  useEffect(() => {
+    (async () => {
+      const res = await fetch('/api/userlist', {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+      });
+
+      if (res.status === 200) {
+        const list = (await res.json()).filter(
+          (cUser) => cUser.email !== user.email
+        );
+        setUserList(list);
+        setPendingList(list.filter((user) => user.role === 'pending'));
+        setNormalList(list.filter((user) => user.role === 'user'));
+        setAdminList(list.filter((user) => user.role === 'admin'));
+      } else {
+        setErrorMsg((await res.json()).message);
+      }
+    })();
+  }, []);
 
   return (
     <>
@@ -15,6 +65,7 @@ const UserManagementPage = (props) => {
       <div id="page-container" style={{ paddingTop: '120px' }}>
         {user && (
           <div id="content-wrap" style={{ paddingBottom: '5rem' }}>
+            {errorMsg && <p className="error">{errorMsg}</p>}
             <div className="row">
               <div className="col-lg-1" />
               <div className="col-lg-10">
@@ -41,15 +92,28 @@ const UserManagementPage = (props) => {
                     <div className="row" style={{ marginTop: '30px' }}>
                       <div className="col-lg-8">
                         <select
+                          ref={
+                            approvalRef as React.RefObject<HTMLSelectElement>
+                          }
                           className="form-control"
                           id="distinct_values_selection"
-                          value={'select'}
-                        ></select>
+                        >
+                          {pendingList.map((user) => (
+                            <option>{user.name}</option>
+                          ))}
+                        </select>
                       </div>
                     </div>
                     <div className="row" style={{ marginTop: '30px' }}>
                       <div className="col-lg-8">
-                        <Button variant="outlined" color="primary">
+                        <Button
+                          onClick={(e) =>
+                            manageUser(e, 'approval', approvalRef.current.value)
+                          }
+                          id="approval"
+                          variant="outlined"
+                          color="primary"
+                        >
                           Approve User
                         </Button>
                       </div>
@@ -69,15 +133,26 @@ const UserManagementPage = (props) => {
                     <div className="row" style={{ marginTop: '30px' }}>
                       <div className="col-lg-8">
                         <select
+                          ref={promoteRef as React.RefObject<HTMLSelectElement>}
                           className="form-control"
                           id="distinct_values_selection"
-                          value={'select'}
-                        ></select>
+                        >
+                          {normalList.map((user) => (
+                            <option>{user.name}</option>
+                          ))}
+                        </select>
                       </div>
                     </div>
                     <div className="row" style={{ marginTop: '30px' }}>
                       <div className="col-lg-8">
-                        <Button variant="outlined" color="primary">
+                        <Button
+                          onClick={(e) =>
+                            manageUser(e, 'promote', promoteRef.current.value)
+                          }
+                          id="promote"
+                          variant="outlined"
+                          color="primary"
+                        >
                           Promote to Admin
                         </Button>
                       </div>
@@ -97,15 +172,26 @@ const UserManagementPage = (props) => {
                     <div className="row" style={{ marginTop: '30px' }}>
                       <div className="col-lg-8">
                         <select
+                          ref={demoteRef as React.RefObject<HTMLSelectElement>}
                           className="form-control"
                           id="distinct_values_selection"
-                          value={'select'}
-                        ></select>
+                        >
+                          {adminList.map((user) => (
+                            <option>{user.name}</option>
+                          ))}
+                        </select>
                       </div>
                     </div>
                     <div className="row" style={{ marginTop: '30px' }}>
                       <div className="col-lg-8">
-                        <Button variant="outlined" color="primary">
+                        <Button
+                          onClick={(e) =>
+                            manageUser(e, 'demote', demoteRef.current.value)
+                          }
+                          id="demote"
+                          variant="outlined"
+                          color="primary"
+                        >
                           Demote to User
                         </Button>
                       </div>
@@ -125,15 +211,26 @@ const UserManagementPage = (props) => {
                     <div className="row" style={{ marginTop: '30px' }}>
                       <div className="col-lg-8">
                         <select
+                          ref={deleteRef as React.RefObject<HTMLSelectElement>}
                           className="form-control"
                           id="distinct_values_selection"
-                          value={'select'}
-                        ></select>
+                        >
+                          {userList.map((user) => (
+                            <option>{user.name}</option>
+                          ))}
+                        </select>
                       </div>
                     </div>
                     <div className="row" style={{ marginTop: '30px' }}>
                       <div className="col-lg-8">
-                        <Button variant="outlined" color="primary">
+                        <Button
+                          onClick={(e) =>
+                            manageUser(e, 'delete', deleteRef.current.value)
+                          }
+                          id="delete"
+                          variant="outlined"
+                          color="primary"
+                        >
                           Delete User
                         </Button>
                       </div>
@@ -148,7 +245,7 @@ const UserManagementPage = (props) => {
                 <div className="card">
                   <div className="card-header"> User list </div>
                   <div className="card-body">
-                    <UserListComponent data={[]} />
+                    <UserListComponent data={userList} />
                   </div>
                 </div>
               </div>
@@ -160,4 +257,4 @@ const UserManagementPage = (props) => {
   );
 };
 
-export default NotFoundHOC(UserManagementPage, ['admin']);
+export default AuthHOC(UserManagementPage, ['admin']);

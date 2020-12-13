@@ -3,27 +3,38 @@ import Head from 'next/head';
 import React from 'react';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import NotFoundHOC from '../components/404-hoc/404-hoc';
+import AuthHOC from '../components/401-hoc/401-hoc';
 import OngoingHijackTableComponent from '../components/ongoing-hijack-table/ongoing-hijack-table';
 import StatisticsTable from '../components/statistics-table/statistics-table';
 import StatusTable from '../components/status-table/status-table';
 import { useGraphQl } from '../utils/hooks/use-graphql';
+import ErrorBoundary from '../components/error-boundary/error-boundary';
 
 const DashboardPage = (props) => {
-  if (process.env.NODE_ENV === 'development') {
-    if (typeof window !== 'undefined') {
-      // eslint-disable-next-line @typescript-eslint/no-var-requires
-      const { worker } = require('../utils/mock-sw/browser');
-      worker.start();
-    }
+  const isDevelopment = process.env.NODE_ENV === 'development';
+  const isBrowser = typeof window !== 'undefined';
+
+  if (isDevelopment && isBrowser) {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const { worker } = require('../utils/mock-sw/browser');
+    worker.start();
   }
 
   const user = props.user;
   const notify = (message: React.ReactText) => toast(message);
 
-  const STATS_DATA = useGraphQl('stats');
-  const HIJACK_DATA = useGraphQl('ongoing_hijack');
-  const INDEX_DATA = useGraphQl('index_stats');
+  const STATS_RES = useGraphQl('stats');
+  const STATS_DATA = STATS_RES.data;
+  const HIJACK_RES = useGraphQl('ongoing_hijack');
+  const HIJACK_DATA = HIJACK_RES.data;
+  let hijacks = HIJACK_DATA ? HIJACK_DATA.view_hijacks : [];
+  const INDEX_RES = useGraphQl('index_stats');
+  const INDEX_DATA = INDEX_RES.data;
+
+  hijacks = hijacks.map((entry, i) => ({
+    ...entry,
+    id: i,
+  }));
 
   return (
     <>
@@ -46,7 +57,7 @@ const DashboardPage = (props) => {
                         variant="contained"
                         color="primary"
                         onClick={() => {
-                          if (HIJACK_DATA && HIJACK_DATA.view_hijacks) {
+                          if (hijacks.length) {
                             notify(`Example notification !`);
                           }
                         }}
@@ -84,10 +95,15 @@ const DashboardPage = (props) => {
                   <div className="card-header">
                     Ongoing, Non-Dormant Hijacks{' '}
                   </div>
-                  <div className="card-body">
-                    <OngoingHijackTableComponent
-                      data={HIJACK_DATA ? HIJACK_DATA.view_hijacks : []}
-                    />
+                  <div className="card-body" style={{ textAlign: 'center' }}>
+                    {' '}
+                    <ErrorBoundary
+                      containsData={hijacks.length > 0}
+                      noDataMessage={'No hijack alerts.'}
+                      customError={HIJACK_RES.error}
+                    >
+                      <OngoingHijackTableComponent data={hijacks} />
+                    </ErrorBoundary>
                   </div>
                 </div>
               </div>
@@ -97,16 +113,28 @@ const DashboardPage = (props) => {
               <div className="col-lg-5">
                 <div className="card">
                   <div className="card-header"> System Status </div>
-                  <div className="card-body">
-                    <StatusTable data={STATS_DATA} />
+                  <div className="card-body" style={{ textAlign: 'center' }}>
+                    <ErrorBoundary
+                      containsData={STATS_DATA}
+                      noDataMessage={'No modules found.'}
+                      customError={STATS_RES.error}
+                    >
+                      <StatusTable data={STATS_DATA} />
+                    </ErrorBoundary>
                   </div>
                 </div>
               </div>
               <div className="col-lg-5">
                 <div className="card">
                   <div className="card-header"> Statistics </div>
-                  <div className="card-body">
-                    <StatisticsTable data={INDEX_DATA} />
+                  <div className="card-body" style={{ textAlign: 'center' }}>
+                    <ErrorBoundary
+                      containsData={INDEX_DATA}
+                      noDataMessage={'No statistics found.'}
+                      customError={INDEX_RES.error}
+                    >
+                      <StatisticsTable data={INDEX_DATA} />
+                    </ErrorBoundary>
                   </div>
                 </div>
               </div>
@@ -119,4 +147,4 @@ const DashboardPage = (props) => {
   );
 };
 
-export default NotFoundHOC(DashboardPage, ['admin', 'user']);
+export default AuthHOC(DashboardPage, ['admin', 'user']);

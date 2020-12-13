@@ -16,6 +16,7 @@ export const useFetch = (url) => {
   const [data, setData] = useState('');
 
   useEffect(() => {
+    let mounted = true;
     if (!url) return;
 
     const fetchData = async () => {
@@ -29,12 +30,15 @@ export const useFetch = (url) => {
         const body = await response.text();
         const data = body.length > 0 ? body : null;
         cache[url] = data;
-        setData(data);
-        setStatus('fetched');
+        if (mounted) {
+          setData(data);
+          setStatus('fetched');
+        }
       }
     };
 
     fetchData();
+    return () => (mounted = false);
   }, [url]);
 
   return { status, data };

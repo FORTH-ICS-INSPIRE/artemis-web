@@ -1,33 +1,7 @@
+import { Container, CssBaseline } from '@material-ui/core';
+import { useFooterStyles } from '../../utils/styles';
 import React from 'react';
-import { CssBaseline, Container } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
 import Copyright from './copyright';
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    display: 'flex',
-    flexDirection: 'column',
-    left: '0px;',
-  },
-  main: {
-    marginTop: theme.spacing(8),
-    marginBottom: theme.spacing(2),
-  },
-  footer: {
-    padding: theme.spacing(3, 2),
-    marginTop: 'auto',
-    position: 'absolute',
-    height: '4.5rem',
-    bottom: '0',
-    width: '100%',
-    backgroundColor: theme.palette.grey[800],
-  },
-  link: {
-    color: '#ffff',
-    textAlign: 'left',
-    left: '-10%',
-  },
-}));
 
 type MyProps = {
   classes: {
@@ -56,7 +30,7 @@ class Footer extends React.Component<MyProps> {
 }
 
 const Styles = () => {
-  const classes = useStyles();
+  const classes = useFooterStyles();
   return <Footer classes={classes} />;
 };
 

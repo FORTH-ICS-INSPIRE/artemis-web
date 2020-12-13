@@ -1,61 +1,13 @@
 import {
-  deepOrange,
-  deepPurple,
-  lightBlue,
-  orange,
-} from '@material-ui/core/colors';
-import {
   Button,
   Container,
   Grid,
   TextField,
   Typography,
 } from '@material-ui/core';
-import {
-  createMuiTheme,
-  makeStyles,
-  ThemeProvider,
-} from '@material-ui/core/styles';
+import { ThemeProvider } from '@material-ui/core/styles';
+import { theme, useStyles } from '../../utils/styles';
 import React, { useState } from 'react';
-
-const palletType = 'dark';
-const darkState = false;
-const mainPrimaryColor = darkState ? orange[500] : lightBlue[500];
-const mainSecondaryColor = darkState ? deepOrange[900] : deepPurple[500];
-const theme = createMuiTheme({
-  palette: {
-    type: palletType,
-    primary: {
-      main: mainPrimaryColor,
-    },
-    secondary: {
-      main: mainSecondaryColor,
-    },
-  },
-});
-
-const useStyles = makeStyles((_theme) => ({
-  paper: {
-    marginTop: _theme.spacing(16),
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-  },
-  avatar: {
-    margin: _theme.spacing(1),
-    backgroundColor: _theme.palette.secondary.main,
-  },
-  form: {
-    width: '100%', // Fix IE 11 issue.
-    marginTop: _theme.spacing(3),
-  },
-  submit: {
-    margin: _theme.spacing(3, 0, 2),
-  },
-  input: {
-    color: '#ffff',
-  },
-}));
 
 const PasswordChange = (props) => {
   const { classes } = props;
@@ -66,9 +18,10 @@ const PasswordChange = (props) => {
     e.preventDefault();
     const old_password = e.currentTarget.old_password.value;
     const new_password = e.currentTarget.new_password.value;
-    const repeat_password = e.currentTarget.new_password.repeat_password;
+    const repeat_password = e.currentTarget.repeat_password.value;
 
-    if (new_password === repeat_password) {
+    if (new_password !== repeat_password) {
+      setSuccessMsg('');
       setErrorMsg('New password and repeat password must be the same');
       return;
     }
@@ -88,7 +41,7 @@ const PasswordChange = (props) => {
       setSuccessMsg((await res.json()).message);
       setErrorMsg('');
     } else {
-      setErrorMsg(await res.text());
+      setErrorMsg((await res.json()).message);
       setSuccessMsg('');
     }
   };
@@ -172,7 +125,7 @@ const PasswordChange = (props) => {
   );
 };
 
-const PasswordChangeComponent = (props) => {
+const PasswordChangeComponent = () => {
   const classes = useStyles();
   return <PasswordChange classes={classes} />;
 };
