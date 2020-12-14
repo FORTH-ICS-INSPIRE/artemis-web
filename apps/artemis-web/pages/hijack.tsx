@@ -16,20 +16,22 @@ import 'react-toastify/dist/ReactToastify.css';
 import ReactTooltip from 'react-tooltip';
 import AuthHOC from '../components/401-hoc/401-hoc';
 import BGPTableComponent from '../components/bgp-table/bgp-table';
-import { fetchASNData } from '../utils/fetch-data';
+import TooltipContext from '../context/tooltip-context';
+import { fetchTooltip } from '../utils/fetch-data';
 import { useGraphQl } from '../utils/hooks/use-graphql';
 import {
   extractDistinctTooltips,
   extractHijackInfos,
   extractHijackTooltips,
   extractWithDrawnSeen,
-  parseASNData,
 } from '../utils/parsers';
 import { useStyles } from '../utils/styles';
-import { formatDate, fromEntries, genTooltip, shallMock } from '../utils/token';
+import { formatDate, fromEntries, shallMock } from '../utils/token';
 
 const ViewHijackPage = (props) => {
   const [isLive, setIsLive] = useState(true);
+  const [tooltips, setTooltips] = useState({});
+  const context = React.useContext(TooltipContext);
 
   if (shallMock()) {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -73,10 +75,6 @@ const ViewHijackPage = (props) => {
   const [editorState, setEditorState] = useState(() =>
     EditorState.createEmpty()
   );
-  const [ASNTitle, setASNTitle] = React.useState([]);
-  const [ASNDistinctTitle, setASNDistinctTitle] = React.useState({});
-  const [ASNWithdrawnTitle, setASNWithdrawnTitle] = React.useState([]);
-  const [ASNSeenTitle, setASNSeenTitle] = React.useState([]);
   const seenTransitions = useTransition(seenState, null, {
     from: { opacity: 0 },
     enter: { opacity: 1 },
@@ -127,10 +125,11 @@ const ViewHijackPage = (props) => {
     );
   };
 
-  const [hijackInfoLeft, hijackInfoRight] = extractHijackInfos(
-    hijack,
-    ASNTitle
-  );
+  const [hijackInfoLeft, hijackInfoRight] = extractHijackInfos(hijack, {
+    tooltips: tooltips,
+    setTooltips: setTooltips,
+    context: context,
+  });
 
   const asns = [];
   bgp.forEach((entry, i) => {
@@ -146,27 +145,6 @@ const ViewHijackPage = (props) => {
         entry.peer_asn === '-' ? entry.peer_asn : parseInt(entry.peer_asn, 10)
       );
   });
-
-  useEffect(() => {
-    let isMounted = true;
-    (async function setStateFn() {
-      const { tooltipsWithdrawn, tooltipsSeen } = await extractWithDrawnSeen(
-        withdrawn,
-        seen
-      );
-
-      if (isMounted) {
-        setASNDistinctTitle(await extractDistinctTooltips(asns));
-        setASNWithdrawnTitle(tooltipsWithdrawn);
-        setASNSeenTitle(tooltipsSeen);
-        setASNTitle(await extractHijackTooltips(hijack));
-      }
-    })();
-
-    return () => {
-      isMounted = false;
-    };
-  }, [bgp.length]);
 
   return (
     <>
@@ -355,11 +333,18 @@ const ViewHijackPage = (props) => {
                               Peers Seen Hijack BGP Announcement:
                               <Grid container spacing={3}>
                                 {seen.map((value, i) => {
+                                  const asn = value;
                                   if (value !== undefined)
                                     return (
                                       <Grid key={i} item xs={3}>
                                         <Paper className={classes.paper}>
                                           <div
+                                            onMouseOver={() =>
+                                              fetchTooltip(asn, context, {
+                                                tooltips: tooltips,
+                                                setTooltips: setTooltips,
+                                              })
+                                            }
                                             data-tip
                                             data-for={'withdrawn' + i}
                                           >
@@ -369,7 +354,7 @@ const ViewHijackPage = (props) => {
                                             html={true}
                                             id={'withdrawn' + i}
                                           >
-                                            {ASNSeenTitle[i] ?? 'Loading...'}
+                                            {tooltips[asn] ?? 'Loading...'}
                                           </ReactTooltip>
                                         </Paper>
                                       </Grid>
@@ -385,12 +370,12 @@ const ViewHijackPage = (props) => {
                       </div>
                     </div>
                     <div className="col-lg-6">
-                      <div className="card">
+                      <div className="card" style={{ borderTop: '0px' }}>
                         {withdrawnTransitions.map(({ item, key, props }) =>
                           item ? (
                             <animated.div
                               key={key}
-                              style={props}
+                              style={{ ...props, borderTop: '0px' }}
                               className={
                                 'card-header multi-collapse collapse show'
                               }
@@ -398,11 +383,18 @@ const ViewHijackPage = (props) => {
                               Peers Seen Hijack BGP Withdrawal:
                               <Grid container spacing={3}>
                                 {withdrawn.map((value, i) => {
+                                  const asn = value;
                                   if (value !== undefined)
                                     return (
                                       <Grid key={i} item xs>
                                         <Paper className={classes.paper}>
                                           <div
+                                            onMouseOver={() =>
+                                              fetchTooltip(asn, context, {
+                                                tooltips: tooltips,
+                                                setTooltips: setTooltips,
+                                              })
+                                            }
                                             data-tip
                                             data-for={'withdrawn' + i}
                                           >
@@ -412,8 +404,7 @@ const ViewHijackPage = (props) => {
                                             html={true}
                                             id={'withdrawn' + i}
                                           >
-                                            {ASNWithdrawnTitle[i] ??
-                                              'Loading...'}
+                                            {tooltips[asn] ?? 'Loading...'}
                                           </ReactTooltip>
                                         </Paper>
                                       </Grid>
@@ -483,17 +474,27 @@ const ViewHijackPage = (props) => {
                   <Grid container spacing={3}>
                     {distinctValues.map((value, i) => {
                       if (value !== undefined) {
+                        const asn = value;
                         if (
                           selectState === 'origin_as' ||
                           selectState === 'peer_asn'
                         )
                           value = (
                             <div key={i}>
-                              <div data-tip data-for={'origin' + i}>
+                              <div
+                                onMouseOver={() =>
+                                  fetchTooltip(asn, context, {
+                                    tooltips: tooltips,
+                                    setTooltips: setTooltips,
+                                  })
+                                }
+                                data-tip
+                                data-for={'originD' + i}
+                              >
                                 {value}
                               </div>
-                              <ReactTooltip html={true} id={'origin' + i}>
-                                {ASNDistinctTitle[value] ?? 'Loading...'}
+                              <ReactTooltip html={true} id={'originD' + i}>
+                                {tooltips[asn] ?? 'Loading...'}
                               </ReactTooltip>
                             </div>
                           );

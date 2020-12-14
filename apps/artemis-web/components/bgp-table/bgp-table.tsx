@@ -1,6 +1,7 @@
 import { Button } from '@material-ui/core';
+import TooltipContext from '../../context/tooltip-context';
 import Link from 'next/link';
-import React, { useEffect } from 'react';
+import React, { useState } from 'react';
 import BootstrapTable, { ExpandRowProps } from 'react-bootstrap-table-next';
 import filterFactory, {
   Comparator,
@@ -15,8 +16,7 @@ import paginationFactory, {
 } from 'react-bootstrap-table2-paginator';
 import ToolkitProvider from 'react-bootstrap-table2-toolkit';
 import ReactTooltip from 'react-tooltip';
-import { fetchASNData } from '../../utils/fetch-data';
-import { parseASNData } from '../../utils/parsers';
+import { fetchTooltip } from '../../utils/fetch-data';
 import { genTooltip } from '../../utils/token';
 
 const exactMatchFilter = textFilter({
@@ -392,36 +392,77 @@ const columns = [
 const BGPTableComponent = (props) => {
   let bgp;
   const bgpData = props.data;
-  const asns = props.asns ?? [];
-  const [ASNTitle, setASNTitle] = React.useState({});
+  const context = React.useContext(TooltipContext);
+  const [tooltips, setTooltips] = useState({});
 
   if (bgpData && bgpData.length) {
     bgp = props.data.map((row, i) => {
       const origin_as = (
         <>
-          <div data-tip data-for={'origin' + i}>
+          <div
+            onMouseOver={() =>
+              fetchTooltip(row['origin_as'], context, {
+                tooltips: tooltips,
+                setTooltips: setTooltips,
+              })
+            }
+            data-tip
+            data-for={'origin' + i}
+          >
             {row['origin_as']}
           </div>
-          <ReactTooltip html={true} id={'origin' + i}>
-            {ASNTitle[row['origin_as']] ?? 'Loading...'}
+          <ReactTooltip
+            place="top"
+            effect="solid"
+            html={true}
+            id={'origin' + i}
+          >
+            {tooltips[row['origin_as']] ?? 'Loading...'}
           </ReactTooltip>
         </>
       );
       const peer_as = (
         <>
-          <div data-tip data-for={'peer' + i}>
+          <div
+            onMouseOver={() =>
+              fetchTooltip(row['peer_asn'], context, {
+                tooltips: tooltips,
+                setTooltips: setTooltips,
+              })
+            }
+            data-tip
+            data-for={'peer' + i}
+          >
             {row['peer_asn']}
           </div>
           <ReactTooltip html={true} id={'peer' + i}>
-            {ASNTitle[row['peer_asn']] ?? 'Loading...'}
+            {tooltips[row['peer_asn']] ?? 'Loading...'}
           </ReactTooltip>
         </>
       );
-      row.as_path = JSON.stringify(row.as_path)
-        .replace(/,/g, ' ')
-        .replace(/\[/g, '')
-        .replace(/\]/g, '')
-        .replace(/\"/g, '');
+      const path = row.as_path;
+      if (typeof row.as_path === 'string')
+        row.as_path = path.split(' ').map((asn, j) => {
+          return (
+            <div key={j} style={{ float: 'left', marginLeft: '4px' }}>
+              <div
+                onMouseOver={() =>
+                  fetchTooltip(asn, context, {
+                    tooltips: tooltips,
+                    setTooltips: setTooltips,
+                  })
+                }
+                data-tip
+                data-for={`asn ${i} ${j}`}
+              >
+                {asn}
+              </div>
+              <ReactTooltip html={true} id={`asn ${i} ${j}`}>
+                {tooltips[asn] ?? 'Loading...'}
+              </ReactTooltip>
+            </div>
+          );
+        });
       return {
         ...row,
         origin_as_original: origin_as,
@@ -437,30 +478,6 @@ const BGPTableComponent = (props) => {
   const filteredCols = columns.filter(
     (col) => !skippedCols.includes(col.dataField)
   );
-
-  useEffect(() => {
-    (async function setStateFn() {
-      const tooltips = {};
-
-      for (let i = 0; i < asns.length; i++) {
-        const ASN_int: number | string = asns[i];
-        const [name_origin, countries_origin, abuse_origin] =
-          ASN_int == '-' ? ['', '', ''] : await fetchASNData(ASN_int);
-
-        const tooltip1 =
-          ASN_int == '-'
-            ? ''
-            : parseASNData(
-                ASN_int,
-                name_origin,
-                countries_origin,
-                abuse_origin
-              );
-        tooltips[ASN_int] = tooltip1;
-      }
-      setASNTitle(tooltips);
-    })();
-  }, [bgp.length]);
 
   const customTotal = (from, to, size) => (
     <span className="react-bootstrap-table-pagination-total">

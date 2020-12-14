@@ -1,5 +1,6 @@
 import { Button } from '@material-ui/core';
-import React, { useEffect } from 'react';
+import TooltipContext from '../../context/tooltip-context';
+import React, { useEffect, useState } from 'react';
 import BootstrapTable, { ExpandRowProps } from 'react-bootstrap-table-next';
 import filterFactory, {
   Comparator,
@@ -14,7 +15,7 @@ import paginationFactory, {
 } from 'react-bootstrap-table2-paginator';
 import ToolkitProvider from 'react-bootstrap-table2-toolkit';
 import ReactTooltip from 'react-tooltip';
-import { fetchASNData } from '../../utils/fetch-data';
+import { fetchASNData, fetchTooltip } from '../../utils/fetch-data';
 import { parseASNData } from '../../utils/parsers';
 import { formatDate } from '../../utils/token';
 
@@ -449,7 +450,8 @@ const columns = [
 const OngoingHijackTableComponent = (props) => {
   const HIJACK_DATA = props.data;
   let hijacks;
-  const [ASNTitle, setASNTitle] = React.useState([]);
+  const context = React.useContext(TooltipContext);
+  const [tooltips, setTooltips] = useState({});
 
   if (HIJACK_DATA && HIJACK_DATA.length) {
     hijacks = HIJACK_DATA.map((row, i) => {
@@ -463,11 +465,20 @@ const OngoingHijackTableComponent = (props) => {
         as_original: row.hijack_as,
         as: (
           <>
-            <div data-tip data-for={'hijack_as' + i}>
+            <div
+              onMouseOver={() =>
+                fetchTooltip(row.hijack_as, context, {
+                  tooltips: tooltips,
+                  setTooltips: setTooltips,
+                })
+              }
+              data-tip
+              data-for={'hijack_as' + i}
+            >
               {row.hijack_as}
             </div>
             <ReactTooltip html={true} id={'hijack_as' + i}>
-              {ASNTitle[i] ?? 'Loading...'}
+              {tooltips[row.hijack_as] ?? 'Loading...'}
             </ReactTooltip>
           </>
         ),
@@ -485,22 +496,6 @@ const OngoingHijackTableComponent = (props) => {
   } else {
     hijacks = [];
   }
-
-  useEffect(() => {
-    (async function setStateFn() {
-      const tooltips = [];
-      for (let i = 0; i < hijacks.length; i++) {
-        if (hijacks.length < ASNTitle.length) return;
-        const ASN_int: number = hijacks[i].as_original;
-        const [name, countries, abuse] = await fetchASNData(ASN_int);
-
-        const tooltip = parseASNData(ASN_int, name, countries, abuse);
-        tooltips.push(tooltip);
-      }
-      if (JSON.stringify(tooltips) !== JSON.stringify(ASNTitle))
-        setASNTitle(tooltips);
-    })();
-  }, [hijacks]);
 
   const customTotal = (from, to, size) => (
     <span className="react-bootstrap-table-pagination-total">

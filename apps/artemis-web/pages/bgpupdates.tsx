@@ -7,23 +7,24 @@ import {
   Switch,
 } from '@material-ui/core';
 import Head from 'next/head';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ReactTooltip from 'react-tooltip';
 import NotAuthHOC from '../components/401-hoc/401-hoc';
 import BGPTableComponent from '../components/bgp-table/bgp-table';
-import { fetchASNData } from '../utils/fetch-data';
+import ErrorBoundary from '../components/error-boundary/error-boundary';
+import TooltipContext from '../context/tooltip-context';
+import { fetchTooltip } from '../utils/fetch-data';
 import { useGraphQl } from '../utils/hooks/use-graphql';
-import { parseASNData } from '../utils/parsers';
 import { useStyles } from '../utils/styles';
 import { formatDate, fromEntries } from '../utils/token';
-import ErrorBoundary from '../components/error-boundary/error-boundary';
 
 const BGPUpdates = (props) => {
   const [isLive, setIsLive] = useState(true);
   const isDevelopment = process.env.NODE_ENV === 'development';
   const isBrowser = typeof window !== 'undefined';
+  const context = React.useContext(TooltipContext);
 
   if (isDevelopment && isBrowser) {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -37,7 +38,7 @@ const BGPUpdates = (props) => {
   const [filterButton, setFilterButton] = useState(0);
   const [distinctValues, setDistinctValues] = useState([]);
   const [selectState, setSelectState] = useState('');
-  const [ASNTitle, setASNTitle] = useState({});
+  const [tooltips, setTooltips] = useState({});
 
   const user = props.user;
   const BGP_RES = useGraphQl('bgpupdates', isLive);
@@ -75,31 +76,6 @@ const BGPUpdates = (props) => {
 
     entry.id = i;
   });
-
-  useEffect(() => {
-    (async function setStateFn() {
-      const tooltips = {};
-      for (let i = 0; i < asns.length; i++) {
-        const ASN_int: number | string = asns[i];
-
-        const [name_origin, countries_origin, abuse_origin] =
-          ASN_int == '-' ? ['', '', ''] : await fetchASNData(ASN_int);
-
-        const tooltip =
-          ASN_int == '-'
-            ? ''
-            : parseASNData(
-                ASN_int,
-                name_origin,
-                countries_origin,
-                abuse_origin
-              );
-
-        tooltips[ASN_int] = tooltip;
-      }
-      setASNTitle(tooltips);
-    })();
-  }, [bgp.length]);
 
   const onChangeValue = (event) => {
     setSelectState(event.target.value);
@@ -220,7 +196,7 @@ const BGPUpdates = (props) => {
                     noDataMessage={'No bgp updates.'}
                     customError={BGP_RES.error}
                   >
-                    <BGPTableComponent asns={asns} data={filteredBgp} />
+                    <BGPTableComponent data={filteredBgp} />
                   </ErrorBoundary>
                 </div>
               </div>
@@ -254,17 +230,27 @@ const BGPUpdates = (props) => {
                   <Grid container spacing={3}>
                     {distinctValues.map((value, i) => {
                       if (value !== undefined) {
+                        const asn = value;
                         if (
                           selectState === 'origin_as' ||
                           selectState === 'peer_asn'
                         )
                           value = (
                             <>
-                              <div data-tip data-for={'origin' + i}>
+                              <div
+                                onMouseOver={() =>
+                                  fetchTooltip(asn, context, {
+                                    tooltips: tooltips,
+                                    setTooltips: setTooltips,
+                                  })
+                                }
+                                data-tip
+                                data-for={'originD' + i}
+                              >
                                 {value}
                               </div>
-                              <ReactTooltip html={true} id={'origin' + i}>
-                                {ASNTitle[value] ? ASNTitle[value] : ''}
+                              <ReactTooltip html={true} id={'originD' + i}>
+                                {tooltips[asn] ?? 'Loading...'}
                               </ReactTooltip>
                             </>
                           );
