@@ -32,7 +32,9 @@ export const fetchTooltip = async (ASN, context, { tooltips, setTooltips }) => {
     setTooltips({ ...tooltips, [ASN]: context.tooltips[ASN] });
   } else {
     const [name_origin, countries_origin, abuse_origin] =
-      ASN == '-' ? ['', '', ''] : await fetchASNData(parseInt(ASN.toString()));
+      ASN == '-'
+        ? ['', '', '']
+        : await fetchASNData(parseInt(ASN.toString(), 10));
 
     const tooltip =
       ASN == '-'

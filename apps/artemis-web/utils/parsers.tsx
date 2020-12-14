@@ -432,7 +432,7 @@ export async function extractDistinctTooltips(asns) {
     const [name_origin, countries_origin, abuse_origin] =
       ASN_int == '-'
         ? ['', '', '']
-        : await fetchASNData(parseInt(ASN_int.toString()));
+        : await fetchASNData(parseInt(ASN_int.toString(), 10));
 
     const tooltip =
       ASN_int == '-'
