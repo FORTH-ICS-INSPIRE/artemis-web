@@ -250,11 +250,7 @@ export const HIJACK_QUERY = gql`
 
 export const BGP_SUB = gql`
   subscription bgpupdates {
-    view_bgpupdates(
-      limit: 10
-      order_by: { time_last: desc }
-      where: { _and: [{ active: { _eq: true } }, { dormant: { _eq: false } }] }
-    ) {
+    view_bgpupdates {
       prefix
       origin_as
       peer_asn
@@ -273,11 +269,7 @@ export const BGP_SUB = gql`
 
 export const BGP_QUERY = gql`
   query bgpupdates {
-    view_bgpupdates(
-      limit: 10
-      order_by: { time_last: desc }
-      where: { _and: [{ active: { _eq: true } }, { dormant: { _eq: false } }] }
-    ) {
+    view_bgpupdates {
       prefix
       origin_as
       peer_asn
