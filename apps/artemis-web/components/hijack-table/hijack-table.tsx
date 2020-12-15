@@ -172,7 +172,7 @@ const columns = [
     filter: exactMatchFilter,
   },
   {
-    dataField: 'rpki_status',
+    dataField: 'rpki',
     headerTitle: false,
     headerFormatter: (column, colIndex, components) =>
       genTooltip(

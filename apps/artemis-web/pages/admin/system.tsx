@@ -1,17 +1,12 @@
-import {
-  Button,
-  FormControlLabel,
-  FormGroup,
-  Grid,
-  Switch,
-} from '@material-ui/core';
-import Head from 'next/head';
-import React, { useState } from 'react';
-import { useGraphQl } from '../../utils/hooks/use-graphql';
-import { Controlled as CodeMirror } from 'react-codemirror2';
+import { Grid } from '@material-ui/core';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/material.css';
+import Head from 'next/head';
+import React, { useState } from 'react';
+import { Controlled as CodeMirror } from 'react-codemirror2';
 import AuthHOC from '../../components/401-hoc/401-hoc';
+import SystemModule from '../../components/system-module/system-module';
+import { useGraphQl } from '../../utils/hooks/use-graphql';
 
 const SystemPage = (props) => {
   if (process.env.NODE_ENV === 'development') {
@@ -71,48 +66,14 @@ const SystemPage = (props) => {
               <div className="col-lg-1" />
               <div className="col-lg-10">
                 <Grid container spacing={3}>
-                  {keys.map((module) => {
+                  {keys.map((module, i) => {
                     return (
-                      <Grid item xs={4}>
-                        <div className="card">
-                          <div className="card-header"> {module} Module</div>
-                          <div className="card-body">
-                            <div className="row">
-                              <div className="col-lg-3">
-                                <Button
-                                  variant="contained"
-                                  color={
-                                    state[module] ? 'primary' : 'secondary'
-                                  }
-                                >
-                                  {state[module]
-                                    ? 'Active (1/1)'
-                                    : 'Active (0/1)'}
-                                </Button>
-                              </div>
-                              <div className="col-lg-3">
-                                <FormGroup>
-                                  <FormControlLabel
-                                    control={
-                                      <Switch
-                                        checked={state[module]}
-                                        onChange={() => {
-                                          setState((prevState) => ({
-                                            ...prevState,
-                                            [module]: !state[module],
-                                          }));
-                                        }}
-                                        size="medium"
-                                      />
-                                    }
-                                    label=""
-                                  />
-                                </FormGroup>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </Grid>
+                      <SystemModule
+                        key={i}
+                        module={module}
+                        state={state}
+                        setState={setState}
+                      />
                     );
                   })}
                 </Grid>
