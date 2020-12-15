@@ -85,9 +85,11 @@ const HijacksPage = (props) => {
 
   const onChangeValue = (event) => {
     setDistinctValues(
-      filteredHijacks.map((entry) => {
-        return entry[event.target.value];
-      })
+      filteredHijacks
+        .map((entry) => {
+          return entry[event.target.value];
+        })
+        .filter((v, i, a) => a.indexOf(v) === i)
     );
     setSelectState(event.target.value);
   };

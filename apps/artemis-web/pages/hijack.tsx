@@ -119,9 +119,11 @@ const ViewHijackPage = (props) => {
     setSelectState(event.target.value);
 
     setDistinctValues(
-      bgp.map((entry) => {
-        return entry[event.target.value];
-      })
+      bgp
+        .map((entry) => {
+          return entry[event.target.value];
+        })
+        .filter((v, i, a) => a.indexOf(v) === i)
     );
   };
 

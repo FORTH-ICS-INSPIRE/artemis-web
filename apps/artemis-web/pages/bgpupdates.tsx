@@ -81,9 +81,11 @@ const BGPUpdates = (props) => {
     setSelectState(event.target.value);
 
     setDistinctValues(
-      filteredBgp.map((entry) => {
-        return entry[event.target.value];
-      })
+      filteredBgp
+        .map((entry) => {
+          return entry[event.target.value];
+        })
+        .filter((v, i, a) => a.indexOf(v) === i)
     );
   };
 
