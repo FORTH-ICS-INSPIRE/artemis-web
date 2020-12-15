@@ -27,10 +27,10 @@ export function fetchASNData(ASN: number) {
 }
 
 export const fetchTooltip = async (ASN, context, { tooltips, setTooltips }) => {
-  if (tooltips[ASN]) setTooltips(tooltips);
-  else if (context.tooltips[ASN]) {
+  if (context.tooltips[ASN] && !tooltips[ASN]) {
     setTooltips({ ...tooltips, [ASN]: context.tooltips[ASN] });
-  } else {
+  } else if (tooltips[ASN]) setTooltips(tooltips);
+  else {
     const [name_origin, countries_origin, abuse_origin] =
       ASN == '-'
         ? ['', '', '']
@@ -42,6 +42,6 @@ export const fetchTooltip = async (ASN, context, { tooltips, setTooltips }) => {
         : parseASNData(ASN, name_origin, countries_origin, abuse_origin);
 
     setTooltips({ ...tooltips, [ASN]: tooltip });
-    context.setTooltips({ ...tooltips, [ASN]: tooltip });
+    context.setTooltips({ ...context.tooltips, [ASN]: tooltip });
   }
 };

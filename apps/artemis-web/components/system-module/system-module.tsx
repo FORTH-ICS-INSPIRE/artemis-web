@@ -5,9 +5,7 @@ import {
   Grid,
   Switch,
 } from '@material-ui/core';
-import { diffDate } from '../../utils/token';
 import React, { Component } from 'react';
-import ReactTooltip from 'react-tooltip';
 
 class SystemModule extends Component<any, any> {
   render() {
