@@ -26,7 +26,7 @@ const createApolloClient = () => {
   const httpLink =
     typeof window !== 'undefined'
       ? createHttpLink({
-          uri: `https://${window.location.host}/api/graphql`,
+          uri: `https://localhost/api/graphql`,
           useGETForQueries: false,
         })
       : null;
@@ -47,7 +47,7 @@ const createApolloClient = () => {
   const wsLink =
     typeof window !== 'undefined'
       ? new WebSocketLink({
-          uri: `wss://${window.location.host}/api/graphql`,
+          uri: `wss://localhost/api/graphql`,
           options: {
             reconnect: true,
             lazy: true,

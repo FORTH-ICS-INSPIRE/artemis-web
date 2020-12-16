@@ -8,19 +8,17 @@ import {
 } from '@material-ui/core';
 import Head from 'next/head';
 import Link from 'next/link';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import ReactTooltip from 'react-tooltip';
 import AuthHOC from '../components/401-hoc/401-hoc';
+import ErrorBoundary from '../components/error-boundary/error-boundary';
 import HijackTableComponent from '../components/hijack-table/hijack-table';
-import { fetchASNData, fetchTooltip } from '../utils/fetch-data';
+import Tooltip from '../components/tooltip/tooltip';
+import TooltipContext from '../context/tooltip-context';
 import { useGraphQl } from '../utils/hooks/use-graphql';
-import { parseASNData } from '../utils/parsers';
 import { useStyles } from '../utils/styles';
 import { findStatus, shallMock } from '../utils/token';
-import ErrorBoundary from '../components/error-boundary/error-boundary';
-import TooltipContext from '../context/tooltip-context';
 
 const HijacksPage = (props) => {
   const [isLive, setIsLive] = useState(true);
@@ -410,23 +408,13 @@ const HijacksPage = (props) => {
                         const asn = value;
                         if (selectState === 'hijack_as')
                           value = (
-                            <>
-                              <div
-                                onMouseOver={() =>
-                                  fetchTooltip(asn, context, {
-                                    tooltips: tooltips,
-                                    setTooltips: setTooltips,
-                                  })
-                                }
-                                data-tip
-                                data-for={'originD' + i}
-                              >
-                                {value}
-                              </div>
-                              <ReactTooltip html={true} id={'originD' + i}>
-                                {tooltips[asn] ?? 'Loading...'}
-                              </ReactTooltip>
-                            </>
+                            <Tooltip
+                              tooltips={tooltips}
+                              setTooltips={setTooltips}
+                              asn={asn}
+                              label={`originD${i}`}
+                              context={context}
+                            />
                           );
                         return (
                           <Grid key={i} item xs={3}>

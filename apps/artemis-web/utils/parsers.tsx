@@ -1,7 +1,7 @@
 import React from 'react';
-import ReactTooltip from 'react-tooltip';
-import { fetchASNData, fetchTooltip } from './fetch-data';
-import { genTooltip, formatDate } from './token';
+import Tooltip from '../components/tooltip/tooltip';
+import { fetchASNData } from './fetch-data';
+import { formatDate, genTooltip } from './token';
 
 export function extractUser(req) {
   if (!req.user) return null;
@@ -196,29 +196,13 @@ export function parseASNData(ASN_int, name, countries, abuse) {
 function extractHijackInfoLeft(hijack, { tooltips, setTooltips, context }) {
   const hijackInfo = {
     'Hijacker AS:': [
-      <>
-        <div
-          onMouseOver={() =>
-            fetchTooltip(hijack.hijack_as, context, {
-              tooltips: tooltips,
-              setTooltips: setTooltips,
-            })
-          }
-          data-tip
-          data-for={'hijack_as'}
-        >
-          <input
-            id="info_type"
-            className="form-control"
-            type="text"
-            readOnly={true}
-            value={hijack.hijack_as ?? ''}
-          />
-        </div>
-        <ReactTooltip html={true} id={'hijack_as'}>
-          {tooltips[hijack.hijack_as] ?? 'Loading...'}
-        </ReactTooltip>
-      </>,
+      <Tooltip
+        tooltips={tooltips}
+        setTooltips={setTooltips}
+        asn={hijack.hijack_as}
+        label={`hijack_as`}
+        context={context}
+      />,
       genTooltip(
         'Hijacker AS:',
         null,

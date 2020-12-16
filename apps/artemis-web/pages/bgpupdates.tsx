@@ -10,12 +10,11 @@ import Head from 'next/head';
 import React, { useState } from 'react';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import ReactTooltip from 'react-tooltip';
 import NotAuthHOC from '../components/401-hoc/401-hoc';
 import BGPTableComponent from '../components/bgp-table/bgp-table';
 import ErrorBoundary from '../components/error-boundary/error-boundary';
+import Tooltip from '../components/tooltip/tooltip';
 import TooltipContext from '../context/tooltip-context';
-import { fetchTooltip } from '../utils/fetch-data';
 import { useGraphQl } from '../utils/hooks/use-graphql';
 import { useStyles } from '../utils/styles';
 import { formatDate, fromEntries } from '../utils/token';
@@ -127,7 +126,6 @@ const BGPUpdates = (props) => {
                   </FormGroup>
                 </div>
               </div>
-
               <hr style={{ backgroundColor: 'white' }} />
             </div>
           </div>
@@ -238,23 +236,13 @@ const BGPUpdates = (props) => {
                           selectState === 'peer_asn'
                         )
                           value = (
-                            <>
-                              <div
-                                onMouseOver={() =>
-                                  fetchTooltip(asn, context, {
-                                    tooltips: tooltips,
-                                    setTooltips: setTooltips,
-                                  })
-                                }
-                                data-tip
-                                data-for={'originD' + i}
-                              >
-                                {value}
-                              </div>
-                              <ReactTooltip html={true} id={'originD' + i}>
-                                {tooltips[asn] ?? 'Loading...'}
-                              </ReactTooltip>
-                            </>
+                            <Tooltip
+                              tooltips={tooltips}
+                              setTooltips={setTooltips}
+                              asn={asn}
+                              label={`originD${i}`}
+                              context={context}
+                            />
                           );
                         return (
                           <Grid key={i} item xs={3}>

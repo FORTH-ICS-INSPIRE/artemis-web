@@ -1,5 +1,4 @@
 import { Button } from '@material-ui/core';
-import TooltipContext from '../../context/tooltip-context';
 import Link from 'next/link';
 import React, { useState } from 'react';
 import BootstrapTable from 'react-bootstrap-table-next';
@@ -15,9 +14,9 @@ import paginationFactory, {
   SizePerPageDropdownStandalone,
 } from 'react-bootstrap-table2-paginator';
 import ToolkitProvider from 'react-bootstrap-table2-toolkit';
-import ReactTooltip from 'react-tooltip';
-import { fetchTooltip } from '../../utils/fetch-data';
+import TooltipContext from '../../context/tooltip-context';
 import { formatDate, genTooltip } from '../../utils/token';
+import Tooltip from '../tooltip/tooltip';
 
 const exactMatchFilter = textFilter({
   placeholder: '', // custom the input placeholder
@@ -322,23 +321,13 @@ const HijackTableComponent = (props) => {
       ),
       as_original: row.hijack_as,
       as: (
-        <>
-          <div
-            onMouseOver={() =>
-              fetchTooltip(row.hijack_as, context, {
-                tooltips: tooltips,
-                setTooltips: setTooltips,
-              })
-            }
-            data-tip
-            data-for={'hijack_as'}
-          >
-            {row.hijack_as}
-          </div>
-          <ReactTooltip html={true} id={'hijack_as'}>
-            {tooltips[row.hijack_as] ?? 'Loading...'}
-          </ReactTooltip>
-        </>
+        <Tooltip
+          tooltips={tooltips}
+          setTooltips={setTooltips}
+          asn={row.hijack_as}
+          label={`hijack_as`}
+          context={context}
+        />
       ),
       rpki: row.rpki_status,
       peers: row.num_peers_seen,

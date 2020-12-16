@@ -1,5 +1,4 @@
 import { Button } from '@material-ui/core';
-import TooltipContext from '../../context/tooltip-context';
 import Link from 'next/link';
 import React, { useState } from 'react';
 import BootstrapTable, { ExpandRowProps } from 'react-bootstrap-table-next';
@@ -15,9 +14,9 @@ import paginationFactory, {
   SizePerPageDropdownStandalone,
 } from 'react-bootstrap-table2-paginator';
 import ToolkitProvider from 'react-bootstrap-table2-toolkit';
-import ReactTooltip from 'react-tooltip';
-import { fetchTooltip } from '../../utils/fetch-data';
+import TooltipContext from '../../context/tooltip-context';
 import { genTooltip } from '../../utils/token';
+import Tooltip from '../tooltip/tooltip';
 
 const exactMatchFilter = textFilter({
   placeholder: '', // custom the input placeholder
@@ -398,68 +397,35 @@ const BGPTableComponent = (props) => {
   if (bgpData && bgpData.length) {
     bgp = props.data.map((row, i) => {
       const origin_as = (
-        <>
-          <div
-            onMouseOver={() =>
-              fetchTooltip(row['origin_as'], context, {
-                tooltips: tooltips,
-                setTooltips: setTooltips,
-              })
-            }
-            data-tip
-            data-for={'origin' + i}
-          >
-            {row['origin_as']}
-          </div>
-          <ReactTooltip
-            place="top"
-            effect="solid"
-            html={true}
-            id={'origin' + i}
-          >
-            {tooltips[row['origin_as']] ?? 'Loading...'}
-          </ReactTooltip>
-        </>
+        <Tooltip
+          tooltips={tooltips}
+          setTooltips={setTooltips}
+          asn={row['origin_as']}
+          label={`origin${i}`}
+          context={context}
+        />
       );
       const peer_as = (
-        <>
-          <div
-            onMouseOver={() =>
-              fetchTooltip(row['peer_asn'], context, {
-                tooltips: tooltips,
-                setTooltips: setTooltips,
-              })
-            }
-            data-tip
-            data-for={'peer' + i}
-          >
-            {row['peer_asn']}
-          </div>
-          <ReactTooltip html={true} id={'peer' + i}>
-            {tooltips[row['peer_asn']] ?? 'Loading...'}
-          </ReactTooltip>
-        </>
+        <Tooltip
+          tooltips={tooltips}
+          setTooltips={setTooltips}
+          asn={row['peer_asn']}
+          label={`peer${i}`}
+          context={context}
+        />
       );
       const path = row.as_path;
       if (typeof row.as_path === 'string')
         row.as_path = path.split(' ').map((asn, j) => {
           return (
             <div key={j} style={{ float: 'left', marginLeft: '4px' }}>
-              <div
-                onMouseOver={() =>
-                  fetchTooltip(asn, context, {
-                    tooltips: tooltips,
-                    setTooltips: setTooltips,
-                  })
-                }
-                data-tip
-                data-for={`asn ${i} ${j}`}
-              >
-                {asn}
-              </div>
-              <ReactTooltip html={true} id={`asn ${i} ${j}`}>
-                {tooltips[asn] ?? 'Loading...'}
-              </ReactTooltip>
+              <Tooltip
+                tooltips={tooltips}
+                setTooltips={setTooltips}
+                asn={asn}
+                label={`asn ${i} ${j}`}
+                context={context}
+              />
             </div>
           );
         });

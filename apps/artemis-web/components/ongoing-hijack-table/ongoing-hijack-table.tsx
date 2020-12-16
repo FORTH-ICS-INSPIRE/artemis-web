@@ -18,6 +18,7 @@ import ReactTooltip from 'react-tooltip';
 import { fetchASNData, fetchTooltip } from '../../utils/fetch-data';
 import { parseASNData } from '../../utils/parsers';
 import { formatDate } from '../../utils/token';
+import Tooltip from '../tooltip/tooltip';
 
 const exactMatchFilter = textFilter({
   placeholder: '', // custom the input placeholder
@@ -464,23 +465,13 @@ const OngoingHijackTableComponent = (props) => {
         type: row.type,
         as_original: row.hijack_as,
         as: (
-          <>
-            <div
-              onMouseOver={() =>
-                fetchTooltip(row.hijack_as, context, {
-                  tooltips: tooltips,
-                  setTooltips: setTooltips,
-                })
-              }
-              data-tip
-              data-for={'hijack_as' + i}
-            >
-              {row.hijack_as}
-            </div>
-            <ReactTooltip html={true} id={'hijack_as' + i}>
-              {tooltips[row.hijack_as] ?? 'Loading...'}
-            </ReactTooltip>
-          </>
+          <Tooltip
+            tooltips={tooltips}
+            setTooltips={setTooltips}
+            asn={row.hijack_as}
+            label={`hijack_as`}
+            context={context}
+          />
         ),
         rpki: row.rpki_status,
         peers: row.num_peers_seen,

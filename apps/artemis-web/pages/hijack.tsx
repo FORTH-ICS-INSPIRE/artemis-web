@@ -10,21 +10,15 @@ import 'draft-js/dist/Draft.css';
 import DefaultErrorPage from 'next/error';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { animated, useTransition } from 'react-spring';
 import 'react-toastify/dist/ReactToastify.css';
-import ReactTooltip from 'react-tooltip';
 import AuthHOC from '../components/401-hoc/401-hoc';
 import BGPTableComponent from '../components/bgp-table/bgp-table';
+import Tooltip from '../components/tooltip/tooltip';
 import TooltipContext from '../context/tooltip-context';
-import { fetchTooltip } from '../utils/fetch-data';
 import { useGraphQl } from '../utils/hooks/use-graphql';
-import {
-  extractDistinctTooltips,
-  extractHijackInfos,
-  extractHijackTooltips,
-  extractWithDrawnSeen,
-} from '../utils/parsers';
+import { extractHijackInfos } from '../utils/parsers';
 import { useStyles } from '../utils/styles';
 import { formatDate, fromEntries, shallMock } from '../utils/token';
 
@@ -340,24 +334,13 @@ const ViewHijackPage = (props) => {
                                     return (
                                       <Grid key={i} item xs={3}>
                                         <Paper className={classes.paper}>
-                                          <div
-                                            onMouseOver={() =>
-                                              fetchTooltip(asn, context, {
-                                                tooltips: tooltips,
-                                                setTooltips: setTooltips,
-                                              })
-                                            }
-                                            data-tip
-                                            data-for={'withdrawn' + i}
-                                          >
-                                            {value}
-                                          </div>
-                                          <ReactTooltip
-                                            html={true}
-                                            id={'withdrawn' + i}
-                                          >
-                                            {tooltips[asn] ?? 'Loading...'}
-                                          </ReactTooltip>
+                                          <Tooltip
+                                            tooltips={tooltips}
+                                            setTooltips={setTooltips}
+                                            asn={asn}
+                                            label={`seen${i}`}
+                                            context={context}
+                                          />
                                         </Paper>
                                       </Grid>
                                     );
@@ -390,24 +373,13 @@ const ViewHijackPage = (props) => {
                                     return (
                                       <Grid key={i} item xs>
                                         <Paper className={classes.paper}>
-                                          <div
-                                            onMouseOver={() =>
-                                              fetchTooltip(asn, context, {
-                                                tooltips: tooltips,
-                                                setTooltips: setTooltips,
-                                              })
-                                            }
-                                            data-tip
-                                            data-for={'withdrawn' + i}
-                                          >
-                                            {value}
-                                          </div>
-                                          <ReactTooltip
-                                            html={true}
-                                            id={'withdrawn' + i}
-                                          >
-                                            {tooltips[asn] ?? 'Loading...'}
-                                          </ReactTooltip>
+                                          <Tooltip
+                                            tooltips={tooltips}
+                                            setTooltips={setTooltips}
+                                            asn={asn}
+                                            label={`withdrawn${i}`}
+                                            context={context}
+                                          />
                                         </Paper>
                                       </Grid>
                                     );
@@ -483,21 +455,13 @@ const ViewHijackPage = (props) => {
                         )
                           value = (
                             <div key={i}>
-                              <div
-                                onMouseOver={() =>
-                                  fetchTooltip(asn, context, {
-                                    tooltips: tooltips,
-                                    setTooltips: setTooltips,
-                                  })
-                                }
-                                data-tip
-                                data-for={'originD' + i}
-                              >
-                                {value}
-                              </div>
-                              <ReactTooltip html={true} id={'originD' + i}>
-                                {tooltips[asn] ?? 'Loading...'}
-                              </ReactTooltip>
+                              <Tooltip
+                                tooltips={tooltips}
+                                setTooltips={setTooltips}
+                                asn={asn}
+                                label={`originD${i}`}
+                                context={context}
+                              />
                             </div>
                           );
                         return (
