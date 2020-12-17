@@ -1,7 +1,7 @@
 import React from 'react';
-import ReactTooltip from 'react-tooltip';
+import Tooltip from '../components/tooltip/tooltip';
 import { fetchASNData } from './fetch-data';
-import { genTooltip, formatDate } from './token';
+import { formatDate, genTooltip } from './token';
 
 export function extractUser(req) {
   if (!req.user) return null;
@@ -193,23 +193,16 @@ export function parseASNData(ASN_int, name, countries, abuse) {
   return join_text;
 }
 
-function extractHijackInfoLeft(hijack, ASNTitle) {
+function extractHijackInfoLeft(hijack, { tooltips, setTooltips, context }) {
   const hijackInfo = {
     'Hijacker AS:': [
-      <>
-        <div data-tip data-for={'hijack_as'}>
-          <input
-            id="info_type"
-            className="form-control"
-            type="text"
-            readOnly={true}
-            value={hijack.hijack_as ?? ''}
-          />
-        </div>
-        <ReactTooltip html={true} id={'hijack_as'}>
-          {ASNTitle[0] && ASNTitle[0].length ? ASNTitle[0] : 'Loading...'}
-        </ReactTooltip>
-      </>,
+      <Tooltip
+        tooltips={tooltips}
+        setTooltips={setTooltips}
+        asn={hijack.hijack_as}
+        label={`hijack_as`}
+        context={context}
+      />,
       genTooltip(
         'Hijacker AS:',
         null,
@@ -293,7 +286,7 @@ function extractHijackInfoLeft(hijack, ASNTitle) {
   };
   return hijackInfo;
 }
-function extractHijackInfoRight(hijack, ASNTitle) {
+function extractHijackInfoRight(hijack) {
   const hijackInfo = {
     'Time Started': [
       formatDate(new Date(hijack.time_started)),
@@ -377,10 +370,10 @@ function extractHijackInfoRight(hijack, ASNTitle) {
 
   return hijackInfo;
 }
-export function extractHijackInfos(hijack, ASNTitle) {
+export function extractHijackInfos(hijack, contextData) {
   return [
-    extractHijackInfoLeft(hijack, ASNTitle),
-    extractHijackInfoRight(hijack, ASNTitle),
+    extractHijackInfoLeft(hijack, contextData),
+    extractHijackInfoRight(hijack),
   ];
 }
 
@@ -421,7 +414,9 @@ export async function extractDistinctTooltips(asns) {
     const ASN_int: number | string =
       asns[i] !== '-' ? parseInt(asns[i], 10) : '-';
     const [name_origin, countries_origin, abuse_origin] =
-      ASN_int == '-' ? ['', '', ''] : await fetchASNData(ASN_int);
+      ASN_int == '-'
+        ? ['', '', '']
+        : await fetchASNData(parseInt(ASN_int.toString(), 10));
 
     const tooltip =
       ASN_int == '-'

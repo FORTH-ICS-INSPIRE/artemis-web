@@ -1,6 +1,6 @@
 import { Button } from '@material-ui/core';
 import Link from 'next/link';
-import React, { useEffect } from 'react';
+import React, { useState } from 'react';
 import BootstrapTable from 'react-bootstrap-table-next';
 import filterFactory, {
   Comparator,
@@ -14,10 +14,9 @@ import paginationFactory, {
   SizePerPageDropdownStandalone,
 } from 'react-bootstrap-table2-paginator';
 import ToolkitProvider from 'react-bootstrap-table2-toolkit';
-import ReactTooltip from 'react-tooltip';
-import { fetchASNData } from '../../utils/fetch-data';
-import { parseASNData } from '../../utils/parsers';
+import TooltipContext from '../../context/tooltip-context';
 import { formatDate, genTooltip } from '../../utils/token';
+import Tooltip from '../tooltip/tooltip';
 
 const exactMatchFilter = textFilter({
   placeholder: '', // custom the input placeholder
@@ -172,7 +171,7 @@ const columns = [
     filter: exactMatchFilter,
   },
   {
-    dataField: 'rpki_status',
+    dataField: 'rpki',
     headerTitle: false,
     headerFormatter: (column, colIndex, components) =>
       genTooltip(
@@ -304,7 +303,8 @@ const statuses = {
 const HijackTableComponent = (props) => {
   const HIJACK_DATA = props.data;
   let hijacks;
-  const [ASNTitle, setASNTitle] = React.useState([]);
+  const context = React.useContext(TooltipContext);
+  const [tooltips, setTooltips] = useState({});
 
   if (HIJACK_DATA && HIJACK_DATA.length) {
     hijacks = HIJACK_DATA.map((row, i) => ({
@@ -321,14 +321,13 @@ const HijackTableComponent = (props) => {
       ),
       as_original: row.hijack_as,
       as: (
-        <>
-          <div data-tip data-for={'hijack_as'}>
-            {row.hijack_as}
-          </div>
-          <ReactTooltip html={true} id={'hijack_as'}>
-            {ASNTitle[i] ?? 'Loading...'}
-          </ReactTooltip>
-        </>
+        <Tooltip
+          tooltips={tooltips}
+          setTooltips={setTooltips}
+          asn={row.hijack_as}
+          label={`hijack_as`}
+          context={context}
+        />
       ),
       rpki: row.rpki_status,
       peers: row.num_peers_seen,
@@ -344,27 +343,6 @@ const HijackTableComponent = (props) => {
   } else {
     hijacks = [];
   }
-
-  useEffect(() => {
-    let isMounted = true;
-    (async function setStateFn() {
-      if (!isMounted) return;
-      const tooltips = [];
-      for (let i = 0; i < hijacks.length; i++) {
-        if (hijacks.length < ASNTitle.length) return;
-        const ASN_int: number = hijacks[i].as_original;
-        const [name, countries, abuse] = await fetchASNData(ASN_int);
-
-        const tooltip = parseASNData(ASN_int, name, countries, abuse);
-        tooltips.push(tooltip);
-      }
-      if (JSON.stringify(tooltips) !== JSON.stringify(ASNTitle))
-        setASNTitle(tooltips);
-    })();
-    return () => {
-      isMounted = false;
-    };
-  }, [hijacks]);
 
   const customTotal = (from, to, size) => (
     <span className="react-bootstrap-table-pagination-total">

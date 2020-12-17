@@ -1,7 +1,5 @@
-import { Button } from '@material-ui/core';
-import { diffDate } from '../../utils/token';
 import React, { Component } from 'react';
-import ReactTooltip from 'react-tooltip';
+import ModuleState from '../module-state/module-state';
 
 type ProcessType = {
   view_processes: { name: string; running: boolean; timestamp: number }[];
@@ -55,42 +53,22 @@ class StatusTable extends Component<StatsType, any> {
       <table id="modules" className="table table-hover">
         <thead>
           <tr>
-            <th>Module</th>
-            <th>Status</th>
-            <th>Uptime</th>
+            <th style={{ textAlign: 'left' }}>Module</th>
+            <th style={{ textAlign: 'left' }}>Status</th>
+            <th style={{ textAlign: 'left' }}>Uptime</th>
           </tr>
         </thead>
         <tbody>
           {STATS_DATA && STATS_DATA ? (
             STATS_DATA.view_processes.map((process, i) => {
               return (
-                <tr key={i}>
-                  <td>
-                    <div data-tip data-for={'module' + i}>
-                      {process.name.charAt(0).toUpperCase() +
-                        process.name.slice(1)}
-                    </div>
-                    <ReactTooltip html={true} id={'module' + i}>
-                      {tooltips[process.name] ?? ''}
-                    </ReactTooltip>
-                  </td>
-                  <td>
-                    {process.running ? (
-                      <Button variant="contained" color="primary">
-                        On
-                      </Button>
-                    ) : (
-                      <Button variant="contained" color="secondary">
-                        Off
-                      </Button>
-                    )}
-                  </td>
-                  <td>
-                    {process.running
-                      ? diffDate(new Date(process.timestamp), this.state.date)
-                      : '-'}
-                  </td>
-                </tr>
+                <ModuleState
+                  key={i}
+                  process={process}
+                  index={i}
+                  tooltip={tooltips[process.name]}
+                  date={this.state.date}
+                ></ModuleState>
               );
             })
           ) : (

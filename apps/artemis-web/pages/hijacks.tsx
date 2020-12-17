@@ -8,18 +8,17 @@ import {
 } from '@material-ui/core';
 import Head from 'next/head';
 import Link from 'next/link';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import ReactTooltip from 'react-tooltip';
 import AuthHOC from '../components/401-hoc/401-hoc';
+import ErrorBoundary from '../components/error-boundary/error-boundary';
 import HijackTableComponent from '../components/hijack-table/hijack-table';
-import { fetchASNData } from '../utils/fetch-data';
+import Tooltip from '../components/tooltip/tooltip';
+import TooltipContext from '../context/tooltip-context';
 import { useGraphQl } from '../utils/hooks/use-graphql';
-import { parseASNData } from '../utils/parsers';
 import { useStyles } from '../utils/styles';
 import { findStatus, shallMock } from '../utils/token';
-import ErrorBoundary from '../components/error-boundary/error-boundary';
 
 const HijacksPage = (props) => {
   const [isLive, setIsLive] = useState(true);
@@ -48,7 +47,8 @@ const HijacksPage = (props) => {
   const [selectState, setSelectState] = useState('');
   const [statusButton, setStatusButton] = useState('');
   const [key, setKey] = useState(' ');
-  const [ASNTitle, setASNTitle] = useState({});
+  const context = React.useContext(TooltipContext);
+  const [tooltips, setTooltips] = useState({});
 
   const user = props.user;
 
@@ -81,36 +81,13 @@ const HijacksPage = (props) => {
     if (!asns.includes(entry.hijack_as)) asns.push(entry.hijack_as);
   });
 
-  useEffect(() => {
-    (async function setStateFn() {
-      const tooltips = {};
-      for (let i = 0; i < asns.length; i++) {
-        const ASN_int: number | string = asns[i];
-
-        const [name_origin, countries_origin, abuse_origin] =
-          ASN_int == '-' ? ['', '', ''] : await fetchASNData(ASN_int);
-
-        const tooltip =
-          ASN_int == '-'
-            ? ''
-            : parseASNData(
-                ASN_int,
-                name_origin,
-                countries_origin,
-                abuse_origin
-              );
-
-        tooltips[ASN_int] = tooltip;
-      }
-      setASNTitle(tooltips);
-    })();
-  }, [hijacks.length]);
-
   const onChangeValue = (event) => {
     setDistinctValues(
-      filteredHijacks.map((entry) => {
-        return entry[event.target.value];
-      })
+      filteredHijacks
+        .map((entry) => {
+          return entry[event.target.value];
+        })
+        .filter((v, i, a) => a.indexOf(v) === i)
     );
     setSelectState(event.target.value);
   };
@@ -428,16 +405,16 @@ const HijacksPage = (props) => {
                   <Grid container spacing={3}>
                     {distinctValues.map((value, i) => {
                       if (value !== undefined) {
+                        const asn = value;
                         if (selectState === 'hijack_as')
                           value = (
-                            <>
-                              <div data-tip data-for={'origin' + i}>
-                                {value}
-                              </div>
-                              <ReactTooltip html={true} id={'origin' + i}>
-                                {ASNTitle[value] ?? 'Loading...'}
-                              </ReactTooltip>
-                            </>
+                            <Tooltip
+                              tooltips={tooltips}
+                              setTooltips={setTooltips}
+                              asn={asn}
+                              label={`originD${i}`}
+                              context={context}
+                            />
                           );
                         return (
                           <Grid key={i} item xs={3}>

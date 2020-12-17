@@ -4,12 +4,22 @@ import { findQuery, findSubscription, shallSubscribe } from '../token';
 export function useGraphQl(module, isLive = true, key = '') {
   /* eslint-disable react-hooks/rules-of-hooks */
   const res = shallSubscribe(isLive)
-    ? useSubscription(findSubscription(module), {
-        variables: { key },
-      })
-    : useQuery(findQuery(module), {
-        variables: { key },
-      });
+    ? useSubscription(
+        findSubscription(module),
+        module.includes('Key')
+          ? {
+              variables: { key },
+            }
+          : {}
+      )
+    : useQuery(
+        findQuery(module),
+        module.includes('Key')
+          ? {
+              variables: { key },
+            }
+          : {}
+      );
 
   const { error } = res;
   if (error) {
