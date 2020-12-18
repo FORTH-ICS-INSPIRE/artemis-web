@@ -21,12 +21,13 @@ const requestToken = async () => {
 };
 
 let apolloClient: ApolloClient<NormalizedCacheObject>;
+const windowHost = 'localhost'; //window.location.host;
 
 const createApolloClient = () => {
   const httpLink =
     typeof window !== 'undefined'
       ? createHttpLink({
-          uri: `https://${window.location.host}/api/graphql`,
+          uri: `https://${windowHost}/api/graphql`,
           useGETForQueries: false,
         })
       : null;
@@ -47,7 +48,7 @@ const createApolloClient = () => {
   const wsLink =
     typeof window !== 'undefined'
       ? new WebSocketLink({
-          uri: `wss://${window.location.host}/api/graphql`,
+          uri: `wss://${windowHost}/api/graphql`,
           options: {
             reconnect: true,
             lazy: true,
@@ -249,8 +250,12 @@ export const HIJACK_QUERY = gql`
 `;
 
 export const BGP_SUB = gql`
-  subscription bgpupdates {
-    view_bgpupdates {
+  subscription bgpupdates($offset: Int!, $limit: Int!) {
+    view_bgpupdates(
+      limit: $limit
+      offset: $offset
+      order_by: { timestamp: desc_nulls_first }
+    ) {
       prefix
       origin_as
       peer_asn
@@ -268,8 +273,12 @@ export const BGP_SUB = gql`
 `;
 
 export const BGP_QUERY = gql`
-  query bgpupdates {
-    view_bgpupdates {
+  query bgpupdates($offset: Int!, $limit: Int!) {
+    view_bgpupdates(
+      limit: $limit
+      offset: $offset
+      order_by: { timestamp: desc_nulls_first }
+    ) {
       prefix
       origin_as
       peer_asn
@@ -282,6 +291,26 @@ export const BGP_QUERY = gql`
       handled
       matched_prefix
       orig_path
+    }
+  }
+`;
+
+export const BGP_COUNT_SUB = gql`
+  subscription getLiveTableCount {
+    count_data: view_bgpupdates_aggregate {
+      aggregate {
+        count
+      }
+    }
+  }
+`;
+
+export const BGP_COUNT_QUERY = gql`
+  query getLiveTableCount {
+    count_data: view_bgpupdates_aggregate {
+      aggregate {
+        count
+      }
     }
   }
 `;

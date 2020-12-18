@@ -1,4 +1,7 @@
+// import { useSubscription } from '@apollo/client/react/hooks/useSubscription';
+import { useQuery, useSubscription } from '@apollo/client';
 import { Button } from '@material-ui/core';
+import { useGraphQl } from '../../utils/hooks/use-graphql';
 import Link from 'next/link';
 import React, { useState } from 'react';
 import BootstrapTable, { ExpandRowProps } from 'react-bootstrap-table-next';
@@ -15,7 +18,7 @@ import paginationFactory, {
 } from 'react-bootstrap-table2-paginator';
 import ToolkitProvider from 'react-bootstrap-table2-toolkit';
 import TooltipContext from '../../context/tooltip-context';
-import { genTooltip } from '../../utils/token';
+import { findQuery, findSubscription, genTooltip } from '../../utils/token';
 import Tooltip from '../tooltip/tooltip';
 
 const exactMatchFilter = textFilter({
@@ -75,15 +78,7 @@ const expandRow: ExpandRowProps<any, number> = {
                 )}
               </b>
             </td>
-            <td>
-              {row.as_path
-                ? JSON.stringify(row.as_path)
-                    .replace(/,/g, ' ')
-                    .replace(/\[/g, '')
-                    .replace(/\]/g, '')
-                    .replace(/\"/g, '')
-                : ''}
-            </td>
+            <td>{row.as_path}</td>
           </tr>
           <tr>
             <td>
@@ -388,14 +383,10 @@ const columns = [
   },
 ];
 
-const BGPTableComponent = (props) => {
+function handleData(bgpData, tooltips, setTooltips, context) {
   let bgp;
-  const bgpData = props.data;
-  const context = React.useContext(TooltipContext);
-  const [tooltips, setTooltips] = useState({});
-
   if (bgpData && bgpData.length) {
-    bgp = props.data.map((row, i) => {
+    bgp = bgpData.map((row, i) => {
       const origin_as = (
         <Tooltip
           tooltips={tooltips}
@@ -415,20 +406,20 @@ const BGPTableComponent = (props) => {
         />
       );
       const path = row.as_path;
-      if (typeof row.as_path === 'string')
-        row.as_path = path.split(' ').map((asn, j) => {
-          return (
-            <div key={j} style={{ float: 'left', marginLeft: '4px' }}>
-              <Tooltip
-                tooltips={tooltips}
-                setTooltips={setTooltips}
-                asn={asn}
-                label={`asn ${i} ${j}`}
-                context={context}
-              />
-            </div>
-          );
-        });
+
+      row.as_path = path.map((asn, j) => {
+        return (
+          <div key={j} style={{ float: 'left', marginLeft: '4px' }}>
+            <Tooltip
+              tooltips={tooltips}
+              setTooltips={setTooltips}
+              asn={asn}
+              label={`asn ${i} ${j}`}
+              context={context}
+            />
+          </div>
+        );
+      });
       return {
         ...row,
         origin_as_original: origin_as,
@@ -438,6 +429,40 @@ const BGPTableComponent = (props) => {
   } else {
     bgp = [];
   }
+
+  return bgp;
+}
+
+const BGPTableComponent = (props) => {
+  let bgp;
+  // const {data, setLimitState, setOffsetState} = props;
+  const [bgpData, setBgpData] = useState([]);
+  const context = React.useContext(TooltipContext);
+  const [tooltips, setTooltips] = useState({});
+  const bgp_count = props.bgp_count;
+  const [page, setPage] = useState(0);
+  const [sizePerPage, setSizePerPage] = useState(10);
+  const BGP_COUNT = useGraphQl('bgpcount', true, '');
+  const [limitState, setLimitState] = useState(10);
+  const [offsetState, setOffsetState] = useState(0);
+  const BGP_RES = useSubscription(findSubscription('bgpupdates'), {
+    variables: { limit: limitState, offset: offsetState },
+    onSubscriptionData: (data) =>
+      setBgpData(
+        handleData(
+          data.subscriptionData.data.view_bgpupdates.slice(
+            offsetState,
+            limitState + offsetState
+          ),
+          tooltips,
+          setTooltips,
+          context
+        )
+      ),
+  });
+  const bgpCount = BGP_COUNT.data
+    ? BGP_COUNT.data.count_data.aggregate.count
+    : 0;
 
   const skippedCols = props.skippedCols ?? [];
 
@@ -497,7 +522,10 @@ const BGPTableComponent = (props) => {
     custom: true,
     hidePageListOnlyOnePage: true,
     paginationTotalRenderer: customTotal,
+    dataSize: bgpCount,
     disablePageTitle: true,
+    page: page,
+    sizePerPage: sizePerPage,
     sizePerPageList: [
       {
         text: '10',
@@ -536,16 +564,26 @@ const BGPTableComponent = (props) => {
     );
   };
 
+  const handleTableChange = (type, { page, sizePerPage }) => {
+    const currentIndex = page * sizePerPage;
+    setPage(page);
+    setSizePerPage(sizePerPage);
+    setOffsetState(currentIndex);
+    setLimitState(currentIndex + sizePerPage);
+  };
+
   const contentTable = ({ paginationProps, paginationTableProps }) => (
     <ToolkitProvider
       keyField="id"
       columns={filteredCols}
-      data={bgp}
-      dataSize={bgp.length}
+      data={bgpData}
+      dataSize={bgpCount}
       exportCSV={{ onlyExportFiltered: true, exportAll: false }}
     >
       {(toolkitprops) => {
-        paginationProps.dataSize = bgp.length;
+        paginationProps.dataSize = bgpCount;
+        paginationTableProps.dataSize = bgpCount;
+        const onPage = paginationProps.onPageChange;
         return (
           <>
             <div className="header-filter">
@@ -553,9 +591,10 @@ const BGPTableComponent = (props) => {
               <MyExportCSV {...toolkitprops.csvProps}>Export CSV!!</MyExportCSV>
             </div>
             <BootstrapTable
+              remote
               wrapperClasses="table-responsive"
               keyField="id"
-              data={bgp}
+              data={bgpData}
               columns={filteredCols}
               expandRow={expandRow}
               filter={filterFactory()}
@@ -563,6 +602,7 @@ const BGPTableComponent = (props) => {
               hover
               condensed
               filterPosition="bottom"
+              onTableChange={handleTableChange}
               {...toolkitprops.baseProps}
               {...paginationTableProps}
             />

@@ -15,21 +15,22 @@ import BGPTableComponent from '../components/bgp-table/bgp-table';
 import ErrorBoundary from '../components/error-boundary/error-boundary';
 import Tooltip from '../components/tooltip/tooltip';
 import TooltipContext from '../context/tooltip-context';
+import { BGP_COUNT_QUERY } from '../libs/graphql';
 import { useGraphQl } from '../utils/hooks/use-graphql';
 import { useStyles } from '../utils/styles';
 import { formatDate, fromEntries } from '../utils/token';
 
 const BGPUpdates = (props) => {
   const [isLive, setIsLive] = useState(true);
-  const isDevelopment = process.env.NODE_ENV === 'development';
-  const isBrowser = typeof window !== 'undefined';
+  const isDevelopment: boolean = process.env.NODE_ENV === 'development';
+  const isBrowser: boolean = typeof window !== 'undefined';
   const context = React.useContext(TooltipContext);
 
-  if (isDevelopment && isBrowser) {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const { worker } = require('../utils/mock-sw/browser');
-    worker.start();
-  }
+  //  if (isDevelopment && isBrowser) {
+  //   // eslint-disable-next-line @typescript-eslint/no-var-requires
+  //   const { worker } = require('../utils/mock-sw/browser');
+  //   worker.start();
+  // }
 
   const classes = useStyles();
 
@@ -38,16 +39,27 @@ const BGPUpdates = (props) => {
   const [distinctValues, setDistinctValues] = useState([]);
   const [selectState, setSelectState] = useState('');
   const [tooltips, setTooltips] = useState({});
+  const [bgpData, setBgpData] = useState([]);
+  const [limitState, setLimitState] = useState(40);
+  const [offsetState, setOffsetState] = useState(0);
 
   const user = props.user;
-  const BGP_RES = useGraphQl('bgpupdates', isLive);
+  const BGP_COUNT = useGraphQl('bgpcount', isLive, '');
+  const BGP_RES = useGraphQl('bgpupdates', isLive, '', {
+    limit: limitState,
+    offset: offsetState,
+  });
+  const bgpCount = BGP_COUNT.data
+    ? BGP_COUNT.data.count_data.aggregate.count
+    : 0;
+  // if (bgpCount != 0) setLimitState(bgpCount);
   const BGP_DATA = BGP_RES.data;
 
-  const bgp = BGP_DATA ? BGP_DATA.view_bgpupdates : [];
-  const filteredDate = new Date();
+  const bgp: Array<any> = BGP_DATA ? BGP_DATA.view_bgpupdates : [];
+  const filteredDate: Date = new Date();
   filteredDate.setHours(filteredDate.getHours() - filter);
 
-  let filteredBgp =
+  let filteredBgp: Array<any> =
     filter !== 0
       ? bgp.filter((entry) => new Date(entry.timestamp) >= filteredDate)
       : bgp;
@@ -68,11 +80,7 @@ const BGPUpdates = (props) => {
     )
   );
 
-  const asns = [];
   filteredBgp.forEach((entry, i) => {
-    if (!asns.includes(entry.origin_as)) asns.push(entry.origin_as);
-    if (!asns.includes(entry.peer_asn)) asns.push(entry.peer_asn);
-
     entry.id = i;
   });
 
@@ -196,7 +204,7 @@ const BGPUpdates = (props) => {
                     noDataMessage={'No bgp updates.'}
                     customError={BGP_RES.error}
                   >
-                    <BGPTableComponent data={filteredBgp} />
+                    <BGPTableComponent />
                   </ErrorBoundary>
                 </div>
               </div>

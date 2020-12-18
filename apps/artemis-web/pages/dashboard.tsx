@@ -14,11 +14,11 @@ const DashboardPage = (props) => {
   const isDevelopment = process.env.NODE_ENV === 'development';
   const isBrowser = typeof window !== 'undefined';
 
-  if (isDevelopment && isBrowser) {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const { worker } = require('../utils/mock-sw/browser');
-    worker.start();
-  }
+  // if (isDevelopment && isBrowser) {
+  //   // eslint-disable-next-line @typescript-eslint/no-var-requires
+  //   const { worker } = require('../utils/mock-sw/browser');
+  //   worker.start();
+  // }
 
   const user = props.user;
   const notify = (message: React.ReactText) => toast(message);

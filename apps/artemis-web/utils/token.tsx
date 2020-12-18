@@ -17,6 +17,8 @@ import {
   STATS_QUERY,
   CONFIG_SUB,
   CONFIG_QUERY,
+  BGP_COUNT_QUERY,
+  BGP_COUNT_SUB,
 } from '../libs/graphql';
 
 export const getRandomString = (len) => {
@@ -101,6 +103,7 @@ const actionSubMap = {
   bgpByKey: getBGPByKeySub,
   index_stats: INDEXSTATS_SUB,
   config: CONFIG_SUB,
+  bgpcount: BGP_COUNT_SUB,
 };
 
 const actionQueryMap = {
@@ -112,6 +115,7 @@ const actionQueryMap = {
   bgpByKey: getBGPByKeyQuery,
   index_stats: INDEXSTATS_QUERY,
   config: CONFIG_QUERY,
+  bgpcount: BGP_COUNT_QUERY,
 };
 
 export const findSubscription = (action) => {
