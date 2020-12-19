@@ -249,11 +249,18 @@ export const HIJACK_QUERY = gql`
   }
 `;
 
-export const BGP_SUB = gql`
-  subscription bgpupdates($offset: Int!, $limit: Int!) {
+export const bgpUpdatesQuery = (isSubscription, options) => {
+  return gql`
+  ${
+    isSubscription ? 'subscription' : 'query'
+  } bgpupdates($offset: Int!, $limit: Int!) {
     view_bgpupdates(
-      limit: $limit
-      offset: $offset
+      ${
+        options.limits
+          ? `limit: $limit
+      offset: $offset`
+          : ''
+      }
       order_by: { timestamp: desc_nulls_first }
     ) {
       prefix
@@ -271,9 +278,10 @@ export const BGP_SUB = gql`
     }
   }
 `;
+};
 
 export const BGP_QUERY = gql`
-  query bgpupdates($offset: Int!, $limit: Int!) {
+  query bgpupdates($offset: Int, $limit: Int) {
     view_bgpupdates(
       limit: $limit
       offset: $offset
@@ -295,15 +303,25 @@ export const BGP_QUERY = gql`
   }
 `;
 
-export const BGP_COUNT_SUB = gql`
-  subscription getLiveTableCount {
-    count_data: view_bgpupdates_aggregate {
-      aggregate {
-        count
+export const bgpCount = (
+  isSubscription,
+  options,
+  extraVars = { dateFrom: '', dateTo: '' }
+) => {
+  return gql`
+    ${isSubscription ? 'subscription' : 'query'} getLiveTableCount {
+      count_data: view_bgpupdates_aggregate${
+        options.dateFilter
+          ? `(where: { _and: [{ timestamp: {_gte: "${extraVars.dateFrom}"} },{ timestamp: {_lte: "${extraVars.dateTo}"} }] })`
+          : ''
+      } {
+        aggregate {
+          count
+        }
       }
     }
-  }
-`;
+  `;
+};
 
 export const BGP_COUNT_QUERY = gql`
   query getLiveTableCount {

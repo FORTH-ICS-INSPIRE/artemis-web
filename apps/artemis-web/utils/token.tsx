@@ -1,24 +1,24 @@
 import React from 'react';
 import ReactTooltip from 'react-tooltip';
 import {
-  STATS_SUB,
-  ONGOING_HIJACK_SUB,
-  HIJACK_SUB,
-  BGP_SUB,
-  getHijackByKeySub,
-  getBGPByKeySub,
-  INDEXSTATS_SUB,
-  BGP_QUERY,
-  getBGPByKeyQuery,
-  getHijackByKeyQuery,
-  HIJACK_QUERY,
-  INDEXSTATS_QUERY,
-  ONGOING_HIJACK_QUERY,
-  STATS_QUERY,
-  CONFIG_SUB,
-  CONFIG_QUERY,
+  bgpCount,
+  bgpUpdatesQuery,
   BGP_COUNT_QUERY,
-  BGP_COUNT_SUB,
+  BGP_QUERY,
+  CONFIG_QUERY,
+  CONFIG_SUB,
+  getBGPByKeyQuery,
+  getBGPByKeySub,
+  getHijackByKeyQuery,
+  getHijackByKeySub,
+  HIJACK_QUERY,
+  HIJACK_SUB,
+  INDEXSTATS_QUERY,
+  INDEXSTATS_SUB,
+  ONGOING_HIJACK_QUERY,
+  ONGOING_HIJACK_SUB,
+  STATS_QUERY,
+  STATS_SUB,
 } from '../libs/graphql';
 
 export const getRandomString = (len) => {
@@ -94,35 +94,19 @@ export const shallMock = () => isDevelopment() && isBrowser();
 const isProduction = () => process.env.NODE_ENV === 'production';
 export const shallSubscribe = (isLive) => isProduction() && isLive;
 
-const actionSubMap = {
-  stats: STATS_SUB,
-  ongoing_hijack: ONGOING_HIJACK_SUB,
-  hijack: HIJACK_SUB,
-  bgpupdates: BGP_SUB,
-  hijackByKey: getHijackByKeySub,
-  bgpByKey: getBGPByKeySub,
-  index_stats: INDEXSTATS_SUB,
-  config: CONFIG_SUB,
-  bgpcount: BGP_COUNT_SUB,
-};
-
-const actionQueryMap = {
-  stats: STATS_QUERY,
-  ongoing_hijack: ONGOING_HIJACK_QUERY,
-  hijack: HIJACK_QUERY,
-  bgpupdates: BGP_QUERY,
-  hijackByKey: getHijackByKeyQuery,
-  bgpByKey: getBGPByKeyQuery,
-  index_stats: INDEXSTATS_QUERY,
-  config: CONFIG_QUERY,
-  bgpcount: BGP_COUNT_QUERY,
-};
-
-export const findSubscription = (action) => {
-  return actionSubMap[action];
-};
-
-export const findQuery = (action) => {
+export const findQuery = (action, isSubscription, options, extraVars) => {
+  console.log('mpike');
+  const actionQueryMap = {
+    stats: STATS_SUB,
+    ongoing_hijack: ONGOING_HIJACK_SUB,
+    hijack: HIJACK_SUB,
+    bgpupdates: bgpUpdatesQuery(isSubscription, options),
+    hijackByKey: getHijackByKeySub,
+    bgpByKey: getBGPByKeySub,
+    index_stats: INDEXSTATS_SUB,
+    config: CONFIG_SUB,
+    bgpcount: bgpCount(isSubscription, options, extraVars),
+  };
   return actionQueryMap[action];
 };
 

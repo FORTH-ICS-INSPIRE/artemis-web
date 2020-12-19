@@ -1,7 +1,5 @@
 // import { useSubscription } from '@apollo/client/react/hooks/useSubscription';
-import { useQuery, useSubscription } from '@apollo/client';
 import { Button } from '@material-ui/core';
-import { useGraphQl } from '../../utils/hooks/use-graphql';
 import Link from 'next/link';
 import React, { useState } from 'react';
 import BootstrapTable, { ExpandRowProps } from 'react-bootstrap-table-next';
@@ -18,7 +16,13 @@ import paginationFactory, {
 } from 'react-bootstrap-table2-paginator';
 import ToolkitProvider from 'react-bootstrap-table2-toolkit';
 import TooltipContext from '../../context/tooltip-context';
-import { findQuery, findSubscription, genTooltip } from '../../utils/token';
+import { useGraphQl } from '../../utils/hooks/use-graphql';
+import {
+  formatDate,
+  fromEntries,
+  genTooltip,
+  shallSubscribe,
+} from '../../utils/token';
 import Tooltip from '../tooltip/tooltip';
 
 const exactMatchFilter = textFilter({
@@ -383,7 +387,14 @@ const columns = [
   },
 ];
 
-function handleData(bgpData, tooltips, setTooltips, context) {
+function handleData(
+  bgpData,
+  tooltips,
+  setTooltips,
+  context,
+  setFilteredBgpData,
+  filter = 0
+) {
   let bgp;
   if (bgpData && bgpData.length) {
     bgp = bgpData.map((row, i) => {
@@ -406,7 +417,6 @@ function handleData(bgpData, tooltips, setTooltips, context) {
         />
       );
       const path = row.as_path;
-
       row.as_path = path.map((asn, j) => {
         return (
           <div key={j} style={{ float: 'left', marginLeft: '4px' }}>
@@ -430,36 +440,83 @@ function handleData(bgpData, tooltips, setTooltips, context) {
     bgp = [];
   }
 
-  return bgp;
+  const filteredDate: Date = new Date();
+  filteredDate.setHours(filteredDate.getHours() - filter);
+
+  let filteredBgp: Array<any> =
+    filter !== 0
+      ? bgp.filter((entry) => new Date(entry.timestamp) >= filteredDate)
+      : bgp;
+
+  filteredBgp = filteredBgp.map((row, i) =>
+    fromEntries(
+      Object.entries(row).map(([key, value]: [string, any]) => {
+        if (key === 'timestamp') return [key, formatDate(new Date(value))];
+        else if (key === 'service') return [key, value.replace(/\|/g, ' -> ')];
+        else if (key === 'as_path') return [key, value];
+        else if (key === 'handled')
+          return [
+            key,
+            value ? <img src="handled.png" /> : <img src="./unhadled.png" />,
+          ];
+        else return [key, value];
+      })
+    )
+  );
+
+  filteredBgp.forEach((entry, i) => {
+    entry.id = i;
+  });
+
+  setFilteredBgpData(filteredBgp);
+
+  return filteredBgp;
 }
 
 const BGPTableComponent = (props) => {
-  let bgp;
-  // const {data, setLimitState, setOffsetState} = props;
+  const { setFilteredBgpData, filter } = props;
   const [bgpData, setBgpData] = useState([]);
   const context = React.useContext(TooltipContext);
   const [tooltips, setTooltips] = useState({});
-  const bgp_count = props.bgp_count;
   const [page, setPage] = useState(0);
   const [sizePerPage, setSizePerPage] = useState(10);
-  const BGP_COUNT = useGraphQl('bgpcount', true, '');
+  const BGP_COUNT = useGraphQl('bgpcount', { isLive: true, key: '' });
   const [limitState, setLimitState] = useState(10);
   const [offsetState, setOffsetState] = useState(0);
-  const BGP_RES = useSubscription(findSubscription('bgpupdates'), {
-    variables: { limit: limitState, offset: offsetState },
-    onSubscriptionData: (data) =>
+  const [filterState, setFilterState] = useState(filter);
+  const filteredDate: Date = new Date();
+  filteredDate.setHours(filteredDate.getHours() - filter);
+
+  // if (filter !== filterState)
+  //   setFilterState(filter);
+
+  const BGP_RES = useGraphQl(
+    'bgpupdates',
+    {
+      isLive: true,
+      limits: {
+        limit: limitState,
+        offset: offsetState,
+        // filter: filteredDate.getTime()
+      },
+    },
+    (data) =>
       setBgpData(
         handleData(
-          data.subscriptionData.data.view_bgpupdates.slice(
-            offsetState,
-            limitState + offsetState
-          ),
+          shallSubscribe(true)
+            ? data.subscriptionData.data.view_bgpupdates.slice(
+                offsetState,
+                limitState + offsetState
+              )
+            : data.view_bgpupdates.slice(offsetState, limitState + offsetState),
           tooltips,
           setTooltips,
-          context
+          context,
+          setFilteredBgpData,
+          filterState
         )
-      ),
-  });
+      )
+  );
   const bgpCount = BGP_COUNT.data
     ? BGP_COUNT.data.count_data.aggregate.count
     : 0;
@@ -590,6 +647,7 @@ const BGPTableComponent = (props) => {
               <SizePerPageDropdownStandalone {...paginationProps} />
               <MyExportCSV {...toolkitprops.csvProps}>Export CSV!!</MyExportCSV>
             </div>
+
             <BootstrapTable
               remote
               wrapperClasses="table-responsive"
@@ -606,6 +664,7 @@ const BGPTableComponent = (props) => {
               {...toolkitprops.baseProps}
               {...paginationTableProps}
             />
+
             <PaginationTotalStandalone {...paginationProps} />
             <PaginationListStandalone {...paginationProps} />
           </>

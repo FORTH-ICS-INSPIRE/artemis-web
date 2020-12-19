@@ -40,55 +40,22 @@ const BGPUpdates = (props) => {
   const [selectState, setSelectState] = useState('');
   const [tooltips, setTooltips] = useState({});
   const [bgpData, setBgpData] = useState([]);
+  const [filteredBgpData, setFilteredBgpData] = useState([]);
   const [limitState, setLimitState] = useState(40);
   const [offsetState, setOffsetState] = useState(0);
 
   const user = props.user;
-  const BGP_COUNT = useGraphQl('bgpcount', isLive, '');
-  const BGP_RES = useGraphQl('bgpupdates', isLive, '', {
-    limit: limitState,
-    offset: offsetState,
-  });
+  const BGP_COUNT = useGraphQl('bgpcount', { isLive: true });
+
   const bgpCount = BGP_COUNT.data
     ? BGP_COUNT.data.count_data.aggregate.count
     : 0;
-  // if (bgpCount != 0) setLimitState(bgpCount);
-  const BGP_DATA = BGP_RES.data;
-
-  const bgp: Array<any> = BGP_DATA ? BGP_DATA.view_bgpupdates : [];
-  const filteredDate: Date = new Date();
-  filteredDate.setHours(filteredDate.getHours() - filter);
-
-  let filteredBgp: Array<any> =
-    filter !== 0
-      ? bgp.filter((entry) => new Date(entry.timestamp) >= filteredDate)
-      : bgp;
-
-  filteredBgp = filteredBgp.map((row, i) =>
-    fromEntries(
-      Object.entries(row).map(([key, value]: [string, any]) => {
-        if (key === 'timestamp') return [key, formatDate(new Date(value))];
-        else if (key === 'service') return [key, value.replace(/\|/g, ' -> ')];
-        else if (key === 'as_path') return [key, value.join(' ')];
-        else if (key === 'handled')
-          return [
-            key,
-            value ? <img src="handled.png" /> : <img src="./unhadled.png" />,
-          ];
-        else return [key, value];
-      })
-    )
-  );
-
-  filteredBgp.forEach((entry, i) => {
-    entry.id = i;
-  });
 
   const onChangeValue = (event) => {
     setSelectState(event.target.value);
 
     setDistinctValues(
-      filteredBgp
+      filteredBgpData
         .map((entry) => {
           return entry[event.target.value];
         })
@@ -200,11 +167,14 @@ const BGPUpdates = (props) => {
                 </div>
                 <div className="card-body" style={{ textAlign: 'center' }}>
                   <ErrorBoundary
-                    containsData={filteredBgp.length > 0}
+                    containsData={bgpCount > 0}
                     noDataMessage={'No bgp updates.'}
-                    customError={BGP_RES.error}
+                    customError={''}
                   >
-                    <BGPTableComponent />
+                    <BGPTableComponent
+                      filter={filter}
+                      setFilteredBgpData={setFilteredBgpData}
+                    />
                   </ErrorBoundary>
                 </div>
               </div>
