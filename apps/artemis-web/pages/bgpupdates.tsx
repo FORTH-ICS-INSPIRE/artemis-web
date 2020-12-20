@@ -18,7 +18,7 @@ import TooltipContext from '../context/tooltip-context';
 import { BGP_COUNT_QUERY } from '../libs/graphql';
 import { useGraphQl } from '../utils/hooks/use-graphql';
 import { useStyles } from '../utils/styles';
-import { formatDate, fromEntries } from '../utils/token';
+import { formatDate, fromEntries, getISODate } from '../utils/token';
 
 const BGPUpdates = (props) => {
   const [isLive, setIsLive] = useState(true);
@@ -43,17 +43,20 @@ const BGPUpdates = (props) => {
   const [limitState, setLimitState] = useState(40);
   const [offsetState, setOffsetState] = useState(0);
 
-  const dateTo = new Date().toISOString();
-    const dateFiltered = new Date();
-    dateFiltered.setHours(dateFiltered.getHours() - 1);
-    const dateFrom = dateFiltered.toISOString();
+  const dateFrom: string = getISODate(filter);
+  const dateTo: string = getISODate(0);
   const user = props.user;
-  const BGP_COUNT = useGraphQl('bgpcount', { isLive: true, dateTo: dateTo, dateFrom: dateFrom });
+
+  const BGP_COUNT = useGraphQl('bgpCount', {
+    isLive: isLive,
+    dateFilter: filter !== 0,
+    dateRange: { dateTo: dateTo, dateFrom: dateFrom },
+  });
 
   const bgpCount = BGP_COUNT.data
     ? BGP_COUNT.data.count_data.aggregate.count
     : 0;
-  
+
   const onChangeValue = (event) => {
     setSelectState(event.target.value);
 
@@ -85,7 +88,7 @@ const BGPUpdates = (props) => {
                 </div>
                 <div className="col-lg-1"></div>
                 <div className="col-lg-2">
-                  <h2 style={{ color: 'white' }}>Live Updates </h2>{' '}
+                  <h2 style={{ color: 'white' }}>Live Updates</h2>{' '}
                 </div>
                 <div className="col-lg-1">
                   <FormGroup>
@@ -176,6 +179,7 @@ const BGPUpdates = (props) => {
                   >
                     <BGPTableComponent
                       filter={filter}
+                      isLive={isLive}
                       setFilteredBgpData={setFilteredBgpData}
                     />
                   </ErrorBoundary>

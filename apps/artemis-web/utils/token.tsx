@@ -110,6 +110,13 @@ export const findQuery = (action, isSubscription, options, extraVars) => {
   return actionQueryMap[action];
 };
 
+export const getISODate = (filter) => {
+  const dateFiltered = new Date();
+  dateFiltered.setHours(dateFiltered.getHours() - filter);
+  dateFiltered.setSeconds(0, 0);
+  return dateFiltered.toISOString();
+};
+
 export const findStatus = (row) => {
   const statuses = [];
 

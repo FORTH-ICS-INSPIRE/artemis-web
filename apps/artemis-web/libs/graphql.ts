@@ -100,7 +100,7 @@ export const initializeApollo = (initialState = null) => {
   return apolloClient;
 };
 
-type queryType =
+export type queryType =
   | 'stats'
   | 'ongoingHijack'
   | 'hijack'
@@ -116,7 +116,7 @@ export class QueryGenerator {
   type: queryType;
   isSubscription: boolean;
   operationType: string;
-  constructor(type: queryType, isSubscription: boolean, options:any = {}) {
+  constructor(type: queryType, isSubscription: boolean, options: any = {}) {
     this.type = type;
     this.isSubscription = isSubscription;
     this.operationType = isSubscription ? 'subscription' : 'query';
@@ -172,15 +172,13 @@ export class QueryGenerator {
   }
 
   private getBgpCountQuery() {
-    let optionalVars = '';
     let optionalCondition = '';
     if (this.options.dateFilter) {
-      optionalVars = ''//'($dateFrom: timestamp, $dateTo: timestamp)';
       optionalCondition = `(where: { _and: [{ timestamp: {_gte: \"${this.options.dateFrom}\"} },{ timestamp: {_lte: \"${this.options.dateTo}\"} }] })`;
     }
 
     return gql`
-            ${this.operationType} getLiveTableCount${optionalVars} {
+            ${this.operationType} getLiveTableCount {
               count_data: view_bgpupdates_aggregate${optionalCondition}
               {
                 aggregate {
@@ -188,6 +186,38 @@ export class QueryGenerator {
                 }
               }
             }`;
+  }
+
+  private getBGPUpdates() {
+    let optionalCondition = '';
+    let optionalVars = '';
+    if (this.options.limits) {
+      optionalCondition = `
+        limit: $limit
+        offset: $offset`;
+      optionalVars = '($offset: Int!, $limit: Int!)';
+    }
+    return gql`
+      ${this.operationType} bgpupdates${optionalVars} {
+      view_bgpupdates(
+        ${optionalCondition}
+        order_by: { timestamp: desc_nulls_first }
+      ) {
+        prefix
+        origin_as
+        peer_asn
+        as_path
+        service
+        type
+        communities
+        timestamp
+        hijack_key
+        handled
+        matched_prefix
+        orig_path
+      }
+    }
+  `;
   }
 
   public getQuery() {
@@ -202,6 +232,9 @@ export class QueryGenerator {
       case 'bgpCount':
         query = this.getBgpCountQuery();
         break;
+      case 'bgpUpdates':
+        query = this.getBGPUpdates();
+        break;
     }
 
     return query;
@@ -209,8 +242,8 @@ export class QueryGenerator {
 
   public executeQuery(vars) {
     return this.isSubscription
-    ? useSubscription(this.getQuery(), vars)
-    : useQuery(this.getQuery(), vars);
+      ? useSubscription(this.getQuery(), vars)
+      : useQuery(this.getQuery(), vars);
   }
 }
 

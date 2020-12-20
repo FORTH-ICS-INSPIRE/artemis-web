@@ -1,20 +1,30 @@
 import { useQuery, useSubscription } from '@apollo/client';
-import { QueryGenerator } from 'apps/artemis-web/libs/graphql';
+import { QueryGenerator, queryType } from 'apps/artemis-web/libs/graphql';
 import { findQuery, shallSubscribe } from '../token';
 
-export function useGraphQl(
-  module,
-  options,
-  callback = (data) => {
-    return;
-  },
-  extraVars: any = {}
-) {
-  const { isLive, key, limits } = options;
-  console.log(module);
+type limitsType = {
+  offset: Number;
+  limit: Number;
+};
+
+type dateRangeType = {
+  dateFrom: string;
+  dateTo: String;
+};
+
+type optionsType = {
+  isLive: boolean;
+  key?: string;
+  limits?: limitsType;
+  dateFilter?: boolean;
+  dateRange?: dateRangeType;
+  callback?: (data: any) => void;
+};
+
+export function useGraphQl(module: queryType, options: optionsType) {
+  const { isLive, key, limits, callback } = options;
   let vars;
   let isSubscription = shallSubscribe(isLive) || true;
-  const queryOptions = {};
 
   if (key && key.length) {
     vars = isSubscription
@@ -27,7 +37,7 @@ export function useGraphQl(
           variables: { key },
         };
   } else if (limits) {
-    const { limit, offset, filter } = limits;
+    const { limit, offset } = limits;
     vars = isSubscription
       ? {
           onSubscriptionData: (data) => callback(data),
@@ -35,27 +45,12 @@ export function useGraphQl(
         }
       : {
           onCompleted: (data) => callback(data),
-          variables: { offset, limit, filter },
+          variables: { offset, limit },
         };
-    queryOptions['limits'] = true;
-  } else if (module === 'bgpcount') {
-    
-    extraVars = {
-      dateTo: '2020-12-19T13:18:34.779Z',
-      dateFrom: '2020-12-19T13:18:34.779Z',
-    };
-    isSubscription = false;
-    queryOptions['dateFilter'] = true;
-    console.log(options.dateFrom, options.dateTo)
-    const executor = new QueryGenerator('bgpCount', false, {dateFilter: true, "dateFrom": "2020-11-19T13:18:34.779Z",
-    "dateTo": "2020-12-19T13:18:34.779Z"});
-    console.log(executor.executeQuery({}))
   }
 
-  /* eslint-disable react-hooks/rules-of-hooks */
-  const res = isSubscription
-    ? useSubscription(findQuery(module, true, queryOptions, extraVars), vars)
-    : useQuery(findQuery(module, false, queryOptions, extraVars), vars);
+  const executor = new QueryGenerator(module, false, options);
+  const res = executor.executeQuery(vars);
 
   const { error } = res;
   if (error) {

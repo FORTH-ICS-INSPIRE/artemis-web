@@ -22,6 +22,7 @@ import {
   fromEntries,
   genTooltip,
   shallSubscribe,
+  getISODate,
 } from '../../utils/token';
 import Tooltip from '../tooltip/tooltip';
 
@@ -480,7 +481,14 @@ const BGPTableComponent = (props) => {
   const [tooltips, setTooltips] = useState({});
   const [page, setPage] = useState(0);
   const [sizePerPage, setSizePerPage] = useState(10);
-  const BGP_COUNT = useGraphQl('bgpcount', { isLive: true, key: '' });
+  const dateFrom: string = getISODate(filter);
+  const dateTo: string = getISODate(0);
+
+  const BGP_COUNT = useGraphQl('bgpCount', {
+    isLive: props.isLive,
+    dateFilter: filter !== 0,
+    dateRange: { dateTo: dateTo, dateFrom: dateFrom },
+  });
   const [limitState, setLimitState] = useState(10);
   const [offsetState, setOffsetState] = useState(0);
   const [filterState, setFilterState] = useState(filter);
@@ -489,17 +497,8 @@ const BGPTableComponent = (props) => {
   // if (filter !== filterState)
   //   setFilterState(filter);
 
-  const BGP_RES = useGraphQl(
-    'bgpupdates',
-    {
-      isLive: true,
-      limits: {
-        limit: limitState,
-        offset: offsetState,
-        // filter: filteredDate.getTime()
-      },
-    },
-    (data) =>
+  const BGP_RES = useGraphQl('bgpUpdates', {
+    callback: (data) => {
       setBgpData(
         handleData(
           shallSubscribe(true) || true
@@ -514,8 +513,15 @@ const BGPTableComponent = (props) => {
           setFilteredBgpData,
           filterState
         )
-      )
-  );
+      );
+    },
+    isLive: true,
+    limits: {
+      limit: limitState,
+      offset: offsetState,
+    },
+  });
+
   const bgpCount = BGP_COUNT.data
     ? BGP_COUNT.data.count_data.aggregate.count
     : 0;
