@@ -486,7 +486,6 @@ const BGPTableComponent = (props) => {
   const [filterState, setFilterState] = useState(filter);
   const filteredDate: Date = new Date();
   filteredDate.setHours(filteredDate.getHours() - filter);
-
   // if (filter !== filterState)
   //   setFilterState(filter);
 
@@ -503,7 +502,7 @@ const BGPTableComponent = (props) => {
     (data) =>
       setBgpData(
         handleData(
-          shallSubscribe(true)
+          shallSubscribe(true) || true
             ? data.subscriptionData.data.view_bgpupdates.slice(
                 offsetState,
                 limitState + offsetState

@@ -4,6 +4,9 @@ import {
   NormalizedCacheObject,
   createHttpLink,
   gql,
+  DocumentNode,
+  useSubscription,
+  useQuery,
 } from '@apollo/client';
 import { split } from '@apollo/client';
 import { getMainDefinition } from '@apollo/client/utilities';
@@ -96,6 +99,120 @@ export const initializeApollo = (initialState = null) => {
 
   return apolloClient;
 };
+
+type queryType =
+  | 'stats'
+  | 'ongoingHijack'
+  | 'hijack'
+  | 'bgpUpdates'
+  | 'hijackByKey'
+  | 'bgpByKey'
+  | 'indexStats'
+  | 'config'
+  | 'bgpCount';
+
+export class QueryGenerator {
+  [x: string]: any;
+  type: queryType;
+  isSubscription: boolean;
+  operationType: string;
+  constructor(type: queryType, isSubscription: boolean, options:any = {}) {
+    this.type = type;
+    this.isSubscription = isSubscription;
+    this.operationType = isSubscription ? 'subscription' : 'query';
+    this.options = options;
+  }
+
+  private getStatsQuery() {
+    return gql`
+    ${this.operationType} getStats {
+      view_processes {
+        name
+        running
+        loading
+        timestamp
+      }
+    }`;
+  }
+
+  private getOngoingHijackQuery() {
+    return gql`
+    ${this.operationType} hijacks {
+      view_hijacks(
+        limit: 10
+        offset: 0
+        order_by: { time_last: desc_nulls_first }
+      ) {
+        active
+        comment
+        configured_prefix
+        hijack_as
+        ignored
+        dormant
+        key
+        mitigation_started
+        num_asns_inf
+        num_peers_seen
+        outdated
+        peers_seen
+        peers_withdrawn
+        prefix
+        resolved
+        seen
+        time_detected
+        time_ended
+        time_last
+        time_started
+        timestamp_of_config
+        type
+        under_mitigation
+        withdrawn
+      }
+    }`;
+  }
+
+  private getBgpCountQuery() {
+    let optionalVars = '';
+    let optionalCondition = '';
+    if (this.options.dateFilter) {
+      optionalVars = ''//'($dateFrom: timestamp, $dateTo: timestamp)';
+      optionalCondition = `(where: { _and: [{ timestamp: {_gte: \"${this.options.dateFrom}\"} },{ timestamp: {_lte: \"${this.options.dateTo}\"} }] })`;
+    }
+
+    return gql`
+            ${this.operationType} getLiveTableCount${optionalVars} {
+              count_data: view_bgpupdates_aggregate${optionalCondition}
+              {
+                aggregate {
+                  count
+                }
+              }
+            }`;
+  }
+
+  public getQuery() {
+    let query: DocumentNode = null;
+    switch (this.type) {
+      case 'stats':
+        query = this.getStatsQuery();
+        break;
+      case 'ongoingHijack':
+        query = this.getOngoingHijackQuery();
+        break;
+      case 'bgpCount':
+        query = this.getBgpCountQuery();
+        break;
+    }
+
+    return query;
+  }
+
+  public executeQuery(vars) {
+    return this.isSubscription
+    ? useSubscription(this.getQuery(), vars)
+    : useQuery(this.getQuery(), vars);
+  }
+}
 
 export const STATS_SUB = gql`
   subscription getStats {

@@ -1,4 +1,5 @@
 import { useQuery, useSubscription } from '@apollo/client';
+import { QueryGenerator } from 'apps/artemis-web/libs/graphql';
 import { findQuery, shallSubscribe } from '../token';
 
 export function useGraphQl(
@@ -12,7 +13,7 @@ export function useGraphQl(
   const { isLive, key, limits } = options;
   console.log(module);
   let vars;
-  const isSubscription = shallSubscribe(isLive) || true;
+  let isSubscription = shallSubscribe(isLive) || true;
   const queryOptions = {};
 
   if (key && key.length) {
@@ -38,18 +39,19 @@ export function useGraphQl(
         };
     queryOptions['limits'] = true;
   } else if (module === 'bgpcount') {
-    const dateTo = new Date().toISOString();
-    const dateFiltered = new Date();
-    dateFiltered.setHours(dateFiltered.getHours() - 1);
-    const dateFrom = dateFiltered.toISOString();
+    
     extraVars = {
       dateTo: '2020-12-19T13:18:34.779Z',
       dateFrom: '2020-12-19T13:18:34.779Z',
     };
-
+    isSubscription = false;
     queryOptions['dateFilter'] = true;
+    console.log(options.dateFrom, options.dateTo)
+    const executor = new QueryGenerator('bgpCount', false, {dateFilter: true, "dateFrom": "2020-11-19T13:18:34.779Z",
+    "dateTo": "2020-12-19T13:18:34.779Z"});
+    console.log(executor.executeQuery({}))
   }
-  console.log(vars);
+
   /* eslint-disable react-hooks/rules-of-hooks */
   const res = isSubscription
     ? useSubscription(findQuery(module, true, queryOptions, extraVars), vars)

@@ -31,7 +31,6 @@ const BGPUpdates = (props) => {
   //   const { worker } = require('../utils/mock-sw/browser');
   //   worker.start();
   // }
-
   const classes = useStyles();
 
   const [filter, setFilter] = useState(0);
@@ -44,13 +43,17 @@ const BGPUpdates = (props) => {
   const [limitState, setLimitState] = useState(40);
   const [offsetState, setOffsetState] = useState(0);
 
+  const dateTo = new Date().toISOString();
+    const dateFiltered = new Date();
+    dateFiltered.setHours(dateFiltered.getHours() - 1);
+    const dateFrom = dateFiltered.toISOString();
   const user = props.user;
-  const BGP_COUNT = useGraphQl('bgpcount', { isLive: true });
+  const BGP_COUNT = useGraphQl('bgpcount', { isLive: true, dateTo: dateTo, dateFrom: dateFrom });
 
   const bgpCount = BGP_COUNT.data
     ? BGP_COUNT.data.count_data.aggregate.count
     : 0;
-
+  
   const onChangeValue = (event) => {
     setSelectState(event.target.value);
 
