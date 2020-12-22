@@ -13,6 +13,7 @@ import { getMainDefinition } from '@apollo/client/utilities';
 import { WebSocketLink } from '@apollo/client/link/ws';
 import { setContext } from '@apollo/client/link/context';
 import { useMemo } from 'react';
+import queryType from './graphql.d';
 
 let accessToken = null;
 const requestToken = async () => {
@@ -100,17 +101,6 @@ export const initializeApollo = (initialState = null) => {
   return apolloClient;
 };
 
-export type queryType =
-  | 'stats'
-  | 'ongoingHijack'
-  | 'hijack'
-  | 'bgpUpdates'
-  | 'hijackByKey'
-  | 'bgpByKey'
-  | 'indexStats'
-  | 'config'
-  | 'bgpCount';
-
 export class QueryGenerator {
   [x: string]: any;
   type: queryType;
@@ -123,25 +113,13 @@ export class QueryGenerator {
     this.options = options;
   }
 
-  private getStatsQuery() {
+  private getHijacksQuery() {
     return gql`
-    ${this.operationType} getStats {
-      view_processes {
-        name
-        running
-        loading
-        timestamp
-      }
-    }`;
-  }
-
-  private getOngoingHijackQuery() {
-    return gql`
-    ${this.operationType} hijacks {
+    ${this.operationType} hijacks${this.getQueryVars()} {
       view_hijacks(
-        limit: 10
-        offset: 0
-        order_by: { time_last: desc_nulls_first }
+        ${this.getConditionLimit()}
+        ${this.getWhereCondition(false, 'time_last')}
+        order_by: { ${this.options.sortColumn}: ${this.options.sortOrder} }
       ) {
         active
         comment
@@ -150,6 +128,7 @@ export class QueryGenerator {
         ignored
         dormant
         key
+        rpki_status
         mitigation_started
         num_asns_inf
         num_peers_seen
@@ -172,14 +151,11 @@ export class QueryGenerator {
   }
 
   private getBgpCountQuery() {
-    let optionalCondition = '';
-    if (this.options.dateFilter) {
-      optionalCondition = `(where: { _and: [{ timestamp: {_gte: \"${this.options.dateFrom}\"} },{ timestamp: {_lte: \"${this.options.dateTo}\"} }] })`;
-    }
-
     return gql`
             ${this.operationType} getLiveTableCount {
-              count_data: view_bgpupdates_aggregate${optionalCondition}
+              count_data: view_bgpupdates_aggregate${this.getWhereCondition(
+                this.options.hasDateFilter || this.options.hasColumnFilter
+              )}
               {
                 aggregate {
                   count
@@ -188,20 +164,94 @@ export class QueryGenerator {
             }`;
   }
 
-  private getBGPUpdates() {
-    let optionalCondition = '';
-    let optionalVars = '';
-    if (this.options.limits) {
-      optionalCondition = `
-        limit: $limit
-        offset: $offset`;
-      optionalVars = '($offset: Int!, $limit: Int!)';
-    }
+  private getHijacksCountQuery() {
     return gql`
-      ${this.operationType} bgpupdates${optionalVars} {
+            ${this.operationType} getLiveTableCount {
+              count_data: view_hijacks_aggregate${this.getWhereCondition(
+                true,
+                'time_last'
+              )}
+              { aggregate { count } }
+            }`;
+  }
+
+  private getHijackByKey() {
+    return gql`
+      query getHijackByKey($key: String!) {
+        view_hijacks(where: { key: { _eq: $key } }, limit: 1) {
+          key
+          type
+          prefix
+          hijack_as
+          num_peers_seen
+          num_asns_inf
+          time_started
+          time_ended
+          time_last
+          mitigation_started
+          time_detected
+          timestamp_of_config
+          under_mitigation
+          resolved
+          active
+          dormant
+          ignored
+          configured_prefix
+          comment
+          seen
+          withdrawn
+          peers_withdrawn
+          peers_seen
+          outdated
+          community_annotation
+          rpki_status
+        }
+      }
+    `;
+  }
+
+  private getStatusQuery() {
+    return gql`
+    ${this.operationType} getStats {
+      view_processes {
+        name
+        running
+        loading
+        timestamp
+      }
+    }
+  `;
+  }
+
+  private getStatisticsQuery() {
+    return gql`
+      subscription getIndexAllStats {
+        view_index_all_stats {
+          monitored_prefixes
+          configured_prefixes
+          monitor_peers
+          total_bgp_updates
+          total_unhandled_updates
+          total_hijacks
+          ignored_hijacks
+          resolved_hijacks
+          withdrawn_hijacks
+          mitigation_hijacks
+          ongoing_hijacks
+          dormant_hijacks
+          acknowledged_hijacks
+          outdated_hijacks
+        }
+      }
+    `;
+  }
+  private getBGPUpdates() {
+    return gql`
+      ${this.operationType} bgpupdates${this.getQueryVars()} {
       view_bgpupdates(
-        ${optionalCondition}
-        order_by: { timestamp: desc_nulls_first }
+        ${this.getConditionLimit()}
+        ${this.getWhereCondition()}
+        order_by: { timestamp: ${this.options.sortOrder} }
       ) {
         prefix
         origin_as
@@ -220,14 +270,91 @@ export class QueryGenerator {
   `;
   }
 
+  private getBGPUpdatesByKey() {
+    return gql`${
+      this.operationType
+    }  getLiveTableData${this.getQueryVars()} { view_bgpupdates: search_bgpupdates_by_hijack_key(
+         order_by: {timestamp: ${this.options.sortOrder} }
+         ${this.getConditionLimit()}
+         ${this.getWhereCondition()}
+         args: {key: \"${this.options.key}\"}) {
+            prefix origin_as peer_asn as_path service type communities timestamp hijack_key handled matched_prefix orig_path
+          }}`;
+  }
+
+  private getBGPCountByKey() {
+    return gql`
+    ${this.operationType} getLiveTableCount($key: String!) { 
+      count_data: search_bgpupdates_by_hijack_key_aggregate(
+        ${this.getWhereCondition()}
+        args: {key: $key}) {
+           aggregate {
+             count
+           } 
+        } }
+      `;
+  }
+
+  private getConfig() {
+    return gql`
+  ${this.operationType} getConfig {
+    view_configs(limit: 1, order_by: { time_modified: desc }) {
+      raw_config
+      comment
+      time_modified
+    }
+  }
+`;
+  }
+
+  private getQueryVars() {
+    return this.options.limits ? `($offset: Int!, $limit: Int!)` : '';
+  }
+
+  private getWhereCondition(parenthesis = false, dateField = 'timestamp') {
+    if (
+      this.options.hasDateFilter ||
+      this.options.hasColumnFilter ||
+      this.options.statusFilter ||
+      this.options.key
+    ) {
+      let condition = `${parenthesis ? '(' : ''}where: { _and: [`;
+      if (this.options.hasDateFilter)
+        condition =
+          condition +
+          `{ ${dateField}: {_gte: \"${this.options.dateRange.dateFrom}\"} },{ ${dateField}: {_lte: \"${this.options.dateRange.dateTo}\"} },`;
+      if (this.options.hasColumnFilter) {
+        let column = Object.keys(this.options.columnFilter)[0];
+        const filterValue = this.options.columnFilter[column].filterVal;
+        if (column.includes('original'))
+          column = column.replace('_original', '');
+        else if (column === 'as_path2') column = 'as_path';
+        condition = condition + `{ ${column}: {_eq: \"${filterValue}\"} }`;
+      }
+      if (this.options.statusFilter) {
+        condition = condition + this.options.statusFilter;
+      }
+
+      return condition + `] },${parenthesis ? ')' : ''}`;
+    } else return '';
+  }
+
+  private getConditionLimit() {
+    return this.options.limits
+      ? `
+      limit: $limit
+      offset: $offset`
+      : '';
+  }
+
   public getQuery() {
     let query: DocumentNode = null;
     switch (this.type) {
       case 'stats':
-        query = this.getStatsQuery();
+        query = this.getStatusQuery();
         break;
-      case 'ongoingHijack':
-        query = this.getOngoingHijackQuery();
+      case 'hijacks':
+        query = this.getHijacksQuery();
         break;
       case 'bgpCount':
         query = this.getBgpCountQuery();
@@ -235,399 +362,29 @@ export class QueryGenerator {
       case 'bgpUpdates':
         query = this.getBGPUpdates();
         break;
+      case 'indexStats':
+        query = this.getStatisticsQuery();
+        break;
+      case 'hijackCount':
+        query = this.getHijacksCountQuery();
+        break;
+      case 'hijackByKey':
+        query = this.getHijackByKey();
+        break;
+      case 'bgpByKey':
+        query = this.getBGPUpdatesByKey();
+        break;
+      case 'bgpCountByKey':
+        query = this.getBGPCountByKey();
+        break;
+      case 'config':
+        query = this.getConfig();
+        break;
     }
 
     return query;
   }
-
-  public executeQuery(vars) {
-    return this.isSubscription
-      ? useSubscription(this.getQuery(), vars)
-      : useQuery(this.getQuery(), vars);
-  }
 }
-
-export const STATS_SUB = gql`
-  subscription getStats {
-    view_processes {
-      name
-      running
-      loading
-      timestamp
-    }
-  }
-`;
-
-export const STATS_QUERY = gql`
-  query getStats {
-    view_processes {
-      name
-      running
-      loading
-      timestamp
-    }
-  }
-`;
-
-// An example graphql query to test the API
-export const ONGOING_HIJACK_SUB = gql`
-  subscription hijacks {
-    view_hijacks(
-      limit: 10
-      offset: 0
-      order_by: { time_last: desc_nulls_first }
-    ) {
-      active
-      comment
-      configured_prefix
-      hijack_as
-      ignored
-      dormant
-      key
-      mitigation_started
-      num_asns_inf
-      num_peers_seen
-      outdated
-      peers_seen
-      peers_withdrawn
-      prefix
-      resolved
-      seen
-      time_detected
-      time_ended
-      time_last
-      time_started
-      timestamp_of_config
-      type
-      under_mitigation
-      withdrawn
-    }
-  }
-`;
-
-export const ONGOING_HIJACK_QUERY = gql`
-  query hijacks {
-    view_hijacks(
-      limit: 10
-      offset: 0
-      order_by: { time_last: desc_nulls_first }
-    ) {
-      time_detected
-      prefix
-      type
-      hijack_as
-      rpki_status
-      num_peers_seen
-      num_asns_inf
-      key
-      seen
-      withdrawn
-      resolved
-      ignored
-      active
-      dormant
-      under_mitigation
-      outdated
-      time_last
-      configured_prefix
-    }
-  }
-`;
-
-// An example graphql query to test the API
-export const HIJACK_SUB = gql`
-  subscription hijacks {
-    view_hijacks(
-      limit: 10
-      offset: 0
-      order_by: { time_last: desc_nulls_first }
-    ) {
-      active
-      comment
-      configured_prefix
-      hijack_as
-      ignored
-      dormant
-      key
-      mitigation_started
-      num_asns_inf
-      num_peers_seen
-      outdated
-      peers_seen
-      peers_withdrawn
-      prefix
-      resolved
-      seen
-      time_detected
-      time_ended
-      time_last
-      time_started
-      timestamp_of_config
-      type
-      under_mitigation
-      withdrawn
-    }
-  }
-`;
-
-export const HIJACK_QUERY = gql`
-  query hijacks {
-    view_hijacks(
-      limit: 10
-      offset: 0
-      order_by: { time_last: desc_nulls_first }
-    ) {
-      time_detected
-      prefix
-      type
-      hijack_as
-      rpki_status
-      num_peers_seen
-      num_asns_inf
-      key
-      seen
-      withdrawn
-      resolved
-      ignored
-      active
-      dormant
-      under_mitigation
-      outdated
-      time_last
-      configured_prefix
-    }
-  }
-`;
-
-export const bgpUpdatesQuery = (isSubscription, options) => {
-  return gql`
-  ${
-    isSubscription ? 'subscription' : 'query'
-  } bgpupdates($offset: Int!, $limit: Int!) {
-    view_bgpupdates(
-      ${
-        options.limits
-          ? `limit: $limit
-      offset: $offset`
-          : ''
-      }
-      order_by: { timestamp: desc_nulls_first }
-    ) {
-      prefix
-      origin_as
-      peer_asn
-      as_path
-      service
-      type
-      communities
-      timestamp
-      hijack_key
-      handled
-      matched_prefix
-      orig_path
-    }
-  }
-`;
-};
-
-export const BGP_QUERY = gql`
-  query bgpupdates($offset: Int, $limit: Int) {
-    view_bgpupdates(
-      limit: $limit
-      offset: $offset
-      order_by: { timestamp: desc_nulls_first }
-    ) {
-      prefix
-      origin_as
-      peer_asn
-      as_path
-      service
-      type
-      communities
-      timestamp
-      hijack_key
-      handled
-      matched_prefix
-      orig_path
-    }
-  }
-`;
-
-export const bgpCount = (
-  isSubscription,
-  options,
-  extraVars = { dateFrom: '', dateTo: '' }
-) => {
-  return gql`
-    ${isSubscription ? 'subscription' : 'query'} getLiveTableCount {
-      count_data: view_bgpupdates_aggregate${
-        options.dateFilter
-          ? `(where: { _and: [{ timestamp: {_gte: "${extraVars.dateFrom}"} },{ timestamp: {_lte: "${extraVars.dateTo}"} }] })`
-          : ''
-      } {
-        aggregate {
-          count
-        }
-      }
-    }
-  `;
-};
-
-export const BGP_COUNT_QUERY = gql`
-  query getLiveTableCount {
-    count_data: view_bgpupdates_aggregate {
-      aggregate {
-        count
-      }
-    }
-  }
-`;
-
-export const getHijackByKeySub = gql`
-  subscription getHijackByKey($key: String!) {
-    view_hijacks(where: { key: { _eq: $key } }, limit: 1) {
-      key
-      type
-      prefix
-      hijack_as
-      num_peers_seen
-      num_asns_inf
-      time_started
-      time_ended
-      time_last
-      mitigation_started
-      time_detected
-      timestamp_of_config
-      under_mitigation
-      resolved
-      active
-      dormant
-      ignored
-      configured_prefix
-      comment
-      seen
-      withdrawn
-      peers_withdrawn
-      peers_seen
-      outdated
-      community_annotation
-      rpki_status
-    }
-  }
-`;
-
-export const getHijackByKeyQuery = gql`
-  query getHijackByKey($key: String!) {
-    view_hijacks(where: { key: { _eq: $key } }, limit: 1) {
-      key
-      type
-      prefix
-      hijack_as
-      num_peers_seen
-      num_asns_inf
-      time_started
-      time_ended
-      time_last
-      mitigation_started
-      time_detected
-      timestamp_of_config
-      under_mitigation
-      resolved
-      active
-      dormant
-      ignored
-      configured_prefix
-      comment
-      seen
-      withdrawn
-      peers_withdrawn
-      peers_seen
-      outdated
-      community_annotation
-      rpki_status
-    }
-  }
-`;
-
-export const getBGPByKeyQuery = gql`
-  query getBGPByKey($key: String!) {
-    view_data(limit: 10, offset: 0, args: { key: $key }) {
-      prefix
-      origin_as
-      peer_asn
-      as_path
-      service
-      type
-      communities
-      timestamp
-      hijack_key
-      handled
-      matched_prefix
-      orig_path
-    }
-  }
-`;
-
-export const getBGPByKeySub = gql`
-  subscription getBGPByKey($key: String!) {
-    search_bgpupdates_by_hijack_key(offset: 0, args: { key: $key }) {
-      prefix
-      origin_as
-      peer_asn
-      as_path
-      service
-      type
-      communities
-      timestamp
-      hijack_key
-      handled
-      matched_prefix
-      orig_path
-    }
-  }
-`;
-
-export const INDEXSTATS_SUB = gql`
-  subscription getIndexAllStats {
-    view_index_all_stats {
-      monitored_prefixes
-      configured_prefixes
-      monitor_peers
-      total_bgp_updates
-      total_unhandled_updates
-      total_hijacks
-      ignored_hijacks
-      resolved_hijacks
-      withdrawn_hijacks
-      mitigation_hijacks
-      ongoing_hijacks
-      dormant_hijacks
-      acknowledged_hijacks
-      outdated_hijacks
-    }
-  }
-`;
-
-export const INDEXSTATS_QUERY = gql`
-  query getIndexAllStats {
-    view_index_all_stats {
-      monitored_prefixes
-      configured_prefixes
-      monitor_peers
-      total_bgp_updates
-      total_unhandled_updates
-      total_hijacks
-      ignored_hijacks
-      resolved_hijacks
-      withdrawn_hijacks
-      mitigation_hijacks
-      ongoing_hijacks
-      dormant_hijacks
-      acknowledged_hijacks
-      outdated_hijacks
-    }
-  }
-`;
 
 export const CONFIG_SUB = gql`
   subscription getConfig {

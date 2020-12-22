@@ -66,7 +66,9 @@ class StatusTable extends Component<StatsType, any> {
                   key={i}
                   process={process}
                   index={i}
-                  tooltip={tooltips[process.name]}
+                  tooltip={
+                    tooltips[process.name.slice(0, process.name.indexOf('-'))]
+                  }
                   date={this.state.date}
                 ></ModuleState>
               );

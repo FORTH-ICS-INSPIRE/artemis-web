@@ -16,18 +16,28 @@ import ErrorBoundary from '../components/error-boundary/error-boundary';
 import HijackTableComponent from '../components/hijack-table/hijack-table';
 import Tooltip from '../components/tooltip/tooltip';
 import TooltipContext from '../context/tooltip-context';
-import { useGraphQl } from '../utils/hooks/use-graphql';
 import { useStyles } from '../utils/styles';
-import { findStatus, shallMock } from '../utils/token';
+import { getISODate, shallMock } from '../utils/token';
 
 const HijacksPage = (props) => {
   const [isLive, setIsLive] = useState(true);
 
-  // if (shallMock()) {
-  //   // eslint-disable-next-line @typescript-eslint/no-var-requires
-  //   const { worker } = require('../utils/mock-sw/browser');
-  //   worker.start();
-  // }
+  if (shallMock()) {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const { worker } = require('../utils/mock-sw/browser');
+    worker.start();
+  }
+
+  const [filterDate, setFilterDate] = useState(0);
+  const [filterStatus, setFilterStatus] = useState('');
+  const [filterButton, setFilterButton] = useState(0);
+  const [distinctValues, setDistinctValues] = useState([]);
+  const [selectState, setSelectState] = useState('');
+  const [statusButton, setStatusButton] = useState('');
+  const [key, setKey] = useState(' ');
+  const context = React.useContext(TooltipContext);
+  const [tooltips, setTooltips] = useState({});
+  const [filteredHijackData, setFilteredHijackData] = useState([]);
 
   const classes = useStyles();
   const setStatus = (status) => {
@@ -40,50 +50,17 @@ const HijacksPage = (props) => {
     }
   };
 
-  const [filterDate, setFilterDate] = useState(0);
-  const [filterStatus, setFilterStatus] = useState('');
-  const [filterButton, setFilterButton] = useState(0);
-  const [distinctValues, setDistinctValues] = useState([]);
-  const [selectState, setSelectState] = useState('');
-  const [statusButton, setStatusButton] = useState('');
-  const [key, setKey] = useState(' ');
-  const context = React.useContext(TooltipContext);
-  const [tooltips, setTooltips] = useState({});
+  const dateFrom: string = getISODate(filterDate);
+  const dateTo: string = getISODate(0);
 
   const user = props.user;
-
-  const HIJACK_RES = useGraphQl('hijack', isLive);
-  const HIJACK_DATA = HIJACK_RES.data;
-
-  let hijacks = HIJACK_DATA ? HIJACK_DATA.view_hijacks : [];
-  hijacks = hijacks.map((entry) => ({
-    ...entry,
-    status: findStatus(entry)[0] ?? '',
-  }));
 
   const filteredDate = new Date();
   filteredDate.setHours(filteredDate.getHours() - filterDate);
 
-  const filteredHijacks =
-    filterDate !== 0
-      ? hijacks.filter(
-          (entry) =>
-            new Date(entry.timestamp) >= filteredDate &&
-            (entry.status === filterStatus || '' === filterStatus)
-        )
-      : hijacks.filter(
-          (entry) => entry.status === filterStatus || '' === filterStatus
-        );
-
-  const asns = [];
-  filteredHijacks.forEach((entry, i) => {
-    entry.id = i;
-    if (!asns.includes(entry.hijack_as)) asns.push(entry.hijack_as);
-  });
-
   const onChangeValue = (event) => {
     setDistinctValues(
-      filteredHijacks
+      filteredHijackData
         .map((entry) => {
           return entry[event.target.value];
         })
@@ -225,13 +202,18 @@ const HijacksPage = (props) => {
                   </div>
                 </div>
                 <div className="card-body" style={{ textAlign: 'center' }}>
-                  <ErrorBoundary
+                  {/* <ErrorBoundary
                     containsData={filteredHijacks.length > 0}
                     noDataMessage={'No hijack alerts.'}
                     customError={HIJACK_RES.error}
-                  >
-                    <HijackTableComponent data={filteredHijacks} />
-                  </ErrorBoundary>
+                  > */}
+                  <HijackTableComponent
+                    filter={filterDate}
+                    isLive={isLive}
+                    filterStatus={filterStatus}
+                    setFilteredHijackData={setFilteredHijackData}
+                  />
+                  {/* </ErrorBoundary> */}
                 </div>
               </div>
             </div>

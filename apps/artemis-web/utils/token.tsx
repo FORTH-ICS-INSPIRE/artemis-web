@@ -1,25 +1,6 @@
+import { stat } from 'fs';
 import React from 'react';
 import ReactTooltip from 'react-tooltip';
-import {
-  bgpCount,
-  bgpUpdatesQuery,
-  BGP_COUNT_QUERY,
-  BGP_QUERY,
-  CONFIG_QUERY,
-  CONFIG_SUB,
-  getBGPByKeyQuery,
-  getBGPByKeySub,
-  getHijackByKeyQuery,
-  getHijackByKeySub,
-  HIJACK_QUERY,
-  HIJACK_SUB,
-  INDEXSTATS_QUERY,
-  INDEXSTATS_SUB,
-  ONGOING_HIJACK_QUERY,
-  ONGOING_HIJACK_SUB,
-  STATS_QUERY,
-  STATS_SUB,
-} from '../libs/graphql';
 
 export const getRandomString = (len) => {
   const buf = [],
@@ -87,6 +68,8 @@ export const genTooltip = (column, components, label, text): any => (
   </>
 );
 
+export const isObjectEmpty = (o) => Object.keys(o).length === 0;
+
 const isDevelopment = () => process.env.NODE_ENV === 'development';
 const isBrowser = () => typeof window !== 'undefined';
 export const shallMock = () => isDevelopment() && isBrowser();
@@ -94,26 +77,12 @@ export const shallMock = () => isDevelopment() && isBrowser();
 const isProduction = () => process.env.NODE_ENV === 'production';
 export const shallSubscribe = (isLive) => isProduction() && isLive;
 
-export const findQuery = (action, isSubscription, options, extraVars) => {
-  console.log('mpike');
-  const actionQueryMap = {
-    stats: STATS_SUB,
-    ongoing_hijack: ONGOING_HIJACK_SUB,
-    hijack: HIJACK_SUB,
-    bgpupdates: bgpUpdatesQuery(isSubscription, options),
-    hijackByKey: getHijackByKeySub,
-    bgpByKey: getBGPByKeySub,
-    index_stats: INDEXSTATS_SUB,
-    config: CONFIG_SUB,
-    bgpcount: bgpCount(isSubscription, options, extraVars),
-  };
-  return actionQueryMap[action];
-};
-
-export const getISODate = (filter) => {
+export const getISODate = (filter: number): string => {
   const dateFiltered = new Date();
-  dateFiltered.setHours(dateFiltered.getHours() - filter);
-  dateFiltered.setSeconds(0, 0);
+  if (filter >= 0 && filter <= 24) {
+    dateFiltered.setHours(dateFiltered.getHours() - filter);
+    dateFiltered.setSeconds(0, 0);
+  }
   return dateFiltered.toISOString();
 };
 
@@ -123,10 +92,29 @@ export const findStatus = (row) => {
   if (row.withdrawn) statuses.push('Withdrawn');
   if (row.resolved) statuses.push('Resolved');
   if (row.ignored) statuses.push('Ignored');
-  if (row.active) statuses.push('Active');
+  if (row.active) statuses.push('Ongoing');
   if (row.dormant) statuses.push('Dormant');
   if (row.under_mitigation) statuses.push('Under Mitigation');
   if (row.outdated) statuses.push('Outdated');
 
   return statuses;
+};
+
+export const getStatusField = (status: string) => {
+  if (status.includes('Ongoing')) return 'active';
+  else return status.replace(' ', '_').toLowerCase();
+};
+
+export const getSortCaret = (order) => {
+  const isDesc = !order || order === 'desc';
+
+  return (
+    <span>
+      &nbsp;&nbsp;{!isDesc ? <>&darr;</> : <></>}
+      <span style={{ color: 'red' }}>
+        {!isDesc ? <>/&uarr;</> : <>&darr;</>}
+      </span>
+      {isDesc ? <>/&uarr;</> : <></>}
+    </span>
+  );
 };

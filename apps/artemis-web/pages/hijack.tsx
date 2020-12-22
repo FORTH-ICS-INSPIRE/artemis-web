@@ -20,7 +20,7 @@ import TooltipContext from '../context/tooltip-context';
 import { useGraphQl } from '../utils/hooks/use-graphql';
 import { extractHijackInfos } from '../utils/parsers';
 import { useStyles } from '../utils/styles';
-import { formatDate, fromEntries, shallMock } from '../utils/token';
+import { shallMock, shallSubscribe } from '../utils/token';
 
 const ViewHijackPage = (props) => {
   const [isLive, setIsLive] = useState(true);
@@ -59,13 +59,20 @@ const ViewHijackPage = (props) => {
 
   const classes = useStyles();
   const router = useRouter();
-  const key: string = router.query.key.toString() ?? '';
+  const hijackKey: string = router.query.key.toString() ?? '';
   const user = props.user;
 
   const [distinctValues, setDistinctValues] = useState([]);
   const [selectState, setSelectState] = useState('');
   const [seenState, setSeenState] = useState(false);
   const [withdrawState, setWithdrawState] = useState(false);
+  const [hijackDataState, setHijackDataState] = useState({
+    peers_seen: [],
+    peers_withdrawn: [],
+    comment: '',
+  });
+  const [hijackExists, setHijackExists] = useState(true);
+  const [filteredBgpData, setFilteredBgpData] = useState([]);
   const [editorState, setEditorState] = useState(() =>
     EditorState.createEmpty()
   );
@@ -80,40 +87,34 @@ const ViewHijackPage = (props) => {
     leave: { opacity: 0 },
   });
 
-  const { loading, data } = useGraphQl('hijackByKey', isLive, key);
-  const HIJACK_DATA = data;
+  useGraphQl('hijackByKey', {
+    callback: (data) => {
+      const hijacks = shallSubscribe(isLive)
+        ? data.subscriptionData.data.view_hijacks
+        : data.view_hijacks;
 
-  const BGP_DATA = useGraphQl('bgpByKey', isLive, key).data;
-  const hijack = HIJACK_DATA ? HIJACK_DATA.view_hijacks[0] : [];
-  let bgp = BGP_DATA ? BGP_DATA.view_data : [];
+      if (hijacks.length == 0) setHijackExists(false);
+      setHijackDataState(hijacks[0]);
+    },
+    isLive: shallSubscribe(props.isLive),
+    key: hijackKey,
+    sortOrder: 'desc',
+    sortColumn: 'time_last',
+    hasDateFilter: false,
+    hasColumnFilter: false,
+    hasStatusFilter: false,
+  });
 
-  bgp = bgp.map((row) =>
-    fromEntries(
-      Object.entries(row).map(([key, value]: [string, any]) => {
-        if (key === 'timestamp') return [key, formatDate(new Date(value))];
-        else if (key === 'service') return [key, value.replace(/\|/g, ' -> ')];
-        else if (key === 'handled')
-          return [
-            key,
-            value ? (
-              <img alt="" src="handled.png" />
-            ) : (
-              <img alt="" src="./unhadled.png" />
-            ),
-          ];
-        else return [key, value];
-      })
-    )
-  );
-
-  const seen = hijack ? hijack.peers_seen ?? [] : [];
-  const withdrawn = hijack ? hijack.peers_withdrawn ?? [] : [];
+  const seen = hijackDataState ? hijackDataState.peers_seen ?? [] : [];
+  const withdrawn = hijackDataState
+    ? hijackDataState.peers_withdrawn ?? []
+    : [];
 
   const onChangeValue = (event) => {
     setSelectState(event.target.value);
 
     setDistinctValues(
-      bgp
+      filteredBgpData
         .map((entry) => {
           return entry[event.target.value];
         })
@@ -121,33 +122,21 @@ const ViewHijackPage = (props) => {
     );
   };
 
-  const [hijackInfoLeft, hijackInfoRight] = extractHijackInfos(hijack, {
-    tooltips: tooltips,
-    setTooltips: setTooltips,
-    context: context,
-  });
-
-  const asns = [];
-  bgp.forEach((entry, i) => {
-    entry.id = i;
-    if (!asns.includes(entry.origin_as))
-      asns.push(
-        entry.origin_as === '-'
-          ? entry.origin_as
-          : parseInt(entry.origin_as, 10)
-      );
-    if (!asns.includes(entry.peer_asn))
-      asns.push(
-        entry.peer_asn === '-' ? entry.peer_asn : parseInt(entry.peer_asn, 10)
-      );
-  });
+  const [hijackInfoLeft, hijackInfoRight] = extractHijackInfos(
+    hijackDataState,
+    {
+      tooltips: tooltips,
+      setTooltips: setTooltips,
+      context: context,
+    }
+  );
 
   return (
     <>
       <Head>
         <title>ARTEMIS - Hijack</title>
       </Head>
-      {user && (HIJACK_DATA || loading) && (
+      {user && hijackExists && (
         <div
           className="container overview col-lg-12"
           style={{ paddingTop: '120px' }}
@@ -160,7 +149,7 @@ const ViewHijackPage = (props) => {
                   <h1>
                     Viewing Hijack
                     <small id="hijack_status">
-                      {findStatus(hijack).map((status, i) => (
+                      {findStatus(hijackDataState).map((status, i) => (
                         <span
                           key={i}
                           style={{ marginLeft: '10px' }}
@@ -295,10 +284,10 @@ const ViewHijackPage = (props) => {
               <div className="card">
                 <div className="card-header">Comments</div>
                 <div className="card-body">
-                  {hijack.comment ? (
+                  {hijackDataState.comment ? (
                     <Editor
                       readOnly={true}
-                      placeholder={hijack.comment}
+                      placeholder={hijackDataState.comment}
                       editorState={editorState}
                       onChange={setEditorState}
                     />
@@ -404,20 +393,13 @@ const ViewHijackPage = (props) => {
               <div className="card">
                 <div className="card-header">Related BGP Updates</div>
                 <div className="card-body" style={{ textAlign: 'center' }}>
-                  {bgp.length > 0 ? (
-                    <BGPTableComponent
-                      data={bgp}
-                      asns={asns}
-                      skippedCols={['as_path', 'hijack_key']}
-                    />
-                  ) : (
-                    <div>
-                      <p>
-                        <img alt="" src="checkmark.png" />
-                      </p>
-                      <h3>No related bgp updates.</h3>
-                    </div>
-                  )}
+                  <BGPTableComponent
+                    filter={0}
+                    isLive={isLive}
+                    setFilteredBgpData={setFilteredBgpData}
+                    hijackKey={hijackKey}
+                    skippedCols={['as_path', 'hijack_key']}
+                  />
                 </div>
               </div>
             </div>
@@ -446,31 +428,32 @@ const ViewHijackPage = (props) => {
               <div className="card">
                 <div className="card-header">
                   <Grid container spacing={3}>
-                    {distinctValues.map((value, i) => {
-                      if (value !== undefined) {
-                        const asn = value;
-                        if (
-                          selectState === 'origin_as' ||
-                          selectState === 'peer_asn'
-                        )
-                          value = (
-                            <div key={i}>
-                              <Tooltip
-                                tooltips={tooltips}
-                                setTooltips={setTooltips}
-                                asn={asn}
-                                label={`originD${i}`}
-                                context={context}
-                              />
-                            </div>
+                    {filteredBgpData &&
+                      distinctValues.map((value, i) => {
+                        if (value !== undefined) {
+                          const asn = value;
+                          if (
+                            selectState === 'origin_as' ||
+                            selectState === 'peer_asn'
+                          )
+                            value = (
+                              <div key={i}>
+                                <Tooltip
+                                  tooltips={tooltips}
+                                  setTooltips={setTooltips}
+                                  asn={asn}
+                                  label={`originD${i}`}
+                                  context={context}
+                                />
+                              </div>
+                            );
+                          return (
+                            <Grid key={i} item xs>
+                              <Paper className={classes.paper}>{value}</Paper>
+                            </Grid>
                           );
-                        return (
-                          <Grid key={i} item xs>
-                            <Paper className={classes.paper}>{value}</Paper>
-                          </Grid>
-                        );
-                      } else return <> </>;
-                    })}
+                        } else return <> </>;
+                      })}
                   </Grid>
                 </div>
               </div>
@@ -478,14 +461,12 @@ const ViewHijackPage = (props) => {
           </div>
         </div>
       )}
-      {user &&
-        (!HIJACK_DATA || !HIJACK_DATA.view_hijacks.length) &&
-        !loading && (
-          <DefaultErrorPage
-            statusCode={404}
-            title={'This hijack does not exist'}
-          />
-        )}
+      {user && !hijackExists && (
+        <DefaultErrorPage
+          statusCode={404}
+          title={'This hijack does not exist'}
+        />
+      )}
     </>
   );
 };

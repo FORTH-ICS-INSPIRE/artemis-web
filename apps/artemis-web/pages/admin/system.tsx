@@ -19,8 +19,17 @@ const SystemPage = (props) => {
 
   const user = props.user;
 
-  const STATS_DATA = useGraphQl('stats').data;
-  const CONFIG_DATA = useGraphQl('config').data;
+  const STATS_RES = useGraphQl('stats', {
+    isLive: true,
+    hasDateFilter: false,
+    hasColumnFilter: false,
+  });
+  const STATS_DATA = STATS_RES.data;
+  const CONFIG_DATA = useGraphQl('config', {
+    isLive: false,
+    hasDateFilter: false,
+    hasColumnFilter: false,
+  }).data;
 
   const processes = STATS_DATA ? STATS_DATA.view_processes : null;
 

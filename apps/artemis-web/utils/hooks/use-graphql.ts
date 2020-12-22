@@ -1,31 +1,14 @@
+import { QueryGenerator } from '../../libs/graphql';
+import { shallSubscribe } from '../token';
+import optionsType from './use-graphql.d';
+import queryType from '../../libs/graphql.d';
 import { useQuery, useSubscription } from '@apollo/client';
-import { QueryGenerator, queryType } from 'apps/artemis-web/libs/graphql';
-import { findQuery, shallSubscribe } from '../token';
-
-type limitsType = {
-  offset: Number;
-  limit: Number;
-};
-
-type dateRangeType = {
-  dateFrom: string;
-  dateTo: String;
-};
-
-type optionsType = {
-  isLive: boolean;
-  key?: string;
-  limits?: limitsType;
-  dateFilter?: boolean;
-  dateRange?: dateRangeType;
-  callback?: (data: any) => void;
-};
 
 export function useGraphQl(module: queryType, options: optionsType) {
   const { isLive, key, limits, callback } = options;
   let vars;
-  let isSubscription = shallSubscribe(isLive) || true;
-
+  const varTmp = {};
+  const isSubscription = shallSubscribe(isLive);
   if (key && key.length) {
     vars = isSubscription
       ? {
@@ -36,21 +19,27 @@ export function useGraphQl(module: queryType, options: optionsType) {
           onCompleted: (data) => callback(data),
           variables: { key },
         };
-  } else if (limits) {
+  }
+  if (limits) {
     const { limit, offset } = limits;
+
     vars = isSubscription
       ? {
           onSubscriptionData: (data) => callback(data),
-          variables: { offset, limit },
+          variables: { offset, limit, ...varTmp },
         }
       : {
           onCompleted: (data) => callback(data),
-          variables: { offset, limit },
+          variables: { offset, limit, ...varTmp },
         };
   }
+  const generator = new QueryGenerator(module, isSubscription, options);
 
-  const executor = new QueryGenerator(module, false, options);
-  const res = executor.executeQuery(vars);
+  /* eslint-disable react-hooks/rules-of-hooks */
+  const res = isSubscription
+    ? useSubscription(generator.getQuery(), vars)
+    : useQuery(generator.getQuery(), vars);
+  /* eslint-enable react-hooks/rules-of-hooks */
 
   const { error } = res;
   if (error) {

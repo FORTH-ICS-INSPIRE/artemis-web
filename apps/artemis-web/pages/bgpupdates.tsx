@@ -15,18 +15,15 @@ import BGPTableComponent from '../components/bgp-table/bgp-table';
 import ErrorBoundary from '../components/error-boundary/error-boundary';
 import Tooltip from '../components/tooltip/tooltip';
 import TooltipContext from '../context/tooltip-context';
-import { BGP_COUNT_QUERY } from '../libs/graphql';
 import { useGraphQl } from '../utils/hooks/use-graphql';
 import { useStyles } from '../utils/styles';
-import { formatDate, fromEntries, getISODate } from '../utils/token';
+import { getISODate, shallMock } from '../utils/token';
 
 const BGPUpdates = (props) => {
   const [isLive, setIsLive] = useState(true);
-  const isDevelopment: boolean = process.env.NODE_ENV === 'development';
-  const isBrowser: boolean = typeof window !== 'undefined';
   const context = React.useContext(TooltipContext);
 
-  //  if (isDevelopment && isBrowser) {
+  //  if (shallMock()) {
   //   // eslint-disable-next-line @typescript-eslint/no-var-requires
   //   const { worker } = require('../utils/mock-sw/browser');
   //   worker.start();
@@ -38,24 +35,19 @@ const BGPUpdates = (props) => {
   const [distinctValues, setDistinctValues] = useState([]);
   const [selectState, setSelectState] = useState('');
   const [tooltips, setTooltips] = useState({});
-  const [bgpData, setBgpData] = useState([]);
   const [filteredBgpData, setFilteredBgpData] = useState([]);
-  const [limitState, setLimitState] = useState(40);
-  const [offsetState, setOffsetState] = useState(0);
 
   const dateFrom: string = getISODate(filter);
   const dateTo: string = getISODate(0);
   const user = props.user;
 
-  const BGP_COUNT = useGraphQl('bgpCount', {
-    isLive: isLive,
-    dateFilter: filter !== 0,
-    dateRange: { dateTo: dateTo, dateFrom: dateFrom },
-  });
+  // const BGP_COUNT = useGraphQl('bgpCount', {
+  //   isLive: isLive,
+  //   hasDateFilter: filter !== 0,
+  //   dateRange: { dateTo: dateTo, dateFrom: dateFrom },
+  // });
 
-  const bgpCount = BGP_COUNT.data
-    ? BGP_COUNT.data.count_data.aggregate.count
-    : 0;
+  const bgpCount = 1;
 
   const onChangeValue = (event) => {
     setSelectState(event.target.value);

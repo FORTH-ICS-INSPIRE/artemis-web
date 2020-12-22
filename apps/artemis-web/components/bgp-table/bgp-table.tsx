@@ -21,8 +21,10 @@ import {
   formatDate,
   fromEntries,
   genTooltip,
-  shallSubscribe,
   getISODate,
+  getSortCaret,
+  isObjectEmpty,
+  shallSubscribe,
 } from '../../utils/token';
 import Tooltip from '../tooltip/tooltip';
 
@@ -241,29 +243,7 @@ const columns = [
         'The time when the BGP update was generated, as set by the BGP monitor or route collector.'
       ),
     sortCaret: (order) => {
-      if (!order)
-        return (
-          <span>
-            &nbsp;&nbsp;&darr;
-            <span style={{ color: 'red' }}>/&uarr;</span>
-          </span>
-        );
-      if (order === 'asc')
-        return (
-          <span>
-            &nbsp;&nbsp;&darr;
-            <span style={{ color: 'red' }}>/&uarr;</span>
-          </span>
-        );
-      if (order === 'desc')
-        return (
-          <span>
-            &nbsp;&nbsp;
-            <span style={{ color: 'red' }}>&darr;</span>
-            /&uarr;
-          </span>
-        );
-      return null;
+      return getSortCaret(order);
     },
   },
   {
@@ -306,7 +286,7 @@ const columns = [
     filter: exactMatchFilter,
   },
   {
-    dataField: 'as_path',
+    dataField: 'as_path2',
     headerTitle: false,
     headerFormatter: (column, colIndex, components) =>
       genTooltip(
@@ -397,6 +377,7 @@ function handleData(
   filter = 0
 ) {
   let bgp;
+
   if (bgpData && bgpData.length) {
     bgp = bgpData.map((row, i) => {
       const origin_as = (
@@ -417,8 +398,7 @@ function handleData(
           context={context}
         />
       );
-      const path = row.as_path;
-      row.as_path = path.map((asn, j) => {
+      const as_path = row.as_path.map((asn, j) => {
         return (
           <div key={j} style={{ float: 'left', marginLeft: '4px' }}>
             <Tooltip
@@ -435,21 +415,14 @@ function handleData(
         ...row,
         origin_as_original: origin_as,
         peer_asn_original: peer_as,
+        as_path2: as_path,
       };
     });
   } else {
     bgp = [];
   }
 
-  const filteredDate: Date = new Date();
-  filteredDate.setHours(filteredDate.getHours() - filter);
-
-  let filteredBgp: Array<any> =
-    filter !== 0
-      ? bgp.filter((entry) => new Date(entry.timestamp) >= filteredDate)
-      : bgp;
-
-  filteredBgp = filteredBgp.map((row, i) =>
+  bgp = bgp.map((row, i) =>
     fromEntries(
       Object.entries(row).map(([key, value]: [string, any]) => {
         if (key === 'timestamp') return [key, formatDate(new Date(value))];
@@ -465,66 +438,77 @@ function handleData(
     )
   );
 
-  filteredBgp.forEach((entry, i) => {
+  bgp.forEach((entry, i) => {
     entry.id = i;
   });
+  console.log(bgp);
+  setFilteredBgpData(bgp);
 
-  setFilteredBgpData(filteredBgp);
-
-  return filteredBgp;
+  return bgp;
 }
 
 const BGPTableComponent = (props) => {
-  const { setFilteredBgpData, filter } = props;
+  const { setFilteredBgpData, filter, hijackKey } = props;
   const [bgpData, setBgpData] = useState([]);
+  const [bgpCount, setBgpCount] = useState(0);
   const context = React.useContext(TooltipContext);
   const [tooltips, setTooltips] = useState({});
   const [page, setPage] = useState(0);
   const [sizePerPage, setSizePerPage] = useState(10);
+  const [columnFilter, setColumnFilter] = useState({});
   const dateFrom: string = getISODate(filter);
   const dateTo: string = getISODate(0);
 
-  const BGP_COUNT = useGraphQl('bgpCount', {
+  const BGP_COUNT = useGraphQl(hijackKey ? 'bgpCountByKey' : 'bgpCount', {
+    callback: (data) => {
+      setBgpCount(data.count_data.aggregate.count);
+    },
     isLive: props.isLive,
-    dateFilter: filter !== 0,
+    hasColumnFilter: !isObjectEmpty(columnFilter),
+    columnFilter: columnFilter,
+    hasDateFilter: filter !== 0,
     dateRange: { dateTo: dateTo, dateFrom: dateFrom },
+    key: hijackKey,
   });
   const [limitState, setLimitState] = useState(10);
   const [offsetState, setOffsetState] = useState(0);
+  const [sortState, setSortState] = useState('desc');
   const [filterState, setFilterState] = useState(filter);
   const filteredDate: Date = new Date();
   filteredDate.setHours(filteredDate.getHours() - filter);
-  // if (filter !== filterState)
-  //   setFilterState(filter);
 
-  const BGP_RES = useGraphQl('bgpUpdates', {
+  const BGP_RES = useGraphQl(hijackKey ? 'bgpByKey' : 'bgpUpdates', {
     callback: (data) => {
-      setBgpData(
-        handleData(
-          shallSubscribe(true) || true
-            ? data.subscriptionData.data.view_bgpupdates.slice(
-                offsetState,
-                limitState + offsetState
-              )
-            : data.view_bgpupdates.slice(offsetState, limitState + offsetState),
-          tooltips,
-          setTooltips,
-          context,
-          setFilteredBgpData,
-          filterState
-        )
+      console.log(data);
+      const processedData = handleData(
+        shallSubscribe(props.isLive)
+          ? data.subscriptionData.data.view_bgpupdates.slice(
+              offsetState,
+              limitState
+            )
+          : data.view_bgpupdates,
+        tooltips,
+        setTooltips,
+        context,
+        setFilteredBgpData,
+        filterState
       );
+
+      setBgpData(processedData);
     },
-    isLive: true,
+    isLive: shallSubscribe(props.isLive),
     limits: {
       limit: limitState,
       offset: offsetState,
     },
+    sortOrder: sortState,
+    sortColumn: 'time_last',
+    hasDateFilter: filter !== 0,
+    key: hijackKey,
+    hasColumnFilter: !isObjectEmpty(columnFilter),
+    columnFilter: columnFilter,
+    dateRange: { dateTo: dateTo, dateFrom: dateFrom },
   });
-
-  const bgpCount = BGP_COUNT.data
-    ? BGP_COUNT.data.count_data.aggregate.count
-    : 0;
 
   const skippedCols = props.skippedCols ?? [];
 
@@ -580,6 +564,8 @@ const BGPTableComponent = (props) => {
     prePageTitle: 'Pre page',
     firstPageTitle: 'Next page',
     lastPageTitle: 'Last page',
+    sortOrder: 'desc',
+    sortName: 'timestamp',
     showTotal: true,
     custom: true,
     hidePageListOnlyOnePage: true,
@@ -626,12 +612,17 @@ const BGPTableComponent = (props) => {
     );
   };
 
-  const handleTableChange = (type, { page, sizePerPage }) => {
+  const handleTableChange = (
+    type,
+    { page, sizePerPage, sortOrder, filters }
+  ) => {
     const currentIndex = page * sizePerPage;
     setPage(page);
     setSizePerPage(sizePerPage);
     setOffsetState(currentIndex);
-    setLimitState(currentIndex + sizePerPage);
+    setLimitState(sizePerPage);
+    if (sortOrder) setSortState(sortOrder);
+    if (filters) setColumnFilter(filters);
   };
 
   const contentTable = ({ paginationProps, paginationTableProps }) => (
@@ -652,7 +643,6 @@ const BGPTableComponent = (props) => {
               <SizePerPageDropdownStandalone {...paginationProps} />
               <MyExportCSV {...toolkitprops.csvProps}>Export CSV!!</MyExportCSV>
             </div>
-
             <BootstrapTable
               remote
               wrapperClasses="table-responsive"

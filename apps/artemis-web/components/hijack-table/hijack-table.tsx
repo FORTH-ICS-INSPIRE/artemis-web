@@ -1,4 +1,5 @@
 import { Button } from '@material-ui/core';
+import { useGraphQl } from '../../utils/hooks/use-graphql';
 import Link from 'next/link';
 import React, { useState } from 'react';
 import BootstrapTable from 'react-bootstrap-table-next';
@@ -15,7 +16,16 @@ import paginationFactory, {
 } from 'react-bootstrap-table2-paginator';
 import ToolkitProvider from 'react-bootstrap-table2-toolkit';
 import TooltipContext from '../../context/tooltip-context';
-import { formatDate, genTooltip } from '../../utils/token';
+import {
+  findStatus,
+  formatDate,
+  genTooltip,
+  getISODate,
+  getSortCaret,
+  getStatusField,
+  isObjectEmpty,
+  shallSubscribe,
+} from '../../utils/token';
 import Tooltip from '../tooltip/tooltip';
 
 const exactMatchFilter = textFilter({
@@ -31,7 +41,7 @@ const exactMatchFilter = textFilter({
 
 const columns = [
   {
-    dataField: 'update',
+    dataField: 'time_last',
     text: 'Last Update',
     sort: true,
     headerTitle: false,
@@ -43,33 +53,11 @@ const columns = [
         'The timestamp of the newest known (to the system) BGP update that is related to the hijack.'
       ),
     sortCaret: (order) => {
-      if (!order)
-        return (
-          <span>
-            &nbsp;&nbsp;&darr;
-            <span style={{ color: 'red' }}>/&uarr;</span>
-          </span>
-        );
-      if (order === 'asc')
-        return (
-          <span>
-            &nbsp;&nbsp;&darr;
-            <span style={{ color: 'red' }}>/&uarr;</span>
-          </span>
-        );
-      if (order === 'desc')
-        return (
-          <span>
-            &nbsp;&nbsp;
-            <span style={{ color: 'red' }}>&darr;</span>
-            /&uarr;
-          </span>
-        );
-      return null;
+      return getSortCaret(order);
     },
   },
   {
-    dataField: 'time',
+    dataField: 'time_detected',
     text: 'Time Detected',
     sort: true,
     headerTitle: false,
@@ -81,29 +69,7 @@ const columns = [
         'The time when a hijack event was first detected by the system'
       ),
     sortCaret: (order) => {
-      if (!order)
-        return (
-          <span>
-            &nbsp;&nbsp;&darr;
-            <span style={{ color: 'red' }}>/&uarr;</span>
-          </span>
-        );
-      if (order === 'asc')
-        return (
-          <span>
-            &nbsp;&nbsp;&darr;
-            <span style={{ color: 'red' }}>/&uarr;</span>
-          </span>
-        );
-      if (order === 'desc')
-        return (
-          <span>
-            &nbsp;&nbsp;
-            <span style={{ color: 'red' }}>&darr;</span>
-            /&uarr;
-          </span>
-        );
-      return null;
+      return getSortCaret(order);
     },
   },
   {
@@ -119,7 +85,7 @@ const columns = [
     text: 'Status',
   },
   {
-    dataField: 'hprefix',
+    dataField: 'prefix',
     headerTitle: false,
     headerFormatter: (column, colIndex, components) =>
       genTooltip(
@@ -132,7 +98,7 @@ const columns = [
     filter: exactMatchFilter,
   },
   {
-    dataField: 'mprefix',
+    dataField: 'configured_prefix',
     headerTitle: false,
     headerFormatter: (column, colIndex, components) =>
       genTooltip(
@@ -145,7 +111,7 @@ const columns = [
     filter: exactMatchFilter,
   },
   {
-    dataField: 'htype',
+    dataField: 'type',
     headerTitle: false,
     headerFormatter: (column, colIndex, components) =>
       genTooltip(
@@ -158,7 +124,7 @@ const columns = [
     filter: textFilter(),
   },
   {
-    dataField: 'as',
+    dataField: 'hijack_as',
     headerTitle: false,
     headerFormatter: (column, colIndex, components) =>
       genTooltip(
@@ -171,7 +137,7 @@ const columns = [
     filter: exactMatchFilter,
   },
   {
-    dataField: 'rpki',
+    dataField: 'rpki_status',
     headerTitle: false,
     headerFormatter: (column, colIndex, components) =>
       genTooltip(
@@ -189,7 +155,7 @@ const columns = [
     }),
   },
   {
-    dataField: 'peers',
+    dataField: 'num_peers_seen',
     headerTitle: false,
     headerFormatter: (column, colIndex, components) =>
       genTooltip(
@@ -201,33 +167,11 @@ const columns = [
     text: '# Peers Seen',
     sort: true,
     sortCaret: (order) => {
-      if (!order)
-        return (
-          <span>
-            &nbsp;&nbsp;&darr;
-            <span style={{ color: 'red' }}>/&uarr;</span>
-          </span>
-        );
-      if (order === 'asc')
-        return (
-          <span>
-            &nbsp;&nbsp;&darr;
-            <span style={{ color: 'red' }}>/&uarr;</span>
-          </span>
-        );
-      if (order === 'desc')
-        return (
-          <span>
-            &nbsp;&nbsp;
-            <span style={{ color: 'red' }}>&darr;</span>
-            /&uarr;
-          </span>
-        );
-      return null;
+      return getSortCaret(order);
     },
   },
   {
-    dataField: 'ASes',
+    dataField: 'num_asns_inf',
     text: '# ASes Infected',
     headerTitle: false,
     headerFormatter: (column, colIndex, components) =>
@@ -239,29 +183,7 @@ const columns = [
       ),
     sort: true,
     sortCaret: (order) => {
-      if (!order)
-        return (
-          <span>
-            &nbsp;&nbsp;&darr;
-            <span style={{ color: 'red' }}>/&uarr;</span>
-          </span>
-        );
-      if (order === 'asc')
-        return (
-          <span>
-            &nbsp;&nbsp;&darr;
-            <span style={{ color: 'red' }}>/&uarr;</span>
-          </span>
-        );
-      if (order === 'desc')
-        return (
-          <span>
-            &nbsp;&nbsp;
-            <span style={{ color: 'red' }}>&darr;</span>
-            /&uarr;
-          </span>
-        );
-      return null;
+      return getSortCaret(order);
     },
   },
   {
@@ -300,49 +222,133 @@ const statuses = {
   Outdated: 'dark',
 };
 
-const HijackTableComponent = (props) => {
-  const HIJACK_DATA = props.data;
+function handleData(
+  data,
+  tooltips,
+  setTooltips,
+  context,
+  offset,
+  setFilteredHijackData
+) {
+  const HIJACK_DATA = data;
   let hijacks;
-  const context = React.useContext(TooltipContext);
-  const [tooltips, setTooltips] = useState({});
 
   if (HIJACK_DATA && HIJACK_DATA.length) {
-    hijacks = HIJACK_DATA.map((row, i) => ({
-      id: row.id,
-      update: formatDate(new Date(row.time_last)),
-      time: formatDate(new Date(row.time_detected)),
-      hprefix: row.prefix,
-      mprefix: row.configured_prefix,
-      htype: row.type,
-      status: (
-        <span className={'badge badge-pill badge-' + statuses[row.status]}>
-          {row.status}
-        </span>
-      ),
-      as_original: row.hijack_as,
-      as: (
-        <Tooltip
-          tooltips={tooltips}
-          setTooltips={setTooltips}
-          asn={row.hijack_as}
-          label={`hijack_as`}
-          context={context}
-        />
-      ),
-      rpki: row.rpki_status,
-      peers: row.num_peers_seen,
-      ASes: row.num_asns_inf,
-      ack:
-        row.resolved || row.under_mitigation ? (
-          <img alt="" src="./handled.png" />
-        ) : (
-          <img alt="" src="./unhadled.png" />
+    hijacks = HIJACK_DATA.map((row, i) => {
+      const _status = findStatus(row);
+      return {
+        id: row.id,
+        time_last: formatDate(new Date(row.time_last)),
+        time_detected: formatDate(new Date(row.time_detected)),
+        prefix: row.prefix,
+        configured_prefix: row.configured_prefix,
+        type: row.type,
+        as_original: row.hijack_as,
+        hijack_as: (
+          <Tooltip
+            tooltips={tooltips}
+            setTooltips={setTooltips}
+            asn={row.hijack_as}
+            label={`hijack_as_` + row.id + '_' + offset}
+            context={context}
+          />
         ),
-      more: <Link href={`/hijack?key=${row.key}`}>View</Link>,
-    }));
+        status: (
+          <span className={'badge badge-pill badge-' + statuses[_status[0]]}>
+            {_status[0]}
+          </span>
+        ),
+        rpki_status: row.rpki_status,
+        num_peers_seen: row.num_peers_seen,
+        num_asns_inf: row.num_asns_inf,
+        ack:
+          row.resolved || row.under_mitigation ? (
+            <img alt="" src="./handled.png" />
+          ) : (
+            <img alt="" src="./unhadled.png" />
+          ),
+        more: <Link href={`/hijack?key=${row.key}`}>View</Link>,
+      };
+    });
   } else {
     hijacks = [];
   }
+
+  hijacks.forEach((entry, i) => {
+    entry.id = i;
+  });
+
+  setFilteredHijackData(hijacks);
+
+  return hijacks;
+}
+
+const HijackTableComponent = (props) => {
+  const { setFilteredHijackData, filter, filterStatus } = props;
+  const context = React.useContext(TooltipContext);
+  const [tooltips, setTooltips] = useState({});
+  const [page, setPage] = useState(0);
+  const [sizePerPage, setSizePerPage] = useState(10);
+  const [columnFilter, setColumnFilter] = useState({});
+  const dateFrom: string = getISODate(filter);
+  const dateTo: string = getISODate(0);
+  const [limitState, setLimitState] = useState(10);
+  const [offsetState, setOffsetState] = useState(0);
+  const [sortState, setSortState] = useState('desc');
+  const [sortColumnState, setSortColumnState] = useState('time_last');
+  const [hijackData, setHijackData] = useState([]);
+
+  const HIJACK_COUNT = useGraphQl('hijackCount', {
+    isLive: shallSubscribe(props.isLive),
+    hasColumnFilter: !isObjectEmpty(columnFilter),
+    columnFilter: columnFilter,
+    hasDateFilter: filter !== 0,
+    dateRange: { dateTo: dateTo, dateFrom: dateFrom },
+    hasStatusFilter: filterStatus ? filterStatus.length !== 0 : false,
+    statusFilter:
+      filterStatus && filterStatus.length !== 0
+        ? `{ ${getStatusField(filterStatus)} : {_eq: true } }`
+        : '',
+  });
+
+  const hijackCount = HIJACK_COUNT.data
+    ? HIJACK_COUNT.data.count_data.aggregate.count
+    : 0;
+
+  useGraphQl('hijacks', {
+    callback: (data) => {
+      const processedData = handleData(
+        shallSubscribe(props.isLive)
+          ? data.subscriptionData.data.view_hijacks.slice(
+              offsetState,
+              limitState
+            )
+          : data.view_hijacks.slice(offsetState, limitState),
+        tooltips,
+        setTooltips,
+        context,
+        offsetState,
+        setFilteredHijackData
+      );
+      setHijackData(processedData);
+    },
+    isLive: shallSubscribe(props.isLive),
+    limits: {
+      limit: limitState,
+      offset: offsetState,
+    },
+    sortOrder: sortState,
+    sortColumn: sortColumnState,
+    hasDateFilter: filter !== 0,
+    dateRange: { dateTo: dateTo, dateFrom: dateFrom },
+    hasColumnFilter: !isObjectEmpty(columnFilter),
+    columnFilter: columnFilter,
+    hasStatusFilter: filterStatus ? filterStatus.length !== 0 : false,
+    statusFilter:
+      filterStatus && filterStatus.length !== 0
+        ? `{ ${getStatusField(filterStatus)} : {_eq: true } }`
+        : '',
+  });
 
   const customTotal = (from, to, size) => (
     <span className="react-bootstrap-table-pagination-total">
@@ -435,15 +441,32 @@ const HijackTableComponent = (props) => {
     );
   };
 
+  const handleTableChange = (
+    type,
+    { page, sizePerPage, sortOrder, filters, sortField }
+  ) => {
+    const currentIndex = page * sizePerPage;
+    setPage(page);
+    setSizePerPage(sizePerPage);
+    setOffsetState(currentIndex);
+    setLimitState(sizePerPage);
+    if (sortOrder) {
+      setSortColumnState(sortField);
+      setSortState(sortOrder);
+    }
+    if (filters) setColumnFilter(filters);
+  };
+
   const contentTable = ({ paginationProps, paginationTableProps }) => (
     <ToolkitProvider
       keyField="id"
       columns={columns}
-      data={hijacks}
+      data={hijackData}
+      dataSize={hijackCount}
       exportCSV={{ onlyExportFiltered: true, exportAll: false }}
     >
       {(toolkitprops) => {
-        paginationProps.dataSize = hijacks.length;
+        paginationProps.dataSize = hijackCount;
         return (
           <>
             <div className="header-filter">
@@ -451,12 +474,14 @@ const HijackTableComponent = (props) => {
               <MyExportCSV {...toolkitprops.csvProps}>Export CSV!!</MyExportCSV>
             </div>
             <BootstrapTable
+              remote
               wrapperClasses="table-responsive"
               keyField="id"
-              data={hijacks}
+              data={hijackData}
               columns={columns}
               filter={filterFactory()}
               filterPosition="bottom"
+              onTableChange={handleTableChange}
               striped
               condensed
               hover

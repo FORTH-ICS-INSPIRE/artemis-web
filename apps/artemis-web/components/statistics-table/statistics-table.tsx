@@ -61,7 +61,7 @@ class StatisticsTable extends Component<StatisticsType, {}> {
                         word.slice(1) +
                         ' ')
                   );
-
+                if (firstCaps.includes('Typename')) return;
                 return (
                   <tr key={i}>
                     <td>
