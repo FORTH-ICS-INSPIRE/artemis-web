@@ -79,11 +79,20 @@ export const shallSubscribe = (isLive) => isProduction() && isLive;
 
 export const getISODate = (filter: number): string => {
   const dateFiltered = new Date();
-  if (filter >= 0 && filter <= 24) {
+  if (filter >= 0 && filter <= 48) {
     dateFiltered.setHours(dateFiltered.getHours() - filter);
     dateFiltered.setSeconds(0, 0);
   }
   return dateFiltered.toISOString();
+};
+export const statuses = {
+  Ongoing: 'danger',
+  Dormant: 'secondary',
+  Resolved: 'success',
+  Ignored: 'warning',
+  'Under Mitigation': 'primary',
+  Withdrawn: 'info',
+  Outdated: 'dark',
 };
 
 export const findStatus = (row) => {

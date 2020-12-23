@@ -200,6 +200,15 @@ function extractHijackInfoLeft(hijack, { tooltips, setTooltips, context }) {
         tooltips={tooltips}
         setTooltips={setTooltips}
         asn={hijack.hijack_as}
+        html={
+          <input
+            id="info_type"
+            className="form-control"
+            type="text"
+            readOnly={true}
+            value={hijack.hijack_as ?? ''}
+          />
+        }
         label={`hijack_as`}
         context={context}
       />,

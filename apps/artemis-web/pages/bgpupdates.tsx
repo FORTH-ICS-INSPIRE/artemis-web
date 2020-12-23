@@ -12,22 +12,20 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import NotAuthHOC from '../components/401-hoc/401-hoc';
 import BGPTableComponent from '../components/bgp-table/bgp-table';
-import ErrorBoundary from '../components/error-boundary/error-boundary';
 import Tooltip from '../components/tooltip/tooltip';
 import TooltipContext from '../context/tooltip-context';
-import { useGraphQl } from '../utils/hooks/use-graphql';
 import { useStyles } from '../utils/styles';
-import { getISODate, shallMock } from '../utils/token';
+import { shallMock } from '../utils/token';
 
 const BGPUpdates = (props) => {
   const [isLive, setIsLive] = useState(true);
   const context = React.useContext(TooltipContext);
 
-  //  if (shallMock()) {
-  //   // eslint-disable-next-line @typescript-eslint/no-var-requires
-  //   const { worker } = require('../utils/mock-sw/browser');
-  //   worker.start();
-  // }
+  if (shallMock()) {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const { worker } = require('../utils/mock-sw/browser');
+    worker.start();
+  }
   const classes = useStyles();
 
   const [filter, setFilter] = useState(0);
@@ -37,17 +35,7 @@ const BGPUpdates = (props) => {
   const [tooltips, setTooltips] = useState({});
   const [filteredBgpData, setFilteredBgpData] = useState([]);
 
-  const dateFrom: string = getISODate(filter);
-  const dateTo: string = getISODate(0);
   const user = props.user;
-
-  // const BGP_COUNT = useGraphQl('bgpCount', {
-  //   isLive: isLive,
-  //   hasDateFilter: filter !== 0,
-  //   dateRange: { dateTo: dateTo, dateFrom: dateFrom },
-  // });
-
-  const bgpCount = 1;
 
   const onChangeValue = (event) => {
     setSelectState(event.target.value);
@@ -164,17 +152,11 @@ const BGPUpdates = (props) => {
                   </Button>
                 </div>
                 <div className="card-body" style={{ textAlign: 'center' }}>
-                  <ErrorBoundary
-                    containsData={bgpCount > 0}
-                    noDataMessage={'No bgp updates.'}
-                    customError={''}
-                  >
-                    <BGPTableComponent
-                      filter={filter}
-                      isLive={isLive}
-                      setFilteredBgpData={setFilteredBgpData}
-                    />
-                  </ErrorBoundary>
+                  <BGPTableComponent
+                    filter={filter}
+                    isLive={isLive}
+                    setFilteredBgpData={setFilteredBgpData}
+                  />
                 </div>
               </div>
             </div>

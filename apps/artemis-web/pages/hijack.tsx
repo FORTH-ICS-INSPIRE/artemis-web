@@ -20,7 +20,12 @@ import TooltipContext from '../context/tooltip-context';
 import { useGraphQl } from '../utils/hooks/use-graphql';
 import { extractHijackInfos } from '../utils/parsers';
 import { useStyles } from '../utils/styles';
-import { shallMock, shallSubscribe } from '../utils/token';
+import {
+  findStatus,
+  shallMock,
+  shallSubscribe,
+  statuses,
+} from '../utils/token';
 
 const ViewHijackPage = (props) => {
   const [isLive, setIsLive] = useState(true);
@@ -32,30 +37,6 @@ const ViewHijackPage = (props) => {
     const { worker } = require('../utils/mock-sw/browser');
     worker.start();
   }
-
-  const statuses = {
-    Ongoing: 'danger',
-    Dormant: 'secondary',
-    Resolved: 'success',
-    Ignored: 'warning',
-    'Under Mitigation': 'primary',
-    Withdrawn: 'info',
-    Outdated: 'dark',
-  };
-
-  const findStatus = (row) => {
-    const statuses = [];
-
-    if (row.withdrawn) statuses.push('Withdrawn');
-    if (row.resolved) statuses.push('Resolved');
-    if (row.ignored) statuses.push('Ignored');
-    if (row.active) statuses.push('Active');
-    if (row.dormant) statuses.push('Dormant');
-    if (row.under_mitigation) statuses.push('Under Mitigation');
-    if (row.outdated) statuses.push('Outdated');
-
-    return statuses;
-  };
 
   const classes = useStyles();
   const router = useRouter();
@@ -93,7 +74,7 @@ const ViewHijackPage = (props) => {
         ? data.subscriptionData.data.view_hijacks
         : data.view_hijacks;
 
-      if (hijacks.length == 0) setHijackExists(false);
+      if (hijacks.length === 0) setHijackExists(false);
       setHijackDataState(hijacks[0]);
     },
     isLive: shallSubscribe(props.isLive),

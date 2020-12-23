@@ -177,7 +177,7 @@ export class QueryGenerator {
 
   private getHijackByKey() {
     return gql`
-      query getHijackByKey($key: String!) {
+      ${this.operationType} getHijackByKey($key: String!) {
         view_hijacks(where: { key: { _eq: $key } }, limit: 1) {
           key
           type
@@ -225,7 +225,7 @@ export class QueryGenerator {
 
   private getStatisticsQuery() {
     return gql`
-      subscription getIndexAllStats {
+      ${this.operationType} getIndexAllStats {
         view_index_all_stats {
           monitored_prefixes
           configured_prefixes
@@ -297,14 +297,14 @@ export class QueryGenerator {
 
   private getConfig() {
     return gql`
-  ${this.operationType} getConfig {
-    view_configs(limit: 1, order_by: { time_modified: desc }) {
-      raw_config
-      comment
-      time_modified
-    }
-  }
-`;
+      ${this.operationType} getConfig {
+        view_configs(limit: 1, order_by: { time_modified: desc }) {
+          raw_config
+          comment
+          time_modified
+        }
+      }
+    `;
   }
 
   private getQueryVars() {
@@ -385,26 +385,6 @@ export class QueryGenerator {
     return query;
   }
 }
-
-export const CONFIG_SUB = gql`
-  subscription getConfig {
-    view_configs(limit: 1, order_by: { time_modified: desc }) {
-      raw_config
-      comment
-      time_modified
-    }
-  }
-`;
-
-export const CONFIG_QUERY = gql`
-  query getConfig {
-    view_configs(limit: 1, order_by: { time_modified: desc }) {
-      raw_config
-      comment
-      time_modified
-    }
-  }
-`;
 
 export const useApollo = (initialState) => {
   const store = useMemo(() => initializeApollo(initialState), [initialState]);

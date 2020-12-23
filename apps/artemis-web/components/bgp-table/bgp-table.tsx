@@ -26,6 +26,7 @@ import {
   isObjectEmpty,
   shallSubscribe,
 } from '../../utils/token';
+import ErrorBoundary from '../error-boundary/error-boundary';
 import Tooltip from '../tooltip/tooltip';
 
 const exactMatchFilter = textFilter({
@@ -441,7 +442,7 @@ function handleData(
   bgp.forEach((entry, i) => {
     entry.id = i;
   });
-  console.log(bgp);
+
   setFilteredBgpData(bgp);
 
   return bgp;
@@ -450,7 +451,6 @@ function handleData(
 const BGPTableComponent = (props) => {
   const { setFilteredBgpData, filter, hijackKey } = props;
   const [bgpData, setBgpData] = useState([]);
-  const [bgpCount, setBgpCount] = useState(0);
   const context = React.useContext(TooltipContext);
   const [tooltips, setTooltips] = useState({});
   const [page, setPage] = useState(0);
@@ -458,18 +458,22 @@ const BGPTableComponent = (props) => {
   const [columnFilter, setColumnFilter] = useState({});
   const dateFrom: string = getISODate(filter);
   const dateTo: string = getISODate(0);
+  let bgpCount = 0;
 
   const BGP_COUNT = useGraphQl(hijackKey ? 'bgpCountByKey' : 'bgpCount', {
-    callback: (data) => {
-      setBgpCount(data.count_data.aggregate.count);
-    },
     isLive: props.isLive,
+    callback: (data) => {
+      return;
+    },
     hasColumnFilter: !isObjectEmpty(columnFilter),
     columnFilter: columnFilter,
     hasDateFilter: filter !== 0,
     dateRange: { dateTo: dateTo, dateFrom: dateFrom },
     key: hijackKey,
   });
+
+  bgpCount = BGP_COUNT.data ? BGP_COUNT.data.count_data.aggregate.count : 0;
+
   const [limitState, setLimitState] = useState(10);
   const [offsetState, setOffsetState] = useState(0);
   const [sortState, setSortState] = useState('desc');
@@ -479,14 +483,10 @@ const BGPTableComponent = (props) => {
 
   const BGP_RES = useGraphQl(hijackKey ? 'bgpByKey' : 'bgpUpdates', {
     callback: (data) => {
-      console.log(data);
       const processedData = handleData(
         shallSubscribe(props.isLive)
-          ? data.subscriptionData.data.view_bgpupdates.slice(
-              offsetState,
-              limitState
-            )
-          : data.view_bgpupdates,
+          ? data.subscriptionData.data.view_bgpupdates.slice(0, limitState)
+          : data.view_bgpupdates.slice(0, limitState),
         tooltips,
         setTooltips,
         context,
@@ -669,9 +669,15 @@ const BGPTableComponent = (props) => {
   );
 
   return (
-    <PaginationProvider pagination={paginationFactory(options)}>
-      {contentTable}
-    </PaginationProvider>
+    <ErrorBoundary
+      containsData={bgpCount > 0}
+      noDataMessage={'No bgp updates.'}
+      customError={''}
+    >
+      <PaginationProvider pagination={paginationFactory(options)}>
+        {contentTable}
+      </PaginationProvider>
+    </ErrorBoundary>
   );
 };
 

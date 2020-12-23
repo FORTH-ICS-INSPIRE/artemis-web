@@ -96,13 +96,7 @@ const DashboardPage = (props) => {
                   </div>
                   <div className="card-body" style={{ textAlign: 'center' }}>
                     {' '}
-                    {/* <ErrorBoundary
-                      containsData={hijacks.length > 0}
-                      noDataMessage={'No hijack alerts.'}
-                      customError={HIJACK_RES.error}
-                    > */}
                     <OngoingHijackTableComponent isLive={true} />
-                    {/* </ErrorBoundary> */}
                   </div>
                 </div>
               </div>
@@ -116,6 +110,7 @@ const DashboardPage = (props) => {
                     <ErrorBoundary
                       containsData={STATS_DATA}
                       noDataMessage={'No modules found.'}
+                      errorImage={true}
                       customError={STATS_RES.error}
                     >
                       <StatusTable data={STATS_DATA} />
@@ -131,6 +126,7 @@ const DashboardPage = (props) => {
                       containsData={INDEX_DATA}
                       noDataMessage={'No statistics found.'}
                       customError={INDEX_RES.error}
+                      errorImage={true}
                     >
                       <StatisticsTable data={INDEX_DATA} />
                     </ErrorBoundary>

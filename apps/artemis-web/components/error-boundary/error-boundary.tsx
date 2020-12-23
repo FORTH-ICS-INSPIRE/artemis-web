@@ -4,6 +4,7 @@ type PropsType = {
   customError: any;
   containsData: boolean;
   noDataMessage: string;
+  errorImage?: boolean;
 };
 
 class ErrorBoundary extends Component<PropsType, {}> {
@@ -36,7 +37,9 @@ class ErrorBoundary extends Component<PropsType, {}> {
       return (
         <div>
           <p>
-            <img src="checkmark.png"></img>
+            <img
+              src={this.props.errorImage ? 'error.png' : 'checkmark.png'}
+            ></img>
           </p>
           <h3>{this.props.noDataMessage}</h3>
         </div>

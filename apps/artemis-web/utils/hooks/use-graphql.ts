@@ -9,6 +9,7 @@ export function useGraphQl(module: queryType, options: optionsType) {
   let vars;
   const varTmp = {};
   const isSubscription = shallSubscribe(isLive);
+
   if (key && key.length) {
     vars = isSubscription
       ? {
@@ -22,7 +23,6 @@ export function useGraphQl(module: queryType, options: optionsType) {
   }
   if (limits) {
     const { limit, offset } = limits;
-
     vars = isSubscription
       ? {
           onSubscriptionData: (data) => callback(data),
@@ -34,7 +34,6 @@ export function useGraphQl(module: queryType, options: optionsType) {
         };
   }
   const generator = new QueryGenerator(module, isSubscription, options);
-
   /* eslint-disable react-hooks/rules-of-hooks */
   const res = isSubscription
     ? useSubscription(generator.getQuery(), vars)

@@ -12,7 +12,6 @@ import React, { useState } from 'react';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import AuthHOC from '../components/401-hoc/401-hoc';
-import ErrorBoundary from '../components/error-boundary/error-boundary';
 import HijackTableComponent from '../components/hijack-table/hijack-table';
 import Tooltip from '../components/tooltip/tooltip';
 import TooltipContext from '../context/tooltip-context';
@@ -49,9 +48,6 @@ const HijacksPage = (props) => {
       setStatusButton(status);
     }
   };
-
-  const dateFrom: string = getISODate(filterDate);
-  const dateTo: string = getISODate(0);
 
   const user = props.user;
 
@@ -202,18 +198,12 @@ const HijacksPage = (props) => {
                   </div>
                 </div>
                 <div className="card-body" style={{ textAlign: 'center' }}>
-                  {/* <ErrorBoundary
-                    containsData={filteredHijacks.length > 0}
-                    noDataMessage={'No hijack alerts.'}
-                    customError={HIJACK_RES.error}
-                  > */}
                   <HijackTableComponent
                     filter={filterDate}
                     isLive={isLive}
                     filterStatus={filterStatus}
                     setFilteredHijackData={setFilteredHijackData}
                   />
-                  {/* </ErrorBoundary> */}
                 </div>
               </div>
             </div>

@@ -27,6 +27,7 @@ import {
   shallSubscribe,
 } from '../../utils/token';
 import Tooltip from '../tooltip/tooltip';
+import ErrorBoundary from '../error-boundary/error-boundary';
 
 const exactMatchFilter = textFilter({
   placeholder: '', // custom the input placeholder
@@ -232,7 +233,6 @@ function handleData(
 ) {
   const HIJACK_DATA = data;
   let hijacks;
-
   if (HIJACK_DATA && HIJACK_DATA.length) {
     hijacks = HIJACK_DATA.map((row, i) => {
       const _status = findStatus(row);
@@ -319,11 +319,8 @@ const HijackTableComponent = (props) => {
     callback: (data) => {
       const processedData = handleData(
         shallSubscribe(props.isLive)
-          ? data.subscriptionData.data.view_hijacks.slice(
-              offsetState,
-              limitState
-            )
-          : data.view_hijacks.slice(offsetState, limitState),
+          ? data.subscriptionData.data.view_hijacks.slice(0, limitState)
+          : data.view_hijacks.slice(0, limitState),
         tooltips,
         setTooltips,
         context,
@@ -488,7 +485,6 @@ const HijackTableComponent = (props) => {
               {...toolkitprops.baseProps}
               {...paginationTableProps}
             />
-
             <PaginationTotalStandalone {...paginationProps} />
             <PaginationListStandalone {...paginationProps} />
           </>
@@ -498,9 +494,15 @@ const HijackTableComponent = (props) => {
   );
 
   return (
-    <PaginationProvider pagination={paginationFactory(options)}>
-      {contentTable}
-    </PaginationProvider>
+    <ErrorBoundary
+      containsData={hijackCount}
+      noDataMessage={'No hijack alerts.'}
+      customError={HIJACK_COUNT.error}
+    >
+      <PaginationProvider pagination={paginationFactory(options)}>
+        {contentTable}
+      </PaginationProvider>
+    </ErrorBoundary>
   );
 };
 

@@ -16,7 +16,7 @@ class Tooltip extends Component<any, any> {
   }
 
   render() {
-    const { context, asn, label } = this.props;
+    const { context, asn, label, html } = this.props;
 
     return (
       <>
@@ -29,7 +29,7 @@ class Tooltip extends Component<any, any> {
           data-tip
           data-for={label}
         >
-          {asn}
+          {html || asn}
         </div>
         <ReactTooltip place="top" effect="solid" html={true} id={label}>
           {this.state.tooltip ?? 'Loading...'}

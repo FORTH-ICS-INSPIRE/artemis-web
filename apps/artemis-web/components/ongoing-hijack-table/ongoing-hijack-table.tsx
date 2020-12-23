@@ -22,6 +22,7 @@ import {
   isObjectEmpty,
   shallSubscribe,
 } from '../../utils/token';
+import ErrorBoundary from '../error-boundary/error-boundary';
 import Tooltip from '../tooltip/tooltip';
 
 const exactMatchFilter = textFilter({
@@ -437,11 +438,8 @@ const OngoingHijackTableComponent = (props) => {
     callback: (data) => {
       const processedData = handleData(
         shallSubscribe(props.isLive)
-          ? data.subscriptionData.data.view_hijacks.slice(
-              offsetState,
-              limitState
-            )
-          : data.view_hijacks,
+          ? data.subscriptionData.data.view_hijacks.slice(0, limitState)
+          : data.view_hijacks.slice(0, limitState),
         tooltips,
         setTooltips,
         context,
@@ -611,9 +609,15 @@ const OngoingHijackTableComponent = (props) => {
   );
 
   return (
-    <PaginationProvider pagination={paginationFactory(options)}>
-      {contentTable}
-    </PaginationProvider>
+    <ErrorBoundary
+      containsData={hijackCount}
+      noDataMessage={'No hijack alerts.'}
+      customError={HIJACK_COUNT.error}
+    >
+      <PaginationProvider pagination={paginationFactory(options)}>
+        {contentTable}
+      </PaginationProvider>
+    </ErrorBoundary>
   );
 };
 

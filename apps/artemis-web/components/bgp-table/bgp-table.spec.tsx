@@ -8,7 +8,13 @@ describe('BGPTable', () => {
   it('should render successfully', () => {
     const { baseElement } = render(
       <MockedProvider>
-        <BGPTable filter={0} isLive={false} setFilteredBgpData={(data) => {return;}} />
+        <BGPTable
+          filter={0}
+          isLive={false}
+          setFilteredBgpData={(data) => {
+            return;
+          }}
+        />
       </MockedProvider>
     );
     expect(baseElement).toBeTruthy();
