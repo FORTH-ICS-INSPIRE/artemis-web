@@ -113,6 +113,23 @@ export class QueryGenerator {
     this.options = options;
   }
 
+  private setModuleState() {
+    return gql`
+      mutation updateIntendedProcessStates($name: String, $running: Boolean) {
+        update_view_processes(
+          where: { name: { _eq: $name } }
+          _set: { running: $running }
+        ) {
+          affected_rows
+          returning {
+            name
+            running
+          }
+        }
+      }
+    `;
+  }
+
   private getHijacksQuery() {
     return gql`
     ${this.operationType} hijacks${this.getQueryVars()} {
@@ -379,6 +396,9 @@ export class QueryGenerator {
         break;
       case 'config':
         query = this.getConfig();
+        break;
+      case 'setModuleState':
+        query = this.setModuleState();
         break;
     }
 

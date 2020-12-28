@@ -10,6 +10,8 @@ type queryType =
   | 'bgpCount'
   | 'bgpCountByKey'
   | 'config'
+  | 'moduleState'
+  | 'setModuleState'
   | 'hijackCount';
 
 export default queryType;
