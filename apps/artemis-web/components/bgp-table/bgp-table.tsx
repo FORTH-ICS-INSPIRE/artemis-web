@@ -460,7 +460,7 @@ const BGPTableComponent = (props) => {
   const dateTo: string = getISODate(0);
   let bgpCount = 0;
 
-  const BGP_COUNT = useGraphQl(hijackKey ? 'bgpCountByKey' : 'bgpCount', {
+  const BGP_COUNT: any = useGraphQl(hijackKey ? 'bgpCountByKey' : 'bgpCount', {
     isLive: props.isLive,
     callback: (data) => {
       return;
@@ -472,7 +472,8 @@ const BGPTableComponent = (props) => {
     key: hijackKey,
   });
 
-  bgpCount = BGP_COUNT.data ? BGP_COUNT.data.count_data.aggregate.count : 0;
+  bgpCount =
+    BGP_COUNT && BGP_COUNT.data ? BGP_COUNT.data.count_data.aggregate.count : 0;
 
   const [limitState, setLimitState] = useState(10);
   const [offsetState, setOffsetState] = useState(0);

@@ -4,7 +4,15 @@ import React, { Component } from 'react';
 import { Controlled as CodeMirror } from 'react-codemirror2';
 import fetch from 'cross-fetch';
 
-class ConfigComparisonComponent extends Component<{}, {}> {
+type stateType = {
+  configs: any[];
+  currentConfigLeft: string;
+  currentConfigRight: string;
+  currentCommentLeft: string;
+  currentCommentRight: string;
+};
+
+class ConfigComparisonComponent extends Component<{}, stateType> {
   CodeMirror: any;
   _ref: any;
   constructor(props) {

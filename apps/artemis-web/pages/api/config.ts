@@ -11,7 +11,7 @@ const handler = nc()
   .use(authorization(['admin']))
   .post(async (req: NextApiRequestExtended, res: NextApiResponseExtended) => {
     const host: string = process.env.CONFIG_HOST;
-    const port: number = parseInt(process.env.CONFIG_PORT);
+    const port: number = parseInt(process.env.CONFIG_PORT, 10);
 
     const resp = await fetch('http://${host}:${port}/config', {
       method: 'POST',

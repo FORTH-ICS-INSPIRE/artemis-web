@@ -21,14 +21,14 @@ const DashboardPage = (props) => {
   const user = props.user;
   const notify = (message: React.ReactText) => toast(message);
 
-  const STATS_RES = useGraphQl('stats', {
+  const STATS_RES: any = useGraphQl('stats', {
     isLive: true,
     hasDateFilter: false,
     hasColumnFilter: false,
   });
   const STATS_DATA = STATS_RES.data;
 
-  const INDEX_RES = useGraphQl('indexStats', {
+  const INDEX_RES: any = useGraphQl('indexStats', {
     isLive: true,
     hasDateFilter: false,
     hasColumnFilter: false,

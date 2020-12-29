@@ -4,7 +4,10 @@ import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/material.css';
 import Head from 'next/head';
 import React, { useEffect, useState } from 'react';
-import { Controlled as CodeMirror } from 'react-codemirror2';
+import {
+  Controlled as CodeMirror,
+  IControlledCodeMirror,
+} from 'react-codemirror2';
 import AuthHOC from '../../components/401-hoc/401-hoc';
 import SystemModule from '../../components/system-module/system-module';
 import { useGraphQl } from '../../utils/hooks/use-graphql';
@@ -15,8 +18,11 @@ const SystemPage = (props) => {
     const { worker } = require('../../utils/mock-sw/browser');
     worker.start();
   }
-  const configRef = React.createRef();
-  const commentRef = React.createRef();
+  type currentType = {
+    props: any;
+  };
+  const configRef = React.createRef<any>();
+  const commentRef = React.createRef<any>();
   const [alertState, setAlertState] = useState('none');
   const [editState, setEditState] = useState(false);
   const [configState, setConfigState] = useState('');
@@ -63,17 +69,18 @@ const SystemPage = (props) => {
 
   const user = props.user;
 
-  const STATS_RES = useGraphQl('stats', {
+  const STATS_RES: any = useGraphQl('stats', {
     isLive: true,
     hasDateFilter: false,
     hasColumnFilter: false,
   });
-  const STATS_DATA = STATS_RES?.data;
-  const CONFIG_DATA = useGraphQl('config', {
+  const STATS_DATA: any = STATS_RES?.data;
+  let CONFIG_DATA: any = useGraphQl('config', {
     isLive: false,
     hasDateFilter: false,
     hasColumnFilter: false,
-  })?.data;
+  });
+  CONFIG_DATA = CONFIG_DATA?.data;
 
   const processes = STATS_DATA ? STATS_DATA.view_processes : null;
 

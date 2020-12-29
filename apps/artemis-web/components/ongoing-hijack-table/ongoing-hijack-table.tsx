@@ -422,7 +422,7 @@ const OngoingHijackTableComponent = (props) => {
   const [sortState, setSortState] = useState('desc');
   const [sortColumnState, setSortColumnState] = useState('time_last');
 
-  const HIJACK_COUNT = useGraphQl('hijackCount', {
+  const HIJACK_COUNT: any = useGraphQl('hijackCount', {
     isLive: shallSubscribe(props.isLive),
     hasColumnFilter: !isObjectEmpty(columnFilter),
     columnFilter: columnFilter,

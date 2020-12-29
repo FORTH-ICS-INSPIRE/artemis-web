@@ -11,7 +11,7 @@ const handler = nc()
   .use(authorization(['user', 'admin']))
   .get(async (req: NextApiRequestExtended, res: NextApiResponseExtended) => {
     const host: string = process.env.API_HOST;
-    const port: number = parseInt(process.env.API_PORT);
+    const port: number = parseInt(process.env.API_PORT, 10);
 
     const resp = await fetch(`http://${host}:${port}/view_configs`, {
       method: 'GET',
