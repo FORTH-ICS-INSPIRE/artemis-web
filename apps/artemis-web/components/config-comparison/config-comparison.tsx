@@ -1,6 +1,8 @@
+import { formatDate } from '../../utils/token';
+import DMP from 'diff_match_patch';
 import React, { Component } from 'react';
 import { Controlled as CodeMirror } from 'react-codemirror2';
-import DMP from 'diff_match_patch';
+import fetch from 'cross-fetch';
 
 class ConfigComparisonComponent extends Component<{}, {}> {
   CodeMirror: any;
@@ -22,9 +24,17 @@ class ConfigComparisonComponent extends Component<{}, {}> {
       require('codemirror/addon/lint/javascript-lint');
       require('codemirror/addon/merge/merge');
     }
+
+    this.state = {
+      configs: [],
+      currentConfigLeft: '',
+      currentCommentLeft: '',
+      currentConfigRight: '',
+      currentCommentRight: '',
+    };
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     if (
       typeof window !== 'undefined' &&
       typeof window.navigator !== 'undefined'
@@ -32,14 +42,31 @@ class ConfigComparisonComponent extends Component<{}, {}> {
       Object.keys(DMP).forEach((key) => {
         window[key] = DMP[key];
       });
-      const origin = '',
-        target = '';
+
+      const res = await fetch('http://127.0.0.1/api/configs', {
+        method: 'GET',
+        credentials: 'include',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+      });
+      const configs = await res.json();
+      this.setState({ configs: configs.configs });
+      this.setState({
+        currentConfigLeft: this.state.configs[0].raw_config,
+        currentCommentLeft: this.state.configs[0].comment,
+      });
+      this.setState({
+        currentConfigRight: this.state.configs[0]?.raw_config,
+        currentCommentRight: this.state.configs[0]?.comment,
+      });
 
       this.CodeMirror.MergeView(this._ref, {
         theme: 'material',
-        value: origin,
+        value: this.state.currentConfigLeft,
         origLeft: null,
-        origRight: target,
+        origRight: this.state.currentConfigRight,
         allowEditingOriginals: true,
         lineNumbers: true,
         mode: 'yaml',
@@ -51,6 +78,19 @@ class ConfigComparisonComponent extends Component<{}, {}> {
     }
   }
 
+  handleOptions(key, position) {
+    if (position === 'left')
+      this.setState({
+        currentConfigLeft: this.state.configs[key].raw_config,
+        currentCommentLeft: this.state.configs[key].comment,
+      });
+    else
+      this.setState({
+        currentConfigRight: this.state.configs[key].raw_config,
+        currentCommentRight: this.state.configs[key].comment,
+      });
+  }
+
   render() {
     return (
       <>
@@ -58,6 +98,38 @@ class ConfigComparisonComponent extends Component<{}, {}> {
           <div className="card" style={{ width: '100%' }}>
             <div className="card-header"> </div>
             <div className="card-body">
+              <div className="row">
+                <div className="col-lg-6">
+                  <select
+                    onChange={(e) => this.handleOptions(e.target.value, 'left')}
+                    style={{ marginBottom: '10px' }}
+                  >
+                    {this.state.configs.map((config, i) => {
+                      return (
+                        <option value={i} key={i}>
+                          {formatDate(new Date(config.time_modified))}
+                        </option>
+                      );
+                    })}
+                  </select>
+                </div>
+                <div className="col-lg-6">
+                  <select
+                    onChange={(e) =>
+                      this.handleOptions(e.target.value, 'right')
+                    }
+                    style={{ marginLeft: '50px' }}
+                  >
+                    {this.state.configs.map((config, i) => {
+                      return (
+                        <option value={i} key={i}>
+                          {formatDate(new Date(config.time_modified))}
+                        </option>
+                      );
+                    })}
+                  </select>
+                </div>
+              </div>
               <div ref={(ref) => (this._ref = ref)}></div>
             </div>
           </div>
@@ -69,7 +141,7 @@ class ConfigComparisonComponent extends Component<{}, {}> {
               <div className="row">
                 <div className="col-lg-6">
                   <CodeMirror
-                    value={'fsdfs'}
+                    value={this.state.currentCommentLeft}
                     options={{
                       mode: 'yaml',
                       styleActiveLine: true,
@@ -92,7 +164,7 @@ class ConfigComparisonComponent extends Component<{}, {}> {
                 </div>
                 <div className="col-lg-6">
                   <CodeMirror
-                    value={'121'}
+                    value={this.state.currentCommentRight}
                     options={{
                       mode: 'yaml',
                       styleActiveLine: true,

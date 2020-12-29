@@ -79,11 +79,11 @@ const SystemPage = (props) => {
 
   const modules = processes
     ? processes.map((ps) => {
-      return [
-        ps['name'].charAt(0).toUpperCase() + ps['name'].slice(1),
-        ps['running'],
-      ];
-    })
+        return [
+          ps['name'].charAt(0).toUpperCase() + ps['name'].slice(1),
+          ps['running'],
+        ];
+      })
     : [];
 
   const states = {};
@@ -166,15 +166,15 @@ const SystemPage = (props) => {
                         </Button>{' '}
                       </>
                     ) : (
-                        <Button
-                          onClick={() => setEditState(!editState)}
-                          style={{ float: 'right' }}
-                          variant="contained"
-                          color="secondary"
-                        >
-                          Edit
-                        </Button>
-                      )}
+                      <Button
+                        onClick={() => setEditState(!editState)}
+                        style={{ float: 'right' }}
+                        variant="contained"
+                        color="secondary"
+                      >
+                        Edit
+                      </Button>
+                    )}
                     <Button
                       onClick={(e) => onClick(e, 'load')}
                       style={{ float: 'right' }}
@@ -221,10 +221,10 @@ const SystemPage = (props) => {
                         Last Update:{' '}
                         {CONFIG_DATA
                           ? formatDate(
-                            new Date(
-                              CONFIG_DATA.view_configs[0].time_modified
+                              new Date(
+                                CONFIG_DATA.view_configs[0].time_modified
+                              )
                             )
-                          )
                           : 'Never'}
                       </span>
                       <span style={{ float: 'right' }}>

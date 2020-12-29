@@ -2,14 +2,13 @@ import Head from 'next/head';
 import React from 'react';
 import AuthHOC from '../components/401-hoc/401-hoc';
 import ConfigComparisonComponent from '../components/config-comparison/config-comparison';
+import { shallMock } from '../utils/token';
 
 const ConfigComparisonPage = (props) => {
-  if (process.env.NODE_ENV === 'development') {
-    if (typeof window !== 'undefined') {
-      // eslint-disable-next-line @typescript-eslint/no-var-requires
-      const { worker } = require('../utils/mock-sw/browser');
-      worker.start();
-    }
+  if (shallMock()) {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const { worker } = require('../utils/mock-sw/browser');
+    worker.start();
   }
   const user = props.user;
 
@@ -35,7 +34,7 @@ const ConfigComparisonPage = (props) => {
             <div className="row">
               <div className="col-lg-1"></div>
               <div className="col-lg-10">
-                <ConfigComparisonComponent></ConfigComparisonComponent>
+                <ConfigComparisonComponent />
               </div>
             </div>
           </div>

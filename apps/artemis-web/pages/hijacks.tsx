@@ -16,7 +16,7 @@ import HijackTableComponent from '../components/hijack-table/hijack-table';
 import Tooltip from '../components/tooltip/tooltip';
 import TooltipContext from '../context/tooltip-context';
 import { useStyles } from '../utils/styles';
-import { getISODate, shallMock } from '../utils/token';
+import { shallMock } from '../utils/token';
 
 const HijacksPage = (props) => {
   const [isLive, setIsLive] = useState(true);
