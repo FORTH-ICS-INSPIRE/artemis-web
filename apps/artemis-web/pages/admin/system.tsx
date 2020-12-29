@@ -1,19 +1,63 @@
-import { Grid } from '@material-ui/core';
+import { Button, Grid } from '@material-ui/core';
+import { formatDate, shallMock } from '../../utils/token';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/material.css';
 import Head from 'next/head';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Controlled as CodeMirror } from 'react-codemirror2';
 import AuthHOC from '../../components/401-hoc/401-hoc';
 import SystemModule from '../../components/system-module/system-module';
 import { useGraphQl } from '../../utils/hooks/use-graphql';
 
 const SystemPage = (props) => {
-  if (process.env.NODE_ENV === 'development') {
-    if (typeof window !== 'undefined') {
-      // eslint-disable-next-line @typescript-eslint/no-var-requires
-      const { worker } = require('../../utils/mock-sw/browser');
-      worker.start();
+  if (shallMock()) {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const { worker } = require('../../utils/mock-sw/browser');
+    worker.start();
+  }
+  const configRef = React.createRef();
+  const commentRef = React.createRef();
+  const [alertState, setAlertState] = useState('none');
+  const [editState, setEditState] = useState(false);
+  const [configState, setConfigState] = useState('');
+  const [commentState, setCommentState] = useState('');
+  const [alertMessage, setAlertMessage] = useState('');
+
+  async function onClick(e, action) {
+    e.preventDefault();
+    if (action === 'save') {
+      const new_config = configRef.current.props.value;
+      const comment = commentRef.current.props.value;
+      const res = await fetch('/api/config', {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ new_config: new_config, comment: comment }),
+      });
+
+      if (res.status === 200) {
+        setAlertState('block');
+        setAlertMessage('Configuration file updated.');
+      }
+    } else {
+      const res = await fetch('/api/as_sets', {
+        method: 'GET',
+        credentials: 'include',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (res.status === 200) {
+        const resp = await res.json();
+        console.log(resp);
+        setAlertState('block');
+        setAlertMessage(resp.payload.payload.message);
+      }
     }
   }
 
@@ -24,22 +68,22 @@ const SystemPage = (props) => {
     hasDateFilter: false,
     hasColumnFilter: false,
   });
-  const STATS_DATA = STATS_RES.data;
+  const STATS_DATA = STATS_RES?.data;
   const CONFIG_DATA = useGraphQl('config', {
     isLive: false,
     hasDateFilter: false,
     hasColumnFilter: false,
-  }).data;
+  })?.data;
 
   const processes = STATS_DATA ? STATS_DATA.view_processes : null;
 
   const modules = processes
     ? processes.map((ps) => {
-        return [
-          ps['name'].charAt(0).toUpperCase() + ps['name'].slice(1),
-          ps['running'],
-        ];
-      })
+      return [
+        ps['name'].charAt(0).toUpperCase() + ps['name'].slice(1),
+        ps['running'],
+      ];
+    })
     : [];
 
   const states = {};
@@ -50,6 +94,13 @@ const SystemPage = (props) => {
   const keys = Object.keys(state);
 
   if (modules.length !== 0 && keys.length === 0) setState(states);
+
+  useEffect(() => {
+    if (CONFIG_DATA && CONFIG_DATA.view_configs[0]) {
+      setConfigState(CONFIG_DATA.view_configs[0].raw_config.toString());
+      setCommentState(CONFIG_DATA.view_configs[0].comment);
+    }
+  }, [CONFIG_DATA]);
 
   return (
     <>
@@ -92,14 +143,64 @@ const SystemPage = (props) => {
               <div className="col-lg-1" />
               <div className="col-lg-10">
                 <div className="card">
-                  <div className="card-header"> Current Configuration </div>
+                  <div className="card-header">
+                    {' '}
+                    Current Configuration{' '}
+                    {editState ? (
+                      <>
+                        <Button
+                          onClick={(e) => onClick(e, 'save')}
+                          style={{ float: 'right' }}
+                          variant="contained"
+                          color="primary"
+                        >
+                          Save
+                        </Button>
+                        <Button
+                          onClick={() => setEditState(!editState)}
+                          style={{ float: 'right' }}
+                          variant="contained"
+                          color="secondary"
+                        >
+                          cancel
+                        </Button>{' '}
+                      </>
+                    ) : (
+                        <Button
+                          onClick={() => setEditState(!editState)}
+                          style={{ float: 'right' }}
+                          variant="contained"
+                          color="secondary"
+                        >
+                          Edit
+                        </Button>
+                      )}
+                    <Button
+                      onClick={(e) => onClick(e, 'load')}
+                      style={{ float: 'right' }}
+                      variant="contained"
+                      color="primary"
+                    >
+                      Load AS-SETs
+                    </Button>
+                  </div>
                   <div id="config" className="card-body">
+                    <div style={{ display: alertState }} id="config_alert_box">
+                      <div className="alert alert-success alert-dismissible">
+                        <a
+                          href="#"
+                          className="close"
+                          data-dismiss="alert"
+                          aria-label="close"
+                        >
+                          ×
+                        </a>
+                        {alertMessage}
+                      </div>
+                    </div>
                     <CodeMirror
-                      value={
-                        CONFIG_DATA
-                          ? CONFIG_DATA.view_configs[0].raw_config
-                          : ''
-                      }
+                      ref={configRef}
+                      value={configState}
                       options={{
                         mode: 'yaml',
                         styleActiveLine: true,
@@ -112,17 +213,18 @@ const SystemPage = (props) => {
                         lineNumbers: true,
                       }}
                       onBeforeChange={(editor, data, value) => {
-                        return;
-                      }}
-                      onChange={(editor, data, value) => {
-                        return;
+                        if (editState) setConfigState(value);
                       }}
                     />
                     <div>
                       <span style={{ float: 'left' }}>
                         Last Update:{' '}
                         {CONFIG_DATA
-                          ? CONFIG_DATA.view_configs[0].time_modified
+                          ? formatDate(
+                            new Date(
+                              CONFIG_DATA.view_configs[0].time_modified
+                            )
+                          )
                           : 'Never'}
                       </span>
                       <span style={{ float: 'right' }}>
@@ -143,9 +245,8 @@ const SystemPage = (props) => {
                   <div className="card-header">Comment for config</div>
                   <div className="card-body">
                     <CodeMirror
-                      value={
-                        CONFIG_DATA ? CONFIG_DATA.view_configs[0].comment : ''
-                      }
+                      ref={commentRef}
+                      value={commentState}
                       options={{
                         mode: 'yaml',
                         styleActiveLine: true,
@@ -158,10 +259,7 @@ const SystemPage = (props) => {
                         lineNumbers: true,
                       }}
                       onBeforeChange={(editor, data, value) => {
-                        return;
-                      }}
-                      onChange={(editor, data, value) => {
-                        return;
+                        if (editState) setCommentState(value);
                       }}
                     />
                   </div>
