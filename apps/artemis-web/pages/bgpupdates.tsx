@@ -26,6 +26,7 @@ const BGPUpdates = (props) => {
     const { worker } = require('../utils/mock-sw/browser');
     worker.start();
   }
+
   const classes = useStyles();
 
   const [filter, setFilter] = useState(0);

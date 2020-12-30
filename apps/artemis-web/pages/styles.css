@@ -138,3 +138,37 @@ footer > .MuiContainer-root {
 a:hover {
   cursor: pointer;
 }
+
+.menu-item > a {
+  color: gray;
+  font-size: 18px;
+}
+
+.menu-item > a:hover {
+  color: white;
+}
+
+.menu-item > div > a {
+  color: gray;
+  font-size: 18px;
+}
+
+.menu-item > div > a:hover {
+  color: white;
+}
+
+.menu-item {
+  padding-bottom: 2rem;
+}
+
+.bm-menu-wrap {
+  width: 250px !important;
+}
+
+.nav-item > a:hover {
+  text-decoration: none !important;
+}
+
+.nav-link:hover {
+  cursor: pointer;
+}
