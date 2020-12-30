@@ -13,7 +13,7 @@ const handler = nc()
     const host: string = process.env.CONFIG_HOST;
     const port: number = parseInt(process.env.CONFIG_PORT, 10);
 
-    const resp = await fetch('http://${host}:${port}/config', {
+    const resp = await fetch(`http://${host}:${port}/config`, {
       method: 'POST',
       body: JSON.stringify({
         type: 'yaml',
