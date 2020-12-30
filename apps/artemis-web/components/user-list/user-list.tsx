@@ -157,7 +157,7 @@ const columns = [
 const UserListComponent = (props) => {
   const users = props.data;
 
-  return <BootstrapTable keyField="id" data={users} columns={columns} />;
+  return <BootstrapTable keyField="_id" data={users} columns={columns} />;
 };
 
 export default UserListComponent;

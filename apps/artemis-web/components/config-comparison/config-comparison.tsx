@@ -51,7 +51,7 @@ class ConfigComparisonComponent extends Component<{}, stateType> {
         window[key] = DMP[key];
       });
 
-      const res = await fetch('http://127.0.0.1/api/configs', {
+      const res = await fetch('/api/configs', {
         method: 'GET',
         credentials: 'include',
         headers: {

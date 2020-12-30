@@ -100,8 +100,8 @@ const UserManagementPage = (props) => {
                           className="form-control"
                           id="distinct_values_selection"
                         >
-                          {pendingList.map((user) => (
-                            <option>{user.name}</option>
+                          {pendingList.map((user, i) => (
+                            <option key={`1${i}`}>{user.name}</option>
                           ))}
                         </select>
                       </div>
@@ -139,8 +139,8 @@ const UserManagementPage = (props) => {
                           className="form-control"
                           id="distinct_values_selection"
                         >
-                          {normalList.map((user) => (
-                            <option>{user.name}</option>
+                          {normalList.map((user, i) => (
+                            <option key={`2${i}`}>{user.name}</option>
                           ))}
                         </select>
                       </div>
@@ -178,8 +178,8 @@ const UserManagementPage = (props) => {
                           className="form-control"
                           id="distinct_values_selection"
                         >
-                          {adminList.map((user) => (
-                            <option>{user.name}</option>
+                          {adminList.map((user, i) => (
+                            <option key={`3${i}`}>{user.name}</option>
                           ))}
                         </select>
                       </div>
@@ -217,8 +217,8 @@ const UserManagementPage = (props) => {
                           className="form-control"
                           id="distinct_values_selection"
                         >
-                          {userList.map((user) => (
-                            <option>{user.name}</option>
+                          {userList.map((user, i) => (
+                            <option key={`4${i}`}>{user.name}</option>
                           ))}
                         </select>
                       </div>
