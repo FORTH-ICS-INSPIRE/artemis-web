@@ -5,12 +5,14 @@ import {
   NextApiResponseExtended,
 } from '../../definitions';
 import auth from '../../middleware/auth';
+import argon2 from 'argon2';
+import { nanoid } from 'nanoid';
 
 const handler = nc()
   .use(auth)
   .use(authorization(['admin']))
   .post(async (req: NextApiRequestExtended, res: NextApiResponseExtended) => {
-    const { userName, action } = req.body;
+    const { userName, action, new_password, email } = req.body;
     switch (action) {
       case 'approval':
         await req.db.collection('users').updateOne(
@@ -41,6 +43,31 @@ const handler = nc()
             },
           }
         );
+        break;
+      case 'changePass':
+        await req.db.collection('users').updateOne(
+          { name: userName },
+          {
+            $set: {
+              password: await argon2.hash(new_password),
+            },
+          }
+        );
+        break;
+      case 'create':
+        await req.db
+          .collection('users')
+          .insertOne({
+            _id: nanoid(12),
+            email,
+            password: await argon2.hash(new_password),
+            name: userName,
+            lastLogin: new Date(),
+            currentLogin: new Date(),
+            role: 'user',
+            token: '',
+          })
+          .then(({ ops }) => ops[0]);
         break;
       case 'delete':
         req.db.collection('users').deleteOne({ name: userName });

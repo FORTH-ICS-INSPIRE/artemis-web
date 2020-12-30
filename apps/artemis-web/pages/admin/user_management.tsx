@@ -1,4 +1,6 @@
 import { Button } from '@material-ui/core';
+import UserCreationComponent from '../../components/user-creation/user-creation';
+import UsersPasswordComponent from '../../components/users-password/users-password';
 import Head from 'next/head';
 import React, { useEffect, useState } from 'react';
 import AuthHOC from '../../components/401-hoc/401-hoc';
@@ -246,6 +248,29 @@ const UserManagementPage = (props) => {
                   <div className="card-header"> User list </div>
                   <div className="card-body">
                     <UserListComponent data={userList} />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="row" style={{ marginTop: '30px' }}>
+              <div className="col-lg-1" />
+              <div className="col-lg-5">
+                <div className="card">
+                  <div className="card-header"> Password Change </div>
+                  <div className="card-body">
+                    <UsersPasswordComponent
+                      data={userList}
+                    ></UsersPasswordComponent>
+                  </div>
+                </div>
+              </div>
+              <div className="col-lg-5">
+                <div className="card">
+                  <div className="card-header"> Create User </div>
+                  <div className="card-body">
+                    <UserCreationComponent
+                      data={userList}
+                    ></UserCreationComponent>
                   </div>
                 </div>
               </div>
