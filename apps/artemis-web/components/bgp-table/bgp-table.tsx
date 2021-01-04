@@ -207,8 +207,8 @@ const expandRow: ExpandRowProps<any, number> = {
               {row.hijack_key.toString().length > 0 ? (
                 <Link href={`/hijack?key=${row.hijack_key}`}>View</Link>
               ) : (
-                  ''
-                )}
+                ''
+              )}
             </td>
           </tr>
           <tr>
@@ -539,10 +539,11 @@ const BGPTableComponent = (props) => {
             key={option.text}
             value={option.text}
             onClick={() => onSizePerPageChange(option.page)}
-            className={`btn ${currSizePerPage === `${option.page}`
+            className={`btn ${
+              currSizePerPage === `${option.page}`
                 ? 'btn-secondary'
                 : 'btn-warning'
-              }`}
+            }`}
           >
             {option.text}
           </option>

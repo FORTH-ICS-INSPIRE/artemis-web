@@ -265,8 +265,9 @@ function handleData(
           row.resolved || row.under_mitigation ? (
             <img alt="" src="./handled.png" />
           ) : (
-              <img alt="" src="./unhadled.png" />
-            ),
+            <img alt="" src="./unhadled.png" />
+          ),
+        key: row.key,
         more: <Link href={`/hijack?key=${row.key}`}>View</Link>,
       };
     });
@@ -369,10 +370,11 @@ const HijackTableComponent = (props) => {
             key={option.text}
             value={option.text}
             onClick={() => onSizePerPageChange(option.page)}
-            className={`btn ${currSizePerPage === `${option.page}`
+            className={`btn ${
+              currSizePerPage === `${option.page}`
                 ? 'btn-secondary'
                 : 'btn-warning'
-              }`}
+            }`}
           >
             {option.text}
           </option>
@@ -427,7 +429,7 @@ const HijackTableComponent = (props) => {
       win.focus();
     };
     return (
-      <div>
+      <div style={{ display: 'inline' }}>
         <Button
           className="btn btn-success"
           style={{ float: 'right', marginBottom: '10px' }}
@@ -438,6 +440,96 @@ const HijackTableComponent = (props) => {
           Download Table
         </Button>
       </div>
+    );
+  };
+
+  const HijackActions = (props) => {
+    const data = props.data;
+    const [hijackState, setHijackState] = useState(0);
+    const [selectState, setSelectState] = useState('hijack_action_resolve');
+
+    const sendData = async (e) => {
+      e.preventDefault();
+      const hijackKeys = data.slice(0, hijackState).map((hijack) => hijack.key);
+
+      const reqData = {
+        hijack_keys: hijackKeys,
+        action: selectState,
+      };
+
+      const res = await fetch(
+        'https://localhost/actions/multiple_hijack_actions',
+        {
+          method: 'POST',
+          credentials: 'include',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(reqData),
+        }
+      );
+    };
+
+    return (
+      <>
+        <button
+          onClick={() => setHijackState(data.length)}
+          style={{ marginRight: '5px' }}
+          id="select_page"
+          type="button"
+          className="btn btn-primary btn-sm"
+        >
+          Select Page
+        </button>
+        <span
+          style={{ marginRight: '5px' }}
+          className="btn-group-toggle"
+          data-toggle="buttons"
+        >
+          <label className="btn btn-secondary active btn-sm">
+            <input type="checkbox" autoComplete="off" /> Selected Hijacks{' '}
+            <b id="selected_hijacks_num">{hijackState}</b>
+          </label>
+        </span>
+        <select
+          onChange={(e) => setSelectState(e.target.value)}
+          style={{
+            width: '200px',
+            display: 'inline-block',
+            marginRight: '5px',
+          }}
+          className="form-control form-control-sm-auto"
+          id="action_selection"
+        >
+          <option value="hijack_action_resolve">Mark as Resolved</option>
+          <option value="hijack_action_ignore">Mark as Ignored</option>
+          <option value="hijack_action_acknowledge">
+            Mark as Acknowledged
+          </option>
+          <option value="hijack_action_acknowledge_not">
+            Mark as Not Acknowledged
+          </option>
+          <option value="hijack_action_delete">Delete Hijack</option>
+        </select>
+        <button
+          onClick={sendData}
+          style={{ marginRight: '5px' }}
+          id="apply_selected"
+          type="button"
+          className="btn btn-primary btn-sm"
+        >
+          Apply
+        </button>
+        <button
+          onClick={() => setHijackState(0)}
+          id="clear_all_selected"
+          type="button"
+          className="btn btn-danger btn-sm"
+        >
+          Clear
+        </button>
+      </>
     );
   };
 
@@ -471,7 +563,8 @@ const HijackTableComponent = (props) => {
           <>
             <div className="header-filter">
               <SizePerPageDropdownStandalone {...paginationProps} />
-              <MyExportCSV {...toolkitprops.csvProps}>Export CSV!!</MyExportCSV>
+              <HijackActions data={hijackData} />
+              <MyExportCSV {...toolkitprops.csvProps} />
             </div>
             <BootstrapTable
               remote

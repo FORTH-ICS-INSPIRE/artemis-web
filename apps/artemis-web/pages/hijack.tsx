@@ -68,6 +68,33 @@ const ViewHijackPage = (props) => {
     leave: { opacity: 0 },
   });
 
+  const [selectActionState, setSelectActionState] = useState(
+    'hijack_action_resolve'
+  );
+
+  const sendData = async (e) => {
+    e.preventDefault();
+    const hijackKeys = [hijackKey];
+
+    const reqData = {
+      hijack_keys: hijackKeys,
+      action: selectActionState,
+    };
+
+    const res = await fetch(
+      'https://localhost/actions/multiple_hijack_actions',
+      {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(reqData),
+      }
+    );
+  };
+
   useGraphQl('hijackByKey', {
     callback: (data) => {
       const hijacks = shallSubscribe(isLive)
@@ -262,19 +289,67 @@ const ViewHijackPage = (props) => {
               </div>
             </div>
             <div className="col-lg-3">
-              <div className="card">
-                <div className="card-header">Comments</div>
-                <div className="card-body">
-                  {hijackDataState.comment ? (
-                    <Editor
-                      readOnly={true}
-                      placeholder={hijackDataState.comment}
-                      editorState={editorState}
-                      onChange={setEditorState}
-                    />
-                  ) : (
-                    <> </>
-                  )}
+              <div className="row" style={{ marginBottom: '15px' }}>
+                <div className="col-lg-12">
+                  <div className="card">
+                    <div className="card-header">Hijack Actions</div>
+                    <div className="card-body">
+                      <select
+                        onChange={(e) => setSelectActionState(e.target.value)}
+                        style={{
+                          width: '200px',
+                          display: 'inline-block',
+                          marginRight: '15px',
+                        }}
+                        className="form-control form-control-sm-auto"
+                        id="action_selection"
+                      >
+                        <option value="hijack_action_resolve">
+                          Mark as Resolved
+                        </option>
+                        <option value="hijack_action_ignore">
+                          Mark as Ignored
+                        </option>
+                        <option value="hijack_action_acknowledge">
+                          Mark as Acknowledged
+                        </option>
+                        <option value="hijack_action_acknowledge_not">
+                          Mark as Not Acknowledged
+                        </option>
+                        <option value="hijack_action_delete">
+                          Delete Hijack
+                        </option>
+                      </select>
+                      <button
+                        onClick={sendData}
+                        style={{ marginRight: '5px' }}
+                        id="apply_selected"
+                        type="button"
+                        className="btn btn-primary btn-md"
+                      >
+                        Apply
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="row">
+                <div className="col-lg-12">
+                  <div className="card">
+                    <div className="card-header">Comments</div>
+                    <div className="card-body">
+                      {hijackDataState.comment ? (
+                        <Editor
+                          readOnly={true}
+                          placeholder={hijackDataState.comment}
+                          editorState={editorState}
+                          onChange={setEditorState}
+                        />
+                      ) : (
+                        <> </>
+                      )}
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>

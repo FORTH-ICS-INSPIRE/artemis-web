@@ -18,9 +18,7 @@ const SystemPage = (props) => {
     const { worker } = require('../../utils/mock-sw/browser');
     worker.start();
   }
-  type currentType = {
-    props: any;
-  };
+
   const configRef = React.createRef<any>();
   const commentRef = React.createRef<any>();
   const [alertState, setAlertState] = useState('none');
