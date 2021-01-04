@@ -1,47 +1,102 @@
 import { Button } from '@material-ui/core';
-import { diffDate } from '../../utils/token';
-import React, { Component } from 'react';
+import { diffDate, formatDate } from '../../utils/token';
+import React, { Component, useState } from 'react';
 import ReactTooltip from 'react-tooltip';
 
 class ModuleState extends Component<any, any> {
+  constructor(props) {
+    super(props);
+    this.state = {
+      visibility: false,
+    };
+  }
   render() {
-    const { process, index, tooltip, date } = this.props;
+    const { process, index, tooltip, date, modules } = this.props;
+    if (!process || !modules) return <> </>;
+
+    const modName = process.name.substring(0, process.name.indexOf('-'));
+    const totalModules = modules[modName].length;
+    const activeModules = modules[modName].filter(
+      (module) => module[1] === true
+    ).length;
 
     return (
-      <tr key={index}>
-        <td>
-          <div data-tip data-for={'module' + index}>
-            {process
-              ? process.name.charAt(0).toUpperCase() + process.name.slice(1)
-              : ''}
-          </div>
-          <ReactTooltip html={true} id={'module' + index}>
-            {tooltip ?? 'Loading...'}
-          </ReactTooltip>
-        </td>
-        <td>
-          {process ? (
-            process.running ? (
-              <Button variant="contained" color="primary">
-                On
-              </Button>
+      <>
+        <tr key={index}>
+          <td>
+            <div
+              style={{ width: '150px' }}
+              data-tip
+              data-for={'module' + index}
+            >
+              {process
+                ? modName.charAt(0).toUpperCase() + modName.slice(1)
+                : ''}
+            </div>
+            <ReactTooltip html={true} id={'module' + index}>
+              {tooltip ?? 'Loading...'}
+            </ReactTooltip>
+          </td>
+          <td>
+            {process ? (
+              process.running && activeModules > 0 ? (
+                <button type="button" className="btn btn-success btn-sm">
+                  On{' '}
+                  <span className="badge badge-light">
+                    {activeModules}/{totalModules}
+                  </span>
+                </button>
+              ) : (
+                <button type="button" className="btn btn-danger btn-sm">
+                  Off{' '}
+                  <span className="badge badge-light">
+                    {activeModules}/{totalModules}
+                  </span>
+                </button>
+              )
             ) : (
-              <Button variant="contained" color="secondary">
-                Off
-              </Button>
-            )
-          ) : (
-            ''
-          )}
-        </td>
-        <td>
-          {process
-            ? process.running
-              ? diffDate(new Date(process.timestamp), date)
-              : '-'
-            : ''}
-        </td>
-      </tr>
+              ''
+            )}
+          </td>
+          <td>
+            <a
+              onClick={(e) =>
+                this.setState({ visibility: !this.state.visibility })
+              }
+              id={modName}
+              className="view_multiple_modules"
+              href="#"
+            >
+              View instances
+            </a>
+          </td>
+        </tr>
+        <tr
+          id={modName + '_mods'}
+          style={{
+            backgroundColor: 'rgba(0, 0, 0, 0.05)',
+            display: this.state.visibility ? 'table-row' : 'none',
+          }}
+        >
+          {modules[modName].map((module) => (
+            <>
+              <td>{module[0].charAt(0).toUpperCase() + module[0].slice(1)}</td>
+              <td>
+                {module[1] ? (
+                  <button type="button" className="btn btn-success btn-sm">
+                    On
+                  </button>
+                ) : (
+                  <button type="button" className="btn btn-danger btn-sm">
+                    Off
+                  </button>
+                )}
+              </td>
+              <td>{module[1] ? formatDate(new Date(module[2])) : ''}</td>
+            </>
+          ))}
+        </tr>
+      </>
     );
   }
 }
