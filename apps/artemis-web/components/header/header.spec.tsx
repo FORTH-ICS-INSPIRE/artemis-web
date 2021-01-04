@@ -11,8 +11,12 @@ configure({ adapter: new Adapter() });
 
 describe('Header', () => {
   window.matchMedia = () => ({
-    addListener: () => { return },
-    removeListener: () => { return },
+    addListener: () => {
+      return;
+    },
+    removeListener: () => {
+      return;
+    },
   });
 
   it('should render successfully', async () => {
