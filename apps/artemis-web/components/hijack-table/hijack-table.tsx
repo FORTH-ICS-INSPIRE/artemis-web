@@ -265,8 +265,8 @@ function handleData(
           row.resolved || row.under_mitigation ? (
             <img alt="" src="./handled.png" />
           ) : (
-            <img alt="" src="./unhadled.png" />
-          ),
+              <img alt="" src="./unhadled.png" />
+            ),
         more: <Link href={`/hijack?key=${row.key}`}>View</Link>,
       };
     });
@@ -369,11 +369,10 @@ const HijackTableComponent = (props) => {
             key={option.text}
             value={option.text}
             onClick={() => onSizePerPageChange(option.page)}
-            className={`btn ${
-              currSizePerPage === `${option.page}`
+            className={`btn ${currSizePerPage === `${option.page}`
                 ? 'btn-secondary'
                 : 'btn-warning'
-            }`}
+              }`}
           >
             {option.text}
           </option>
@@ -420,8 +419,12 @@ const HijackTableComponent = (props) => {
   };
 
   const MyExportCSV = (props) => {
-    const handleClick = () => {
-      props.onExport();
+    const handleClick = async () => {
+      const win = window.open(
+        '/proxy_api?download_table=true&action=view_hijacks',
+        '_blank'
+      );
+      win.focus();
     };
     return (
       <div>

@@ -207,8 +207,8 @@ const expandRow: ExpandRowProps<any, number> = {
               {row.hijack_key.toString().length > 0 ? (
                 <Link href={`/hijack?key=${row.hijack_key}`}>View</Link>
               ) : (
-                ''
-              )}
+                  ''
+                )}
             </td>
           </tr>
           <tr>
@@ -539,11 +539,10 @@ const BGPTableComponent = (props) => {
             key={option.text}
             value={option.text}
             onClick={() => onSizePerPageChange(option.page)}
-            className={`btn ${
-              currSizePerPage === `${option.page}`
+            className={`btn ${currSizePerPage === `${option.page}`
                 ? 'btn-secondary'
                 : 'btn-warning'
-            }`}
+              }`}
           >
             {option.text}
           </option>
@@ -596,25 +595,11 @@ const BGPTableComponent = (props) => {
   };
   const MyExportCSV = (props) => {
     const handleClick = async () => {
-      const res = await fetch('/api/download_tables', {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ action: 'view_bgpupdates' }),
-      });
-
-      const downloadJson = await res.json();
-
-      const x = window.open();
-      x.document.open();
-      x.document.write(
-        '<html><body><pre>' +
-          JSON.stringify(downloadJson) +
-          '</pre></body></html>'
+      const win = window.open(
+        '/proxy_api?download_table=true&action=view_bgpupdates',
+        '_blank'
       );
-      x.document.close();
+      win.focus();
     };
 
     return (

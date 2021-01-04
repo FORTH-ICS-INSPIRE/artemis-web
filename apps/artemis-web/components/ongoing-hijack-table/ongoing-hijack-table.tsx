@@ -535,25 +535,6 @@ const OngoingHijackTableComponent = (props) => {
     ], // A numeric array is also available. the purpose of above example is custom the text
   };
 
-  const MyExportCSV = (props) => {
-    const handleClick = () => {
-      props.onExport();
-    };
-    return (
-      <div>
-        <Button
-          className="btn btn-success"
-          style={{ float: 'right', marginBottom: '10px' }}
-          variant="contained"
-          color="primary"
-          onClick={handleClick}
-        >
-          Download Table
-        </Button>
-      </div>
-    );
-  };
-
   const handleTableChange = (
     type,
     { page, sizePerPage, sortOrder, filters, sortField }
@@ -583,7 +564,6 @@ const OngoingHijackTableComponent = (props) => {
           <>
             <div className="header-filter">
               <SizePerPageDropdownStandalone {...paginationProps} />
-              <MyExportCSV {...toolkitprops.csvProps}>Export CSV!!</MyExportCSV>
             </div>
             <BootstrapTable
               remote
