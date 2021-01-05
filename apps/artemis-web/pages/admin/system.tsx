@@ -13,11 +13,11 @@ import SystemModule from '../../components/system-module/system-module';
 import { useGraphQl } from '../../utils/hooks/use-graphql';
 
 const SystemPage = (props) => {
-  if (shallMock()) {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const { worker } = require('../../utils/mock-sw/browser');
-    worker.start();
-  }
+  // if (shallMock()) {
+  //   // eslint-disable-next-line @typescript-eslint/no-var-requires
+  //   const { worker } = require('../../utils/mock-sw/browser');
+  //   worker.start();
+  // }
 
   const configRef = React.createRef<any>();
   const commentRef = React.createRef<any>();
@@ -158,7 +158,7 @@ const SystemPage = (props) => {
             <div className="row">
               <div className="col-lg-1" />
               <div className="col-lg-10">
-                <Grid xs={3} container spacing={3}>
+                <Grid container spacing={3}>
                   {keys.map((module, i) => {
                     return (
                       <SystemModule
