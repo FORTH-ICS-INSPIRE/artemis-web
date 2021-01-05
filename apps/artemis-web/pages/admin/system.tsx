@@ -92,11 +92,39 @@ const SystemPage = (props) => {
     : [];
 
   const states = {};
+  const modulesList = [
+    'riperistap',
+    'bgpstreamlivetap',
+    'exabgptap',
+    'detection',
+    'mitigation',
+    'bgpstreamhisttap',
+    'bgpstreamkafkatap',
+  ];
+  const modulesLabels = {
+    riperistap: 'RIPE RIS Monitor Service',
+    bgpstreamlivetap: 'BGPStream Live Monitor Service',
+    bgpstreamkafkatap: 'BGPStream Kafka Monitor Service',
+    bgpstreamhisttap: 'BGPStream Historical Monitor Service',
+    exabgptap: 'ExaBGP Monitor Service',
+    detection: 'Detection Service',
+    mitigation: 'Mitigation Service',
+  };
 
   modules.forEach((module) => (states[module[0].toString()] = module[1]));
-
   const [state, setState] = useState(states);
-  const keys = Object.keys(state);
+  const keys = Object.keys(state).filter((key) =>
+    modulesList.includes(key.substring(0, key.indexOf('-')).toLowerCase())
+  );
+  const subModules = {};
+  keys.forEach((key) => {
+    const keyL = key.substring(0, key.indexOf('-')).toLowerCase();
+    if (keyL in subModules) {
+      subModules[keyL].push([key.toLowerCase(), state[key]]);
+    } else {
+      subModules[keyL] = [[key.toLowerCase(), state[key]]];
+    }
+  });
 
   if (modules.length !== 0 && keys.length === 0) setState(states);
 
@@ -130,12 +158,14 @@ const SystemPage = (props) => {
             <div className="row">
               <div className="col-lg-1" />
               <div className="col-lg-10">
-                <Grid container spacing={3}>
+                <Grid xs={3} container spacing={3}>
                   {keys.map((module, i) => {
                     return (
                       <SystemModule
                         key={i}
                         module={module}
+                        subModules={subModules}
+                        labels={modulesLabels}
                         state={state}
                         setState={setState}
                       />
