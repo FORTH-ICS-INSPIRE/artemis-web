@@ -16,7 +16,6 @@ jobs:
     # Because of this the network configuration changes from host based network to a container network.
     container:
       image: cypress/included:3.4.0
-
     services:
       mongodb:
         image: mongo
@@ -38,6 +37,7 @@ jobs:
         env:
           MONGODB_HOST: mongodb
           MONGODB_PORT: ${{ job.services.mongodb.ports[27017] }}
+          LDAP_HOST: ldap
       - name: 'Upload Artifact'
         if: failure()
         uses: actions/upload-artifact@v2

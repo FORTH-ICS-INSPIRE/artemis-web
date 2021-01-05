@@ -29,7 +29,7 @@ class ModuleState extends Component<any, any> {
               data-tip
               data-for={'module' + index}
             >
-              {process && (modName.charAt(0).toUpperCase() + modName.slice(1))}
+              {process && modName.charAt(0).toUpperCase() + modName.slice(1)}
             </div>
             <ReactTooltip html={true} id={'module' + index}>
               {tooltip ?? 'Loading...'}
@@ -45,16 +45,16 @@ class ModuleState extends Component<any, any> {
                   </span>
                 </button>
               ) : (
-                  <button type="button" className="btn btn-danger btn-sm">
-                    Off{' '}
-                    <span className="badge badge-light">
-                      {activeModules}/{totalModules}
-                    </span>
-                  </button>
-                )
+                <button type="button" className="btn btn-danger btn-sm">
+                  Off{' '}
+                  <span className="badge badge-light">
+                    {activeModules}/{totalModules}
+                  </span>
+                </button>
+              )
             ) : (
-                ''
-              )}
+              ''
+            )}
           </td>
           <td>
             <a
@@ -87,10 +87,10 @@ class ModuleState extends Component<any, any> {
                   On
                 </button>
               ) : (
-                  <button type="button" className="btn btn-danger btn-sm">
-                    Off
-                  </button>
-                )}
+                <button type="button" className="btn btn-danger btn-sm">
+                  Off
+                </button>
+              )}
             </td>
             <td key={index + '_' + i + '3'}>
               {module[1] && formatDate(new Date(module[2]))}
