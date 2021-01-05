@@ -61,7 +61,9 @@ class StatisticsTable extends Component<StatisticsType, {}> {
                         word.slice(1) +
                         ' ')
                   );
+
                 if (firstCaps.includes('Typename')) return;
+
                 return (
                   <tr key={i}>
                     <td>
@@ -69,7 +71,7 @@ class StatisticsTable extends Component<StatisticsType, {}> {
                         {firstCaps}
                       </div>
                       <ReactTooltip html={true} id={'stats' + i}>
-                        {tooltips[i]}
+                        {tooltips[i - 1]}
                       </ReactTooltip>
                     </td>
                     <td>{stat[1]}</td>

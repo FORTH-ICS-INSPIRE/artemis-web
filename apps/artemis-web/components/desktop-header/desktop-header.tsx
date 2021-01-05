@@ -33,31 +33,25 @@ const DesktopHeader = (props) => {
   return (
     <div className="container">
       <a className="navbar-brand" href="/">
-        <img src="./artemis-logo.png" alt="" width="128px;" />
+        <img src="/artemis-logo.png" alt="" width="128px;" />
       </a>
       <div className="collapse navbar-collapse" id="navbarCollapse">
         <ul className="nav navbar-nav navbar-right">
           {user && user.role !== 'pending' && (
             <>
               <li className="nav-item">
-                <Link href="/dashboard">
-                  <a href="/dashboard" className="nav-link">
-                    Dashboard
-                  </a>
+                <Link href="/dashboard" className="nav-link">
+                  Dashboard
                 </Link>
               </li>
               <li className="nav-item">
-                <Link href="/bgpupdates">
-                  <a href="/bgpupdates" className="nav-link">
-                    BGP Updates
-                  </a>
+                <Link href="/bgpupdates" className="nav-link">
+                  BGP Updates
                 </Link>
               </li>
               <li className="nav-item">
-                <Link href="/hijacks">
-                  <a href="/hijacks" className="nav-link">
-                    Hijacks
-                  </a>
+                <Link href="/hijacks" className="nav-link">
+                  Hijacks
                 </Link>
               </li>
             </>

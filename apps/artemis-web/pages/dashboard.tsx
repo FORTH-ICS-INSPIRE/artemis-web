@@ -12,11 +12,11 @@ import { useGraphQl } from '../utils/hooks/use-graphql';
 import { shallMock } from '../utils/token';
 
 const DashboardPage = (props) => {
-  if (shallMock()) {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const { worker } = require('../utils/mock-sw/browser');
-    worker.start();
-  }
+  // if (shallMock()) {
+  //   // eslint-disable-next-line @typescript-eslint/no-var-requires
+  //   const { worker } = require('../utils/mock-sw/browser');
+  //   worker.start();
+  // }
 
   const user = props.user;
   const notify = (message: React.ReactText) => toast(message);

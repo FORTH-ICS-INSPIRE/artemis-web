@@ -29,9 +29,7 @@ class ModuleState extends Component<any, any> {
               data-tip
               data-for={'module' + index}
             >
-              {process
-                ? modName.charAt(0).toUpperCase() + modName.slice(1)
-                : ''}
+              {process && (modName.charAt(0).toUpperCase() + modName.slice(1))}
             </div>
             <ReactTooltip html={true} id={'module' + index}>
               {tooltip ?? 'Loading...'}
@@ -47,16 +45,16 @@ class ModuleState extends Component<any, any> {
                   </span>
                 </button>
               ) : (
-                <button type="button" className="btn btn-danger btn-sm">
-                  Off{' '}
-                  <span className="badge badge-light">
-                    {activeModules}/{totalModules}
-                  </span>
-                </button>
-              )
+                  <button type="button" className="btn btn-danger btn-sm">
+                    Off{' '}
+                    <span className="badge badge-light">
+                      {activeModules}/{totalModules}
+                    </span>
+                  </button>
+                )
             ) : (
-              ''
-            )}
+                ''
+              )}
           </td>
           <td>
             <a
@@ -71,31 +69,34 @@ class ModuleState extends Component<any, any> {
             </a>
           </td>
         </tr>
-        <tr
-          id={modName + '_mods'}
-          style={{
-            backgroundColor: 'rgba(0, 0, 0, 0.05)',
-            display: this.state.visibility ? 'table-row' : 'none',
-          }}
-        >
-          {modules[modName].map((module) => (
-            <>
-              <td>{module[0].charAt(0).toUpperCase() + module[0].slice(1)}</td>
-              <td>
-                {module[1] ? (
-                  <button type="button" className="btn btn-success btn-sm">
-                    On
-                  </button>
-                ) : (
+        {modules[modName].map((module, i) => (
+          <tr
+            key={index + '_' + i + '0'}
+            id={modName + '_mods'}
+            style={{
+              backgroundColor: 'rgba(0, 0, 0, 0.05)',
+              display: this.state.visibility ? 'table-row' : 'none',
+            }}
+          >
+            <td key={index + '_' + i + '1'}>
+              {module[0].charAt(0).toUpperCase() + module[0].slice(1)}
+            </td>
+            <td key={index + '_' + i + '2'}>
+              {module[1] ? (
+                <button type="button" className="btn btn-success btn-sm">
+                  On
+                </button>
+              ) : (
                   <button type="button" className="btn btn-danger btn-sm">
                     Off
                   </button>
                 )}
-              </td>
-              <td>{module[1] ? formatDate(new Date(module[2])) : ''}</td>
-            </>
-          ))}
-        </tr>
+            </td>
+            <td key={index + '_' + i + '3'}>
+              {module[1] && formatDate(new Date(module[2]))}
+            </td>
+          </tr>
+        ))}
       </>
     );
   }

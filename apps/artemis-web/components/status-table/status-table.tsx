@@ -67,6 +67,26 @@ class StatusTable extends Component<StatsType, any> {
     );
 
     const tooltips = {
+      autoignore:
+        'Backend microservice that automatically ignores hijack alerts of low impact and/or visibility based on user configuration.',
+      autostarter:
+        'Backend microservice that automatically checks the health of the backend and monitor (taps) microservices and activates them via their REST interface in case they are down.',
+      notifier:
+        'Backend microservice that sends BGP hijack alerts to different logging endpoints, according to user configuration.',
+      fileobserver:
+        'Backend microservice that detects content changes in the configuration file and notifies configuration.',
+      prefixtree:
+        'Backend microservice that holds the configuration prefix tree (prefixes bundled with ARTEMIS rules) in-memory for quick lookups.',
+      riperistap:
+        'Monitor/tap microservice that collects real-time BGP update information from RIPE RIS live.',
+      exabgptap:
+        'Monitor/tap microservice that collects real-time BGP update information from local BGP feeds via exaBGP.',
+      bgpstreamlivetap:
+        'Monitor/tap microservice that collects real-time BGP update information from RIPE RIS RIB collections, RouteViews RIB collections and Public CAIDA BMP feeds.',
+      bgpstreamkafkatap:
+        'Monitor/tap microservice that collects real-time BGP update information via Kafka from public and private BMP feeds.',
+      bgpstreamhisttap:
+        'Monitor/tap microservice that replays historical BGP updates.',
       clock:
         'ARTEMIS module serving as the clock signal generator for periodic tasks done in other modules (e.g., database).',
       configuration:
