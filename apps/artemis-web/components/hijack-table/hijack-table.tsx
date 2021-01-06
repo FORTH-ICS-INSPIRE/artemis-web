@@ -384,7 +384,23 @@ const HijackTableComponent = (props) => {
     </div>
   );
 
+  const pageButtonRenderer = ({ page, active, onPageChange }) => {
+    const handleClick = (e) => {
+      e.preventDefault();
+      onPageChange(page);
+    };
+
+    return (
+      <li className={(active ? 'active' : '') + ' page-item'}>
+        <a onClick={handleClick} href="#" className="page-link">
+          {page !== 'Next' && page !== 'Back' ? page + 1 : page}
+        </a>
+      </li>
+    );
+  };
+
   const options = {
+    pageButtonRenderer,
     sizePerPageRenderer,
     pageStartIndex: 0,
     withFirstAndLast: false, // Hide the going to First and Last page button
