@@ -372,7 +372,7 @@ function handleData(data, tooltips, setTooltips, context, offset) {
   if (HIJACK_DATA && HIJACK_DATA.length) {
     hijacks = HIJACK_DATA.map((row, i) => {
       return {
-        id: row.id,
+        id: i,
         time_last: formatDate(new Date(row.time_last)),
         time_detected: formatDate(new Date(row.time_detected)),
         prefix: row.prefix,
@@ -384,7 +384,7 @@ function handleData(data, tooltips, setTooltips, context, offset) {
             tooltips={tooltips}
             setTooltips={setTooltips}
             asn={row.hijack_as}
-            label={`hijack_as_` + row.id + '_' + offset}
+            label={`hijack_as_` + i + '_' + offset}
             context={context}
           />
         ),
