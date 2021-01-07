@@ -32,7 +32,7 @@ class Tooltip extends Component<any, any> {
           {html || asn}
         </div>
         <ReactTooltip place="top" effect="solid" html={true} id={label}>
-          {this.state.tooltip ?? 'Loading...'}
+          {this.state.tooltip.length ? this.state.tooltip : 'Loading...'}
         </ReactTooltip>
       </>
     );

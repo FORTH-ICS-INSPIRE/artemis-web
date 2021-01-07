@@ -391,7 +391,7 @@ const HijackTableComponent = (props) => {
     };
 
     return (
-      <li className={(active ? 'active' : '') + ' page-item'}>
+      <li key={page} className={(active ? 'active' : '') + ' page-item'}>
         <a onClick={handleClick} href="#" className="page-link">
           {page !== 'Next' && page !== 'Back' ? page + 1 : page}
         </a>
