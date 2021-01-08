@@ -8,6 +8,8 @@ import { QueryGenerator } from '../../libs/graphql';
 describe('BGPTable', () => {
   it('should render successfully', () => {
     const generator = new QueryGenerator('bgpUpdates', false, {});
+    const generator2 = new QueryGenerator('bgpCount', false, {});
+
     const mocks = [
       {
         request: {
@@ -32,6 +34,20 @@ describe('BGPTable', () => {
                 orig_path: null,
               },
             ],
+          },
+        },
+      },
+      {
+        request: {
+          operationName: 'getLiveTableCount',
+          query: generator2.getQuery(),
+        },
+        result: {
+          data: {
+            count_data: {
+              aggregate: { count: 25, __typename: 'view_hijacks_aggregate_fields' },
+              __typename: 'view_hijacks_aggregate',
+            },
           },
         },
       },
