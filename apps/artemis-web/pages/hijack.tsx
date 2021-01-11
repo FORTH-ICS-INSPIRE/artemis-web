@@ -51,6 +51,7 @@ const ViewHijackPage = (props) => {
     peers_seen: [],
     peers_withdrawn: [],
     comment: '',
+    seen: false,
   });
   const [hijackExists, setHijackExists] = useState(true);
   const [filteredBgpData, setFilteredBgpData] = useState([]);
@@ -212,7 +213,7 @@ const ViewHijackPage = (props) => {
                   ) : (
                     <span
                       id="hijack_acknowledged_badge"
-                      class="badge badge-acknowledged float-right badge-danger"
+                      className="badge badge-acknowledged float-right badge-danger"
                     >
                       Not Acknowledged
                     </span>
