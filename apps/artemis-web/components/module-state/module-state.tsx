@@ -58,45 +58,47 @@ class ModuleState extends Component<any, any> {
           </td>
           <td>
             <a
-              onClick={(e) =>
-                this.setState({ visibility: !this.state.visibility })
-              }
+              onClick={(e) => {
+                const offset = window.pageYOffset;
+                this.setState({ visibility: !this.state.visibility });
+              }}
               id={modName}
               className="view_multiple_modules"
-              href="#"
             >
               View instances
             </a>
           </td>
         </tr>
-        {modules[modName].map((module, i) => (
-          <tr
-            key={index + '_' + i + '0'}
-            id={modName + '_mods'}
-            style={{
-              backgroundColor: 'rgba(0, 0, 0, 0.05)',
-              display: this.state.visibility ? 'table-row' : 'none',
-            }}
-          >
-            <td key={index + '_' + i + '1'}>
-              {module[0].charAt(0).toUpperCase() + module[0].slice(1)}
-            </td>
-            <td key={index + '_' + i + '2'}>
-              {module[1] ? (
-                <button type="button" className="btn btn-success btn-sm">
-                  On
-                </button>
-              ) : (
-                <button type="button" className="btn btn-danger btn-sm">
-                  Off
-                </button>
-              )}
-            </td>
-            <td key={index + '_' + i + '3'}>
-              {module[1] && formatDate(new Date(module[2]))}
-            </td>
-          </tr>
-        ))}
+        {modules[modName].map(
+          (module, i) =>
+            this.state.visibility && (
+              <tr
+                key={index + '_' + i + '0'}
+                id={modName + '_mods'}
+                style={{
+                  backgroundColor: 'rgba(0, 0, 0, 0.05)',
+                }}
+              >
+                <td key={index + '_' + i + '1'}>
+                  {module[0].charAt(0).toUpperCase() + module[0].slice(1)}
+                </td>
+                <td key={index + '_' + i + '2'}>
+                  {module[1] ? (
+                    <button type="button" className="btn btn-success btn-sm">
+                      On
+                    </button>
+                  ) : (
+                    <button type="button" className="btn btn-danger btn-sm">
+                      Off
+                    </button>
+                  )}
+                </td>
+                <td key={index + '_' + i + '3'}>
+                  {module[1] && formatDate(new Date(module[2]))}
+                </td>
+              </tr>
+            )
+        )}
       </>
     );
   }

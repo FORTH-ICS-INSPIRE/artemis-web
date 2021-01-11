@@ -45,7 +45,10 @@ describe('BGPTable', () => {
         result: {
           data: {
             count_data: {
-              aggregate: { count: 25, __typename: 'view_hijacks_aggregate_fields' },
+              aggregate: {
+                count: 25,
+                __typename: 'view_hijacks_aggregate_fields',
+              },
               __typename: 'view_hijacks_aggregate',
             },
           },

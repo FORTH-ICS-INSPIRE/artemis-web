@@ -40,194 +40,197 @@ const exactMatchFilter = textFilter({
   id: 'id', // assign a unique value for htmlFor attribute, it's useful when you have same dataField across multiple table in one page
 });
 
-const expandRow: ExpandRowProps<any, number> = {
-  showExpandColumn: true,
-  expandByColumnOnly: true,
-  expandColumnPosition: 'right',
-  renderer: (row, i) => {
-    return (
-      <table>
-        <thead></thead>
-        <tbody>
-          <tr>
-            <td>
-              <b>
-                {genTooltip(
-                  'Prefix',
-                  null,
-                  'prefix_exp' + i,
-                  'The IPv4/IPv6 prefix related to the BGP update.'
+const getExpandRow = (expandState) => {
+  return {
+    showExpandColumn: true,
+    expandByColumnOnly: true,
+    expandColumnPosition: 'right',
+    expanded: expandState,
+    renderer: (row, i) => {
+      return (
+        <table>
+          <thead></thead>
+          <tbody>
+            <tr>
+              <td>
+                <b>
+                  {genTooltip(
+                    'Prefix',
+                    null,
+                    'prefix_exp' + i,
+                    'The IPv4/IPv6 prefix related to the BGP update.'
+                  )}
+                </b>
+              </td>
+              <td>{row.prefix.toString()}</td>
+            </tr>
+            <tr>
+              <td>
+                <b>
+                  {genTooltip(
+                    'Origin AS',
+                    null,
+                    'origin_exp' + i,
+                    'The AS that originated the BGP update.'
+                  )}
+                </b>
+              </td>
+              <td>{row.origin_as_original}</td>
+            </tr>
+            <tr>
+              <td>
+                <b>
+                  {genTooltip(
+                    'AS PATH',
+                    null,
+                    'path_exp' + i,
+                    'The AS-level path of the update.'
+                  )}
+                </b>
+              </td>
+              <td>{row.as_path}</td>
+            </tr>
+            <tr>
+              <td>
+                <b>
+                  {genTooltip(
+                    'Aux Path Information',
+                    null,
+                    'aux_exp' + i,
+                    'Auxiliary path information on the update/withdrawal. </br> For updates, this is different from the reported AS-PATH only in the case of AS-SETs, sequences, etc. where the monitor decomposes a single update into many for ease of interpretation. </br> For (implicit) withdrawals, it contains the original triggering BGP update information in json format.'
+                  )}
+                </b>
+              </td>
+              <td>{row.orig_path ? JSON.stringify(row.orig_path) : ''}</td>
+            </tr>
+            <tr>
+              <td>
+                <b>
+                  {genTooltip(
+                    'Peer AS',
+                    null,
+                    'peer_exp' + i,
+                    'The monitor AS that peers with the route collector service reporting the BGP update.'
+                  )}
+                </b>
+              </td>
+              <td>{row.peer_asn_original}</td>
+            </tr>
+            <tr>
+              <td>
+                <b>
+                  {genTooltip(
+                    'Service',
+                    null,
+                    'service_exp' + i,
+                    'The route collector service that is connected to the monitor AS that observed the BGP update.'
+                  )}
+                </b>
+              </td>
+              <td>{row.service.toString().replace(/\|/g, ' -> ')}</td>
+            </tr>
+            <tr>
+              <td>
+                <b>
+                  {genTooltip(
+                    'Type',
+                    null,
+                    'type_exp' + i,
+                    '<ul><li>A → route announcement</li><li>W → route withdrawal</li></ul>'
+                  )}
+                </b>
+              </td>
+              <td>{row.type.toString()}</td>
+            </tr>
+            <tr>
+              <td>
+                <b>
+                  {genTooltip(
+                    'Communities',
+                    null,
+                    'communities_exp' + i,
+                    'BGP communities related to the BGP update.'
+                  )}
+                </b>
+              </td>
+              <td>{row.communities.toString()}</td>
+            </tr>
+            <tr>
+              <td>
+                <b>
+                  {genTooltip(
+                    'Timestamp',
+                    null,
+                    'timestamp_exp' + i,
+                    'The time when the BGP update was generated, as set by the BGP monitor or route collector.'
+                  )}
+                </b>
+              </td>
+              <td>{row.timestamp.toString()}</td>
+            </tr>
+            <tr>
+              <td>
+                <b>
+                  {genTooltip(
+                    'Hijack Key',
+                    null,
+                    'key_exp' + i,
+                    'Redirects to the hijack view if the BGP update is not benign, otherwise empty.'
+                  )}
+                </b>
+              </td>
+              <td>{row.hijack_key.toString()}</td>
+            </tr>
+            <tr>
+              <td>
+                <b>
+                  {genTooltip(
+                    'Matched Prefix',
+                    null,
+                    'matched_exp' + i,
+                    'The configured IPv4/IPv6 prefix that matched the hijacked prefix.'
+                  )}
+                </b>
+              </td>
+              <td>{row.matched_prefix.toString()}</td>
+            </tr>
+            <tr>
+              <td>
+                <b>
+                  {genTooltip(
+                    'View Hijack',
+                    null,
+                    'view_exp' + i,
+                    'Redirects to the hijack view if the BGP update is not benign, otherwise empty.'
+                  )}
+                </b>
+              </td>
+              <td>
+                {row.hijack_key.toString().length > 0 ? (
+                  <Link href={`/hijack?key=${row.hijack_key}`}>View</Link>
+                ) : (
+                  ''
                 )}
-              </b>
-            </td>
-            <td>{row.prefix.toString()}</td>
-          </tr>
-          <tr>
-            <td>
-              <b>
-                {genTooltip(
-                  'Origin AS',
-                  null,
-                  'origin_exp' + i,
-                  'The AS that originated the BGP update.'
-                )}
-              </b>
-            </td>
-            <td>{row.origin_as_original}</td>
-          </tr>
-          <tr>
-            <td>
-              <b>
-                {genTooltip(
-                  'AS PATH',
-                  null,
-                  'path_exp' + i,
-                  'The AS-level path of the update.'
-                )}
-              </b>
-            </td>
-            <td>{row.as_path}</td>
-          </tr>
-          <tr>
-            <td>
-              <b>
-                {genTooltip(
-                  'Aux Path Information',
-                  null,
-                  'aux_exp' + i,
-                  'Auxiliary path information on the update/withdrawal. </br> For updates, this is different from the reported AS-PATH only in the case of AS-SETs, sequences, etc. where the monitor decomposes a single update into many for ease of interpretation. </br> For (implicit) withdrawals, it contains the original triggering BGP update information in json format.'
-                )}
-              </b>
-            </td>
-            <td>{row.orig_path ? JSON.stringify(row.orig_path) : ''}</td>
-          </tr>
-          <tr>
-            <td>
-              <b>
-                {genTooltip(
-                  'Peer AS',
-                  null,
-                  'peer_exp' + i,
-                  'The monitor AS that peers with the route collector service reporting the BGP update.'
-                )}
-              </b>
-            </td>
-            <td>{row.peer_asn_original}</td>
-          </tr>
-          <tr>
-            <td>
-              <b>
-                {genTooltip(
-                  'Service',
-                  null,
-                  'service_exp' + i,
-                  'The route collector service that is connected to the monitor AS that observed the BGP update.'
-                )}
-              </b>
-            </td>
-            <td>{row.service.toString().replace(/\|/g, ' -> ')}</td>
-          </tr>
-          <tr>
-            <td>
-              <b>
-                {genTooltip(
-                  'Type',
-                  null,
-                  'type_exp' + i,
-                  '<ul><li>A → route announcement</li><li>W → route withdrawal</li></ul>'
-                )}
-              </b>
-            </td>
-            <td>{row.type.toString()}</td>
-          </tr>
-          <tr>
-            <td>
-              <b>
-                {genTooltip(
-                  'Communities',
-                  null,
-                  'communities_exp' + i,
-                  'BGP communities related to the BGP update.'
-                )}
-              </b>
-            </td>
-            <td>{row.communities.toString()}</td>
-          </tr>
-          <tr>
-            <td>
-              <b>
-                {genTooltip(
-                  'Timestamp',
-                  null,
-                  'timestamp_exp' + i,
-                  'The time when the BGP update was generated, as set by the BGP monitor or route collector.'
-                )}
-              </b>
-            </td>
-            <td>{row.timestamp.toString()}</td>
-          </tr>
-          <tr>
-            <td>
-              <b>
-                {genTooltip(
-                  'Hijack Key',
-                  null,
-                  'key_exp' + i,
-                  'Redirects to the hijack view if the BGP update is not benign, otherwise empty.'
-                )}
-              </b>
-            </td>
-            <td>{row.hijack_key.toString()}</td>
-          </tr>
-          <tr>
-            <td>
-              <b>
-                {genTooltip(
-                  'Matched Prefix',
-                  null,
-                  'matched_exp' + i,
-                  'The configured IPv4/IPv6 prefix that matched the hijacked prefix.'
-                )}
-              </b>
-            </td>
-            <td>{row.matched_prefix.toString()}</td>
-          </tr>
-          <tr>
-            <td>
-              <b>
-                {genTooltip(
-                  'View Hijack',
-                  null,
-                  'view_exp' + i,
-                  'Redirects to the hijack view if the BGP update is not benign, otherwise empty.'
-                )}
-              </b>
-            </td>
-            <td>
-              {row.hijack_key.toString().length > 0 ? (
-                <Link href={`/hijack?key=${row.hijack_key}`}>View</Link>
-              ) : (
-                ''
-              )}
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <b>
-                {genTooltip(
-                  'Handled',
-                  null,
-                  'handled_exp' + i,
-                  'Whether the BGP update has been handled by the detection module or not.'
-                )}
-              </b>
-            </td>
-            <td>{row.handled}</td>
-          </tr>
-        </tbody>
-      </table>
-    );
-  },
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>
+                  {genTooltip(
+                    'Handled',
+                    null,
+                    'handled_exp' + i,
+                    'Whether the BGP update has been handled by the detection module or not.'
+                  )}
+                </b>
+              </td>
+              <td>{row.handled}</td>
+            </tr>
+          </tbody>
+        </table>
+      );
+    },
+  };
 };
 
 const columns = [
@@ -478,6 +481,7 @@ const BGPTableComponent = (props) => {
   const [limitState, setLimitState] = useState(10);
   const [offsetState, setOffsetState] = useState(0);
   const [sortState, setSortState] = useState('desc');
+  const [expandState, setExpandState] = useState([]);
   const [filterState, setFilterState] = useState(filter);
   const filteredDate: Date = new Date();
   filteredDate.setHours(filteredDate.getHours() - filter);
@@ -510,6 +514,8 @@ const BGPTableComponent = (props) => {
     columnFilter: columnFilter,
     dateRange: { dateTo: dateTo, dateFrom: dateFrom },
   });
+  console.log(BGP_RES);
+  // setExpandState([]);
 
   const skippedCols = props.skippedCols ?? [];
 
@@ -671,7 +677,7 @@ const BGPTableComponent = (props) => {
               keyField="id"
               data={bgpData}
               columns={filteredCols}
-              expandRow={expandRow}
+              expandRow={getExpandRow(expandState)}
               filter={filterFactory()}
               striped
               hover

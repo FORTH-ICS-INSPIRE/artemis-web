@@ -32,11 +32,11 @@ const ViewHijackPage = (props) => {
   const [tooltips, setTooltips] = useState({});
   const context = React.useContext(TooltipContext);
 
-  if (shallMock()) {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const { worker } = require('../utils/mock-sw/browser');
-    worker.start();
-  }
+  // if (shallMock()) {
+  //   // eslint-disable-next-line @typescript-eslint/no-var-requires
+  //   const { worker } = require('../utils/mock-sw/browser');
+  //   worker.start();
+  // }
 
   const classes = useStyles();
   const router = useRouter();
@@ -54,6 +54,7 @@ const ViewHijackPage = (props) => {
   });
   const [hijackExists, setHijackExists] = useState(true);
   const [filteredBgpData, setFilteredBgpData] = useState([]);
+  const [editComment, setEditComment] = useState(false);
   const [editorState, setEditorState] = useState(() =>
     EditorState.createEmpty()
   );
@@ -199,7 +200,24 @@ const ViewHijackPage = (props) => {
             <div className="col-lg-1" />
             <div className="col-lg-7">
               <div className="card">
-                <div className="card-header">Hijack Information</div>
+                <div className="card-header">
+                  Hijack Information
+                  {hijackDataState && hijackDataState.seen ? (
+                    <span
+                      id="hijack_acknowledged_badge"
+                      className="badge badge-acknowledged float-right badge-primary"
+                    >
+                      Acknowledged
+                    </span>
+                  ) : (
+                    <span
+                      id="hijack_acknowledged_badge"
+                      class="badge badge-acknowledged float-right badge-danger"
+                    >
+                      Not Acknowledged
+                    </span>
+                  )}
+                </div>
                 <div className="card-body">
                   <div className="row">
                     <div className="col-lg-6">
@@ -336,18 +354,27 @@ const ViewHijackPage = (props) => {
               <div className="row">
                 <div className="col-lg-12">
                   <div className="card">
-                    <div className="card-header">Comments</div>
+                    <div className="card-header">
+                      Comments{' '}
+                      <button
+                        style={{ marginRight: '5px', float: 'right' }}
+                        id="edit_comment"
+                        type="button"
+                        className={`btn btn-${
+                          !editComment ? 'primary' : 'secondary'
+                        } btn-md`}
+                        onClick={() => setEditComment(!editComment)}
+                      >
+                        {!editComment ? 'Edit' : 'Save'}
+                      </button>
+                    </div>
                     <div className="card-body">
-                      {hijackDataState.comment ? (
-                        <Editor
-                          readOnly={true}
-                          placeholder={hijackDataState.comment}
-                          editorState={editorState}
-                          onChange={setEditorState}
-                        />
-                      ) : (
-                        <> </>
-                      )}
+                      <Editor
+                        readOnly={!editComment}
+                        placeholder={hijackDataState.comment}
+                        editorState={editorState}
+                        onChange={setEditorState}
+                      />
                     </div>
                   </div>
                 </div>
@@ -361,82 +388,86 @@ const ViewHijackPage = (props) => {
                 <div className="card-body">
                   <div className="row">
                     <div className="col-lg-6">
-                      <div className="card">
-                        {seenTransitions.map(({ item, key, props }) =>
-                          item ? (
-                            <animated.div
-                              key={key}
-                              style={props}
-                              className={
-                                'card-header multi-collapse collapse show'
-                              }
-                            >
-                              Peers Seen Hijack BGP Announcement:
-                              <Grid container spacing={3}>
-                                {seen.map((value, i) => {
-                                  const asn = value;
-                                  if (value !== undefined)
-                                    return (
-                                      <Grid key={i} item xs={3}>
-                                        <Paper className={classes.paper}>
-                                          <Tooltip
-                                            tooltips={tooltips}
-                                            setTooltips={setTooltips}
-                                            asn={asn}
-                                            label={`seen${i}`}
-                                            context={context}
-                                          />
-                                        </Paper>
-                                      </Grid>
-                                    );
-                                  else return <> </>;
-                                })}
-                              </Grid>
-                            </animated.div>
-                          ) : (
-                            <animated.div key={key}></animated.div>
-                          )
-                        )}
-                      </div>
+                      {seenState && (
+                        <div className="card">
+                          {seenTransitions.map(({ item, key, props }) =>
+                            item ? (
+                              <animated.div
+                                key={key}
+                                style={props}
+                                className={
+                                  'card-header multi-collapse collapse show'
+                                }
+                              >
+                                Peers Seen Hijack BGP Announcement:
+                                <Grid container spacing={3}>
+                                  {seen.map((value, i) => {
+                                    const asn = value;
+                                    if (value !== undefined)
+                                      return (
+                                        <Grid key={i} item xs={3}>
+                                          <Paper className={classes.paper}>
+                                            <Tooltip
+                                              tooltips={tooltips}
+                                              setTooltips={setTooltips}
+                                              asn={asn}
+                                              label={`seen${i}`}
+                                              context={context}
+                                            />
+                                          </Paper>
+                                        </Grid>
+                                      );
+                                    else return <> </>;
+                                  })}
+                                </Grid>
+                              </animated.div>
+                            ) : (
+                              <animated.div key={key}></animated.div>
+                            )
+                          )}
+                        </div>
+                      )}
                     </div>
                     <div className="col-lg-6">
-                      <div className="card" style={{ borderTop: '0px' }}>
-                        {withdrawnTransitions.map(({ item, key, props }) =>
-                          item ? (
-                            <animated.div
-                              key={key}
-                              style={{ ...props, borderTop: '0px' }}
-                              className={
-                                'card-header multi-collapse collapse show'
-                              }
-                            >
-                              Peers Seen Hijack BGP Withdrawal:
-                              <Grid container spacing={3}>
-                                {withdrawn.map((value, i) => {
-                                  const asn = value;
-                                  if (value !== undefined)
-                                    return (
-                                      <Grid key={i} item xs>
-                                        <Paper className={classes.paper}>
-                                          <Tooltip
-                                            tooltips={tooltips}
-                                            setTooltips={setTooltips}
-                                            asn={asn}
-                                            label={`withdrawn${i}`}
-                                            context={context}
-                                          />
-                                        </Paper>
-                                      </Grid>
-                                    );
-                                  else return <> </>;
-                                })}
-                              </Grid>
-                            </animated.div>
-                          ) : (
-                            <animated.div key={key}></animated.div>
-                          )
-                        )}
-                      </div>
+                      {withdrawState && (
+                        <div className="card" style={{ borderTop: '0px' }}>
+                          {withdrawnTransitions.map(({ item, key, props }) =>
+                            item ? (
+                              <animated.div
+                                key={key}
+                                style={{ ...props, borderTop: '0px' }}
+                                className={
+                                  'card-header multi-collapse collapse show'
+                                }
+                              >
+                                Peers Seen Hijack BGP Withdrawal:
+                                <Grid container spacing={3}>
+                                  {withdrawn.map((value, i) => {
+                                    const asn = value;
+                                    if (value !== undefined)
+                                      return (
+                                        <Grid key={i} item xs={3}>
+                                          <Paper className={classes.paper}>
+                                            <Tooltip
+                                              tooltips={tooltips}
+                                              setTooltips={setTooltips}
+                                              asn={asn}
+                                              label={`withdrawn${i}`}
+                                              context={context}
+                                            />
+                                          </Paper>
+                                        </Grid>
+                                      );
+                                    else return <> </>;
+                                  })}
+                                </Grid>
+                              </animated.div>
+                            ) : (
+                              <animated.div key={key}></animated.div>
+                            )
+                          )}
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
