@@ -514,7 +514,7 @@ const BGPTableComponent = (props) => {
     columnFilter: columnFilter,
     dateRange: { dateTo: dateTo, dateFrom: dateFrom },
   });
-  console.log(BGP_RES);
+
   // setExpandState([]);
 
   const skippedCols = props.skippedCols ?? [];

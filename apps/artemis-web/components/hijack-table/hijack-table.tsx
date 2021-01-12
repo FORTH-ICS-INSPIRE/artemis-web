@@ -467,24 +467,30 @@ const HijackTableComponent = (props) => {
     const sendData = async (e) => {
       e.preventDefault();
       const hijackKeys = data.slice(0, hijackState).map((hijack) => hijack.key);
+      let state = false;
+      let action = '';
+      if (selectState === 'hijack_action_acknowledge') {
+        action = 'seen';
+        state = true;
+      } else if (selectState === 'hijack_action_acknowledge_not') {
+        action = 'seen';
+      }
 
       const reqData = {
         hijack_keys: hijackKeys,
-        action: selectState,
+        action: action,
+        state: state,
       };
 
-      const res = await fetch(
-        'https://localhost/actions/multiple_hijack_actions',
-        {
-          method: 'POST',
-          credentials: 'include',
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(reqData),
-        }
-      );
+      const res = await fetch('/api/hijack', {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(reqData),
+      });
     };
 
     return (

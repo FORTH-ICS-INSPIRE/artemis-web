@@ -5,7 +5,7 @@ import {
   Paper,
   Switch,
 } from '@material-ui/core';
-import { Editor, EditorState } from 'draft-js';
+import { Editor, EditorState, ContentState } from 'draft-js';
 import 'draft-js/dist/Draft.css';
 import DefaultErrorPage from 'next/error';
 import Head from 'next/head';
@@ -57,7 +57,9 @@ const ViewHijackPage = (props) => {
   const [filteredBgpData, setFilteredBgpData] = useState([]);
   const [editComment, setEditComment] = useState(false);
   const [editorState, setEditorState] = useState(() =>
-    EditorState.createEmpty()
+    EditorState.createWithContent(
+      ContentState.createFromText(hijackDataState.comment)
+    )
   );
   const seenTransitions = useTransition(seenState, null, {
     from: { opacity: 0 },
@@ -74,27 +76,57 @@ const ViewHijackPage = (props) => {
     'hijack_action_resolve'
   );
 
+  const commentRef = React.createRef();
+
   const sendData = async (e) => {
     e.preventDefault();
     const hijackKeys = [hijackKey];
+    let state = false;
+    let action = '';
+    if (selectActionState === 'hijack_action_acknowledge') {
+      action = 'seen';
+      state = true;
+    } else if (selectActionState === 'hijack_action_acknowledge_not') {
+      action = 'seen';
+    }
 
     const reqData = {
       hijack_keys: hijackKeys,
-      action: selectActionState,
+      action: action,
+      state: state,
     };
 
-    const res = await fetch(
-      'https://localhost/actions/multiple_hijack_actions',
-      {
-        method: 'POST',
-        credentials: 'include',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(reqData),
-      }
-    );
+    const res = await fetch('/api/hijack', {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(reqData),
+    });
+  };
+
+  const submitComment = async (e) => {
+    e.preventDefault();
+    const editor: any = commentRef.current;
+    const comment = editor.editor.innerText;
+
+    const reqData = {
+      action: 'comment',
+      key: hijackKey,
+      comment: comment,
+    };
+
+    const res = await fetch('/api/hijack', {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(reqData),
+    });
   };
 
   useGraphQl('hijackByKey', {
@@ -105,6 +137,11 @@ const ViewHijackPage = (props) => {
 
       if (hijacks.length === 0) setHijackExists(false);
       setHijackDataState(hijacks[0]);
+      setEditorState(() =>
+        EditorState.createWithContent(
+          ContentState.createFromText(hijacks[0].comment)
+        )
+      );
     },
     isLive: shallSubscribe(props.isLive),
     key: hijackKey,
@@ -119,6 +156,7 @@ const ViewHijackPage = (props) => {
   const withdrawn = hijackDataState
     ? hijackDataState.peers_withdrawn ?? []
     : [];
+  console.log(hijackDataState);
 
   const onChangeValue = (event) => {
     setSelectState(event.target.value);
@@ -364,15 +402,18 @@ const ViewHijackPage = (props) => {
                         className={`btn btn-${
                           !editComment ? 'primary' : 'secondary'
                         } btn-md`}
-                        onClick={() => setEditComment(!editComment)}
+                        onClick={(e) => {
+                          if (editComment) submitComment(e);
+                          setEditComment(!editComment);
+                        }}
                       >
                         {!editComment ? 'Edit' : 'Save'}
                       </button>
                     </div>
                     <div className="card-body">
                       <Editor
+                        ref={commentRef}
                         readOnly={!editComment}
-                        placeholder={hijackDataState.comment}
                         editorState={editorState}
                         onChange={setEditorState}
                       />
