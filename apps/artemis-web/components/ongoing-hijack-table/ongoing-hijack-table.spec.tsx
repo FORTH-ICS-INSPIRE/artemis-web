@@ -123,13 +123,20 @@ describe('OngoingHijackTable', () => {
           operationName: 'getLiveTableCount',
           query: gql`
             query getLiveTableCount {
-              count_data: view_hijacks_aggregate {
+              count_data: view_hijacks_aggregate(
+                where: {
+                  _and: [{ active: { _eq: true } }, { dormant: { _eq: false } }]
+                }
+              ) {
                 aggregate {
                   count
+                  __typename
                 }
+                __typename
               }
             }
           `,
+          variables: {},
         },
         result: {
           data: {
