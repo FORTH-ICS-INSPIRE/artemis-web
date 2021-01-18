@@ -8,9 +8,8 @@ import { gql } from '@apollo/client';
 
 describe('BGPTable', () => {
   it('should render successfully', () => {
-    const generator = new QueryGenerator('bgpUpdates', false, {});
     const generator2 = new QueryGenerator('bgpCount', false, {});
-    console.log(generator.getQuery());
+
     const mocks = [
       {
         request: {

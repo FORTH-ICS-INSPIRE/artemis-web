@@ -4,15 +4,46 @@ import { MockedProvider } from '@apollo/client/testing';
 
 import HijackTable from './hijack-table';
 import { QueryGenerator } from '../../libs/graphql';
+import { gql } from '@apollo/client';
 
 describe('HijackTable', () => {
   it('should render successfully', () => {
-    const generator = new QueryGenerator('hijacks', false, {});
+
     const mocks = [
       {
         request: {
           operationName: 'hijacks',
-          query: generator.getQuery(),
+          query: gql`
+            query hijacks {
+              view_hijacks {
+                active
+                comment
+                configured_prefix
+                hijack_as
+                ignored
+                dormant
+                key
+                rpki_status
+                mitigation_started
+                num_asns_inf
+                num_peers_seen
+                outdated
+                peers_seen
+                peers_withdrawn
+                prefix
+                resolved
+                seen
+                time_detected
+                time_ended
+                time_last
+                time_started
+                timestamp_of_config
+                type
+                under_mitigation
+                withdrawn
+              }
+            }
+          `,
         },
         result: {
           data: {
