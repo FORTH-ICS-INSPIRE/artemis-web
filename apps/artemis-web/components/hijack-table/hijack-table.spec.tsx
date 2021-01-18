@@ -8,6 +8,7 @@ import { gql } from '@apollo/client';
 
 describe('HijackTable', () => {
   it('should render successfully', () => {
+    const generator2 = new QueryGenerator('hijackCount', false, {});
 
     const mocks = [
       {
@@ -143,6 +144,23 @@ describe('HijackTable', () => {
                 __typename: 'view_hijacks',
               },
             ],
+          },
+        },
+      },
+      {
+        request: {
+          operationName: 'getLiveTableCount',
+          query: generator2.getQuery(),
+        },
+        result: {
+          data: {
+            count_data: {
+              aggregate: {
+                count: 25,
+                __typename: 'view_hijacks_aggregate_fields',
+              },
+              __typename: 'view_hijacks_aggregate',
+            },
           },
         },
       },
