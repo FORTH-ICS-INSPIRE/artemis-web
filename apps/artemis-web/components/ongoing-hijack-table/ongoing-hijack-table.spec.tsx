@@ -8,6 +8,8 @@ import { QueryGenerator } from '../../libs/graphql';
 describe('OngoingHijackTable', () => {
   it('should render successfully', () => {
     const generator = new QueryGenerator('hijacks', false, {});
+    const generator2 = new QueryGenerator('hijackCount', false, {});
+
     const mocks = [
       {
         request: {
@@ -112,6 +114,23 @@ describe('OngoingHijackTable', () => {
                 __typename: 'view_hijacks',
               },
             ],
+          },
+        },
+      },
+      {
+        request: {
+          operationName: 'getLiveTableCount',
+          query: generator2.getQuery(),
+        },
+        result: {
+          data: {
+            count_data: {
+              aggregate: {
+                count: 25,
+                __typename: 'view_hijacks_aggregate_fields',
+              },
+              __typename: 'view_hijacks_aggregate',
+            },
           },
         },
       },
