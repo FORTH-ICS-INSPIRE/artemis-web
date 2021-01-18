@@ -298,6 +298,8 @@ const HijackTableComponent = (props) => {
   const [sortState, setSortState] = useState('desc');
   const [sortColumnState, setSortColumnState] = useState('time_last');
   const [hijackData, setHijackData] = useState([]);
+  const [hijackState, setHijackState] = useState(0);
+  const [selectState, setSelectState] = useState('hijack_action_resolve');
 
   const HIJACK_COUNT: any = useGraphQl('hijackCount', {
     isLive: shallSubscribe(props.isLive),
@@ -461,8 +463,7 @@ const HijackTableComponent = (props) => {
 
   const HijackActions = (props) => {
     const data = props.data;
-    const [hijackState, setHijackState] = useState(0);
-    const [selectState, setSelectState] = useState('hijack_action_resolve');
+    const { hijackState, setHijackState, selectState, setSelectState } = props;
 
     const sendData = async (e) => {
       e.preventDefault();
@@ -582,10 +583,16 @@ const HijackTableComponent = (props) => {
       {(toolkitprops) => {
         paginationProps.dataSize = hijackCount;
         return (
-          <>
+          <div className={hijackState > 0 ? 'hijack-table' : ''}>
             <div className="header-filter">
               <SizePerPageDropdownStandalone {...paginationProps} />
-              <HijackActions data={hijackData} />
+              <HijackActions
+                data={hijackData}
+                hijackState={hijackState}
+                setHijackState={setHijackState}
+                selectState={selectState}
+                setSelectState={setSelectState}
+              />
               <MyExportCSV {...toolkitprops.csvProps} />
             </div>
             <BootstrapTable
@@ -605,7 +612,7 @@ const HijackTableComponent = (props) => {
             />
             <PaginationTotalStandalone {...paginationProps} />
             <PaginationListStandalone {...paginationProps} />
-          </>
+          </div>
         );
       }}
     </ToolkitProvider>

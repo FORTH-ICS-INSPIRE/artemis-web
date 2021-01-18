@@ -172,3 +172,7 @@ a:hover {
 .nav-link:hover {
   cursor: pointer;
 }
+
+.hijack-table > .react-bootstrap-table > table > tbody:nth-child(3) > tr {
+  background-color: gold;
+}
