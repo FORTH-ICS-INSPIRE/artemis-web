@@ -15,8 +15,8 @@ describe('BGPTable', () => {
         request: {
           operationName: 'bgpupdates',
           query: gql`
-            query bgpupdates {
-              view_bgpupdates(order_by: { timestamp: desc }) {
+            query bgpupdates($offset: Int!, $limit: Int!) {
+              view_bgpupdates(limit: $limit, offset: $offset, order_by: {timestamp: desc}) {
                 prefix
                 origin_as
                 peer_asn
@@ -29,9 +29,11 @@ describe('BGPTable', () => {
                 handled
                 matched_prefix
                 orig_path
+                __typename
               }
             }
           `,
+          variables: { "offset": 0, "limit": 10 }
         },
         result: {
           data: {
