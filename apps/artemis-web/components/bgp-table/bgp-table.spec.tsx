@@ -4,17 +4,35 @@ import { MockedProvider } from '@apollo/client/testing';
 
 import BGPTable from './bgp-table';
 import { QueryGenerator } from '../../libs/graphql';
+import { gql } from '@apollo/client';
 
 describe('BGPTable', () => {
   it('should render successfully', () => {
     const generator = new QueryGenerator('bgpUpdates', false, {});
     const generator2 = new QueryGenerator('bgpCount', false, {});
-
+    console.log(generator.getQuery());
     const mocks = [
       {
         request: {
           operationName: 'bgpupdates',
-          query: generator.getQuery(),
+          query: gql`
+            query bgpupdates {
+              view_bgpupdates(order_by: { timestamp: desc }) {
+                prefix
+                origin_as
+                peer_asn
+                as_path
+                service
+                type
+                communities
+                timestamp
+                hijack_key
+                handled
+                matched_prefix
+                orig_path
+              }
+            }
+          `,
         },
         result: {
           data: {
