@@ -4,6 +4,7 @@ import { MockedProvider } from '@apollo/client/testing';
 
 import OngoingHijackTable from './ongoing-hijack-table';
 import { QueryGenerator } from '../../libs/graphql';
+import { gql } from '@apollo/client';
 
 describe('OngoingHijackTable', () => {
   it('should render successfully', () => {
@@ -120,7 +121,11 @@ describe('OngoingHijackTable', () => {
       {
         request: {
           operationName: 'getLiveTableCount',
-          query: generator2.getQuery(),
+          query: gql`
+          query getLiveTableCount {
+            count_data: view_hijacks_aggregate
+            { aggregate { count } }
+          }`,
         },
         result: {
           data: {
