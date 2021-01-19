@@ -29,18 +29,19 @@ import {
 import Tooltip from '../tooltip/tooltip';
 import ErrorBoundary from '../error-boundary/error-boundary';
 
-const exactMatchFilter = textFilter({
-  placeholder: '', // custom the input placeholder
-  className: 'my-custom-text-filter', // custom classname on input
-  defaultValue: '', // default filtering value
-  comparator: Comparator.EQ, // default is Comparator.LIKE
-  caseSensitive: true, // default is false, and true will only work when comparator is LIKE
-  style: {}, // your custom styles on input
-  delay: 1000, // how long will trigger filtering after user typing, default is 500 ms
-  id: 'id', // assign a unique value for htmlFor attribute, it's useful when you have same dataField across multiple table in one page
-});
+const getExactMatchFilter = (stateValue) =>
+  textFilter({
+    placeholder: '', // custom the input placeholder
+    className: 'my-custom-text-filter', // custom classname on input
+    defaultValue: stateValue, // default filtering value
+    comparator: Comparator.EQ, // default is Comparator.LIKE
+    caseSensitive: true, // default is false, and true will only work when comparator is LIKE
+    style: {}, // your custom styles on input
+    delay: 1000, // how long will trigger filtering after user typing, default is 500 ms
+    id: 'id', // assign a unique value for htmlFor attribute, it's useful when you have same dataField across multiple table in one page
+  });
 
-const columns = [
+const getColumns = (stateValues) => [
   {
     dataField: 'time_last',
     text: 'Last Update',
@@ -96,7 +97,7 @@ const columns = [
         'The IPv4/IPv6 prefix that was hijacked'
       ),
     text: 'Hijacked Prefix',
-    filter: exactMatchFilter,
+    filter: getExactMatchFilter(stateValues['prefix']),
   },
   {
     dataField: 'configured_prefix',
@@ -109,7 +110,7 @@ const columns = [
         'The configured IPv4/IPv6 prefix that matched the hijacked prefix.'
       ),
     text: 'Matched Prefix',
-    filter: exactMatchFilter,
+    filter: getExactMatchFilter(stateValues['configured_prefix']),
   },
   {
     dataField: 'type',
@@ -122,7 +123,7 @@ const columns = [
         'The type of the hijack in 4 dimensions: prefix|path|data plane|policy<ul><li>[Prefix] S → Sub-prefix hijack</li>'
       ),
     text: 'Type',
-    filter: textFilter(),
+    filter: textFilter({ defaultValue: stateValues['type'] }),
   },
   {
     dataField: 'hijack_as',
@@ -135,7 +136,7 @@ const columns = [
         'The AS that is potentially responsible for the hijack.</br>Note that this is an experimental field.'
       ),
     text: 'Hijacked AS',
-    filter: exactMatchFilter,
+    filter: getExactMatchFilter(stateValues['hijack_as']),
   },
   {
     dataField: 'rpki_status',
@@ -149,6 +150,7 @@ const columns = [
       ),
     text: 'RPKI',
     filter: selectFilter({
+      defaultValue: stateValues['rpki_status'],
       options: ['VD', 'IA', 'IL', 'IU', 'NF', 'NA'].reduce((acc, elem) => {
         acc[elem] = elem; // or what ever object you want inside
         return acc;
@@ -300,6 +302,13 @@ const HijackTableComponent = (props) => {
   const [hijackData, setHijackData] = useState([]);
   const [hijackState, setHijackState] = useState(0);
   const [selectState, setSelectState] = useState('hijack_action_resolve');
+  const [stateValues, setStateValues] = useState({
+    prefix: '',
+    configured_prefix: '',
+    hijack_as: '',
+    rpki_status: '',
+    type: '',
+  });
 
   const HIJACK_COUNT: any = useGraphQl('hijackCount', {
     isLive: shallSubscribe(props.isLive),
@@ -569,13 +578,19 @@ const HijackTableComponent = (props) => {
       setSortColumnState(sortField);
       setSortState(sortOrder);
     }
-    if (filters) setColumnFilter(filters);
+    if (filters) {
+      const key = Object.keys(filters)[0];
+      if (filters[key])
+        setStateValues({ ...stateValues, [key]: filters[key].filterVal });
+      else setStateValues({ ...stateValues, [key]: '' });
+      setColumnFilter(filters);
+    }
   };
 
   const contentTable = ({ paginationProps, paginationTableProps }) => (
     <ToolkitProvider
       keyField="id"
-      columns={columns}
+      columns={getColumns(stateValues)}
       data={hijackData}
       dataSize={hijackCount}
       exportCSV={{ onlyExportFiltered: true, exportAll: false }}
@@ -600,13 +615,23 @@ const HijackTableComponent = (props) => {
               wrapperClasses="table-responsive"
               keyField="id"
               data={hijackData}
-              columns={columns}
+              columns={getColumns(stateValues)}
               filter={filterFactory()}
               filterPosition="bottom"
               onTableChange={handleTableChange}
               striped
               condensed
               hover
+              noDataIndication={() => {
+                return (
+                  <div>
+                    <p>
+                      <img id="nodata" width="256" src="checkmark.png"></img>
+                    </p>
+                    <h3>{'No hijack alerts! Go grab a beer!'}</h3>
+                  </div>
+                );
+              }}
               {...toolkitprops.baseProps}
               {...paginationTableProps}
             />
@@ -620,7 +645,7 @@ const HijackTableComponent = (props) => {
 
   return (
     <ErrorBoundary
-      containsData={hijackCount}
+      containsData={true}
       noDataMessage={'No hijack alerts.'}
       customError={HIJACK_COUNT.error}
     >

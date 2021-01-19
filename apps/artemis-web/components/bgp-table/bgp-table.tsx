@@ -29,16 +29,23 @@ import {
 import ErrorBoundary from '../error-boundary/error-boundary';
 import Tooltip from '../tooltip/tooltip';
 
-const exactMatchFilter = textFilter({
-  placeholder: '', // custom the input placeholder
-  className: 'my-custom-text-filter', // custom classname on input
-  defaultValue: '', // default filtering value
-  comparator: Comparator.EQ, // default is Comparator.LIKE
-  caseSensitive: true, // default is false, and true will only work when comparator is LIKE
-  style: {}, // your custom styles on input
-  delay: 1000, // how long will trigger filtering after user typing, default is 500 ms
-  id: 'id', // assign a unique value for htmlFor attribute, it's useful when you have same dataField across multiple table in one page
-});
+const getExactMatchFilter = (stateValue) =>
+  textFilter({
+    placeholder: '', // custom the input placeholder
+    className: 'my-custom-text-filter', // custom classname on input
+    defaultValue: stateValue, // default filtering value
+    comparator: Comparator.EQ, // default is Comparator.LIKE
+    caseSensitive: true, // default is false, and true will only work when comparator is LIKE
+    style: {}, // your custom styles on input
+    delay: 1000, // how long will trigger filtering after user typing, default is 500 ms
+    id: 'id', // assign a unique value for htmlFor attribute, it's useful when you have same dataField across multiple table in one page
+  });
+
+const getTextFilter = (stateValue) =>
+  textFilter({
+    placeholder: '', // custom the input placeholder
+    defaultValue: stateValue, // default filtering value
+  });
 
 const getExpandRow = (expandState) => {
   return {
@@ -233,7 +240,7 @@ const getExpandRow = (expandState) => {
   };
 };
 
-const columns = [
+const getColumns = (stateValues) => [
   {
     dataField: 'timestamp',
     text: 'Timestamp',
@@ -261,7 +268,7 @@ const columns = [
         'prefix_title',
         'The IPv4/IPv6 prefix related to the BGP update.'
       ),
-    filter: exactMatchFilter,
+    filter: getExactMatchFilter(stateValues['prefix']),
   },
   {
     dataField: 'matched_prefix',
@@ -274,7 +281,7 @@ const columns = [
         'The configured IPv4/IPv6 prefix that matched the hijacked prefix.'
       ),
     text: 'Matched Prefix',
-    filter: exactMatchFilter,
+    filter: getExactMatchFilter(stateValues['matched_prefix']),
   },
   {
     dataField: 'origin_as_original',
@@ -287,7 +294,7 @@ const columns = [
         'The AS that originated the BGP update.'
       ),
     text: 'Origin AS',
-    filter: exactMatchFilter,
+    filter: getExactMatchFilter(stateValues['origin_as_original']),
   },
   {
     dataField: 'as_path2',
@@ -300,7 +307,7 @@ const columns = [
         'The AS-level path of the update.'
       ),
     text: 'AS Path',
-    filter: textFilter(),
+    filter: getTextFilter(stateValues['as_path2']),
   },
   {
     dataField: 'peer_asn_original',
@@ -313,7 +320,7 @@ const columns = [
         'The monitor AS that peers with the route collector service reporting the BGP update.'
       ),
     text: 'Peer As',
-    filter: exactMatchFilter,
+    filter: getExactMatchFilter(stateValues['peer_asn_original']),
   },
   {
     dataField: 'service',
@@ -326,7 +333,7 @@ const columns = [
         'The route collector service that is connected to the monitor AS that observed the BGP update.'
       ),
     text: 'Service',
-    filter: textFilter(),
+    filter: getTextFilter(stateValues['service']),
   },
   {
     dataField: 'type',
@@ -340,6 +347,7 @@ const columns = [
         '<ul><li>A → route announcement</li><li>W → route withdrawal</li></ul>'
       ),
     filter: selectFilter({
+      defaultValue: stateValues['type'],
       options: ['A', 'W'].reduce((acc, elem) => {
         acc[elem] = elem; // or what ever object you want inside
         return acc;
@@ -484,6 +492,16 @@ const BGPTableComponent = (props) => {
   const [expandState, setExpandState] = useState([]);
   const [filterState, setFilterState] = useState(filter);
   const filteredDate: Date = new Date();
+  const [stateValues, setStateValues] = useState({
+    prefix: '',
+    matched_prefix: '',
+    peer_asn_original: '',
+    origin_as_original: '',
+    service: '',
+    as_path2: '',
+    type: '',
+  });
+
   filteredDate.setHours(filteredDate.getHours() - filter);
 
   const BGP_RES = useGraphQl(hijackKey ? 'bgpByKey' : 'bgpUpdates', {
@@ -519,7 +537,7 @@ const BGPTableComponent = (props) => {
 
   const skippedCols = props.skippedCols ?? [];
 
-  const filteredCols = columns.filter(
+  const filteredCols = getColumns(stateValues).filter(
     (col) => !skippedCols.includes(col.dataField)
   );
 
@@ -650,7 +668,13 @@ const BGPTableComponent = (props) => {
     setOffsetState(currentIndex);
     setLimitState(sizePerPage);
     if (sortOrder) setSortState(sortOrder);
-    if (filters) setColumnFilter(filters);
+    if (filters) {
+      const key = Object.keys(filters)[0];
+      if (filters[key])
+        setStateValues({ ...stateValues, [key]: filters[key].filterVal });
+      else setStateValues({ ...stateValues, [key]: '' });
+      setColumnFilter(filters);
+    }
   };
 
   const contentTable = ({ paginationProps, paginationTableProps }) => (
@@ -684,6 +708,7 @@ const BGPTableComponent = (props) => {
               condensed
               filterPosition="bottom"
               onTableChange={handleTableChange}
+              noDataIndication={() => <h3>No bgp updates.</h3>}
               {...toolkitprops.baseProps}
               {...paginationTableProps}
             />
@@ -698,7 +723,7 @@ const BGPTableComponent = (props) => {
 
   return (
     <ErrorBoundary
-      containsData={bgpCount > 0}
+      containsData={true}
       noDataMessage={'No bgp updates.'}
       customError={''}
     >

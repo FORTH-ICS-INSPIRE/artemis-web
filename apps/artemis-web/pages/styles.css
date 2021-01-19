@@ -18,6 +18,10 @@ p > img {
   float: left;
 }
 
+#nodata {
+  height: 256px !important;
+}
+
 .react-bs-table-sizePerPage-dropdown,
 .react-bootstrap-table-pagination-total {
   float: left;
