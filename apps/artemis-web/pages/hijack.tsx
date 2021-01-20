@@ -82,19 +82,14 @@ const ViewHijackPage = (props) => {
     e.preventDefault();
     const hijackKeys = [hijackKey];
     let state = false;
-    let action = '';
+
     if (selectActionState === 'hijack_action_acknowledge') {
-      action = 'seen';
       state = true;
-    } else if (selectActionState === 'hijack_action_acknowledge_not') {
-      action = 'seen';
-    } else if (selectActionState === 'hijack_action_resolve') {
-      action = 'hijack_action_resolve';
     }
 
     const reqData = {
       hijack_keys: hijackKeys,
-      action: action,
+      action: selectActionState,
       state: state,
     };
 
@@ -157,7 +152,7 @@ const ViewHijackPage = (props) => {
   const seen = hijackDataState ? hijackDataState.peers_seen ?? [] : [];
   const withdrawn = hijackDataState
     ? hijackDataState.peers_withdrawn ?? []
-    : [];
+      : [];
 
   const onChangeValue = (event) => {
     setSelectState(event.target.value);
@@ -214,7 +209,7 @@ const ViewHijackPage = (props) => {
                 </div>
                 <div className="col-lg-1"></div>
                 <div className="col-lg-2">
-                  <h2 style={{ color: 'white' }}>Live Updates </h2>{' '}
+                  <h2 style={{ color: 'white' }}> Live Updates </h2>{' '}
                 </div>
                 <div className="col-lg-1">
                   <FormGroup>
@@ -250,13 +245,13 @@ const ViewHijackPage = (props) => {
                       Acknowledged
                     </span>
                   ) : (
-                    <span
-                      id="hijack_acknowledged_badge"
-                      className="badge badge-acknowledged float-right badge-danger"
-                    >
-                      Not Acknowledged
+                      <span
+                        id="hijack_acknowledged_badge"
+                        className="badge badge-acknowledged float-right badge-danger"
+                      >
+                        Not Acknowledged
                     </span>
-                  )}
+                    )}
                 </div>
                 <div className="card-body">
                   <div className="row">
@@ -280,7 +275,7 @@ const ViewHijackPage = (props) => {
                                   value={hijackInfoLeft[key][0] ?? ''}
                                 />
                               ) : (
-                                hijackInfoLeft[key][0] ?? ''
+                                  hijackInfoLeft[key][0] ?? ''
                               )}
                             </div>
                           </div>
@@ -307,7 +302,7 @@ const ViewHijackPage = (props) => {
                                   value={hijackInfoRight[key][0] ?? ''}
                                 />
                               ) : (
-                                hijackInfoRight[key][0] ?? ''
+                                  hijackInfoRight[key][0] ?? ''
                               )}
                             </div>
                           </div>
@@ -402,7 +397,7 @@ const ViewHijackPage = (props) => {
                         type="button"
                         className={`btn btn-${
                           !editComment ? 'primary' : 'secondary'
-                        } btn-md`}
+                          } btn-md`}
                         onClick={(e) => {
                           if (editComment) submitComment(e);
                           setEditComment(!editComment);
@@ -465,8 +460,8 @@ const ViewHijackPage = (props) => {
                                 </Grid>
                               </animated.div>
                             ) : (
-                              <animated.div key={key}></animated.div>
-                            )
+                                <animated.div key={key}></animated.div>
+                              )
                           )}
                         </div>
                       )}
@@ -506,8 +501,8 @@ const ViewHijackPage = (props) => {
                                 </Grid>
                               </animated.div>
                             ) : (
-                              <animated.div key={key}></animated.div>
-                            )
+                                <animated.div key={key}></animated.div>
+                              )
                           )}
                         </div>
                       )}
