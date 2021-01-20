@@ -267,8 +267,8 @@ function handleData(
           row.resolved || row.under_mitigation ? (
             <img alt="" src="./handled.png" />
           ) : (
-            <img alt="" src="./unhadled.png" />
-          ),
+              <img alt="" src="./unhadled.png" />
+            ),
         key: row.key,
         more: <Link href={`/hijack?key=${row.key}`}>View</Link>,
       };
@@ -300,7 +300,7 @@ const HijackTableComponent = (props) => {
   const [sortState, setSortState] = useState('desc');
   const [sortColumnState, setSortColumnState] = useState('time_last');
   const [hijackData, setHijackData] = useState([]);
-  const [hijackState, setHijackState] = useState(0);
+  const [hijackState, setHijackState] = useState([]);
   const [selectState, setSelectState] = useState('hijack_action_resolve');
   const [stateValues, setStateValues] = useState({
     prefix: '',
@@ -370,30 +370,30 @@ const HijackTableComponent = (props) => {
     currSizePerPage,
     onSizePerPageChange,
   }) => (
-    <div id="paging" className="btn-group" role="group">
-      Show
+      <div id="paging" className="btn-group" role="group">
+        Show
       <select
-        style={{ width: '80px' }}
-        className="custom-select custom-select-sm form-control form-control-sm"
-      >
-        {options.map((option) => (
-          <option
-            key={option.text}
-            value={option.text}
-            onClick={() => onSizePerPageChange(option.page)}
-            className={`btn ${
-              currSizePerPage === `${option.page}`
-                ? 'btn-secondary'
-                : 'btn-warning'
-            }`}
-          >
-            {option.text}
-          </option>
-        ))}
-      </select>
-      entries
+          style={{ width: '80px' }}
+          className="custom-select custom-select-sm form-control form-control-sm"
+        >
+          {options.map((option) => (
+            <option
+              key={option.text}
+              value={option.text}
+              onClick={() => onSizePerPageChange(option.page)}
+              className={`btn ${
+                currSizePerPage === `${option.page}`
+                  ? 'btn-secondary'
+                  : 'btn-warning'
+                }`}
+            >
+              {option.text}
+            </option>
+          ))}
+        </select>
+        entries
     </div>
-  );
+    );
 
   const pageButtonRenderer = ({ page, active, onPageChange }) => {
     const handleClick = (e) => {
@@ -476,7 +476,7 @@ const HijackTableComponent = (props) => {
 
     const sendData = async (e) => {
       e.preventDefault();
-      const hijackKeys = data.slice(0, hijackState).map((hijack) => hijack.key);
+      const hijackKeys = hijackState.map((hijack) => hijack.key);
       const state = false;
 
       const reqData = {
@@ -499,7 +499,7 @@ const HijackTableComponent = (props) => {
     return (
       <>
         <button
-          onClick={() => setHijackState(data.length)}
+          onClick={() => setHijackState(data)}
           style={{ marginRight: '5px' }}
           id="select_page"
           type="button"
@@ -514,7 +514,7 @@ const HijackTableComponent = (props) => {
         >
           <label className="btn btn-secondary active btn-sm">
             <input type="checkbox" autoComplete="off" /> Selected Hijacks{' '}
-            <b id="selected_hijacks_num">{hijackState}</b>
+            <b id="selected_hijacks_num">{hijackState.length}</b>
           </label>
         </span>
         <select
@@ -580,6 +580,14 @@ const HijackTableComponent = (props) => {
     }
   };
 
+  const tableRowEvents = {
+    onClick: (e, row, rowIndex) => {
+      //todo: highlight if state
+      setHijackState(hijackState + row);
+      console.log(`clicked on row with index: ${rowIndex}`);
+    },
+  }
+
   const contentTable = ({ paginationProps, paginationTableProps }) => (
     <ToolkitProvider
       keyField="id"
@@ -591,7 +599,7 @@ const HijackTableComponent = (props) => {
       {(toolkitprops) => {
         paginationProps.dataSize = hijackCount;
         return (
-          <div className={hijackState > 0 ? 'hijack-table' : ''}>
+          <div className={hijackState.length ? 'hijack-table' : ''}>
             <div className="header-filter">
               <SizePerPageDropdownStandalone {...paginationProps} />
               <HijackActions
@@ -615,6 +623,7 @@ const HijackTableComponent = (props) => {
               striped
               condensed
               hover
+              rowEvents={tableRowEvents}
               noDataIndication={() => {
                 return (
                   <div>
