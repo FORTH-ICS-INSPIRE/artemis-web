@@ -88,6 +88,8 @@ const ViewHijackPage = (props) => {
       state = true;
     } else if (selectActionState === 'hijack_action_acknowledge_not') {
       action = 'seen';
+    } else if (selectActionState === 'hijack_action_resolve') {
+      action = 'hijack_action_resolve';
     }
 
     const reqData = {
@@ -156,7 +158,6 @@ const ViewHijackPage = (props) => {
   const withdrawn = hijackDataState
     ? hijackDataState.peers_withdrawn ?? []
     : [];
-  console.log(hijackDataState);
 
   const onChangeValue = (event) => {
     setSelectState(event.target.value);

@@ -570,8 +570,8 @@ const OngoingHijackTableComponent = (props) => {
     const currentIndex = page * sizePerPage;
     setPage(page);
     setSizePerPage(sizePerPage);
-    setOffsetState(currentIndex);
-    setLimitState(sizePerPage);
+    if (currentIndex) setOffsetState(currentIndex);
+    if (sizePerPage) setLimitState(sizePerPage);
     if (sortOrder) {
       setSortColumnState(sortField);
       setSortState(sortOrder);

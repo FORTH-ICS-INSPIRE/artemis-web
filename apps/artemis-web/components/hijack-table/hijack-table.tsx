@@ -267,8 +267,8 @@ function handleData(
           row.resolved || row.under_mitigation ? (
             <img alt="" src="./handled.png" />
           ) : (
-            <img alt="" src="./unhadled.png" />
-          ),
+              <img alt="" src="./unhadled.png" />
+            ),
         key: row.key,
         more: <Link href={`/hijack?key=${row.key}`}>View</Link>,
       };
@@ -381,11 +381,10 @@ const HijackTableComponent = (props) => {
             key={option.text}
             value={option.text}
             onClick={() => onSizePerPageChange(option.page)}
-            className={`btn ${
-              currSizePerPage === `${option.page}`
+            className={`btn ${currSizePerPage === `${option.page}`
                 ? 'btn-secondary'
                 : 'btn-warning'
-            }`}
+              }`}
           >
             {option.text}
           </option>
@@ -477,18 +476,11 @@ const HijackTableComponent = (props) => {
     const sendData = async (e) => {
       e.preventDefault();
       const hijackKeys = data.slice(0, hijackState).map((hijack) => hijack.key);
-      let state = false;
-      let action = '';
-      if (selectState === 'hijack_action_acknowledge') {
-        action = 'seen';
-        state = true;
-      } else if (selectState === 'hijack_action_acknowledge_not') {
-        action = 'seen';
-      }
+      const state = false;
 
       const reqData = {
         hijack_keys: hijackKeys,
-        action: action,
+        action: selectState,
         state: state,
       };
 
@@ -572,8 +564,8 @@ const HijackTableComponent = (props) => {
     const currentIndex = page * sizePerPage;
     setPage(page);
     setSizePerPage(sizePerPage);
-    setOffsetState(currentIndex);
-    setLimitState(sizePerPage);
+    if (currentIndex) setOffsetState(currentIndex);
+    if (sizePerPage) setLimitState(sizePerPage);
     if (sortOrder) {
       setSortColumnState(sortField);
       setSortState(sortOrder);

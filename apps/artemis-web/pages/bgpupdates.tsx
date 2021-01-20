@@ -21,11 +21,11 @@ const BGPUpdates = (props) => {
   const [isLive, setIsLive] = useState(true);
   const context = React.useContext(TooltipContext);
 
-  if (shallMock()) {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const { worker } = require('../utils/mock-sw/browser');
-    worker.start();
-  }
+  // if (shallMock()) {
+  //   // eslint-disable-next-line @typescript-eslint/no-var-requires
+  //   const { worker } = require('../utils/mock-sw/browser');
+  //   worker.start();
+  // }
 
   const classes = useStyles();
 
