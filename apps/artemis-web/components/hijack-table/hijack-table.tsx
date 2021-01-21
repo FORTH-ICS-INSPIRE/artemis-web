@@ -370,30 +370,29 @@ const HijackTableComponent = (props) => {
     currSizePerPage,
     onSizePerPageChange,
   }) => (
-      <div id="paging" className="btn-group" role="group">
-        Show
+    <div id="paging" className="btn-group" role="group">
+      Show
       <select
-          style={{ width: '80px' }}
-          className="custom-select custom-select-sm form-control form-control-sm"
-        >
-          {options.map((option) => (
-            <option
-              key={option.text}
-              value={option.text}
-              onClick={() => onSizePerPageChange(option.page)}
-              className={`btn ${
-                currSizePerPage === `${option.page}`
-                  ? 'btn-secondary'
-                  : 'btn-warning'
-                }`}
-            >
-              {option.text}
-            </option>
-          ))}
-        </select>
-        entries
+        style={{ width: '80px' }}
+        className="custom-select custom-select-sm form-control form-control-sm"
+      >
+        {options.map((option) => (
+          <option
+            key={option.text}
+            value={option.text}
+            onClick={() => onSizePerPageChange(option.page)}
+            className={`btn ${currSizePerPage === `${option.page}`
+                ? 'btn-secondary'
+                : 'btn-warning'
+              }`}
+          >
+            {option.text}
+          </option>
+        ))}
+      </select>
+      entries
     </div>
-    );
+  );
 
   const pageButtonRenderer = ({ page, active, onPageChange }) => {
     const handleClick = (e) => {
@@ -547,7 +546,7 @@ const HijackTableComponent = (props) => {
           Apply
         </button>
         <button
-          onClick={() => setHijackState(0)}
+          onClick={() => setHijackState([])}
           id="clear_all_selected"
           type="button"
           className="btn btn-danger btn-sm"
@@ -582,11 +581,18 @@ const HijackTableComponent = (props) => {
 
   const tableRowEvents = {
     onClick: (e, row, rowIndex) => {
-      //todo: highlight if state
-      setHijackState(hijackState + row);
-      console.log(`clicked on row with index: ${rowIndex}`);
+      const existsInState = hijackState.some(
+        (hijack) => hijack.key === row.key
+      );
+
+      if (existsInState)
+        setHijackState(hijackState.filter((hijack) => hijack.key !== row.key));
+      else setHijackState(hijackState.concat([row]));
     },
-  }
+  };
+
+  const rowClasses = (row, rowIndex) =>
+    hijackState.some((hijack) => hijack.key === row.key) ? 'highlight-row' : '';
 
   const contentTable = ({ paginationProps, paginationTableProps }) => (
     <ToolkitProvider
@@ -599,7 +605,7 @@ const HijackTableComponent = (props) => {
       {(toolkitprops) => {
         paginationProps.dataSize = hijackCount;
         return (
-          <div className={hijackState.length ? 'hijack-table' : ''}>
+          <div>
             <div className="header-filter">
               <SizePerPageDropdownStandalone {...paginationProps} />
               <HijackActions
@@ -623,6 +629,7 @@ const HijackTableComponent = (props) => {
               striped
               condensed
               hover
+              rowClasses={rowClasses}
               rowEvents={tableRowEvents}
               noDataIndication={() => {
                 return (
