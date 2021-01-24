@@ -15,7 +15,37 @@ describe('OngoingHijackTable', () => {
       {
         request: {
           operationName: 'hijacks',
-          query: generator.getQuery(),
+          query: gql`
+            query hijacks {
+              view_hijacks {
+                active
+                comment
+                configured_prefix
+                hijack_as
+                ignored
+                dormant
+                key
+                rpki_status
+                mitigation_started
+                num_asns_inf
+                num_peers_seen
+                outdated
+                peers_seen
+                peers_withdrawn
+                prefix
+                resolved
+                seen
+                time_detected
+                time_ended
+                time_last
+                time_started
+                timestamp_of_config
+                type
+                under_mitigation
+                withdrawn
+              }
+            }
+          `,
         },
         result: {
           data: {

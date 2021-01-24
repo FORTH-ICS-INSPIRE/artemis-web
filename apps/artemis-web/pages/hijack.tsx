@@ -1,9 +1,15 @@
 import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
   FormControlLabel,
   FormGroup,
   Grid,
   Paper,
   Switch,
+  Typography,
 } from '@material-ui/core';
 import { Editor, EditorState, ContentState } from 'draft-js';
 import 'draft-js/dist/Draft.css';
@@ -55,6 +61,8 @@ const ViewHijackPage = (props) => {
     peers_withdrawn: [],
     comment: '',
     seen: false,
+    resolved: false,
+    ignored: false,
   });
   const [hijackExists, setHijackExists] = useState(true);
   const [filteredBgpData, setFilteredBgpData] = useState([]);
@@ -106,8 +114,7 @@ const ViewHijackPage = (props) => {
       body: JSON.stringify(reqData),
     });
 
-    if (res.status === 200)
-      window.location.reload();
+    if (res.status === 200) window.location.reload();
   };
 
   const submitComment = async (e) => {
@@ -159,6 +166,8 @@ const ViewHijackPage = (props) => {
   const withdrawn = hijackDataState
     ? hijackDataState.peers_withdrawn ?? []
     : [];
+  const resolved = hijackDataState?.resolved;
+  const ignored = hijackDataState?.ignored;
 
   const onChangeValue = (event) => {
     setSelectState(event.target.value);
@@ -251,13 +260,13 @@ const ViewHijackPage = (props) => {
                       Acknowledged
                     </span>
                   ) : (
-                      <span
-                        id="hijack_acknowledged_badge"
-                        className="badge badge-acknowledged float-right badge-danger"
-                      >
-                        Not Acknowledged
-                      </span>
-                    )}
+                    <span
+                      id="hijack_acknowledged_badge"
+                      className="badge badge-acknowledged float-right badge-danger"
+                    >
+                      Not Acknowledged
+                    </span>
+                  )}
                 </div>
                 <div className="card-body">
                   <div className="row">
@@ -281,8 +290,8 @@ const ViewHijackPage = (props) => {
                                   value={hijackInfoLeft[key][0] ?? ''}
                                 />
                               ) : (
-                                  hijackInfoLeft[key][0] ?? ''
-                                )}
+                                hijackInfoLeft[key][0] ?? ''
+                              )}
                             </div>
                           </div>
                         );
@@ -308,8 +317,8 @@ const ViewHijackPage = (props) => {
                                   value={hijackInfoRight[key][0] ?? ''}
                                 />
                               ) : (
-                                  hijackInfoRight[key][0] ?? ''
-                                )}
+                                hijackInfoRight[key][0] ?? ''
+                              )}
                             </div>
                           </div>
                         );
@@ -363,22 +372,57 @@ const ViewHijackPage = (props) => {
                         className="form-control form-control-sm-auto"
                         id="action_selection"
                       >
-                        <option value="hijack_action_resolve">
-                          Mark as Resolved
-                        </option>
-                        <option value="hijack_action_ignore">
-                          Mark as Ignored
-                        </option>
-                        <option value="hijack_action_acknowledge">
-                          Mark as Acknowledged
-                        </option>
-                        <option value="hijack_action_acknowledge_not">
-                          Mark as Not Acknowledged
-                        </option>
+                        {!resolved && !ignored && (
+                          <option value="hijack_action_resolve">
+                            Mark as Resolved
+                          </option>
+                        )}
+                        {!resolved && !ignored && (
+                          <option value="hijack_action_ignore">
+                            Mark as Ignored
+                          </option>
+                        )}
+                        {!seen && (
+                          <option value="hijack_action_acknowledge">
+                            Mark as Acknowledged
+                          </option>
+                        )}
+                        {seen && (
+                          <option value="hijack_action_acknowledge_not">
+                            Mark as Not Acknowledged
+                          </option>
+                        )}
                         <option value="hijack_action_delete">
                           Delete Hijack
                         </option>
                       </select>
+                      <Dialog
+                        aria-labelledby="customized-dialog-title"
+                        open={selectActionState === 'hijack_action_ignore'}
+                      >
+                        <DialogTitle id="customized-dialog-title">
+                          Configuration diff (Learn new rule)
+                        </DialogTitle>
+                        <DialogContent dividers>
+                          <div id="modal_display_config_comparison">
+                            <div className="row">
+                              <div className="col-lg-6">
+                                {' '}
+                                Old configuration{' '}
+                              </div>
+                              <div className="col-lg-6">
+                                {' '}
+                                New configuration{' '}
+                              </div>
+                            </div>
+                          </div>
+                        </DialogContent>
+                        <DialogActions>
+                          <Button autoFocus color="primary">
+                            Save changes
+                          </Button>
+                        </DialogActions>
+                      </Dialog>
                       <button
                         onClick={sendData}
                         style={{ marginRight: '5px' }}
@@ -401,8 +445,9 @@ const ViewHijackPage = (props) => {
                         style={{ marginRight: '5px', float: 'right' }}
                         id="edit_comment"
                         type="button"
-                        className={`btn btn-${!editComment ? 'primary' : 'secondary'
-                          } btn-md`}
+                        className={`btn btn-${
+                          !editComment ? 'primary' : 'secondary'
+                        } btn-md`}
                         onClick={(e) => {
                           if (editComment) submitComment(e);
                           setEditComment(!editComment);
@@ -465,8 +510,8 @@ const ViewHijackPage = (props) => {
                                 </Grid>
                               </animated.div>
                             ) : (
-                                <animated.div key={key}></animated.div>
-                              )
+                              <animated.div key={key}></animated.div>
+                            )
                           )}
                         </div>
                       )}
@@ -506,8 +551,8 @@ const ViewHijackPage = (props) => {
                                 </Grid>
                               </animated.div>
                             ) : (
-                                <animated.div key={key}></animated.div>
-                              )
+                              <animated.div key={key}></animated.div>
+                            )
                           )}
                         </div>
                       )}
