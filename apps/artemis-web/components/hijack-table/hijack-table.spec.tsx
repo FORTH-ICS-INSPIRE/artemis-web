@@ -153,7 +153,12 @@ describe('HijackTable', () => {
           query: gql`
             query getLiveTableCount {
               count_data: view_hijacks_aggregate(
-                where: {_and: [{time_last: {_gte: "2021-01-25T08:24:22.385Z"}}, {time_last: {_lte: "2021-01-25T08:24:00.000Z"}}]}
+                where: {
+                  _and: [
+                    { time_last: { _gte: "2021-01-25T08:24:22.385Z" } }
+                    { time_last: { _lte: "2021-01-25T08:24:00.000Z" } }
+                  ]
+                }
               ) {
                 aggregate {
                   count
@@ -162,7 +167,8 @@ describe('HijackTable', () => {
                 __typename
               }
             }
-          `, variables: {}
+          `,
+          variables: {},
         },
         result: {
           data: {
