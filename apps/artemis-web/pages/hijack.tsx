@@ -3,7 +3,7 @@ import {
   FormGroup,
   Grid,
   Paper,
-  Switch
+  Switch,
 } from '@material-ui/core';
 import { ContentState, Editor, EditorState } from 'draft-js';
 import 'draft-js/dist/Draft.css';
@@ -25,7 +25,7 @@ import {
   findStatus,
   shallMock,
   shallSubscribe,
-  statuses
+  statuses,
 } from '../utils/token';
 
 const ViewHijackPage = (props) => {
@@ -33,17 +33,17 @@ const ViewHijackPage = (props) => {
   const [tooltips, setTooltips] = useState({});
   const context = React.useContext(TooltipContext);
 
-  if (shallMock()) {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const { worker } = require('../utils/mock-sw/browser');
-    worker.start();
-  }
+  // if (shallMock()) {
+  //   // eslint-disable-next-line @typescript-eslint/no-var-requires
+  //   const { worker } = require('../utils/mock-sw/browser');
+  //   worker.start();
+  // }
 
   const classes = useStyles();
   const router = useRouter();
 
   const hijackKey: string = router.query.key.toString() ?? '';
-  if (!hijackKey.length) router.push('/wronghijackkey');
+  // if (!hijackKey.length) router.push('/wronghijackkey');
 
   const user = props.user;
 
@@ -371,7 +371,8 @@ const ViewHijackPage = (props) => {
                         className={`btn btn-${!editComment ? 'primary' : 'secondary'
                           } btn-md`}
                         onClick={(e) => {
-                          if (editComment) submitComment(e, { commentRef, hijackKey });
+                          if (editComment)
+                            submitComment(e, { commentRef, hijackKey });
                           setEditComment(!editComment);
                         }}
                       >
