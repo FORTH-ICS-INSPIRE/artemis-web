@@ -8,8 +8,6 @@ import { gql } from '@apollo/client';
 
 describe('HijackTable', () => {
   it('should render successfully', () => {
-    const generator2 = new QueryGenerator('hijackCount', false, {});
-
     const mocks = [
       {
         request: {
@@ -184,7 +182,7 @@ describe('HijackTable', () => {
       },
     ];
     const { baseElement } = render(
-      <MockedProvider mocks={mocks}>
+      <MockedProvider addTypename={false} mocks={mocks}>
         <HijackTable />
       </MockedProvider>
     );

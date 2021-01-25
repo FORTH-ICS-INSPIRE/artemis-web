@@ -186,7 +186,7 @@ describe('OngoingHijackTable', () => {
       },
     ];
     const { baseElement } = render(
-      <MockedProvider mocks={mocks}>
+      <MockedProvider addTypename={false} mocks={mocks}>
         <OngoingHijackTable isLive={false} />
       </MockedProvider>
     );
