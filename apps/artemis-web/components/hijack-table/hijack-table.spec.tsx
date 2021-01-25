@@ -150,16 +150,18 @@ describe('HijackTable', () => {
       {
         request: {
           operationName: 'getLiveTableCount',
-          query: generator2.getQuery(),
+          query: gql`
+          query getLiveTableCount {
+            count_data: view_hijacks_aggregate
+            { aggregate { count } }
+          }`,
         },
         result: {
           data: {
             count_data: {
               aggregate: {
                 count: 25,
-                __typename: 'view_hijacks_aggregate_fields',
               },
-              __typename: 'view_hijacks_aggregate',
             },
           },
         },

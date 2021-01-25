@@ -9,14 +9,14 @@ function getName(ASN: number) {
 function getCountry(ASN: number) {
   return fetch(
     'https://stat.ripe.net/data/maxmind-geo-lite-announced-by-as/data.json?resource=AS' +
-      ASN
+    ASN
   ).then((response) => response.json());
 }
 
 function getAbuse(ASN: number) {
   return fetch(
     'https://stat.ripe.net/data/abuse-contact-finder/data.json?resource=AS' +
-      ASN
+    ASN
   ).then((response) => response.json());
 }
 
@@ -91,3 +91,4 @@ export const sendData = async (e, { hijackKeys, selectState }) => {
 
   if (res.status === 200) window.location.reload();
 };
+
