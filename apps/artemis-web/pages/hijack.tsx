@@ -1,17 +1,11 @@
 import {
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
   FormControlLabel,
   FormGroup,
   Grid,
   Paper,
-  Switch,
-  Typography,
+  Switch
 } from '@material-ui/core';
-import { Editor, EditorState, ContentState } from 'draft-js';
+import { ContentState, Editor, EditorState } from 'draft-js';
 import 'draft-js/dist/Draft.css';
 import DefaultErrorPage from 'next/error';
 import Head from 'next/head';
@@ -23,7 +17,7 @@ import AuthHOC from '../components/401-hoc/401-hoc';
 import BGPTableComponent from '../components/bgp-table/bgp-table';
 import Tooltip from '../components/tooltip/tooltip';
 import TooltipContext from '../context/tooltip-context';
-import { sendData } from '../utils/fetch-data';
+import { sendData, submitComment } from '../utils/fetch-data';
 import { useGraphQl } from '../utils/hooks/use-graphql';
 import { extractHijackInfos } from '../utils/parsers';
 import { useStyles } from '../utils/styles';
@@ -31,7 +25,7 @@ import {
   findStatus,
   shallMock,
   shallSubscribe,
-  statuses,
+  statuses
 } from '../utils/token';
 
 const ViewHijackPage = (props) => {
@@ -89,28 +83,6 @@ const ViewHijackPage = (props) => {
   );
 
   const commentRef = React.createRef();
-
-  const submitComment = async (e) => {
-    e.preventDefault();
-    const editor: any = commentRef.current;
-    const comment = editor.editor.innerText;
-
-    const reqData = {
-      action: 'comment',
-      key: hijackKey,
-      comment: comment,
-    };
-
-    const res = await fetch('/api/hijack', {
-      method: 'POST',
-      credentials: 'include',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(reqData),
-    });
-  };
 
   useGraphQl('hijackByKey', {
     callback: (data) => {
@@ -233,13 +205,13 @@ const ViewHijackPage = (props) => {
                       Acknowledged
                     </span>
                   ) : (
-                    <span
-                      id="hijack_acknowledged_badge"
-                      className="badge badge-acknowledged float-right badge-danger"
-                    >
-                      Not Acknowledged
-                    </span>
-                  )}
+                      <span
+                        id="hijack_acknowledged_badge"
+                        className="badge badge-acknowledged float-right badge-danger"
+                      >
+                        Not Acknowledged
+                      </span>
+                    )}
                 </div>
                 <div className="card-body">
                   <div className="row">
@@ -263,8 +235,8 @@ const ViewHijackPage = (props) => {
                                   value={hijackInfoLeft[key][0] ?? ''}
                                 />
                               ) : (
-                                hijackInfoLeft[key][0] ?? ''
-                              )}
+                                  hijackInfoLeft[key][0] ?? ''
+                                )}
                             </div>
                           </div>
                         );
@@ -290,8 +262,8 @@ const ViewHijackPage = (props) => {
                                   value={hijackInfoRight[key][0] ?? ''}
                                 />
                               ) : (
-                                hijackInfoRight[key][0] ?? ''
-                              )}
+                                  hijackInfoRight[key][0] ?? ''
+                                )}
                             </div>
                           </div>
                         );
@@ -369,33 +341,6 @@ const ViewHijackPage = (props) => {
                           Delete Hijack
                         </option>
                       </select>
-                      <Dialog
-                        aria-labelledby="customized-dialog-title"
-                        open={selectActionState === 'hijack_action_ignore'}
-                      >
-                        <DialogTitle id="customized-dialog-title">
-                          Configuration diff (Learn new rule)
-                        </DialogTitle>
-                        <DialogContent dividers>
-                          <div id="modal_display_config_comparison">
-                            <div className="row">
-                              <div className="col-lg-6">
-                                {' '}
-                                Old configuration{' '}
-                              </div>
-                              <div className="col-lg-6">
-                                {' '}
-                                New configuration{' '}
-                              </div>
-                            </div>
-                          </div>
-                        </DialogContent>
-                        <DialogActions>
-                          <Button autoFocus color="primary">
-                            Save changes
-                          </Button>
-                        </DialogActions>
-                      </Dialog>
                       <button
                         onClick={(e) =>
                           sendData(e, {
@@ -423,11 +368,10 @@ const ViewHijackPage = (props) => {
                         style={{ marginRight: '5px', float: 'right' }}
                         id="edit_comment"
                         type="button"
-                        className={`btn btn-${
-                          !editComment ? 'primary' : 'secondary'
-                        } btn-md`}
+                        className={`btn btn-${!editComment ? 'primary' : 'secondary'
+                          } btn-md`}
                         onClick={(e) => {
-                          if (editComment) submitComment(e);
+                          if (editComment) submitComment(e, { commentRef, hijackKey });
                           setEditComment(!editComment);
                         }}
                       >
@@ -488,8 +432,8 @@ const ViewHijackPage = (props) => {
                                 </Grid>
                               </animated.div>
                             ) : (
-                              <animated.div key={key}></animated.div>
-                            )
+                                <animated.div key={key}></animated.div>
+                              )
                           )}
                         </div>
                       )}
@@ -529,8 +473,8 @@ const ViewHijackPage = (props) => {
                                 </Grid>
                               </animated.div>
                             ) : (
-                              <animated.div key={key}></animated.div>
-                            )
+                                <animated.div key={key}></animated.div>
+                              )
                           )}
                         </div>
                       )}
