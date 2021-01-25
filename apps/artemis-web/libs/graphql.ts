@@ -290,7 +290,7 @@ export class QueryGenerator {
     return gql`${
       this.operationType
     } getLiveTableData${this.getQueryVars()} { view_bgpupdates: search_bgpupdates_by_hijack_key(
-         order_by: {timestamp: ${this.options.sortOrder} }
+         order_by: {timestamp: ${this.options.sortOrder}}
          ${this.getConditionLimit()}
          ${this.getWhereCondition()}
          args: {key: \"${this.options.key}\"}) {

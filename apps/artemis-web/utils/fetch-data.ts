@@ -45,3 +45,49 @@ export const fetchTooltip = async (ASN, context, { setTooltip }) => {
     setTooltip(tooltip);
   }
 };
+
+export const submitComment = async (e, { commentRef, hijackKey }) => {
+  e.preventDefault();
+  const editor: any = commentRef.current;
+  const comment = editor.editor.innerText;
+
+  const reqData = {
+    action: 'comment',
+    key: hijackKey,
+    comment: comment,
+  };
+
+  const res = await fetch('/api/hijack', {
+    method: 'POST',
+    credentials: 'include',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(reqData),
+  });
+};
+
+export const sendData = async (e, { hijackKeys, selectState }) => {
+  e.preventDefault();
+
+  const state = false;
+
+  const reqData = {
+    hijack_keys: hijackKeys,
+    action: selectState,
+    state: state,
+  };
+
+  const res = await fetch('/api/hijack', {
+    method: 'POST',
+    credentials: 'include',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(reqData),
+  });
+
+  if (res.status === 200) window.location.reload();
+};

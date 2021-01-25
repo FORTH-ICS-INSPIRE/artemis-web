@@ -23,6 +23,7 @@ import AuthHOC from '../components/401-hoc/401-hoc';
 import BGPTableComponent from '../components/bgp-table/bgp-table';
 import Tooltip from '../components/tooltip/tooltip';
 import TooltipContext from '../context/tooltip-context';
+import { sendData } from '../utils/fetch-data';
 import { useGraphQl } from '../utils/hooks/use-graphql';
 import { extractHijackInfos } from '../utils/parsers';
 import { useStyles } from '../utils/styles';
@@ -38,11 +39,11 @@ const ViewHijackPage = (props) => {
   const [tooltips, setTooltips] = useState({});
   const context = React.useContext(TooltipContext);
 
-  // if (shallMock()) {
-  //   // eslint-disable-next-line @typescript-eslint/no-var-requires
-  //   const { worker } = require('../utils/mock-sw/browser');
-  //   worker.start();
-  // }
+  if (shallMock()) {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const { worker } = require('../utils/mock-sw/browser');
+    worker.start();
+  }
 
   const classes = useStyles();
   const router = useRouter();
@@ -88,34 +89,6 @@ const ViewHijackPage = (props) => {
   );
 
   const commentRef = React.createRef();
-
-  const sendData = async (e) => {
-    e.preventDefault();
-    const hijackKeys = [hijackKey];
-    let state = false;
-
-    if (selectActionState === 'hijack_action_acknowledge') {
-      state = true;
-    }
-
-    const reqData = {
-      hijack_keys: hijackKeys,
-      action: selectActionState,
-      state: state,
-    };
-
-    const res = await fetch('/api/hijack', {
-      method: 'POST',
-      credentials: 'include',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(reqData),
-    });
-
-    if (res.status === 200) window.location.reload();
-  };
 
   const submitComment = async (e) => {
     e.preventDefault();
@@ -424,7 +397,12 @@ const ViewHijackPage = (props) => {
                         </DialogActions>
                       </Dialog>
                       <button
-                        onClick={sendData}
+                        onClick={(e) =>
+                          sendData(e, {
+                            hijackKeys: [hijackKey],
+                            selectState: selectActionState,
+                          })
+                        }
                         style={{ marginRight: '5px' }}
                         id="apply_selected"
                         type="button"

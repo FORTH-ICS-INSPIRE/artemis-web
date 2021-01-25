@@ -17,7 +17,11 @@ describe('OngoingHijackTable', () => {
           operationName: 'hijacks',
           query: gql`
             query hijacks {
-              view_hijacks {
+              view_hijacks(
+                where: {
+                  _and: [{ active: { _eq: true } }, { dormant: { _eq: false } }]
+                }
+              ) {
                 active
                 comment
                 configured_prefix

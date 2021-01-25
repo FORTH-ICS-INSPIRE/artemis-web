@@ -28,6 +28,7 @@ import {
 } from '../../utils/token';
 import Tooltip from '../tooltip/tooltip';
 import ErrorBoundary from '../error-boundary/error-boundary';
+import { sendData } from '../../utils/fetch-data';
 
 const getExactMatchFilter = (stateValue) =>
   textFilter({
@@ -267,8 +268,8 @@ function handleData(
           row.resolved || row.under_mitigation ? (
             <img alt="" src="./handled.png" />
           ) : (
-            <img alt="" src="./unhadled.png" />
-          ),
+              <img alt="" src="./unhadled.png" />
+            ),
         key: row.key,
         more: <Link href={`/hijack?key=${row.key}`}>View</Link>,
       };
@@ -381,11 +382,10 @@ const HijackTableComponent = (props) => {
             key={option.text}
             value={option.text}
             onClick={() => onSizePerPageChange(option.page)}
-            className={`btn ${
-              currSizePerPage === `${option.page}`
+            className={`btn ${currSizePerPage === `${option.page}`
                 ? 'btn-secondary'
                 : 'btn-warning'
-            }`}
+              }`}
           >
             {option.text}
           </option>
@@ -474,28 +474,6 @@ const HijackTableComponent = (props) => {
     const data = props.data;
     const { hijackState, setHijackState, selectState, setSelectState } = props;
 
-    const sendData = async (e) => {
-      e.preventDefault();
-      const hijackKeys = hijackState.map((hijack) => hijack.key);
-      const state = false;
-
-      const reqData = {
-        hijack_keys: hijackKeys,
-        action: selectState,
-        state: state,
-      };
-
-      const res = await fetch('/api/hijack', {
-        method: 'POST',
-        credentials: 'include',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(reqData),
-      });
-    };
-
     return (
       <>
         <button
@@ -538,7 +516,12 @@ const HijackTableComponent = (props) => {
           <option value="hijack_action_delete">Delete Hijack</option>
         </select>
         <button
-          onClick={sendData}
+          onClick={(e) =>
+            sendData(e, {
+              hijackKeys: hijackState.map((hijack) => hijack.key),
+              selectState: selectState,
+            })
+          }
           style={{ marginRight: '5px' }}
           id="apply_selected"
           type="button"
