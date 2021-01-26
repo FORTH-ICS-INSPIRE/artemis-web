@@ -180,3 +180,8 @@ a:hover {
 .highlight-row {
   background-color: gold !important;
 }
+
+div[role='dialog'] {
+  max-width: 1000px !important;
+  width: 90%;
+}

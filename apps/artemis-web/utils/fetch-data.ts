@@ -68,10 +68,11 @@ export const submitComment = async (e, { commentRef, hijackKey }) => {
   });
 };
 
-export const sendData = async (e, { hijackKeys, selectState }) => {
+export const sendData = async (
+  e,
+  { hijackKeys, selectState, state = false }
+) => {
   e.preventDefault();
-
-  const state = false;
 
   const reqData = {
     hijack_keys: hijackKeys,

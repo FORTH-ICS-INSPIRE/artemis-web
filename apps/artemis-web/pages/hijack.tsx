@@ -1,9 +1,16 @@
 import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
   FormControlLabel,
   FormGroup,
   Grid,
+  IconButton,
   Paper,
   Switch,
+  Typography,
 } from '@material-ui/core';
 import { ContentState, Editor, EditorState } from 'draft-js';
 import 'draft-js/dist/Draft.css';
@@ -15,6 +22,7 @@ import { animated, useTransition } from 'react-spring';
 import 'react-toastify/dist/ReactToastify.css';
 import AuthHOC from '../components/401-hoc/401-hoc';
 import BGPTableComponent from '../components/bgp-table/bgp-table';
+import LearnRuleComponent from '../components/learn-rule/learn-rule';
 import Tooltip from '../components/tooltip/tooltip';
 import TooltipContext from '../context/tooltip-context';
 import { sendData, submitComment } from '../utils/fetch-data';
@@ -27,6 +35,7 @@ import {
   shallSubscribe,
   statuses,
 } from '../utils/token';
+import CloseIcon from '@material-ui/icons/Close';
 
 const ViewHijackPage = (props) => {
   const [isLive, setIsLive] = useState(true);
@@ -43,7 +52,7 @@ const ViewHijackPage = (props) => {
   const router = useRouter();
 
   const hijackKey: string = router.query.key.toString() ?? '';
-  // if (!hijackKey.length) router.push('/wronghijackkey');
+  if (!hijackKey.length) router.push('/wronghijackkey');
 
   const user = props.user;
 
@@ -58,6 +67,7 @@ const ViewHijackPage = (props) => {
     seen: false,
     resolved: false,
     ignored: false,
+    prefix: '',
   });
   const [hijackExists, setHijackExists] = useState(true);
   const [filteredBgpData, setFilteredBgpData] = useState([]);
@@ -81,6 +91,7 @@ const ViewHijackPage = (props) => {
   const [selectActionState, setSelectActionState] = useState(
     'hijack_action_resolve'
   );
+  const [openModalState, setOpenModalState] = useState(false);
 
   const commentRef = React.createRef();
 
@@ -90,7 +101,10 @@ const ViewHijackPage = (props) => {
         ? data.subscriptionData.data.view_hijacks
         : data.view_hijacks;
 
-      if (hijacks.length === 0) setHijackExists(false);
+      if (hijacks.length === 0) {
+        setHijackExists(false);
+        return;
+      }
       setHijackDataState(hijacks[0]);
       setEditorState(() =>
         EditorState.createWithContent(
@@ -107,6 +121,7 @@ const ViewHijackPage = (props) => {
     hasStatusFilter: false,
   });
 
+  if (!hijackExists) router.push('/wronghijackkey');
   const seen = hijackDataState ? hijackDataState.peers_seen ?? [] : [];
   const withdrawn = hijackDataState
     ? hijackDataState.peers_withdrawn ?? []
@@ -134,6 +149,13 @@ const ViewHijackPage = (props) => {
       context: context,
     }
   );
+
+  const config = useGraphQl('config', {
+    isLive: false,
+    hasDateFilter: false,
+    hasColumnFilter: false,
+    hasStatusFilter: false,
+  });
 
   return (
     <>
@@ -343,10 +365,12 @@ const ViewHijackPage = (props) => {
                       </select>
                       <button
                         onClick={(e) =>
-                          sendData(e, {
-                            hijackKeys: [hijackKey],
-                            selectState: selectActionState,
-                          })
+                          selectActionState === 'hijack_action_ignore'
+                            ? setOpenModalState(true)
+                            : sendData(e, {
+                                hijackKeys: [hijackKey],
+                                selectState: selectActionState,
+                              })
                         }
                         style={{ marginRight: '5px' }}
                         id="apply_selected"
@@ -492,6 +516,41 @@ const ViewHijackPage = (props) => {
               <div className="card">
                 <div className="card-header">Related BGP Updates</div>
                 <div className="card-body" style={{ textAlign: 'center' }}>
+                  <Dialog
+                    aria-labelledby="customized-dialog-title"
+                    open={openModalState}
+                  >
+                    <DialogTitle id="customized-dialog-title">
+                      Configuration diff (Learn new rule)
+                      <IconButton
+                        style={{ float: 'right' }}
+                        aria-label="close"
+                        onClick={() => setOpenModalState(false)}
+                      >
+                        <CloseIcon />
+                      </IconButton>
+                    </DialogTitle>
+                    <DialogContent dividers>
+                      <div id="modal_display_config_comparison">
+                        <div id="modal_display_config_comparison">
+                          <LearnRuleComponent
+                            hijack={hijackDataState}
+                            config={config}
+                          />
+                        </div>
+                      </div>
+                    </DialogContent>
+                    {/* <DialogActions>
+                      <DialogActions>
+                        <Button color="primary">
+                          Add rule
+                        </Button>
+                        <Button color="secondary">
+                          Procceed with no change
+                        </Button>
+                      </DialogActions>
+                    </DialogActions> */}
+                  </Dialog>
                   <BGPTableComponent
                     filter={0}
                     isLive={isLive}
