@@ -1,7 +1,6 @@
 import {
-  Button,
   Dialog,
-  DialogActions,
+
   DialogContent,
   DialogTitle,
   FormControlLabel,
@@ -9,9 +8,9 @@ import {
   Grid,
   IconButton,
   Paper,
-  Switch,
-  Typography,
+  Switch
 } from '@material-ui/core';
+import CloseIcon from '@material-ui/icons/Close';
 import { ContentState, Editor, EditorState } from 'draft-js';
 import 'draft-js/dist/Draft.css';
 import DefaultErrorPage from 'next/error';
@@ -31,11 +30,10 @@ import { extractHijackInfos } from '../utils/parsers';
 import { useStyles } from '../utils/styles';
 import {
   findStatus,
-  shallMock,
+
   shallSubscribe,
-  statuses,
+  statuses
 } from '../utils/token';
-import CloseIcon from '@material-ui/icons/Close';
 
 const ViewHijackPage = (props) => {
   const [isLive, setIsLive] = useState(true);

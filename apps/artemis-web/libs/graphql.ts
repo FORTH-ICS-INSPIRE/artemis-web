@@ -1,17 +1,12 @@
 import {
   ApolloClient,
-  InMemoryCache,
-  NormalizedCacheObject,
   createHttpLink,
-  gql,
-  DocumentNode,
-  useSubscription,
-  useQuery,
+  DocumentNode, gql, InMemoryCache,
+  NormalizedCacheObject, split
 } from '@apollo/client';
-import { split } from '@apollo/client';
-import { getMainDefinition } from '@apollo/client/utilities';
-import { WebSocketLink } from '@apollo/client/link/ws';
 import { setContext } from '@apollo/client/link/context';
+import { WebSocketLink } from '@apollo/client/link/ws';
+import { getMainDefinition } from '@apollo/client/utilities';
 import { useMemo } from 'react';
 import queryType from './graphql.d';
 
@@ -337,14 +332,14 @@ export class QueryGenerator {
       if (this.options.hasDateFilter)
         condition =
           condition +
-          `{ ${dateField}: {_gte: \"${this.options.dateRange.dateFrom}\"} },{ ${dateField}: {_lte: \"${this.options.dateRange.dateTo}\"} },`;
+          `{ ${dateField}: {_gte: "${this.options.dateRange.dateFrom}"} },{ ${dateField}: {_lte: "${this.options.dateRange.dateTo}"} },`;
       if (this.options.hasColumnFilter) {
         let column = Object.keys(this.options.columnFilter)[0];
         const filterValue = this.options.columnFilter[column].filterVal;
         if (column.includes('original'))
           column = column.replace('_original', '');
         else if (column === 'as_path2') column = 'as_path';
-        condition = condition + `{ ${column}: {_eq: \"${filterValue}\"} }`;
+        condition = condition + `{ ${column}: {_eq: "${filterValue}"} }`;
       }
       if (this.options.statusFilter) {
         condition = condition + this.options.statusFilter;

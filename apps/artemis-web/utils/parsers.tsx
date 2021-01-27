@@ -423,12 +423,12 @@ export async function extractDistinctTooltips(asns) {
     const ASN_int: number | string =
       asns[i] !== '-' ? parseInt(asns[i], 10) : '-';
     const [name_origin, countries_origin, abuse_origin] =
-      ASN_int == '-'
+      ASN_int === '-'
         ? ['', '', '']
         : await fetchASNData(parseInt(ASN_int.toString(), 10));
 
     const tooltip =
-      ASN_int == '-'
+      ASN_int === '-'
         ? ''
         : parseASNData(ASN_int, name_origin, countries_origin, abuse_origin);
     tooltips[ASN_int] = tooltip;
@@ -453,11 +453,11 @@ export async function extractHijackTooltips(hijack) {
   const tooltip1 =
     ASN_int_origin && ASN_int_origin.toString() !== '-'
       ? parseASNData(
-          ASN_int_origin,
-          name_origin,
-          countries_origin,
-          abuse_origin
-        )
+        ASN_int_origin,
+        name_origin,
+        countries_origin,
+        abuse_origin
+      )
       : '';
 
   const tooltip2 =

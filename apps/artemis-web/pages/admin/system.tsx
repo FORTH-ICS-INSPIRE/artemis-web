@@ -1,16 +1,15 @@
 import { Button, Grid } from '@material-ui/core';
-import { formatDate, shallMock } from '../../utils/token';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/material.css';
 import Head from 'next/head';
 import React, { useEffect, useState } from 'react';
 import {
-  Controlled as CodeMirror,
-  IControlledCodeMirror,
+  Controlled as CodeMirror
 } from 'react-codemirror2';
 import AuthHOC from '../../components/401-hoc/401-hoc';
 import SystemModule from '../../components/system-module/system-module';
 import { useGraphQl } from '../../utils/hooks/use-graphql';
+import { formatDate } from '../../utils/token';
 
 const SystemPage = (props) => {
   // if (shallMock()) {
@@ -84,11 +83,11 @@ const SystemPage = (props) => {
 
   const modules = processes
     ? processes.map((ps) => {
-        return [
-          ps['name'].charAt(0).toUpperCase() + ps['name'].slice(1),
-          ps['running'],
-        ];
-      })
+      return [
+        ps['name'].charAt(0).toUpperCase() + ps['name'].slice(1),
+        ps['running'],
+      ];
+    })
     : [];
 
   const states = {};
@@ -201,15 +200,15 @@ const SystemPage = (props) => {
                         </Button>{' '}
                       </>
                     ) : (
-                      <Button
-                        onClick={() => setEditState(!editState)}
-                        style={{ float: 'right' }}
-                        variant="contained"
-                        color="secondary"
-                      >
-                        Edit
-                      </Button>
-                    )}
+                        <Button
+                          onClick={() => setEditState(!editState)}
+                          style={{ float: 'right' }}
+                          variant="contained"
+                          color="secondary"
+                        >
+                          Edit
+                        </Button>
+                      )}
                     <Button
                       onClick={(e) => onClick(e, 'load')}
                       style={{ float: 'right' }}
@@ -256,10 +255,10 @@ const SystemPage = (props) => {
                         Last Update:{' '}
                         {CONFIG_DATA
                           ? formatDate(
-                              new Date(
-                                CONFIG_DATA.view_configs[0].time_modified
-                              )
+                            new Date(
+                              CONFIG_DATA.view_configs[0].time_modified
                             )
+                          )
                           : 'Never'}
                       </span>
                       <span style={{ float: 'right' }}>

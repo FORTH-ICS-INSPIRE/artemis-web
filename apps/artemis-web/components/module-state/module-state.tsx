@@ -1,7 +1,6 @@
-import { Button } from '@material-ui/core';
-import { diffDate, formatDate } from '../../utils/token';
-import React, { Component, useState } from 'react';
+import React, { Component } from 'react';
 import ReactTooltip from 'react-tooltip';
+import { formatDate } from '../../utils/token';
 
 class ModuleState extends Component<any, any> {
   constructor(props) {
@@ -45,16 +44,16 @@ class ModuleState extends Component<any, any> {
                   </span>
                 </button>
               ) : (
-                <button type="button" className="btn btn-danger btn-sm">
-                  Off{' '}
-                  <span className="badge badge-light">
-                    {activeModules}/{totalModules}
-                  </span>
-                </button>
-              )
+                  <button type="button" className="btn btn-danger btn-sm">
+                    Off{' '}
+                    <span className="badge badge-light">
+                      {activeModules}/{totalModules}
+                    </span>
+                  </button>
+                )
             ) : (
-              ''
-            )}
+                ''
+              )}
           </td>
           <td>
             <a
@@ -88,10 +87,10 @@ class ModuleState extends Component<any, any> {
                       On
                     </button>
                   ) : (
-                    <button type="button" className="btn btn-danger btn-sm">
-                      Off
-                    </button>
-                  )}
+                      <button type="button" className="btn btn-danger btn-sm">
+                        Off
+                      </button>
+                    )}
                 </td>
                 <td key={index + '_' + i + '3'}>
                   {module[1] && formatDate(new Date(module[2]))}

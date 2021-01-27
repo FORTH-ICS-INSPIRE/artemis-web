@@ -1,16 +1,15 @@
-import { Button } from '@material-ui/core';
 import React, { useState } from 'react';
-import BootstrapTable, { ExpandRowProps } from 'react-bootstrap-table-next';
+import BootstrapTable from 'react-bootstrap-table-next';
 import filterFactory, {
   Comparator,
   selectFilter,
-  textFilter,
+  textFilter
 } from 'react-bootstrap-table2-filter';
 import paginationFactory, {
   PaginationListStandalone,
   PaginationProvider,
   PaginationTotalStandalone,
-  SizePerPageDropdownStandalone,
+  SizePerPageDropdownStandalone
 } from 'react-bootstrap-table2-paginator';
 import ToolkitProvider from 'react-bootstrap-table2-toolkit';
 import ReactTooltip from 'react-tooltip';
@@ -20,7 +19,7 @@ import {
   formatDate,
   getSortCaret,
   isObjectEmpty,
-  shallSubscribe,
+  shallSubscribe
 } from '../../utils/token';
 import ErrorBoundary from '../error-boundary/error-boundary';
 import Tooltip from '../tooltip/tooltip';
@@ -150,8 +149,8 @@ const getExpandRow = (expandState) => {
                 {row.resolved || row.under_mitigation ? (
                   <img alt="" src="./handled.png" />
                 ) : (
-                  <img alt="" src="./unhadled.png" />
-                )}
+                    <img alt="" src="./unhadled.png" />
+                  )}
               </td>
             </tr>
           </tbody>
@@ -399,8 +398,8 @@ function handleData(data, tooltips, setTooltips, context, offset) {
           row.resolved || row.under_mitigation ? (
             <img alt="" src="./handled.png" />
           ) : (
-            <img alt="" src="./unhadled.png" />
-          ),
+              <img alt="" src="./unhadled.png" />
+            ),
       };
     });
   } else {
@@ -494,11 +493,10 @@ const OngoingHijackTableComponent = (props) => {
             key={i}
             value={option.text}
             onClick={() => onSizePerPageChange(option.page)}
-            className={`btn ${
-              currSizePerPage === `${option.page}`
+            className={`btn ${currSizePerPage === `${option.page}`
                 ? 'btn-secondary'
                 : 'btn-warning'
-            }`}
+              }`}
           >
             {option.text}
           </option>

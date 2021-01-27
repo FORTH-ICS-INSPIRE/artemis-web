@@ -2,11 +2,10 @@ import {
   Button,
   FormControlLabel,
   FormGroup,
-  Grid,
-  withStyles,
+  Grid
 } from '@material-ui/core';
-import Switch from 'react-ios-switch';
 import React from 'react';
+import Switch from 'react-ios-switch';
 import { useGraphQl } from '../../utils/hooks/use-graphql';
 
 const SystemModule = (props) => {

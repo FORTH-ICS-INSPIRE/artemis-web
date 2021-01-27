@@ -3,7 +3,6 @@ import { render } from '@testing-library/react';
 import { MockedProvider } from '@apollo/client/testing';
 
 import HijackTable from './hijack-table';
-import { QueryGenerator } from '../../libs/graphql';
 import { gql } from '@apollo/client';
 
 describe('HijackTable', () => {

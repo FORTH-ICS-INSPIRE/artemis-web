@@ -8,9 +8,6 @@ import { gql } from '@apollo/client';
 
 describe('OngoingHijackTable', () => {
   it('should render successfully', () => {
-    const generator = new QueryGenerator('hijacks', false, {});
-    const generator2 = new QueryGenerator('hijackCount', false, {});
-
     const mocks = [
       {
         request: {

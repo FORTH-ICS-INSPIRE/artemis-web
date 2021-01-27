@@ -2,7 +2,6 @@ import { Button, Grid, TextField } from '@material-ui/core';
 import React, { useState } from 'react';
 
 const UserCreationComponent = (props) => {
-  const users = props.data;
   const [errorMsg, setErrorMsg] = useState('');
   const [successMsg, setSuccessMsg] = useState('');
 

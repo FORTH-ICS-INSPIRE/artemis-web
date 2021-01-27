@@ -2,17 +2,17 @@
 import { Button } from '@material-ui/core';
 import Link from 'next/link';
 import React, { useState } from 'react';
-import BootstrapTable, { ExpandRowProps } from 'react-bootstrap-table-next';
+import BootstrapTable from 'react-bootstrap-table-next';
 import filterFactory, {
   Comparator,
   selectFilter,
-  textFilter,
+  textFilter
 } from 'react-bootstrap-table2-filter';
 import paginationFactory, {
   PaginationListStandalone,
   PaginationProvider,
   PaginationTotalStandalone,
-  SizePerPageDropdownStandalone,
+  SizePerPageDropdownStandalone
 } from 'react-bootstrap-table2-paginator';
 import ToolkitProvider from 'react-bootstrap-table2-toolkit';
 import TooltipContext from '../../context/tooltip-context';
@@ -24,7 +24,7 @@ import {
   getISODate,
   getSortCaret,
   isObjectEmpty,
-  shallSubscribe,
+  shallSubscribe
 } from '../../utils/token';
 import ErrorBoundary from '../error-boundary/error-boundary';
 import Tooltip from '../tooltip/tooltip';
@@ -216,8 +216,8 @@ const getExpandRow = (expandState) => {
                 {row.hijack_key.toString().length > 0 ? (
                   <Link href={`/hijack?key=${row.hijack_key}`}>View</Link>
                 ) : (
-                  ''
-                )}
+                    ''
+                  )}
               </td>
             </tr>
             <tr>
@@ -489,8 +489,8 @@ const BGPTableComponent = (props) => {
   const [limitState, setLimitState] = useState(10);
   const [offsetState, setOffsetState] = useState(0);
   const [sortState, setSortState] = useState('desc');
-  const [expandState, setExpandState] = useState([]);
-  const [filterState, setFilterState] = useState(filter);
+  const expandState = [];
+  const filterState = filter;
   const filteredDate: Date = new Date();
   const [stateValues, setStateValues] = useState({
     prefix: '',
@@ -504,7 +504,7 @@ const BGPTableComponent = (props) => {
 
   filteredDate.setHours(filteredDate.getHours() - filter);
 
-  const BGP_RES = useGraphQl(hijackKey ? 'bgpByKey' : 'bgpUpdates', {
+  useGraphQl(hijackKey ? 'bgpByKey' : 'bgpUpdates', {
     callback: (data) => {
       const processedData = handleData(
         shallSubscribe(props.isLive)
@@ -563,11 +563,10 @@ const BGPTableComponent = (props) => {
             key={option.text}
             value={option.text}
             onClick={() => onSizePerPageChange(option.page)}
-            className={`btn ${
-              currSizePerPage === `${option.page}`
-                ? 'btn-secondary'
-                : 'btn-warning'
-            }`}
+            className={`btn ${currSizePerPage === `${option.page}`
+              ? 'btn-secondary'
+              : 'btn-warning'
+              }`}
           >
             {option.text}
           </option>

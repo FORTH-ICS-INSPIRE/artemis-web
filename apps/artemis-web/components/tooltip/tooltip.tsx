@@ -1,4 +1,4 @@
-import React, { Component, useState } from 'react';
+import React, { Component } from 'react';
 import ReactTooltip from 'react-tooltip';
 import { fetchTooltip } from '../../utils/fetch-data';
 
