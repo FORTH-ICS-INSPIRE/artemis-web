@@ -29,9 +29,9 @@ import {
 import ErrorBoundary from '../error-boundary/error-boundary';
 import Tooltip from '../tooltip/tooltip';
 
-const getExactMatchFilter = (stateValue) =>
+const getExactMatchFilter = (stateValue, fieldName) =>
   textFilter({
-    placeholder: '', // custom the input placeholder
+    placeholder: fieldName, // custom the input placeholder
     className: 'my-custom-text-filter', // custom classname on input
     defaultValue: stateValue, // default filtering value
     comparator: Comparator.EQ, // default is Comparator.LIKE
@@ -41,9 +41,9 @@ const getExactMatchFilter = (stateValue) =>
     id: 'id', // assign a unique value for htmlFor attribute, it's useful when you have same dataField across multiple table in one page
   });
 
-const getTextFilter = (stateValue) =>
+const getTextFilter = (stateValue, fieldName) =>
   textFilter({
-    placeholder: '', // custom the input placeholder
+    placeholder: fieldName, // custom the input placeholder
     defaultValue: stateValue, // default filtering value
   });
 
@@ -268,7 +268,7 @@ const getColumns = (stateValues) => [
         'prefix_title',
         'The IPv4/IPv6 prefix related to the BGP update.'
       ),
-    filter: getExactMatchFilter(stateValues['prefix']),
+    filter: getExactMatchFilter(stateValues['prefix'], 'Prefix'),
   },
   {
     dataField: 'matched_prefix',
@@ -281,7 +281,7 @@ const getColumns = (stateValues) => [
         'The configured IPv4/IPv6 prefix that matched the hijacked prefix.'
       ),
     text: 'Matched Prefix',
-    filter: getExactMatchFilter(stateValues['matched_prefix']),
+    filter: getExactMatchFilter(stateValues['matched_prefix'], 'Matched Prefix'),
   },
   {
     dataField: 'origin_as_original',
@@ -294,7 +294,7 @@ const getColumns = (stateValues) => [
         'The AS that originated the BGP update.'
       ),
     text: 'Origin AS',
-    filter: getExactMatchFilter(stateValues['origin_as_original']),
+    filter: getExactMatchFilter(stateValues['origin_as_original'], 'Origin AS'),
   },
   {
     dataField: 'as_path2',
@@ -307,7 +307,7 @@ const getColumns = (stateValues) => [
         'The AS-level path of the update.'
       ),
     text: 'AS Path',
-    filter: getTextFilter(stateValues['as_path2']),
+    filter: getTextFilter(stateValues['as_path2'], 'AS Path'),
   },
   {
     dataField: 'peer_asn_original',
@@ -319,8 +319,8 @@ const getColumns = (stateValues) => [
         'peer_title',
         'The monitor AS that peers with the route collector service reporting the BGP update.'
       ),
-    text: 'Peer As',
-    filter: getExactMatchFilter(stateValues['peer_asn_original']),
+    text: 'Peer AS',
+    filter: getExactMatchFilter(stateValues['peer_asn_original'], 'Peer AS'),
   },
   {
     dataField: 'service',
@@ -333,7 +333,7 @@ const getColumns = (stateValues) => [
         'The route collector service that is connected to the monitor AS that observed the BGP update.'
       ),
     text: 'Service',
-    filter: getTextFilter(stateValues['service']),
+    filter: getTextFilter(stateValues['service'], 'Service'),
   },
   {
     dataField: 'type',
@@ -347,6 +347,7 @@ const getColumns = (stateValues) => [
         '<ul><li>A → route announcement</li><li>W → route withdrawal</li></ul>'
       ),
     filter: selectFilter({
+      placeholder: 'Type',
       defaultValue: stateValues['type'],
       options: ['A', 'W'].reduce((acc, elem) => {
         acc[elem] = elem; // or what ever object you want inside

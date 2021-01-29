@@ -30,9 +30,9 @@ import Tooltip from '../tooltip/tooltip';
 import ErrorBoundary from '../error-boundary/error-boundary';
 import { sendData } from '../../utils/fetch-data';
 
-const getExactMatchFilter = (stateValue) =>
+const getExactMatchFilter = (stateValue, fieldName) =>
   textFilter({
-    placeholder: '', // custom the input placeholder
+    placeholder: fieldName, // custom the input placeholder
     className: 'my-custom-text-filter', // custom classname on input
     defaultValue: stateValue, // default filtering value
     comparator: Comparator.EQ, // default is Comparator.LIKE
@@ -98,7 +98,7 @@ const getColumns = (stateValues) => [
         'The IPv4/IPv6 prefix that was hijacked'
       ),
     text: 'Hijacked Prefix',
-    filter: getExactMatchFilter(stateValues['prefix']),
+    filter: getExactMatchFilter(stateValues['prefix'], 'Hijacked Prefix'),
   },
   {
     dataField: 'configured_prefix',
@@ -111,7 +111,7 @@ const getColumns = (stateValues) => [
         'The configured IPv4/IPv6 prefix that matched the hijacked prefix.'
       ),
     text: 'Matched Prefix',
-    filter: getExactMatchFilter(stateValues['configured_prefix']),
+    filter: getExactMatchFilter(stateValues['configured_prefix'], 'Matched Prefix'),
   },
   {
     dataField: 'type',
@@ -124,7 +124,7 @@ const getColumns = (stateValues) => [
         'The type of the hijack in 4 dimensions: prefix|path|data plane|policy<ul><li>[Prefix] S → Sub-prefix hijack</li>'
       ),
     text: 'Type',
-    filter: textFilter({ defaultValue: stateValues['type'] }),
+    filter: textFilter({ placeholder: 'Type', defaultValue: stateValues['type'] }),
   },
   {
     dataField: 'hijack_as',
@@ -137,7 +137,7 @@ const getColumns = (stateValues) => [
         'The AS that is potentially responsible for the hijack.</br>Note that this is an experimental field.'
       ),
     text: 'Hijacked AS',
-    filter: getExactMatchFilter(stateValues['hijack_as']),
+    filter: getExactMatchFilter(stateValues['hijack_as'], 'Hijacked AS'),
   },
   {
     dataField: 'rpki_status',
@@ -151,6 +151,7 @@ const getColumns = (stateValues) => [
       ),
     text: 'RPKI',
     filter: selectFilter({
+      placeholder: 'RPKI',
       defaultValue: stateValues['rpki_status'],
       options: ['VD', 'IA', 'IL', 'IU', 'NF', 'NA'].reduce((acc, elem) => {
         acc[elem] = elem; // or what ever object you want inside
@@ -268,8 +269,8 @@ function handleData(
           row.resolved || row.under_mitigation ? (
             <img alt="" src="./handled.png" />
           ) : (
-            <img alt="" src="./unhadled.png" />
-          ),
+              <img alt="" src="./unhadled.png" />
+            ),
         key: row.key,
         more: <Link href={`/hijack?key=${row.key}`}>View</Link>,
       };
@@ -382,11 +383,10 @@ const HijackTableComponent = (props) => {
             key={option.text}
             value={option.text}
             onClick={() => onSizePerPageChange(option.page)}
-            className={`btn ${
-              currSizePerPage === `${option.page}`
-                ? 'btn-secondary'
-                : 'btn-warning'
-            }`}
+            className={`btn ${currSizePerPage === `${option.page}`
+              ? 'btn-secondary'
+              : 'btn-warning'
+              }`}
           >
             {option.text}
           </option>

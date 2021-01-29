@@ -217,13 +217,13 @@ const ViewHijackPage = (props) => {
                       Acknowledged
                     </span>
                   ) : (
-                      <span
-                        id="hijack_acknowledged_badge"
-                        className="badge badge-acknowledged float-right badge-danger"
-                      >
-                        Not Acknowledged
-                      </span>
-                    )}
+                    <span
+                      id="hijack_acknowledged_badge"
+                      className="badge badge-acknowledged float-right badge-danger"
+                    >
+                      Not Acknowledged
+                    </span>
+                  )}
                 </div>
                 <div className="card-body">
                   <div className="row">
@@ -247,8 +247,8 @@ const ViewHijackPage = (props) => {
                                   value={hijackInfoLeft[key][0] ?? ''}
                                 />
                               ) : (
-                                  hijackInfoLeft[key][0] ?? ''
-                                )}
+                                hijackInfoLeft[key][0] ?? ''
+                              )}
                             </div>
                           </div>
                         );
@@ -274,8 +274,8 @@ const ViewHijackPage = (props) => {
                                   value={hijackInfoRight[key][0] ?? ''}
                                 />
                               ) : (
-                                  hijackInfoRight[key][0] ?? ''
-                                )}
+                                hijackInfoRight[key][0] ?? ''
+                              )}
                             </div>
                           </div>
                         );
@@ -358,9 +358,9 @@ const ViewHijackPage = (props) => {
                           selectActionState === 'hijack_action_ignore'
                             ? setOpenModalState(true)
                             : sendData(e, {
-                              hijackKeys: [hijackKey],
-                              selectState: selectActionState,
-                            })
+                                hijackKeys: [hijackKey],
+                                selectState: selectActionState,
+                              })
                         }
                         style={{ marginRight: '5px' }}
                         id="apply_selected"
@@ -382,8 +382,9 @@ const ViewHijackPage = (props) => {
                         style={{ marginRight: '5px', float: 'right' }}
                         id="edit_comment"
                         type="button"
-                        className={`btn btn-${!editComment ? 'primary' : 'secondary'
-                          } btn-md`}
+                        className={`btn btn-${
+                          !editComment ? 'primary' : 'secondary'
+                        } btn-md`}
                         onClick={(e) => {
                           if (editComment)
                             submitComment(e, { commentRef, hijackKey });
@@ -447,8 +448,8 @@ const ViewHijackPage = (props) => {
                                 </Grid>
                               </animated.div>
                             ) : (
-                                <animated.div key={key}></animated.div>
-                              )
+                              <animated.div key={key}></animated.div>
+                            )
                           )}
                         </div>
                       )}
@@ -488,8 +489,8 @@ const ViewHijackPage = (props) => {
                                 </Grid>
                               </animated.div>
                             ) : (
-                                <animated.div key={key}></animated.div>
-                              )
+                              <animated.div key={key}></animated.div>
+                            )
                           )}
                         </div>
                       )}
