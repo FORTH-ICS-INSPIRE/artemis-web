@@ -268,8 +268,8 @@ function handleData(
           row.resolved || row.under_mitigation ? (
             <img alt="" src="./handled.png" />
           ) : (
-            <img alt="" src="./unhadled.png" />
-          ),
+              <img alt="" src="./unhadled.png" />
+            ),
         key: row.key,
         more: <Link href={`/hijack?key=${row.key}`}>View</Link>,
       };
@@ -291,8 +291,8 @@ const HijackTableComponent = (props) => {
   const { setFilteredHijackData, filter, filterStatus } = props;
   const context = React.useContext(TooltipContext);
   const [tooltips, setTooltips] = useState({});
-  const [setPage] = useState(0);
-  const [setSizePerPage] = useState(10);
+  const [page, setPage] = useState(0);
+  const [sizePerPage, setSizePerPage] = useState(10);
   const [columnFilter, setColumnFilter] = useState({});
   const dateFrom: string = getISODate(filter);
   const dateTo: string = getISODate(0);
@@ -382,11 +382,10 @@ const HijackTableComponent = (props) => {
             key={option.text}
             value={option.text}
             onClick={() => onSizePerPageChange(option.page)}
-            className={`btn ${
-              currSizePerPage === `${option.page}`
-                ? 'btn-secondary'
-                : 'btn-warning'
-            }`}
+            className={`btn ${currSizePerPage === `${option.page}`
+              ? 'btn-secondary'
+              : 'btn-warning'
+              }`}
           >
             {option.text}
           </option>

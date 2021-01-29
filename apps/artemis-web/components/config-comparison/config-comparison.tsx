@@ -51,14 +51,17 @@ class ConfigComparisonComponent extends Component<{}, stateType> {
         window[key] = DMP[key];
       });
 
-      const res = await fetch(`${document.location.protocol}//${document.location.host}/api/configs`, {
-        method: 'GET',
-        credentials: 'include',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-      });
+      const res = await fetch(
+        `${document.location.protocol}//${document.location.host}/api/configs`,
+        {
+          method: 'GET',
+          credentials: 'include',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+        }
+      );
 
       const configs = await res.json();
       this.setState({ configs: configs.configs });
