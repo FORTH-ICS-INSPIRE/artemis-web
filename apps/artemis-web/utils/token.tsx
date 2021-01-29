@@ -74,7 +74,8 @@ const isBrowser = () => typeof window !== 'undefined';
 export const shallMock = () => isDevelopment() && isBrowser();
 
 const isProduction = () => process.env.NODE_ENV === 'production';
-export const shallSubscribe = (isLive) => isProduction() && isLive;
+
+export const shallSubscribe = (isLive) => isLive;
 
 export const getISODate = (filter: number): string => {
   const dateFiltered = new Date();

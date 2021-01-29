@@ -216,8 +216,8 @@ const getExpandRow = (expandState) => {
                 {row.hijack_key.toString().length > 0 ? (
                   <Link href={`/hijack?key=${row.hijack_key}`}>View</Link>
                 ) : (
-                  ''
-                )}
+                    ''
+                  )}
               </td>
             </tr>
             <tr>
@@ -446,8 +446,8 @@ function handleData(
             value ? (
               <img alt="" src="handled.png" />
             ) : (
-              <img alt="" src="./unhadled.png" />
-            ),
+                <img alt="" src="./unhadled.png" />
+              ),
           ];
         else return [key, value];
       })
@@ -567,11 +567,10 @@ const BGPTableComponent = (props) => {
             key={option.text}
             value={option.text}
             onClick={() => onSizePerPageChange(option.page)}
-            className={`btn ${
-              currSizePerPage === `${option.page}`
-                ? 'btn-secondary'
-                : 'btn-warning'
-            }`}
+            className={`btn ${currSizePerPage === `${option.page}`
+              ? 'btn-secondary'
+              : 'btn-warning'
+              }`}
           >
             {option.text}
           </option>

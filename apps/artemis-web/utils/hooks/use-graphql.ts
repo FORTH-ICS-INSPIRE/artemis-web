@@ -13,30 +13,32 @@ export function useGraphQl(module: queryType, options: optionsType) {
   if (key && key.length) {
     vars = isSubscription
       ? {
-          onSubscriptionData: (data) => callback(data),
-          variables: { key },
-        }
+        onSubscriptionData: (data) => callback(data),
+        variables: { key },
+      }
       : {
-          onCompleted: (data) => callback(data),
-          variables: { key },
-        };
+        onCompleted: (data) => callback(data),
+        variables: { key },
+      };
   }
   if (limits) {
     const { limit, offset } = limits;
     vars = isSubscription
       ? {
-          onSubscriptionData: (data) => callback(data),
-          variables: { offset, limit, ...varTmp },
-        }
+        onSubscriptionData: (data) => callback(data),
+        variables: { offset, limit, ...varTmp },
+      }
       : {
-          onCompleted: (data) => callback(data),
-          variables: { offset, limit, ...varTmp },
-        };
+        onCompleted: (data) => callback(data),
+        variables: { offset, limit, ...varTmp },
+      };
   }
 
-  const generator = new QueryGenerator(module, isSubscription, options);
+
   /* eslint-disable react-hooks/rules-of-hooks */
   if (isMutation) {
+    const generator = new QueryGenerator(module, isSubscription, options);
+
     vars = {
       variables: { running, name },
     };
@@ -45,9 +47,12 @@ export function useGraphQl(module: queryType, options: optionsType) {
 
     return res[0]();
   } else {
-    const res = isSubscription
-      ? useSubscription(generator.getQuery(), vars)
-      : useQuery(generator.getQuery(), vars);
+    const generator1 = new QueryGenerator(module, true, options);
+    const generator2 = new QueryGenerator(module, false, options);
+
+    const res1 = useSubscription(generator1.getQuery(), { ...vars, skip: !isSubscription });
+    const res2 = useQuery(generator2.getQuery(), { ...vars, skip: isSubscription });
+    const res = res1.data ? res1 : res2;
 
     const { error } = res;
     if (error) {
