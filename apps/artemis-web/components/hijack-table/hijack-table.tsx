@@ -291,8 +291,8 @@ const HijackTableComponent = (props) => {
   const { setFilteredHijackData, filter, filterStatus } = props;
   const context = React.useContext(TooltipContext);
   const [tooltips, setTooltips] = useState({});
-  const [page, setPage] = useState(0);
-  const [sizePerPage, setSizePerPage] = useState(10);
+  const [setPage] = useState(0);
+  const [setSizePerPage] = useState(10);
   const [columnFilter, setColumnFilter] = useState({});
   const dateFrom: string = getISODate(filter);
   const dateTo: string = getISODate(0);
@@ -620,7 +620,12 @@ const HijackTableComponent = (props) => {
                 return (
                   <div>
                     <p>
-                      <img id="nodata" width="256" src="checkmark.png"></img>
+                      <img
+                        alt=""
+                        id="nodata"
+                        width="256"
+                        src="checkmark.png"
+                      ></img>
                     </p>
                     <h3>{'No hijack alerts! Go grab a beer!'}</h3>
                   </div>

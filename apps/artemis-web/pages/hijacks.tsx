@@ -21,11 +21,11 @@ import { shallMock } from '../utils/token';
 const HijacksPage = (props) => {
   const [isLive, setIsLive] = useState(true);
 
-  // if (shallMock()) {
-  //   // eslint-disable-next-line @typescript-eslint/no-var-requires
-  //   const { worker } = require('../utils/mock-sw/browser');
-  //   worker.start();
-  // }
+  if (shallMock()) {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const { worker } = require('../utils/mock-sw/browser');
+    worker.start();
+  }
 
   const [filterDate, setFilterDate] = useState(0);
   const [filterStatus, setFilterStatus] = useState('');

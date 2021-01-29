@@ -93,7 +93,7 @@ const MobileHeader = (props) => {
         outerContainerId={'outer-container'}
         noOverlay
         styles={styles}
-        customBurgerIcon={<img width="50px" src="menu.svg" />}
+        customBurgerIcon={<img alt="" width="50px" src="menu.svg" />}
         left
       >
         <ul style={{ listStyleType: 'none' }}>

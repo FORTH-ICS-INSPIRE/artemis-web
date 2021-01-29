@@ -32,12 +32,12 @@ export const fetchTooltip = async (ASN, context, { setTooltip }) => {
     setTooltip(context.tooltips[ASN]);
   } else {
     const [name_origin, countries_origin, abuse_origin] =
-      ASN == '-'
+      ASN === '-'
         ? ['', '', '']
         : await fetchASNData(parseInt(ASN.toString(), 10));
 
     const tooltip =
-      ASN == '-'
+      ASN === '-'
         ? ''
         : parseASNData(ASN, name_origin, countries_origin, abuse_origin);
     // setTooltips({ ...tooltips, [ASN]: tooltip });
@@ -57,7 +57,7 @@ export const submitComment = async (e, { commentRef, hijackKey }) => {
     comment: comment,
   };
 
-  const res = await fetch('/api/hijack', {
+  await fetch('/api/hijack', {
     method: 'POST',
     credentials: 'include',
     headers: {

@@ -1,6 +1,5 @@
 import {
   Dialog,
-
   DialogContent,
   DialogTitle,
   FormControlLabel,
@@ -8,7 +7,7 @@ import {
   Grid,
   IconButton,
   Paper,
-  Switch
+  Switch,
 } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import { ContentState, Editor, EditorState } from 'draft-js';
@@ -28,12 +27,7 @@ import { sendData, submitComment } from '../utils/fetch-data';
 import { useGraphQl } from '../utils/hooks/use-graphql';
 import { extractHijackInfos } from '../utils/parsers';
 import { useStyles } from '../utils/styles';
-import {
-  findStatus,
-
-  shallSubscribe,
-  statuses
-} from '../utils/token';
+import { findStatus, shallSubscribe, statuses } from '../utils/token';
 
 const ViewHijackPage = (props) => {
   const [isLive, setIsLive] = useState(true);

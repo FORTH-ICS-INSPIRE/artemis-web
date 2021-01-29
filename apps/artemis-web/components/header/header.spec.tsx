@@ -3,7 +3,6 @@ import { act, render } from '@testing-library/react';
 import { configure, shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import Header from './header';
-import Link from 'next/link';
 import DesktopHeader from '../desktop-header/desktop-header';
 require('jest-fetch-mock').enableMocks();
 

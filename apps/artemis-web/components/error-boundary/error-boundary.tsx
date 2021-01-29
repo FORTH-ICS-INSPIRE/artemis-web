@@ -28,7 +28,7 @@ class ErrorBoundary extends Component<PropsType, {}> {
       return (
         <div>
           <p>
-            <img width="256" src="error.png"></img>
+            <img alt="" width="256" src="error.png"></img>
           </p>
           <h3>{this.state.errorMessage}</h3>
         </div>
@@ -38,6 +38,7 @@ class ErrorBoundary extends Component<PropsType, {}> {
         <div>
           <p>
             <img
+              alt=""
               src={this.props.errorImage ? 'error.png' : 'checkmark.png'}
             ></img>
           </p>

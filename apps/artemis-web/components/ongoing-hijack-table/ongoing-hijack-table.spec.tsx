@@ -1,10 +1,8 @@
-import React from 'react';
-import { render } from '@testing-library/react';
-import { MockedProvider } from '@apollo/client/testing';
-
-import OngoingHijackTable from './ongoing-hijack-table';
-import { QueryGenerator } from '../../libs/graphql';
 import { gql } from '@apollo/client';
+import { MockedProvider } from '@apollo/client/testing';
+import { render } from '@testing-library/react';
+import React from 'react';
+import OngoingHijackTable from './ongoing-hijack-table';
 
 describe('OngoingHijackTable', () => {
   it('should render successfully', () => {

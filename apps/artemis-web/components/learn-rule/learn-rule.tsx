@@ -59,7 +59,8 @@ class LearnRuleComponent extends Component<
       prefix: prefix,
       action: 'approve',
     };
-    const res = await fetch('/api/hijack', {
+
+    await fetch('/api/hijack', {
       method: 'POST',
       credentials: 'include',
       headers: {

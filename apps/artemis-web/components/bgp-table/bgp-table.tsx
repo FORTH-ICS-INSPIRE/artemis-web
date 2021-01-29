@@ -6,13 +6,13 @@ import BootstrapTable from 'react-bootstrap-table-next';
 import filterFactory, {
   Comparator,
   selectFilter,
-  textFilter
+  textFilter,
 } from 'react-bootstrap-table2-filter';
 import paginationFactory, {
   PaginationListStandalone,
   PaginationProvider,
   PaginationTotalStandalone,
-  SizePerPageDropdownStandalone
+  SizePerPageDropdownStandalone,
 } from 'react-bootstrap-table2-paginator';
 import ToolkitProvider from 'react-bootstrap-table2-toolkit';
 import TooltipContext from '../../context/tooltip-context';
@@ -24,7 +24,7 @@ import {
   getISODate,
   getSortCaret,
   isObjectEmpty,
-  shallSubscribe
+  shallSubscribe,
 } from '../../utils/token';
 import ErrorBoundary from '../error-boundary/error-boundary';
 import Tooltip from '../tooltip/tooltip';
@@ -216,8 +216,8 @@ const getExpandRow = (expandState) => {
                 {row.hijack_key.toString().length > 0 ? (
                   <Link href={`/hijack?key=${row.hijack_key}`}>View</Link>
                 ) : (
-                    ''
-                  )}
+                  ''
+                )}
               </td>
             </tr>
             <tr>
@@ -443,7 +443,11 @@ function handleData(
         else if (key === 'handled')
           return [
             key,
-            value ? <img src="handled.png" /> : <img src="./unhadled.png" />,
+            value ? (
+              <img alt="" src="handled.png" />
+            ) : (
+              <img alt="" src="./unhadled.png" />
+            ),
           ];
         else return [key, value];
       })
@@ -563,10 +567,11 @@ const BGPTableComponent = (props) => {
             key={option.text}
             value={option.text}
             onClick={() => onSizePerPageChange(option.page)}
-            className={`btn ${currSizePerPage === `${option.page}`
-              ? 'btn-secondary'
-              : 'btn-warning'
-              }`}
+            className={`btn ${
+              currSizePerPage === `${option.page}`
+                ? 'btn-secondary'
+                : 'btn-warning'
+            }`}
           >
             {option.text}
           </option>
@@ -687,7 +692,7 @@ const BGPTableComponent = (props) => {
       {(toolkitprops) => {
         paginationProps.dataSize = bgpCount;
         paginationTableProps.dataSize = bgpCount;
-        const onPage = paginationProps.onPageChange;
+
         return (
           <>
             <div className="header-filter">

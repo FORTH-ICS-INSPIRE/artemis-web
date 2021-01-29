@@ -10,7 +10,7 @@ class ModuleState extends Component<any, any> {
     };
   }
   render() {
-    const { process, index, tooltip, date, modules } = this.props;
+    const { process, index, tooltip, modules } = this.props;
     if (!process || !modules) return <> </>;
 
     const modName = process.name.substring(0, process.name.indexOf('-'));
@@ -44,21 +44,20 @@ class ModuleState extends Component<any, any> {
                   </span>
                 </button>
               ) : (
-                  <button type="button" className="btn btn-danger btn-sm">
-                    Off{' '}
-                    <span className="badge badge-light">
-                      {activeModules}/{totalModules}
-                    </span>
-                  </button>
-                )
+                <button type="button" className="btn btn-danger btn-sm">
+                  Off{' '}
+                  <span className="badge badge-light">
+                    {activeModules}/{totalModules}
+                  </span>
+                </button>
+              )
             ) : (
-                ''
-              )}
+              ''
+            )}
           </td>
           <td>
             <a
               onClick={(e) => {
-                const offset = window.pageYOffset;
                 this.setState({ visibility: !this.state.visibility });
               }}
               id={modName}
@@ -87,10 +86,10 @@ class ModuleState extends Component<any, any> {
                       On
                     </button>
                   ) : (
-                      <button type="button" className="btn btn-danger btn-sm">
-                        Off
-                      </button>
-                    )}
+                    <button type="button" className="btn btn-danger btn-sm">
+                      Off
+                    </button>
+                  )}
                 </td>
                 <td key={index + '_' + i + '3'}>
                   {module[1] && formatDate(new Date(module[2]))}

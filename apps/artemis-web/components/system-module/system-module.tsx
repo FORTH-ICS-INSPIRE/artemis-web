@@ -1,9 +1,4 @@
-import {
-  Button,
-  FormControlLabel,
-  FormGroup,
-  Grid
-} from '@material-ui/core';
+import { Button, FormControlLabel, FormGroup, Grid } from '@material-ui/core';
 import React from 'react';
 import Switch from 'react-ios-switch';
 import { useGraphQl } from '../../utils/hooks/use-graphql';
