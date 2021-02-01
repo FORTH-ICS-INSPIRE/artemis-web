@@ -79,7 +79,7 @@ export const shallSubscribe = (isLive) => isLive;
 
 export const getISODate = (filter: number): string => {
   const dateFiltered = new Date();
-  if (filter >= 0 && filter <= 48) {
+  if (filter >= 0) {
     dateFiltered.setHours(dateFiltered.getHours() - filter);
     dateFiltered.setSeconds(0, 0);
   }
@@ -93,6 +93,34 @@ export const statuses = {
   'Under Mitigation': 'primary',
   Withdrawn: 'info',
   Outdated: 'dark',
+};
+
+export const getSimpleDates = (): string[] => {
+  const d1 = new Date();
+  const d2 = new Date();
+  d2.setHours(d2.getHours() - 1);
+
+  const timeNow =
+    d1.getFullYear() +
+    '-' +
+    (d1.getMonth() + 1) +
+    '-' +
+    d1.getDate() +
+    ' ' +
+    d1.getHours() +
+    ':' +
+    d1.getMinutes();
+  const timeBefore =
+    d2.getFullYear() +
+    '-' +
+    (d2.getMonth() + 1) +
+    '-' +
+    d2.getDate() +
+    ' ' +
+    d2.getHours() +
+    ':' +
+    d2.getMinutes();
+  return [timeBefore, timeNow];
 };
 
 export const findStatus = (row) => {

@@ -216,8 +216,8 @@ const getExpandRow = (expandState) => {
                 {row.hijack_key.toString().length > 0 ? (
                   <Link href={`/hijack?key=${row.hijack_key}`}>View</Link>
                 ) : (
-                    ''
-                  )}
+                  ''
+                )}
               </td>
             </tr>
             <tr>
@@ -281,7 +281,10 @@ const getColumns = (stateValues) => [
         'The configured IPv4/IPv6 prefix that matched the hijacked prefix.'
       ),
     text: 'Matched Prefix',
-    filter: getExactMatchFilter(stateValues['matched_prefix'], 'Matched Prefix'),
+    filter: getExactMatchFilter(
+      stateValues['matched_prefix'],
+      'Matched Prefix'
+    ),
   },
   {
     dataField: 'origin_as_original',
@@ -447,8 +450,8 @@ function handleData(
             value ? (
               <img alt="" src="handled.png" />
             ) : (
-                <img alt="" src="./unhadled.png" />
-              ),
+              <img alt="" src="./unhadled.png" />
+            ),
           ];
         else return [key, value];
       })
@@ -465,7 +468,7 @@ function handleData(
 }
 
 const BGPTableComponent = (props) => {
-  const { setFilteredBgpData, filter, hijackKey } = props;
+  const { setFilteredBgpData, filter, hijackKey, filterTo } = props;
   const [bgpData, setBgpData] = useState([]);
   const context = React.useContext(TooltipContext);
   const [tooltips, setTooltips] = useState({});
@@ -473,7 +476,7 @@ const BGPTableComponent = (props) => {
   const [sizePerPage, setSizePerPage] = useState(10);
   const [columnFilter, setColumnFilter] = useState({});
   const dateFrom: string = getISODate(filter);
-  const dateTo: string = getISODate(0);
+  const dateTo: string = getISODate(filterTo ?? 0);
   let bgpCount = 0;
 
   const BGP_COUNT: any = useGraphQl(hijackKey ? 'bgpCountByKey' : 'bgpCount', {
@@ -568,10 +571,11 @@ const BGPTableComponent = (props) => {
             key={option.text}
             value={option.text}
             onClick={() => onSizePerPageChange(option.page)}
-            className={`btn ${currSizePerPage === `${option.page}`
-              ? 'btn-secondary'
-              : 'btn-warning'
-              }`}
+            className={`btn ${
+              currSizePerPage === `${option.page}`
+                ? 'btn-secondary'
+                : 'btn-warning'
+            }`}
           >
             {option.text}
           </option>
@@ -640,11 +644,23 @@ const BGPTableComponent = (props) => {
   };
   const MyExportCSV = (props) => {
     const handleClick = async () => {
-      const win = window.open(
-        '/proxy_api?download_table=true&action=view_bgpupdates',
-        '_blank'
+      const res = await fetch('/api/download_tables', {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ action: 'view_bgpupdates' }),
+      });
+      const x = window.open();
+      x.document.open();
+      x.document.write(
+        '<html><body><pre>' +
+          JSON.stringify(await res.json(), null, '\t') +
+          '</pre></body></html>'
       );
-      win.focus();
+      x.document.close();
     };
 
     return (

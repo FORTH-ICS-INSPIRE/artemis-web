@@ -4,18 +4,20 @@ import ConfigComparisonComponent from './config-comparison';
 
 describe('ConfigComparisonComponent', () => {
   it('should render successfully', () => {
-    document.createRange = () => {
-      const range = new Range();
-
-      range.getBoundingClientRect = jest.fn();
-
-      range.getClientRects = jest.fn(() => ({
-        item: () => null,
-        length: 0,
-      }));
-
-      return range;
+    document.createRange = function () {
+      return {
+        setEnd: function () {
+          return true;
+        },
+        setStart: function () {
+          return true;
+        },
+        getBoundingClientRect: function () {
+          return { right: 0 };
+        },
+      };
     };
+
     const { baseElement } = render(<ConfigComparisonComponent />);
     expect(baseElement).toBeTruthy();
   });

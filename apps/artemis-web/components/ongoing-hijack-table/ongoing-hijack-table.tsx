@@ -149,8 +149,8 @@ const getExpandRow = (expandState) => {
                 {row.resolved || row.under_mitigation ? (
                   <img alt="" src="./handled.png" />
                 ) : (
-                    <img alt="" src="./unhadled.png" />
-                  )}
+                  <img alt="" src="./unhadled.png" />
+                )}
               </td>
             </tr>
           </tbody>
@@ -239,7 +239,10 @@ const getColumns = (stateValues) => [
       </>
     ),
     text: 'Matched Prefix',
-    filter: getExactMatchFilter(stateValues['configured_prefix'], 'Matched Prefix'),
+    filter: getExactMatchFilter(
+      stateValues['configured_prefix'],
+      'Matched Prefix'
+    ),
   },
   {
     dataField: 'type',
@@ -257,7 +260,10 @@ const getColumns = (stateValues) => [
       </>
     ),
     text: 'Type',
-    filter: textFilter({ defaultValue: stateValues['type'], placeholder: 'Type' }),
+    filter: textFilter({
+      defaultValue: stateValues['type'],
+      placeholder: 'Type',
+    }),
   },
   {
     dataField: 'hijack_as',
@@ -399,8 +405,8 @@ function handleData(data, tooltips, setTooltips, context, offset) {
           row.resolved || row.under_mitigation ? (
             <img alt="" src="./handled.png" />
           ) : (
-              <img alt="" src="./unhadled.png" />
-            ),
+            <img alt="" src="./unhadled.png" />
+          ),
       };
     });
   } else {
@@ -494,10 +500,11 @@ const OngoingHijackTableComponent = (props) => {
             key={i}
             value={option.text}
             onClick={() => onSizePerPageChange(option.page)}
-            className={`btn ${currSizePerPage === `${option.page}`
-              ? 'btn-secondary'
-              : 'btn-warning'
-              }`}
+            className={`btn ${
+              currSizePerPage === `${option.page}`
+                ? 'btn-secondary'
+                : 'btn-warning'
+            }`}
           >
             {option.text}
           </option>

@@ -111,7 +111,10 @@ const getColumns = (stateValues) => [
         'The configured IPv4/IPv6 prefix that matched the hijacked prefix.'
       ),
     text: 'Matched Prefix',
-    filter: getExactMatchFilter(stateValues['configured_prefix'], 'Matched Prefix'),
+    filter: getExactMatchFilter(
+      stateValues['configured_prefix'],
+      'Matched Prefix'
+    ),
   },
   {
     dataField: 'type',
@@ -124,7 +127,10 @@ const getColumns = (stateValues) => [
         'The type of the hijack in 4 dimensions: prefix|path|data plane|policy<ul><li>[Prefix] S → Sub-prefix hijack</li>'
       ),
     text: 'Type',
-    filter: textFilter({ placeholder: 'Type', defaultValue: stateValues['type'] }),
+    filter: textFilter({
+      placeholder: 'Type',
+      defaultValue: stateValues['type'],
+    }),
   },
   {
     dataField: 'hijack_as',
@@ -269,8 +275,8 @@ function handleData(
           row.resolved || row.under_mitigation ? (
             <img alt="" src="./handled.png" />
           ) : (
-              <img alt="" src="./unhadled.png" />
-            ),
+            <img alt="" src="./unhadled.png" />
+          ),
         key: row.key,
         more: <Link href={`/hijack?key=${row.key}`}>View</Link>,
       };
@@ -289,14 +295,14 @@ function handleData(
 }
 
 const HijackTableComponent = (props) => {
-  const { setFilteredHijackData, filter, filterStatus } = props;
+  const { setFilteredHijackData, filter, filterStatus, filterTo } = props;
   const context = React.useContext(TooltipContext);
   const [tooltips, setTooltips] = useState({});
   const [page, setPage] = useState(0);
   const [sizePerPage, setSizePerPage] = useState(10);
   const [columnFilter, setColumnFilter] = useState({});
   const dateFrom: string = getISODate(filter);
-  const dateTo: string = getISODate(0);
+  const dateTo: string = getISODate(filterTo ?? 0);
   const [limitState, setLimitState] = useState(10);
   const [offsetState, setOffsetState] = useState(0);
   const [sortState, setSortState] = useState('desc');
@@ -383,10 +389,11 @@ const HijackTableComponent = (props) => {
             key={option.text}
             value={option.text}
             onClick={() => onSizePerPageChange(option.page)}
-            className={`btn ${currSizePerPage === `${option.page}`
-              ? 'btn-secondary'
-              : 'btn-warning'
-              }`}
+            className={`btn ${
+              currSizePerPage === `${option.page}`
+                ? 'btn-secondary'
+                : 'btn-warning'
+            }`}
           >
             {option.text}
           </option>
@@ -450,11 +457,23 @@ const HijackTableComponent = (props) => {
 
   const MyExportCSV = (props) => {
     const handleClick = async () => {
-      const win = window.open(
-        '/proxy_api?download_table=true&action=view_hijacks',
-        '_blank'
+      const res = await fetch('/api/download_tables', {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ action: 'view_hijacks' }),
+      });
+      const x = window.open();
+      x.document.open();
+      x.document.write(
+        '<html><body><pre>' +
+          JSON.stringify(await res.json(), null, '\t') +
+          '</pre></body></html>'
       );
-      win.focus();
+      x.document.close();
     };
     return (
       <div style={{ display: 'inline' }}>
