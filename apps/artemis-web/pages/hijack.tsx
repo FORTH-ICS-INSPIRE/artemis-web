@@ -23,7 +23,7 @@ import BGPTableComponent from '../components/bgp-table/bgp-table';
 import LearnRuleComponent from '../components/learn-rule/learn-rule';
 import Tooltip from '../components/tooltip/tooltip';
 import TooltipContext from '../context/tooltip-context';
-import { sendData, submitComment } from '../utils/fetch-data';
+import { sendData, sendHijackData, submitComment } from '../utils/fetch-data';
 import { useGraphQl } from '../utils/hooks/use-graphql';
 import { extractHijackInfos } from '../utils/parsers';
 import { useStyles } from '../utils/styles';
@@ -60,6 +60,8 @@ const ViewHijackPage = (props) => {
     resolved: false,
     ignored: false,
     prefix: '',
+    hijack_as: '',
+    type: '',
   });
   const [hijackExists, setHijackExists] = useState(true);
   const [filteredBgpData, setFilteredBgpData] = useState([]);
@@ -357,9 +359,12 @@ const ViewHijackPage = (props) => {
                         onClick={(e) =>
                           selectActionState === 'hijack_action_ignore'
                             ? setOpenModalState(true)
-                            : sendData(e, {
-                                hijackKeys: [hijackKey],
+                            : sendHijackData(e, {
+                                hijackKey: hijackKey,
                                 selectState: selectActionState,
+                                prefix: hijackDataState.prefix,
+                                hijack_as: hijackDataState.hijack_as,
+                                type: hijackDataState.type,
                               })
                         }
                         style={{ marginRight: '5px' }}

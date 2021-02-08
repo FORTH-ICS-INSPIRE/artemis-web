@@ -92,3 +92,43 @@ export const sendData = async (
 
   if (res.status === 200) window.location.reload();
 };
+
+export const sendHijackData = async (
+  e,
+  { hijackKey, selectState, prefix, hijack_as, type }
+) => {
+  e.preventDefault();
+
+  let state = true;
+
+  const map = {
+    hijack_action_resolve: 'resolve',
+    hijack_action_ignore: 'ignore',
+    hijack_action_acknowledge: 'seen',
+    hijack_action_acknowledge_not: 'seen',
+    hijack_action_delete: 'delete',
+  };
+
+  if (selectState === 'hijack_action_acknowledge_not') state = false;
+
+  const reqData = {
+    hijack_key: hijackKey,
+    action: map[selectState],
+    state: state,
+    prefix: prefix,
+    hijack_as: hijack_as,
+    hijack_type: type,
+  };
+
+  const res = await fetch('/api/rmq_action', {
+    method: 'POST',
+    credentials: 'include',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(reqData),
+  });
+
+  // if (res.status === 200) window.location.reload();
+};
