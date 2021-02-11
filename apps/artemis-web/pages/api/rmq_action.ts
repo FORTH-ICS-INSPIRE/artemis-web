@@ -22,7 +22,7 @@ const sendRMQAction = async (obj) => {
     connection: {
       user: RABBITMQ_USER,
       pass: RABBITMQ_PASS,
-      host: '172.18.0.16',
+      host: '172.24.0.3',
       port: RABBITMQ_PORT,
       timeout: 2000,
       name: 'rabbitmq',
@@ -49,7 +49,7 @@ const sendRMQAction = async (obj) => {
   await broker.init();
 
   console.log('sender: going to send message ..');
-  await broker.send(exchangeName, routing_key, payload.toString());
+  await broker.send(exchangeName, routing_key, payload);
   console.log('sender: message sent ..');
 };
 
@@ -74,7 +74,7 @@ const handler = nc()
           routing_key: 'mitigate',
           exchangeName: 'mitigation',
           priority: 2,
-          payload: { key: hijack_key, prefix: prefix },
+          payload: { "key": hijack_key, "prefix": prefix },
         };
         break;
       case 'unmitigate':

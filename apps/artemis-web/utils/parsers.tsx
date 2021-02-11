@@ -20,6 +20,13 @@ export function extractLdapUser(req) {
   if (!req.user) return null;
 
   const mail = req.user[process.env.LDAP_EMAIL_FIELDNAME];
+  let role = 'user';
+
+  req.user._groups.forEach(group => {
+    if (group.cn === process.env.LDAP_ADMIN_GROUP) {
+      role = 'admin';
+    }
+  })
 
   req.db.collection('users').updateOne(
     {
@@ -32,7 +39,7 @@ export function extractLdapUser(req) {
         password: '<REDUCTED>',
         lastLogin: new Date(),
         currentLogin: new Date(),
-        role: 'user', // just for testing. normally it will be 'pending'
+        role: role, // just for testing. normally it will be 'pending'
       },
     },
     {
@@ -44,7 +51,7 @@ export function extractLdapUser(req) {
     _id: 999,
     name: mail,
     email: mail,
-    role: 'user',
+    role: role,
     lastLogin: new Date(),
   };
 }
@@ -453,11 +460,11 @@ export async function extractHijackTooltips(hijack) {
   const tooltip1 =
     ASN_int_origin && ASN_int_origin.toString() !== '-'
       ? parseASNData(
-          ASN_int_origin,
-          name_origin,
-          countries_origin,
-          abuse_origin
-        )
+        ASN_int_origin,
+        name_origin,
+        countries_origin,
+        abuse_origin
+      )
       : '';
 
   const tooltip2 =
