@@ -107,7 +107,7 @@ const handler = nc()
             key: hijack_key,
             prefix: prefix,
             type: hijack_type,
-            hijack_as: parseInt(hijack_as),
+            hijack_as: parseInt(hijack_as, 10),
           },
         };
         break;
@@ -121,7 +121,7 @@ const handler = nc()
             key: hijack_key,
             prefix: prefix,
             type: hijack_type,
-            hijack_as: parseInt(hijack_as),
+            hijack_as: parseInt(hijack_as, 10),
           },
         };
         break;
@@ -135,7 +135,7 @@ const handler = nc()
             key: hijack_key,
             prefix: prefix,
             type: hijack_type,
-            hijack_as: parseInt(hijack_as),
+            hijack_as: parseInt(hijack_as, 10),
           },
         };
         break;
