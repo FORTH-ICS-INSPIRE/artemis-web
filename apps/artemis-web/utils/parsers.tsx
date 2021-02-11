@@ -22,11 +22,11 @@ export function extractLdapUser(req) {
   const mail = req.user[process.env.LDAP_EMAIL_FIELDNAME];
   let role = 'user';
 
-  req.user._groups.forEach(group => {
+  req.user._groups.forEach((group) => {
     if (group.cn === process.env.LDAP_ADMIN_GROUP) {
       role = 'admin';
     }
-  })
+  });
 
   req.db.collection('users').updateOne(
     {
@@ -460,11 +460,11 @@ export async function extractHijackTooltips(hijack) {
   const tooltip1 =
     ASN_int_origin && ASN_int_origin.toString() !== '-'
       ? parseASNData(
-        ASN_int_origin,
-        name_origin,
-        countries_origin,
-        abuse_origin
-      )
+          ASN_int_origin,
+          name_origin,
+          countries_origin,
+          abuse_origin
+        )
       : '';
 
   const tooltip2 =
