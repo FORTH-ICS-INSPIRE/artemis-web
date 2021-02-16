@@ -391,6 +391,7 @@ export class QueryGenerator {
         break;
       case 'dataplane':
         query = this.getDataplaneQuery();
+        break;
       case 'bgpUpdates':
         query = this.getBGPUpdates();
         break;

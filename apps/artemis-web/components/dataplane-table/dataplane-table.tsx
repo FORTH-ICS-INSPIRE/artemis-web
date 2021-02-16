@@ -1,3 +1,4 @@
+// import { useSubscription } from '@apollo/client/react/hooks/useSubscription';
 import { Button } from '@material-ui/core';
 import Link from 'next/link';
 import React, { useState } from 'react';
@@ -15,224 +16,325 @@ import paginationFactory, {
 } from 'react-bootstrap-table2-paginator';
 import ToolkitProvider from 'react-bootstrap-table2-toolkit';
 import TooltipContext from '../../context/tooltip-context';
-import { formatDate, genTooltip } from '../../utils/token';
+import { useGraphQl } from '../../utils/hooks/use-graphql';
+import {
+    formatDate,
+    fromEntries,
+    genTooltip,
+    getISODate,
+    getSortCaret,
+    isObjectEmpty,
+    shallSubscribe,
+} from '../../utils/token';
+import ErrorBoundary from '../error-boundary/error-boundary';
 import Tooltip from '../tooltip/tooltip';
 
-const exactMatchFilter = textFilter({
-    placeholder: '', // custom the input placeholder
-    className: 'my-custom-text-filter', // custom classname on input
-    defaultValue: '', // default filtering value
-    comparator: Comparator.EQ, // default is Comparator.LIKE
-    caseSensitive: true, // default is false, and true will only work when comparator is LIKE
-    style: {}, // your custom styles on input
-    delay: 1000, // how long will trigger filtering after user typing, default is 500 ms
-    id: 'id', // assign a unique value for htmlFor attribute, it's useful when you have same dataField across multiple table in one page
-});
-
-const columns = [
+const getColumns = (stateValues) => [
     {
-        dataField: 'msm_type',
-        text: 'Measurement Type',
+        dataField: 'timestamp',
+        text: 'Timestamp',
         sort: true,
         headerTitle: false,
         headerFormatter: (column, colIndex, components) =>
             genTooltip(
                 column,
                 components,
-                'msm_type_title',
-                'The timestamp of the newest known (to the system) BGP update that is related to the hijack.'
+                'timestamp_title',
+                'The time when the BGP update was generated, as set by the BGP monitor or route collector.'
             ),
         sortCaret: (order) => {
-            if (!order)
-                return (
-                    <span>
-                        &nbsp;&nbsp;&darr;
-                        <span style={{ color: 'red' }}>/&uarr;</span>
-                    </span>
-                );
-            if (order === 'asc')
-                return (
-                    <span>
-                        &nbsp;&nbsp;&darr;
-                        <span style={{ color: 'red' }}>/&uarr;</span>
-                    </span>
-                );
-            if (order === 'desc')
-                return (
-                    <span>
-                        &nbsp;&nbsp;
-                        <span style={{ color: 'red' }}>&darr;</span>
-            /&uarr;
-                    </span>
-                );
-            return null;
+            return getSortCaret(order);
         },
     },
     {
-        dataField: 'msm_protocol',
-        text: 'Protocol',
-        sort: true,
+        dataField: 'prefix',
+        text: 'Prefix',
         headerTitle: false,
         headerFormatter: (column, colIndex, components) =>
             genTooltip(
                 column,
                 components,
-                'msm_protocol_title',
-                'The time when a hijack event was first detected by the system'
+                'prefix_title',
+                'The IPv4/IPv6 prefix related to the BGP update.'
             ),
-        sortCaret: (order) => {
-            if (!order)
-                return (
-                    <span>
-                        &nbsp;&nbsp;&darr;
-                        <span style={{ color: 'red' }}>/&uarr;</span>
-                    </span>
-                );
-            if (order === 'asc')
-                return (
-                    <span>
-                        &nbsp;&nbsp;&darr;
-                        <span style={{ color: 'red' }}>/&uarr;</span>
-                    </span>
-                );
-            if (order === 'desc')
-                return (
-                    <span>
-                        &nbsp;&nbsp;
-                        <span style={{ color: 'red' }}>&darr;</span>
-            /&uarr;
-                    </span>
-                );
-            return null;
-        },
+        filter: getExactMatchFilter(stateValues['prefix'], 'Prefix'),
     },
     {
-        dataField: 'msm_start_time',
+        dataField: 'matched_prefix',
         headerTitle: false,
         headerFormatter: (column, colIndex, components) =>
             genTooltip(
                 column,
                 components,
-                'msm_start_title',
-                'The status of a hijack event (possible values: ongoing|dormant|withdrawn|under mitigation|ignored|resolved|outdated).'
-            ),
-        text: 'Start Time',
-    },
-    {
-        dataField: 'target_ip',
-        headerTitle: false,
-        headerFormatter: (column, colIndex, components) =>
-            genTooltip(
-                column,
-                components,
-                'target_ip_title',
-                'The IPv4/IPv6 prefix that was hijacked'
-            ),
-        text: 'Target IP',
-    },
-    {
-        dataField: 'num_of_probes',
-        headerTitle: false,
-        headerFormatter: (column, colIndex, components) =>
-            genTooltip(
-                column,
-                components,
-                'num_of_probes_title',
+                'matched_title',
                 'The configured IPv4/IPv6 prefix that matched the hijacked prefix.'
             ),
-        text: '# Probes',
+        text: 'Matched Prefix',
+        filter: getExactMatchFilter(
+            stateValues['matched_prefix'],
+            'Matched Prefix'
+        ),
     },
     {
-        dataField: 'hijacker_as',
+        dataField: 'origin_as_original',
         headerTitle: false,
         headerFormatter: (column, colIndex, components) =>
             genTooltip(
                 column,
                 components,
-                'hijacker_as_title',
-                'The type of the hijack in 4 dimensions: prefix|path|data plane|policy<ul><li>[Prefix] S → Sub-prefix hijack</li>'
+                'origin_title',
+                'The AS that originated the BGP update.'
             ),
-        text: 'Hijacker AS',
+        text: 'Origin AS',
+        filter: getExactMatchFilter(stateValues['origin_as_original'], 'Origin AS'),
     },
     {
-        dataField: 'hijacked',
+        dataField: 'as_path2',
         headerTitle: false,
         headerFormatter: (column, colIndex, components) =>
             genTooltip(
                 column,
                 components,
-                'hijacked_title',
-                'The AS that is potentially responsible for the hijack.</br>Note that this is an experimental field.'
+                'path_title',
+                'The AS-level path of the update.'
             ),
-        text: 'Hijacker Confirmed',
+        text: 'AS Path',
+        filter: getTextFilter(stateValues['as_path2'], 'AS Path'),
     },
     {
-        dataField: 'msm_id',
+        dataField: 'peer_asn_original',
         headerTitle: false,
         headerFormatter: (column, colIndex, components) =>
             genTooltip(
                 column,
                 components,
-                'msm_id_title',
-                'The RPKI status of the hijacked prefix.'
+                'peer_title',
+                'The monitor AS that peers with the route collector service reporting the BGP update.'
             ),
-        text: 'Measurement ID',
+        text: 'Peer AS',
+        filter: getExactMatchFilter(stateValues['peer_asn_original'], 'Peer AS'),
+    },
+    {
+        dataField: 'service',
+        headerTitle: false,
+        headerFormatter: (column, colIndex, components) =>
+            genTooltip(
+                column,
+                components,
+                'service_title',
+                'The route collector service that is connected to the monitor AS that observed the BGP update.'
+            ),
+        text: 'Service',
+        filter: getTextFilter(stateValues['service'], 'Service'),
+    },
+    {
+        dataField: 'type',
+        text: 'Type',
+        headerTitle: false,
+        headerFormatter: (column, colIndex, components) =>
+            genTooltip(
+                column,
+                components,
+                'type_title',
+                '<ul><li>A → route announcement</li><li>W → route withdrawal</li></ul>'
+            ),
+        filter: selectFilter({
+            placeholder: 'Type',
+            defaultValue: stateValues['type'],
+            options: ['A', 'W'].reduce((acc, elem) => {
+                acc[elem] = elem; // or what ever object you want inside
+                return acc;
+            }, {}),
+        }),
+    },
+    {
+        dataField: 'hijack_key',
+        headerTitle: false,
+        headerFormatter: (column, colIndex, components) =>
+            genTooltip(
+                column,
+                components,
+                'key_title',
+                'Redirects to the hijack view if the BGP update is not benign, otherwise empty.'
+            ),
+        text: 'Hijack',
+    },
+    {
+        dataField: 'handled',
+        headerTitle: false,
+        headerFormatter: (column, colIndex, components) =>
+            genTooltip(
+                column,
+                components,
+                'handled_title',
+                'Whether the BGP update has been handled by the detection module or not.'
+            ),
+        text: 'Status',
     },
 ];
 
-const statuses = {
-    Ongoing: 'danger',
-    Dormant: 'secondary',
-    Resolved: 'success',
-    Ignored: 'warning',
-    'Under Mitigation': 'primary',
-    Withdrawn: 'info',
-    Outdated: 'dark',
-};
+function handleData(
+    bgpData,
+    tooltips,
+    setTooltips,
+    context,
+    setFilteredBgpData,
+    filter = 0
+) {
+    let bgp;
 
-const DataplaneTableComponent = (props) => {
-    const HIJACK_DATA = props.data;
-    let hijacks;
-    const context = React.useContext(TooltipContext);
-    const [tooltips, setTooltips] = useState({});
-
-    if (HIJACK_DATA && HIJACK_DATA.length) {
-        hijacks = HIJACK_DATA.map((row, i) => ({
-            id: row.id,
-            update: formatDate(new Date(row.time_last)),
-            time: formatDate(new Date(row.time_detected)),
-            hprefix: row.prefix,
-            mprefix: row.configured_prefix,
-            htype: row.type,
-            status: (
-                <span className={'badge badge-pill badge-' + statuses[row.status]}>
-                    {row.status}
-                </span>
-            ),
-            as_original: row.hijack_as,
-            as: (
+    if (bgpData && bgpData.length) {
+        bgp = bgpData.map((row, i) => {
+            const origin_as = (
                 <Tooltip
                     tooltips={tooltips}
                     setTooltips={setTooltips}
-                    asn={row.hijack_as}
-                    label={`hijack_as`}
+                    asn={row['origin_as']}
+                    label={`origin${i}`}
                     context={context}
                 />
-            ),
-            rpki: row.rpki_status,
-            peers: row.num_peers_seen,
-            ASes: row.num_asns_inf,
-            ack:
-                row.resolved || row.under_mitigation ? (
-                    <img alt="" src="./handled.png" />
-                ) : (
-                    <img alt="" src="./unhadled.png" />
-                ),
-            more: <Link href={`/hijack?key=${row.key}`}>View</Link>,
-        }));
+            );
+            const peer_as = (
+                <Tooltip
+                    tooltips={tooltips}
+                    setTooltips={setTooltips}
+                    asn={row['peer_asn']}
+                    label={`peer${i}`}
+                    context={context}
+                />
+            );
+            const as_path = row.as_path.map((asn, j) => {
+                return (
+                    <div key={j} style={{ float: 'left', marginLeft: '4px' }}>
+                        <Tooltip
+                            tooltips={tooltips}
+                            setTooltips={setTooltips}
+                            asn={asn}
+                            label={`asn ${i} ${j}`}
+                            context={context}
+                        />
+                    </div>
+                );
+            });
+            return {
+                ...row,
+                origin_as_original: origin_as,
+                peer_asn_original: peer_as,
+                as_path2: as_path,
+            };
+        });
     } else {
-        hijacks = [];
+        bgp = [];
     }
+
+    bgp = bgp.map((row, i) =>
+        fromEntries(
+            Object.entries(row).map(([key, value]: [string, any]) => {
+                if (key === 'timestamp') return [key, formatDate(new Date(value))];
+                else if (key === 'service') return [key, value.replace(/\|/g, ' -> ')];
+                else if (key === 'as_path') return [key, value];
+                else if (key === 'handled')
+                    return [
+                        key,
+                        value ? (
+                            <img alt="" src="handled.png" />
+                        ) : (
+                                <img alt="" src="./unhadled.png" />
+                            ),
+                    ];
+                else return [key, value];
+            })
+        )
+    );
+
+    bgp.forEach((entry, i) => {
+        entry.id = i;
+    });
+
+    setFilteredBgpData(bgp);
+
+    return bgp;
+}
+
+const DataplaneTableComponent = (props) => {
+    const { setFilteredBgpData, filter, hijackKey, filterTo } = props;
+    const [bgpData, setBgpData] = useState([]);
+    const context = React.useContext(TooltipContext);
+    const [tooltips, setTooltips] = useState({});
+    const [page, setPage] = useState(0);
+    const [sizePerPage, setSizePerPage] = useState(10);
+    const [columnFilter, setColumnFilter] = useState({});
+    const dateFrom: string = getISODate(filter);
+    const dateTo: string = getISODate(filterTo ?? 0);
+    let bgpCount = 0;
+
+    //   const BGP_COUNT: any = useGraphQl(hijackKey ? 'bgpCountByKey' : 'bgpCount', {
+    //     isLive: props.isLive,
+    //     callback: (data) => {
+    //       return;
+    //     },
+    //     hasColumnFilter: !isObjectEmpty(columnFilter),
+    //     columnFilter: columnFilter,
+    //     hasDateFilter: filter !== 0,
+    //     dateRange: { dateTo: dateTo, dateFrom: dateFrom },
+    //     key: hijackKey,
+    //   });
+
+    bgpCount =
+        10;
+
+    const [limitState, setLimitState] = useState(10);
+    const [offsetState, setOffsetState] = useState(0);
+    const [sortState, setSortState] = useState('desc');
+    const expandState = [];
+    const filterState = filter;
+    const filteredDate: Date = new Date();
+    const [stateValues, setStateValues] = useState({
+        prefix: '',
+        matched_prefix: '',
+        peer_asn_original: '',
+        origin_as_original: '',
+        service: '',
+        as_path2: '',
+        type: '',
+    });
+
+    filteredDate.setHours(filteredDate.getHours() - filter);
+
+    useGraphQl('dataplane', {
+        callback: (data) => {
+            console.log(data);
+            //   const processedData = handleData(
+            //     shallSubscribe(props.isLive)
+            //       ? data.subscriptionData.data.view_bgpupdates.slice(0, limitState)
+            //       : data.view_bgpupdates.slice(0, limitState),
+            //     tooltips,
+            //     setTooltips,
+            //     context,
+            //     setFilteredBgpData,
+            //     filterState
+            //   );
+
+            //   setBgpData(processedData);
+        },
+        isLive: false,
+        limits: {
+            limit: limitState,
+            offset: offsetState,
+        },
+        sortOrder: sortState,
+        sortColumn: 'time_last',
+        hasDateFilter: false,
+        hasColumnFilter: false,
+    });
+
+    // setExpandState([]);
+
+    const skippedCols = props.skippedCols ?? [];
+
+    const filteredCols = getColumns(stateValues).filter(
+        (col) => !skippedCols.includes(col.dataField)
+    );
 
     const customTotal = (from, to, size) => (
         <span className="react-bootstrap-table-pagination-total">
@@ -269,7 +371,23 @@ const DataplaneTableComponent = (props) => {
         </div>
     );
 
+    const pageButtonRenderer = ({ page, active, onPageChange }) => {
+        const handleClick = (e) => {
+            e.preventDefault();
+            onPageChange(page);
+        };
+
+        return (
+            <li key={page} className={(active ? 'active' : '') + ' page-item'}>
+                <a onClick={handleClick} href="#" className="page-link">
+                    {page !== 'Next' && page !== 'Back' ? page + 1 : page}
+                </a>
+            </li>
+        );
+    };
+
     const options = {
+        pageButtonRenderer,
         sizePerPageRenderer,
         pageStartIndex: 0,
         withFirstAndLast: false, // Hide the going to First and Last page button
@@ -281,10 +399,16 @@ const DataplaneTableComponent = (props) => {
         prePageTitle: 'Pre page',
         firstPageTitle: 'Next page',
         lastPageTitle: 'Last page',
+        sortOrder: 'desc',
+        sortName: 'timestamp',
         showTotal: true,
         custom: true,
+        hidePageListOnlyOnePage: true,
         paginationTotalRenderer: customTotal,
+        dataSize: bgpCount,
         disablePageTitle: true,
+        page: page,
+        sizePerPage: sizePerPage,
         sizePerPageList: [
             {
                 text: '10',
@@ -304,11 +428,27 @@ const DataplaneTableComponent = (props) => {
             },
         ], // A numeric array is also available. the purpose of above example is custom the text
     };
-
     const MyExportCSV = (props) => {
-        const handleClick = () => {
-            props.onExport();
+        const handleClick = async () => {
+            const res = await fetch('/api/download_tables', {
+                method: 'POST',
+                credentials: 'include',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ action: 'view_bgpupdates' }),
+            });
+            const x = window.open();
+            x.document.open();
+            x.document.write(
+                '<html><body><pre>' +
+                JSON.stringify(await res.json(), null, '\t') +
+                '</pre></body></html>'
+            );
+            x.document.close();
         };
+
         return (
             <div>
                 <Button
@@ -324,15 +464,37 @@ const DataplaneTableComponent = (props) => {
         );
     };
 
+    const handleTableChange = (
+        type,
+        { page, sizePerPage, sortOrder, filters }
+    ) => {
+        const currentIndex = page * sizePerPage;
+        setPage(page);
+        setSizePerPage(sizePerPage);
+        if (currentIndex) setOffsetState(currentIndex);
+        if (sizePerPage) setLimitState(sizePerPage);
+        if (sortOrder) setSortState(sortOrder);
+        if (filters) {
+            const key = Object.keys(filters)[0];
+            if (filters[key])
+                setStateValues({ ...stateValues, [key]: filters[key].filterVal });
+            else setStateValues({ ...stateValues, [key]: '' });
+            setColumnFilter(filters);
+        }
+    };
+
     const contentTable = ({ paginationProps, paginationTableProps }) => (
         <ToolkitProvider
             keyField="id"
-            columns={columns}
-            data={hijacks}
+            columns={filteredCols}
+            data={bgpData}
+            dataSize={bgpCount}
             exportCSV={{ onlyExportFiltered: true, exportAll: false }}
         >
             {(toolkitprops) => {
-                paginationProps.dataSize = hijacks.length;
+                paginationProps.dataSize = bgpCount;
+                paginationTableProps.dataSize = bgpCount;
+
                 return (
                     <>
                         <div className="header-filter">
@@ -340,15 +502,19 @@ const DataplaneTableComponent = (props) => {
                             <MyExportCSV {...toolkitprops.csvProps}>Export CSV!!</MyExportCSV>
                         </div>
                         <BootstrapTable
+                            remote
                             wrapperClasses="table-responsive"
                             keyField="id"
-                            data={hijacks}
-                            columns={columns}
+                            data={bgpData}
+                            columns={filteredCols}
+                            expandRow={getExpandRow(expandState)}
                             filter={filterFactory()}
-                            filterPosition="bottom"
                             striped
-                            condensed
                             hover
+                            condensed
+                            filterPosition="bottom"
+                            onTableChange={handleTableChange}
+                            noDataIndication={() => <h3>No dataplane data.</h3>}
                             {...toolkitprops.baseProps}
                             {...paginationTableProps}
                         />
@@ -362,9 +528,15 @@ const DataplaneTableComponent = (props) => {
     );
 
     return (
-        <PaginationProvider pagination={paginationFactory(options)}>
-            {contentTable}
-        </PaginationProvider>
+        <ErrorBoundary
+            containsData={true}
+            noDataMessage={'No bgp updates.'}
+            customError={''}
+        >
+            <PaginationProvider pagination={paginationFactory(options)}>
+                {contentTable}
+            </PaginationProvider>
+        </ErrorBoundary>
     );
 };
 
