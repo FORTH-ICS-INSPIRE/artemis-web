@@ -29,231 +29,205 @@ import {
 import ErrorBoundary from '../error-boundary/error-boundary';
 import Tooltip from '../tooltip/tooltip';
 
-const getColumns = (stateValues) => [
+const getColumns = () => [
     {
-        dataField: 'timestamp',
-        text: 'Timestamp',
+        dataField: 'msm_type',
+        text: 'Measurement Type',
         sort: true,
         headerTitle: false,
         headerFormatter: (column, colIndex, components) =>
             genTooltip(
                 column,
                 components,
-                'timestamp_title',
-                'The time when the BGP update was generated, as set by the BGP monitor or route collector.'
+                'msm_type_title',
+                'Ping | Traceroute.'
             ),
         sortCaret: (order) => {
-            return getSortCaret(order);
+            if (!order)
+                return (
+                    <span>
+                        &nbsp;&nbsp;&darr;
+                        <span style={{ color: 'red' }}>/&uarr;</span>
+                    </span>
+                );
+            if (order === 'asc')
+                return (
+                    <span>
+                        &nbsp;&nbsp;&darr;
+                        <span style={{ color: 'red' }}>/&uarr;</span>
+                    </span>
+                );
+            if (order === 'desc')
+                return (
+                    <span>
+                        &nbsp;&nbsp;
+                        <span style={{ color: 'red' }}>&darr;</span>
+            /&uarr;
+                    </span>
+                );
+            return null;
         },
     },
     {
-        dataField: 'prefix',
-        text: 'Prefix',
+        dataField: 'msm_protocol',
+        text: 'Protocol',
+        sort: true,
         headerTitle: false,
         headerFormatter: (column, colIndex, components) =>
             genTooltip(
                 column,
                 components,
-                'prefix_title',
-                'The IPv4/IPv6 prefix related to the BGP update.'
+                'msm_protocol_title',
+                'ICMP | TCP | UDP'
             ),
-        filter: getExactMatchFilter(stateValues['prefix'], 'Prefix'),
+        sortCaret: (order) => {
+            if (!order)
+                return (
+                    <span>
+                        &nbsp;&nbsp;&darr;
+                        <span style={{ color: 'red' }}>/&uarr;</span>
+                    </span>
+                );
+            if (order === 'asc')
+                return (
+                    <span>
+                        &nbsp;&nbsp;&darr;
+                        <span style={{ color: 'red' }}>/&uarr;</span>
+                    </span>
+                );
+            if (order === 'desc')
+                return (
+                    <span>
+                        &nbsp;&nbsp;
+                        <span style={{ color: 'red' }}>&darr;</span>
+            /&uarr;
+                    </span>
+                );
+            return null;
+        },
     },
     {
-        dataField: 'matched_prefix',
+        dataField: 'msm_start_time',
         headerTitle: false,
         headerFormatter: (column, colIndex, components) =>
             genTooltip(
                 column,
                 components,
-                'matched_title',
-                'The configured IPv4/IPv6 prefix that matched the hijacked prefix.'
+                'msm_start_title',
+                'The date and time that the measurement starts.'
             ),
-        text: 'Matched Prefix',
-        filter: getExactMatchFilter(
-            stateValues['matched_prefix'],
-            'Matched Prefix'
-        ),
+        text: 'Start Time',
     },
     {
-        dataField: 'origin_as_original',
+        dataField: 'target_ip',
         headerTitle: false,
         headerFormatter: (column, colIndex, components) =>
             genTooltip(
                 column,
                 components,
-                'origin_title',
-                'The AS that originated the BGP update.'
+                'target_ip_title',
+                'The target measurement IP of the Victim AS.'
             ),
-        text: 'Origin AS',
-        filter: getExactMatchFilter(stateValues['origin_as_original'], 'Origin AS'),
+        text: 'Target IP',
     },
     {
-        dataField: 'as_path2',
+        dataField: 'num_of_probes',
         headerTitle: false,
         headerFormatter: (column, colIndex, components) =>
             genTooltip(
                 column,
                 components,
-                'path_title',
-                'The AS-level path of the update.'
+                'num_of_probes_title',
+                'The number of RIPE Atlas probes that participated in the measurement.'
             ),
-        text: 'AS Path',
-        filter: getTextFilter(stateValues['as_path2'], 'AS Path'),
+        text: '# Probes',
     },
     {
-        dataField: 'peer_asn_original',
+        dataField: 'hijacker_as',
         headerTitle: false,
         headerFormatter: (column, colIndex, components) =>
             genTooltip(
                 column,
                 components,
-                'peer_title',
-                'The monitor AS that peers with the route collector service reporting the BGP update.'
+                'hijacker_as_title',
+                'The AS that is potentially responsible for the hijack.'
             ),
-        text: 'Peer AS',
-        filter: getExactMatchFilter(stateValues['peer_asn_original'], 'Peer AS'),
+        text: 'Hijacker AS',
     },
     {
-        dataField: 'service',
+        dataField: 'hijacked',
         headerTitle: false,
         headerFormatter: (column, colIndex, components) =>
             genTooltip(
                 column,
                 components,
-                'service_title',
-                'The route collector service that is connected to the monitor AS that observed the BGP update.'
+                'hijacked_title',
+                'Yes -> Origin AS is hijacked.</br>No -> Origin AS is not hijacked.</br>NA -> Not Answer.'
             ),
-        text: 'Service',
-        filter: getTextFilter(stateValues['service'], 'Service'),
+        text: 'Hijacker Confirmed',
     },
     {
-        dataField: 'type',
-        text: 'Type',
+        dataField: 'msm_id',
         headerTitle: false,
         headerFormatter: (column, colIndex, components) =>
             genTooltip(
                 column,
                 components,
-                'type_title',
-                '<ul><li>A → route announcement</li><li>W → route withdrawal</li></ul>'
+                'msm_id_title',
+                'The RIPE Atlas measurement id.</br>Click for redirection to RIPE Atlas measurement web page.'
             ),
-        filter: selectFilter({
-            placeholder: 'Type',
-            defaultValue: stateValues['type'],
-            options: ['A', 'W'].reduce((acc, elem) => {
-                acc[elem] = elem; // or what ever object you want inside
-                return acc;
-            }, {}),
-        }),
-    },
-    {
-        dataField: 'hijack_key',
-        headerTitle: false,
-        headerFormatter: (column, colIndex, components) =>
-            genTooltip(
-                column,
-                components,
-                'key_title',
-                'Redirects to the hijack view if the BGP update is not benign, otherwise empty.'
-            ),
-        text: 'Hijack',
-    },
-    {
-        dataField: 'handled',
-        headerTitle: false,
-        headerFormatter: (column, colIndex, components) =>
-            genTooltip(
-                column,
-                components,
-                'handled_title',
-                'Whether the BGP update has been handled by the detection module or not.'
-            ),
-        text: 'Status',
+        text: 'Measurement ID',
     },
 ];
 
+
 function handleData(
-    bgpData,
+    dataplaneData,
     tooltips,
     setTooltips,
     context,
     setFilteredBgpData,
     filter = 0
 ) {
-    let bgp;
+    let dataplane;
 
-    if (bgpData && bgpData.length) {
-        bgp = bgpData.map((row, i) => {
-            const origin_as = (
+    if (dataplaneData && dataplaneData.length) {
+        dataplane = dataplaneData.map((row, i) => {
+            const hijack_as = (
                 <Tooltip
                     tooltips={tooltips}
                     setTooltips={setTooltips}
-                    asn={row['origin_as']}
-                    label={`origin${i}`}
+                    asn={row['hijack_as']}
+                    label={`hijack_as${i}`}
                     context={context}
                 />
             );
-            const peer_as = (
-                <Tooltip
-                    tooltips={tooltips}
-                    setTooltips={setTooltips}
-                    asn={row['peer_asn']}
-                    label={`peer${i}`}
-                    context={context}
-                />
-            );
-            const as_path = row.as_path.map((asn, j) => {
-                return (
-                    <div key={j} style={{ float: 'left', marginLeft: '4px' }}>
-                        <Tooltip
-                            tooltips={tooltips}
-                            setTooltips={setTooltips}
-                            asn={asn}
-                            label={`asn ${i} ${j}`}
-                            context={context}
-                        />
-                    </div>
-                );
-            });
+
             return {
                 ...row,
-                origin_as_original: origin_as,
-                peer_asn_original: peer_as,
-                as_path2: as_path,
+                hijack_as_original: hijack_as,
             };
         });
     } else {
-        bgp = [];
+        dataplane = [];
     }
 
-    bgp = bgp.map((row, i) =>
+    dataplane = dataplane.map((row, i) =>
         fromEntries(
             Object.entries(row).map(([key, value]: [string, any]) => {
-                if (key === 'timestamp') return [key, formatDate(new Date(value))];
-                else if (key === 'service') return [key, value.replace(/\|/g, ' -> ')];
-                else if (key === 'as_path') return [key, value];
-                else if (key === 'handled')
-                    return [
-                        key,
-                        value ? (
-                            <img alt="" src="handled.png" />
-                        ) : (
-                                <img alt="" src="./unhadled.png" />
-                            ),
-                    ];
+                if (key === 'msm_start_time') return [key, formatDate(new Date(value))];
                 else return [key, value];
             })
         )
     );
 
-    bgp.forEach((entry, i) => {
+    dataplane.forEach((entry, i) => {
         entry.id = i;
     });
 
-    setFilteredBgpData(bgp);
+    setFilteredBgpData(dataplane);
 
-    return bgp;
+    return dataplane;
 }
 
 const DataplaneTableComponent = (props) => {
@@ -328,13 +302,7 @@ const DataplaneTableComponent = (props) => {
         hasColumnFilter: false,
     });
 
-    // setExpandState([]);
-
-    const skippedCols = props.skippedCols ?? [];
-
-    const filteredCols = getColumns(stateValues).filter(
-        (col) => !skippedCols.includes(col.dataField)
-    );
+    const filteredCols = getColumns();
 
     const customTotal = (from, to, size) => (
         <span className="react-bootstrap-table-pagination-total">
@@ -474,13 +442,6 @@ const DataplaneTableComponent = (props) => {
         if (currentIndex) setOffsetState(currentIndex);
         if (sizePerPage) setLimitState(sizePerPage);
         if (sortOrder) setSortState(sortOrder);
-        if (filters) {
-            const key = Object.keys(filters)[0];
-            if (filters[key])
-                setStateValues({ ...stateValues, [key]: filters[key].filterVal });
-            else setStateValues({ ...stateValues, [key]: '' });
-            setColumnFilter(filters);
-        }
     };
 
     const contentTable = ({ paginationProps, paginationTableProps }) => (
@@ -488,7 +449,7 @@ const DataplaneTableComponent = (props) => {
             keyField="id"
             columns={filteredCols}
             data={bgpData}
-            dataSize={bgpCount}
+            dataSize={bgpData.length}
             exportCSV={{ onlyExportFiltered: true, exportAll: false }}
         >
             {(toolkitprops) => {
