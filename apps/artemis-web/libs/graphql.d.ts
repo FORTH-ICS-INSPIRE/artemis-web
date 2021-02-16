@@ -12,6 +12,7 @@ type queryType =
   | 'config'
   | 'moduleState'
   | 'setModuleState'
+  | 'dataplane'
   | 'hijackCount';
 
 export default queryType;

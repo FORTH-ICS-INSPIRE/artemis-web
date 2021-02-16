@@ -20,6 +20,7 @@ import { animated, useTransition } from 'react-spring';
 import 'react-toastify/dist/ReactToastify.css';
 import AuthHOC from '../components/401-hoc/401-hoc';
 import BGPTableComponent from '../components/bgp-table/bgp-table';
+import DataplaneTableComponent from '../components/dataplane-table/dataplane-table';
 import LearnRuleComponent from '../components/learn-rule/learn-rule';
 import Tooltip from '../components/tooltip/tooltip';
 import TooltipContext from '../context/tooltip-context';
@@ -34,11 +35,11 @@ const ViewHijackPage = (props) => {
   const [tooltips, setTooltips] = useState({});
   const context = React.useContext(TooltipContext);
 
-  // if (shallMock()) {
-  //   // eslint-disable-next-line @typescript-eslint/no-var-requires
-  //   const { worker } = require('../utils/mock-sw/browser');
-  //   worker.start();
-  // }
+  if (shallMock()) {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const { worker } = require('../utils/mock-sw/browser');
+    worker.start();
+  }
 
   const classes = useStyles();
   const router = useRouter();
@@ -152,6 +153,17 @@ const ViewHijackPage = (props) => {
     hasStatusFilter: false,
   });
 
+  useGraphQl('dataplane', {
+    callback: (data) => {
+      console.log(data);
+    },
+    isLive: false,
+    sortOrder: 'desc',
+    hasDateFilter: false,
+    hasColumnFilter: false,
+    hasStatusFilter: false,
+  });
+
   return (
     <>
       <Head>
@@ -222,13 +234,13 @@ const ViewHijackPage = (props) => {
                       Acknowledged
                     </span>
                   ) : (
-                      <span
-                        id="hijack_acknowledged_badge"
-                        className="badge badge-acknowledged float-right badge-danger"
-                      >
-                        Not Acknowledged
-                      </span>
-                    )}
+                    <span
+                      id="hijack_acknowledged_badge"
+                      className="badge badge-acknowledged float-right badge-danger"
+                    >
+                      Not Acknowledged
+                    </span>
+                  )}
                 </div>
                 <div className="card-body">
                   <div className="row">
@@ -252,8 +264,8 @@ const ViewHijackPage = (props) => {
                                   value={hijackInfoLeft[key][0] ?? ''}
                                 />
                               ) : (
-                                  hijackInfoLeft[key][0] ?? ''
-                                )}
+                                hijackInfoLeft[key][0] ?? ''
+                              )}
                             </div>
                           </div>
                         );
@@ -279,8 +291,8 @@ const ViewHijackPage = (props) => {
                                   value={hijackInfoRight[key][0] ?? ''}
                                 />
                               ) : (
-                                  hijackInfoRight[key][0] ?? ''
-                                )}
+                                hijackInfoRight[key][0] ?? ''
+                              )}
                             </div>
                           </div>
                         );
@@ -465,8 +477,8 @@ const ViewHijackPage = (props) => {
                                 </Grid>
                               </animated.div>
                             ) : (
-                                <animated.div key={key}></animated.div>
-                              )
+                              <animated.div key={key}></animated.div>
+                            )
                           )}
                         </div>
                       )}
@@ -506,8 +518,8 @@ const ViewHijackPage = (props) => {
                                 </Grid>
                               </animated.div>
                             ) : (
-                                <animated.div key={key}></animated.div>
-                              )
+                              <animated.div key={key}></animated.div>
+                            )
                           )}
                         </div>
                       )}
@@ -620,6 +632,22 @@ const ViewHijackPage = (props) => {
                         } else return <> </>;
                       })}
                   </Grid>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="row" style={{ marginTop: '20px' }}>
+            <div className="col-lg-1" />
+            <div className="col-lg-10">
+              <div className="card">
+                <div className="card-header">Dataplane View</div>
+                <div className="card-body" style={{ textAlign: 'center' }}>
+                  <DataplaneTableComponent
+                    filter={0}
+                    isLive={isLive}
+                    setFilteredBgpData={setFilteredBgpData}
+                    hijackKey={hijackKey}
+                  />
                 </div>
               </div>
             </div>

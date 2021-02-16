@@ -29,56 +29,56 @@ const createApolloClient = () => {
   const httpLink =
     typeof window !== 'undefined'
       ? createHttpLink({
-          uri: `https://${windowHost}/api/graphql`,
-          useGETForQueries: false,
-        })
+        uri: `https://${windowHost}/api/graphql`,
+        useGETForQueries: false,
+      })
       : null;
 
   const authLink =
     typeof window !== 'undefined'
       ? setContext(async (_, { headers }) => {
-          await requestToken();
-          return {
-            headers: {
-              ...headers,
-              authorization: accessToken ? `Bearer ${accessToken}` : '',
-            },
-          };
-        })
+        await requestToken();
+        return {
+          headers: {
+            ...headers,
+            authorization: accessToken ? `Bearer ${accessToken}` : '',
+          },
+        };
+      })
       : null;
 
   const wsLink =
     typeof window !== 'undefined'
       ? new WebSocketLink({
-          uri: `wss://${windowHost}/api/graphql`,
-          options: {
-            reconnect: true,
-            lazy: true,
-            connectionParams: async () => {
-              await requestToken();
-              return {
-                headers: {
-                  authorization: `Bearer ${accessToken}`,
-                },
-              };
-            },
+        uri: `wss://${windowHost}/api/graphql`,
+        options: {
+          reconnect: true,
+          lazy: true,
+          connectionParams: async () => {
+            await requestToken();
+            return {
+              headers: {
+                authorization: `Bearer ${accessToken}`,
+              },
+            };
           },
-        })
+        },
+      })
       : null;
 
   const splitLink =
     typeof window !== 'undefined'
       ? split(
-          ({ query }) => {
-            const definition = getMainDefinition(query);
-            return (
-              definition.kind === 'OperationDefinition' &&
-              definition.operation === 'subscription'
-            );
-          },
-          wsLink,
-          authLink.concat(httpLink)
-        )
+        ({ query }) => {
+          const definition = getMainDefinition(query);
+          return (
+            definition.kind === 'OperationDefinition' &&
+            definition.operation === 'subscription'
+          );
+        },
+        wsLink,
+        authLink.concat(httpLink)
+      )
       : null;
 
   return new ApolloClient({
@@ -169,8 +169,8 @@ export class QueryGenerator {
     return gql`
             ${this.operationType} getLiveTableCount {
               count_data: view_bgpupdates_aggregate${this.getWhereCondition(
-                this.options.hasDateFilter || this.options.hasColumnFilter
-              )}
+      this.options.hasDateFilter || this.options.hasColumnFilter
+    )}
               {
                 aggregate {
                   count
@@ -183,9 +183,9 @@ export class QueryGenerator {
     return gql`
             ${this.operationType} getLiveTableCount {
               count_data: view_hijacks_aggregate${this.getWhereCondition(
-                true,
-                'time_last'
-              )}
+      true,
+      'time_last'
+    )}
               { aggregate { count } }
             }`;
   }
@@ -284,10 +284,26 @@ export class QueryGenerator {
     }`;
   }
 
+  private getDataplaneQuery() {
+    return gql`${this.operationType
+      } getDataplane {
+      view_dataplane_msms {
+        msm_id
+        msm_type
+        msm_protocol
+        msm_start_time
+        msm_stop_time
+        target_ip
+        num_of_probes
+        hijacker_as
+        hijacked 
+      }
+    }`;
+  }
+
   private getBGPUpdatesByKey() {
-    return gql`${
-      this.operationType
-    } getLiveTableData${this.getQueryVars()} { view_bgpupdates: search_bgpupdates_by_hijack_key(
+    return gql`${this.operationType
+      } getLiveTableData${this.getQueryVars()} { view_bgpupdates: search_bgpupdates_by_hijack_key(
          order_by: {timestamp: ${this.options.sortOrder}}
          ${this.getConditionLimit()}
          ${this.getWhereCondition()}
@@ -332,7 +348,7 @@ export class QueryGenerator {
       this.options.statusFilter ||
       this.options.key
     ) {
-      let condition = `${parenthesis ? '(' : ''}where: { _and: [`;
+      let condition: string = `${parenthesis ? '(' : ''}where: { _and: [`;
       if (this.options.hasDateFilter)
         condition =
           condition +
@@ -373,6 +389,8 @@ export class QueryGenerator {
       case 'bgpCount':
         query = this.getBgpCountQuery();
         break;
+      case 'dataplane':
+        query = this.getDataplaneQuery();
       case 'bgpUpdates':
         query = this.getBGPUpdates();
         break;
