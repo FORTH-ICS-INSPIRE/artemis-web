@@ -920,28 +920,29 @@ export const handlers = [
         view_dataplane_msms: [
           {
             msm_id: 28216338,
-            msm_type: "ping",
-            msm_protocol: "ICMP",
-            msm_start_time: "2004-10-19T10:23:54",
-            msm_stop_time: "2020-10-19T10:23:54",
-            target_ip: "1.2.3.4",
+            msm_type: 'ping',
+            msm_protocol: 'ICMP',
+            msm_start_time: '2004-10-19T10:23:54',
+            msm_stop_time: '2020-10-19T10:23:54',
+            target_ip: '1.2.3.4',
             num_of_probes: 6,
             hijacker_as: 65001,
-            hijacked: "no"
+            hijacked: 'no',
           },
           {
             msm_id: 28248777,
-            msm_type: "traceroute",
-            msm_protocol: "TCP",
-            msm_start_time: "2020-10-12T10:23:54",
-            msm_stop_time: "2020-10-19T10:23:54",
-            target_ip: "20.2.3.4",
+            msm_type: 'traceroute',
+            msm_protocol: 'TCP',
+            msm_start_time: '2020-10-12T10:23:54',
+            msm_stop_time: '2020-10-19T10:23:54',
+            target_ip: '20.2.3.4',
             num_of_probes: 4,
             hijacker_as: 65020,
-            hijacked: "no"
-          }
-        ]
-      }))
+            hijacked: 'no',
+          },
+        ],
+      })
+    );
   }),
   graphql.query('bgpupdates', (req, res, ctx) => {
     return res(

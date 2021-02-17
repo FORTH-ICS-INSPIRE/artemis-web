@@ -13,25 +13,25 @@ export function useGraphQl(module: queryType, options: optionsType) {
   if (key && key.length) {
     vars = isSubscription
       ? {
-        onSubscriptionData: (data) => callback(data),
-        variables: { key },
-      }
+          onSubscriptionData: (data) => callback(data),
+          variables: { key },
+        }
       : {
-        onCompleted: (data) => callback(data),
-        variables: { key },
-      };
+          onCompleted: (data) => callback(data),
+          variables: { key },
+        };
   }
   if (limits) {
     const { limit, offset } = limits;
     vars = isSubscription
       ? {
-        onSubscriptionData: (data) => callback(data),
-        variables: { offset, limit, ...varTmp },
-      }
+          onSubscriptionData: (data) => callback(data),
+          variables: { offset, limit, ...varTmp },
+        }
       : {
-        onCompleted: (data) => callback(data),
-        variables: { offset, limit, ...varTmp },
-      };
+          onCompleted: (data) => callback(data),
+          variables: { offset, limit, ...varTmp },
+        };
   }
 
   /* eslint-disable react-hooks/rules-of-hooks */
