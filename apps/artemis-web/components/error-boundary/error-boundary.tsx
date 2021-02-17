@@ -7,7 +7,7 @@ type PropsType = {
   errorImage?: boolean;
 };
 
-class ErrorBoundary extends Component<PropsType, {}> {
+class ErrorBoundary extends Component<PropsType, unknown> {
   state = {
     hasError: false,
     errorMessage: '',
@@ -19,7 +19,7 @@ class ErrorBoundary extends Component<PropsType, {}> {
     }
   }
 
-  componentDidCatch = (error, info) => {
+  componentDidCatch = (error: any, info) => {
     this.setState({ hasError: true, errorMessage: error });
   };
 

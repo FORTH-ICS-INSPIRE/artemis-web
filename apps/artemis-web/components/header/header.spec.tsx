@@ -4,7 +4,9 @@ import { configure, shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import Header from './header';
 import DesktopHeader from '../desktop-header/desktop-header';
-require('jest-fetch-mock').enableMocks();
+import { enableFetchMocks } from 'jest-fetch-mock';
+
+enableFetchMocks();
 
 configure({ adapter: new Adapter() });
 

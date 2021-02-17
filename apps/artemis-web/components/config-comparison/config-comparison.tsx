@@ -12,7 +12,7 @@ type stateType = {
   currentCommentRight: string;
 };
 
-class ConfigComparisonComponent extends Component<{}, stateType> {
+class ConfigComparisonComponent extends Component<unknown, stateType> {
   CodeMirror: any;
   _ref: any;
   constructor(props) {

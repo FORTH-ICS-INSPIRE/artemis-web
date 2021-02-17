@@ -19,7 +19,7 @@ const sendRMQAction = async (obj) => {
     RABBITMQ_PORT,
   } = process.env;
 
-  let config: any = {
+  const config: any = {
     connection: {
       user: RABBITMQ_USER,
       pass: RABBITMQ_PASS,
@@ -41,7 +41,7 @@ const sendRMQAction = async (obj) => {
     },
   };
 
-  let broker = new Broker(config);
+  const broker = new Broker(config);
   await broker.connect();
 
   await broker.addExchange(exchangeName, 'direct', {

@@ -351,7 +351,7 @@ export class QueryGenerator {
       this.options.statusFilter ||
       this.options.key
     ) {
-      let condition: string = `${parenthesis ? '(' : ''}where: { _and: [`;
+      let condition = `${parenthesis ? '(' : ''}where: { _and: [`;
       if (this.options.hasDateFilter)
         condition =
           condition +

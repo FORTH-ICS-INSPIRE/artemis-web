@@ -1,8 +1,9 @@
 import React from 'react';
 import { act, render } from '@testing-library/react';
 import HomePage from '../pages/index';
+import { enableFetchMocks } from 'jest-fetch-mock';
 
-require('jest-fetch-mock').enableMocks();
+enableFetchMocks();
 
 describe('Index', () => {
   it('should render successfully', async () => {

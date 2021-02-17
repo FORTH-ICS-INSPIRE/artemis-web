@@ -1,6 +1,6 @@
 import { Grid } from '@material-ui/core';
-import SystemConfigurationComponent from 'apps/artemis-web/components/system-configuration/system-configuration';
-import { shallMock } from 'apps/artemis-web/utils/token';
+import SystemConfigurationComponent from '../../components/system-configuration/system-configuration';
+import { shallMock } from '../../utils/token';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/material.css';
 import Head from 'next/head';

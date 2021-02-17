@@ -24,7 +24,7 @@ type StatisticsType = {
   data: IndexType;
 };
 
-class StatisticsTable extends Component<StatisticsType, {}> {
+class StatisticsTable extends Component<StatisticsType, unknown> {
   render() {
     const STATISTICS_DATA = this.props.data;
     const tooltips = [
