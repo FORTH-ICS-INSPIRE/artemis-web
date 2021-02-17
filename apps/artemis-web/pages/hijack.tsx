@@ -630,7 +630,7 @@ const ViewHijackPage = (props) => {
               <div className="card">
                 <div className="card-header">Dataplane View</div>
                 <div className="card-body" style={{ textAlign: 'center' }}>
-                  <DataplaneTableComponent />
+                  <DataplaneTableComponent hijackKey={hijackKey} />
                 </div>
               </div>
             </div>

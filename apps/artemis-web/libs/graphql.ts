@@ -286,10 +286,11 @@ export class QueryGenerator {
 
   private getDataplaneQuery() {
     return gql`${this.operationType
-      } getDataplane($key: String!) {
+      } getDataplane${this.getQueryVars()} {
       view_dataplane_msms(
-      args: {key: \"${this.options.key}\"}
-      ) {
+        order_by: {${this.options.sortColumn}: ${this.options.sortOrder}}
+        ${this.getConditionLimit()}
+        where: {hijack_key: {_eq: \"${this.options.key}\"}}) {
         msm_id
         msm_type
         msm_protocol

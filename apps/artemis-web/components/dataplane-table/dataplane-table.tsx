@@ -33,7 +33,6 @@ const getColumns = () => [
     {
         dataField: 'msm_type',
         text: 'Measurement Type',
-        sort: true,
         headerTitle: false,
         headerFormatter: (column, colIndex, components) =>
             genTooltip(
@@ -42,36 +41,14 @@ const getColumns = () => [
                 'msm_type_title',
                 'Ping | Traceroute.'
             ),
+        sort: true,
         sortCaret: (order) => {
-            if (!order)
-                return (
-                    <span>
-                        &nbsp;&nbsp;&darr;
-                        <span style={{ color: 'red' }}>/&uarr;</span>
-                    </span>
-                );
-            if (order === 'asc')
-                return (
-                    <span>
-                        &nbsp;&nbsp;&darr;
-                        <span style={{ color: 'red' }}>/&uarr;</span>
-                    </span>
-                );
-            if (order === 'desc')
-                return (
-                    <span>
-                        &nbsp;&nbsp;
-                        <span style={{ color: 'red' }}>&darr;</span>
-            /&uarr;
-                    </span>
-                );
-            return null;
+            return getSortCaret(order);
         },
     },
     {
         dataField: 'msm_protocol',
         text: 'Protocol',
-        sort: true,
         headerTitle: false,
         headerFormatter: (column, colIndex, components) =>
             genTooltip(
@@ -80,30 +57,9 @@ const getColumns = () => [
                 'msm_protocol_title',
                 'ICMP | TCP | UDP'
             ),
+        sort: true,
         sortCaret: (order) => {
-            if (!order)
-                return (
-                    <span>
-                        &nbsp;&nbsp;&darr;
-                        <span style={{ color: 'red' }}>/&uarr;</span>
-                    </span>
-                );
-            if (order === 'asc')
-                return (
-                    <span>
-                        &nbsp;&nbsp;&darr;
-                        <span style={{ color: 'red' }}>/&uarr;</span>
-                    </span>
-                );
-            if (order === 'desc')
-                return (
-                    <span>
-                        &nbsp;&nbsp;
-                        <span style={{ color: 'red' }}>&darr;</span>
-            /&uarr;
-                    </span>
-                );
-            return null;
+            return getSortCaret(order);
         },
     },
     {
@@ -116,6 +72,10 @@ const getColumns = () => [
                 'msm_start_title',
                 'The date and time that the measurement starts.'
             ),
+        sort: true,
+        sortCaret: (order) => {
+            return getSortCaret(order);
+        },
         text: 'Start Time',
     },
     {
@@ -141,6 +101,10 @@ const getColumns = () => [
                 'The number of RIPE Atlas probes that participated in the measurement.'
             ),
         text: '# Probes',
+        sort: true,
+        sortCaret: (order) => {
+            return getSortCaret(order);
+        },
     },
     {
         dataField: 'hijacker_as',
@@ -165,6 +129,10 @@ const getColumns = () => [
                 'Yes -> Origin AS is hijacked.</br>No -> Origin AS is not hijacked.</br>NA -> Not Answer.'
             ),
         text: 'Hijacker Confirmed',
+        sort: true,
+        sortCaret: (order) => {
+            return getSortCaret(order);
+        },
     },
     {
         dataField: 'msm_id',
@@ -177,6 +145,10 @@ const getColumns = () => [
                 'The RIPE Atlas measurement id.</br>Click for redirection to RIPE Atlas measurement web page.'
             ),
         text: 'Measurement ID',
+        sort: true,
+        sortCaret: (order) => {
+            return getSortCaret(order);
+        },
     },
 ];
 
@@ -186,8 +158,6 @@ function handleData(
     tooltips,
     setTooltips,
     context,
-    setFilteredBgpData,
-    filter = 0
 ) {
     let dataplane;
 
@@ -225,71 +195,26 @@ function handleData(
         entry.id = i;
     });
 
-    setFilteredBgpData(dataplane);
-
     return dataplane;
 }
 
 const DataplaneTableComponent = (props) => {
-    const { setFilteredBgpData, filter, hijackKey, filterTo } = props;
-    const [bgpData, setBgpData] = useState([]);
+    const { hijackKey } = props;
+    const [dataplaneData, setDataplaneData] = useState([]);
+    const [dataplaneCount, setDataplaneCount] = useState(0);
     const context = React.useContext(TooltipContext);
     const [tooltips, setTooltips] = useState({});
     const [page, setPage] = useState(0);
     const [sizePerPage, setSizePerPage] = useState(10);
-    const [columnFilter, setColumnFilter] = useState({});
-    const dateFrom: string = getISODate(filter);
-    const dateTo: string = getISODate(filterTo ?? 0);
-    let bgpCount = 0;
-
-    //   const BGP_COUNT: any = useGraphQl(hijackKey ? 'bgpCountByKey' : 'bgpCount', {
-    //     isLive: props.isLive,
-    //     callback: (data) => {
-    //       return;
-    //     },
-    //     hasColumnFilter: !isObjectEmpty(columnFilter),
-    //     columnFilter: columnFilter,
-    //     hasDateFilter: filter !== 0,
-    //     dateRange: { dateTo: dateTo, dateFrom: dateFrom },
-    //     key: hijackKey,
-    //   });
-
-    bgpCount =
-        10;
+    const [sortColumnState, setSortColumnState] = useState('msm_type');
 
     const [limitState, setLimitState] = useState(10);
     const [offsetState, setOffsetState] = useState(0);
     const [sortState, setSortState] = useState('desc');
-    const expandState = [];
-    const filterState = filter;
-    const filteredDate: Date = new Date();
-    const [stateValues, setStateValues] = useState({
-        prefix: '',
-        matched_prefix: '',
-        peer_asn_original: '',
-        origin_as_original: '',
-        service: '',
-        as_path2: '',
-        type: '',
-    });
-
-    filteredDate.setHours(filteredDate.getHours() - filter);
 
     useGraphQl('dataplane', {
         callback: (data) => {
-            console.log(data);
-            //   const processedData = handleData(
-            //     shallSubscribe(props.isLive)
-            //       ? data.subscriptionData.data.view_bgpupdates.slice(0, limitState)
-            //       : data.view_bgpupdates.slice(0, limitState),
-            //     tooltips,
-            //     setTooltips,
-            //     context,
-            //     setFilteredBgpData,
-            //     filterState
-            //   );
-
-            //   setBgpData(processedData);
+            setDataplaneCount(data.view_dataplane_msms.length);
         },
         isLive: false,
         limits: {
@@ -297,7 +222,28 @@ const DataplaneTableComponent = (props) => {
             offset: offsetState,
         },
         sortOrder: sortState,
-        sortColumn: 'time_last',
+        sortColumn: sortColumnState,
+        hasDateFilter: false,
+        key: hijackKey,
+        hasColumnFilter: false,
+    });
+
+    useGraphQl('dataplane', {
+        callback: (data) => {
+            const processedData = handleData(data.view_dataplane_msms.slice(0, limitState),
+                tooltips,
+                setTooltips,
+                context);
+            setDataplaneData(processedData);
+        },
+        isLive: false,
+        limits: {
+            limit: limitState,
+            offset: offsetState,
+        },
+        sortOrder: sortState,
+        sortColumn: sortColumnState,
+        key: hijackKey,
         hasDateFilter: false,
         hasColumnFilter: false,
     });
@@ -373,7 +319,7 @@ const DataplaneTableComponent = (props) => {
         custom: true,
         hidePageListOnlyOnePage: true,
         paginationTotalRenderer: customTotal,
-        dataSize: bgpCount,
+        dataSize: dataplaneCount,
         disablePageTitle: true,
         page: page,
         sizePerPage: sizePerPage,
@@ -434,27 +380,30 @@ const DataplaneTableComponent = (props) => {
 
     const handleTableChange = (
         type,
-        { page, sizePerPage, sortOrder, filters }
+        { page, sizePerPage, sortOrder, sortField }
     ) => {
         const currentIndex = page * sizePerPage;
         setPage(page);
         setSizePerPage(sizePerPage);
         if (currentIndex) setOffsetState(currentIndex);
         if (sizePerPage) setLimitState(sizePerPage);
-        if (sortOrder) setSortState(sortOrder);
+        if (sortOrder) {
+            setSortColumnState(sortField);
+            setSortState(sortOrder);
+        }
     };
 
     const contentTable = ({ paginationProps, paginationTableProps }) => (
         <ToolkitProvider
             keyField="id"
             columns={filteredCols}
-            data={bgpData}
-            dataSize={bgpData.length}
+            data={dataplaneData}
+            dataSize={dataplaneCount}
             exportCSV={{ onlyExportFiltered: true, exportAll: false }}
         >
             {(toolkitprops) => {
-                paginationProps.dataSize = bgpCount;
-                paginationTableProps.dataSize = bgpCount;
+                paginationProps.dataSize = dataplaneCount;
+                paginationTableProps.dataSize = dataplaneCount;
 
                 return (
                     <>
@@ -466,9 +415,9 @@ const DataplaneTableComponent = (props) => {
                             remote
                             wrapperClasses="table-responsive"
                             keyField="id"
-                            data={bgpData}
+                            data={dataplaneData}
                             columns={filteredCols}
-                            expandRow={getExpandRow(expandState)}
+                            // expandRow={getExpandRow(expandState)}
                             filter={filterFactory()}
                             striped
                             hover
@@ -491,7 +440,7 @@ const DataplaneTableComponent = (props) => {
     return (
         <ErrorBoundary
             containsData={true}
-            noDataMessage={'No bgp updates.'}
+            noDataMessage={'No dataplane data.'}
             customError={''}
         >
             <PaginationProvider pagination={paginationFactory(options)}>
