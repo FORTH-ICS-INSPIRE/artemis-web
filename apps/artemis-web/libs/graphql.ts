@@ -29,56 +29,56 @@ const createApolloClient = () => {
   const httpLink =
     typeof window !== 'undefined'
       ? createHttpLink({
-          uri: `https://${windowHost}/api/graphql`,
-          useGETForQueries: false,
-        })
+        uri: `https://${windowHost}/api/graphql`,
+        useGETForQueries: false,
+      })
       : null;
 
   const authLink =
     typeof window !== 'undefined'
       ? setContext(async (_, { headers }) => {
-          await requestToken();
-          return {
-            headers: {
-              ...headers,
-              authorization: accessToken ? `Bearer ${accessToken}` : '',
-            },
-          };
-        })
+        await requestToken();
+        return {
+          headers: {
+            ...headers,
+            authorization: accessToken ? `Bearer ${accessToken}` : '',
+          },
+        };
+      })
       : null;
 
   const wsLink =
     typeof window !== 'undefined'
       ? new WebSocketLink({
-          uri: `wss://${windowHost}/api/graphql`,
-          options: {
-            reconnect: true,
-            lazy: true,
-            connectionParams: async () => {
-              await requestToken();
-              return {
-                headers: {
-                  authorization: `Bearer ${accessToken}`,
-                },
-              };
-            },
+        uri: `wss://${windowHost}/api/graphql`,
+        options: {
+          reconnect: true,
+          lazy: true,
+          connectionParams: async () => {
+            await requestToken();
+            return {
+              headers: {
+                authorization: `Bearer ${accessToken}`,
+              },
+            };
           },
-        })
+        },
+      })
       : null;
 
   const splitLink =
     typeof window !== 'undefined'
       ? split(
-          ({ query }) => {
-            const definition = getMainDefinition(query);
-            return (
-              definition.kind === 'OperationDefinition' &&
-              definition.operation === 'subscription'
-            );
-          },
-          wsLink,
-          authLink.concat(httpLink)
-        )
+        ({ query }) => {
+          const definition = getMainDefinition(query);
+          return (
+            definition.kind === 'OperationDefinition' &&
+            definition.operation === 'subscription'
+          );
+        },
+        wsLink,
+        authLink.concat(httpLink)
+      )
       : null;
 
   return new ApolloClient({
@@ -169,8 +169,8 @@ export class QueryGenerator {
     return gql`
             ${this.operationType} getLiveTableCount {
               count_data: view_bgpupdates_aggregate${this.getWhereCondition(
-                this.options.hasDateFilter || this.options.hasColumnFilter
-              )}
+      this.options.hasDateFilter || this.options.hasColumnFilter
+    )}
               {
                 aggregate {
                   count
@@ -183,9 +183,9 @@ export class QueryGenerator {
     return gql`
             ${this.operationType} getLiveTableCount {
               count_data: view_hijacks_aggregate${this.getWhereCondition(
-                true,
-                'time_last'
-              )}
+      true,
+      'time_last'
+    )}
               { aggregate { count } }
             }`;
   }
@@ -298,15 +298,14 @@ export class QueryGenerator {
         target_ip
         num_of_probes
         hijacker_as
-        hijacked 
+        hijacked
       }
     }`;
   }
 
   private getBGPUpdatesByKey() {
-    return gql`${
-      this.operationType
-    } getLiveTableData${this.getQueryVars()} { view_bgpupdates: search_bgpupdates_by_hijack_key(
+    return gql`${this.operationType
+      } getLiveTableData${this.getQueryVars()} { view_bgpupdates: search_bgpupdates_by_hijack_key(
          order_by: {timestamp: ${this.options.sortOrder}}
          ${this.getConditionLimit()}
          ${this.getWhereCondition()}
