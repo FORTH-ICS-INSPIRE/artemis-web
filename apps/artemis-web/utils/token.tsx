@@ -155,3 +155,19 @@ export const getSortCaret = (order) => {
     </span>
   );
 };
+
+export const getWithdrawn = (hijackDataState) =>
+  hijackDataState ? hijackDataState.peers_withdrawn ?? [] : [];
+
+export const getSeen = (hijackDataState) =>
+  hijackDataState ? hijackDataState.peers_seen ?? [] : [];
+
+export const isResolved = (hijackDataState) => hijackDataState?.resolved;
+
+export const isIgnored = (hijackDataState) => hijackDataState?.ignored;
+
+export const isUnderMitigation = (hijackDataState) =>
+  hijackDataState?.under_mitigation;
+
+export const isSeen = (hijackDataState) =>
+  hijackDataState && hijackDataState.seen;

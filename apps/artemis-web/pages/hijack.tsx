@@ -28,7 +28,17 @@ import { sendHijackData, submitComment } from '../utils/fetch-data';
 import { useGraphQl } from '../utils/hooks/use-graphql';
 import { extractHijackInfos } from '../utils/parsers';
 import { useStyles } from '../utils/styles';
-import { findStatus, shallMock, statuses } from '../utils/token';
+import {
+  findStatus,
+  getSeen,
+  getWithdrawn,
+  isIgnored,
+  isResolved,
+  isSeen,
+  isUnderMitigation,
+  shallMock,
+  statuses,
+} from '../utils/token';
 
 const ViewHijackPage = (props) => {
   const [isLive, setIsLive] = useState(true);
@@ -116,13 +126,6 @@ const ViewHijackPage = (props) => {
   });
 
   if (!hijackExists) router.push('/wronghijackkey');
-  const seen = hijackDataState ? hijackDataState.peers_seen ?? [] : [];
-  const withdrawn = hijackDataState
-    ? hijackDataState.peers_withdrawn ?? []
-    : [];
-  const resolved = hijackDataState?.resolved;
-  const ignored = hijackDataState?.ignored;
-  const underMitigation = hijackDataState?.under_mitigation;
 
   const onChangeValue = (event) => {
     setSelectState(event.target.value);
@@ -214,7 +217,7 @@ const ViewHijackPage = (props) => {
               <div className="card">
                 <div className="card-header">
                   Hijack Information
-                  {hijackDataState && hijackDataState.seen ? (
+                  {isSeen(hijackDataState) ? (
                     <span
                       id="hijack_acknowledged_badge"
                       className="badge badge-acknowledged float-right badge-primary"
@@ -334,32 +337,31 @@ const ViewHijackPage = (props) => {
                         className="form-control form-control-sm-auto"
                         id="action_selection"
                       >
-                        {!resolved && !ignored && (
-                          <option value="hijack_action_resolve">
-                            Mark as Resolved
-                          </option>
-                        )}
-                        {!resolved && !ignored && (
-                          <option value="hijack_action_ignore">
-                            Mark as Ignored
-                          </option>
-                        )}
-                        {!underMitigation && (
+                        {!isResolved(hijackDataState) &&
+                          !isIgnored(hijackDataState) && (
+                            <>
+                              <option value="hijack_action_resolve">
+                                Mark as Resolved
+                              </option>
+                              <option value="hijack_action_mitigate">
+                                Mitigate Hijack
+                              </option>
+                            </>
+                          )}
+                        {!isUnderMitigation(hijackDataState) ? (
                           <option value="hijack_action_mitigate">
                             Mitigate Hijack
                           </option>
-                        )}
-                        {underMitigation && (
+                        ) : (
                           <option value="hijack_action_unmitigate">
                             Un-mitigate Hijack
                           </option>
                         )}
-                        {!seen && (
+                        {!isSeen(hijackDataState) ? (
                           <option value="hijack_action_acknowledge">
                             Mark as Acknowledged
                           </option>
-                        )}
-                        {seen && (
+                        ) : (
                           <option value="hijack_action_acknowledge_not">
                             Mark as Not Acknowledged
                           </option>
@@ -445,7 +447,7 @@ const ViewHijackPage = (props) => {
                               >
                                 Peers Seen Hijack BGP Announcement:
                                 <Grid container spacing={3}>
-                                  {seen.map((value, i) => {
+                                  {getSeen(hijackDataState).map((value, i) => {
                                     const asn = value;
                                     if (value !== undefined)
                                       return (
@@ -486,24 +488,26 @@ const ViewHijackPage = (props) => {
                               >
                                 Peers Seen Hijack BGP Withdrawal:
                                 <Grid container spacing={3}>
-                                  {withdrawn.map((value, i) => {
-                                    const asn = value;
-                                    if (value !== undefined)
-                                      return (
-                                        <Grid key={i} item xs={3}>
-                                          <Paper className={classes.paper}>
-                                            <Tooltip
-                                              tooltips={tooltips}
-                                              setTooltips={setTooltips}
-                                              asn={asn}
-                                              label={`withdrawn${i}`}
-                                              context={context}
-                                            />
-                                          </Paper>
-                                        </Grid>
-                                      );
-                                    else return <> </>;
-                                  })}
+                                  {getWithdrawn(hijackDataState).map(
+                                    (value, i) => {
+                                      const asn = value;
+                                      if (value !== undefined)
+                                        return (
+                                          <Grid key={i} item xs={3}>
+                                            <Paper className={classes.paper}>
+                                              <Tooltip
+                                                tooltips={tooltips}
+                                                setTooltips={setTooltips}
+                                                asn={asn}
+                                                label={`withdrawn${i}`}
+                                                context={context}
+                                              />
+                                            </Paper>
+                                          </Grid>
+                                        );
+                                      else return <> </>;
+                                    }
+                                  )}
                                 </Grid>
                               </animated.div>
                             ) : (
