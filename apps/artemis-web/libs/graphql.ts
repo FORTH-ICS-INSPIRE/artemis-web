@@ -23,13 +23,12 @@ const requestToken = async () => {
 };
 
 let apolloClient: ApolloClient<NormalizedCacheObject>;
-const windowHost = 'localhost'; //window.location.host;
 
 const createApolloClient = () => {
   const httpLink =
     typeof window !== 'undefined'
       ? createHttpLink({
-          uri: `https://${windowHost}/api/graphql`,
+          uri: `https://${window.location.hostname}/api/graphql`,
           useGETForQueries: false,
         })
       : null;
@@ -50,7 +49,7 @@ const createApolloClient = () => {
   const wsLink =
     typeof window !== 'undefined'
       ? new WebSocketLink({
-          uri: `wss://${windowHost}/api/graphql`,
+          uri: `wss://${window.location.hostname}/api/graphql`,
           options: {
             reconnect: true,
             lazy: true,
