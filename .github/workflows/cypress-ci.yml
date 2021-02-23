@@ -15,7 +15,7 @@ jobs:
     # runs all of the steps inside the specified container rather than on the VM host.
     # Because of this the network configuration changes from host based network to a container network.
     container:
-      image: cypress/included:6.5.0
+      image: cypress/browsers:node12.13.0-chrome80-ff73
     services:
       mongodb:
         image: mongo
