@@ -7,7 +7,7 @@ import {
   Grid,
   IconButton,
   Paper,
-  Switch,
+  Switch
 } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import { ContentState, Editor, EditorState } from 'draft-js';
@@ -15,19 +15,18 @@ import 'draft-js/dist/Draft.css';
 import DefaultErrorPage from 'next/error';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import React, { useState } from 'react';
-import { animated, useTransition } from 'react-spring';
+import React from 'react';
+import { animated } from 'react-spring';
 import 'react-toastify/dist/ReactToastify.css';
 import AuthHOC from '../components/401-hoc/401-hoc';
 import BGPTableComponent from '../components/bgp-table/bgp-table';
 import DataplaneTableComponent from '../components/dataplane-table/dataplane-table';
 import LearnRuleComponent from '../components/learn-rule/learn-rule';
 import Tooltip from '../components/tooltip/tooltip';
-import TooltipContext from '../context/tooltip-context';
 import { sendHijackData, submitComment } from '../utils/fetch-data';
 import { useGraphQl } from '../utils/hooks/use-graphql';
+import { useHijack } from '../utils/hooks/use-hijack';
 import { extractHijackInfos } from '../utils/parsers';
-import { useStyles } from '../utils/styles';
 import {
   findStatus,
   getSeen,
@@ -37,67 +36,32 @@ import {
   isSeen,
   isUnderMitigation,
   shallMock,
-  statuses,
+  statuses
 } from '../utils/token';
 
 const ViewHijackPage = (props) => {
-  const [isLive, setIsLive] = useState(true);
-  const [tooltips, setTooltips] = useState({});
-  const context = React.useContext(TooltipContext);
-
   if (shallMock()) {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const { worker } = require('../utils/mock-sw/browser');
     worker.start();
   }
+  const {
+    isLive, setIsLive, tooltips, setTooltips, context, classes,
+    distinctValues, setDistinctValues, selectState, setSelectState,
+    seenState, setSeenState, withdrawState, setWithdrawState,
+    hijackDataState, setHijackDataState, hijackExists, setHijackExists,
+    filteredBgpData, setFilteredBgpData, editComment, setEditComment,
+    editorState, setEditorState, seenTransitions, withdrawnTransitions,
+    selectActionState, setSelectActionState, openModalState, setOpenModalState,
+    config
+  } = useHijack();
 
-  const classes = useStyles();
   const router = useRouter();
 
   const hijackKey: string = router.query.key.toString() ?? '';
   if (!hijackKey.length) router.push('/wronghijackkey');
 
   const user = props.user;
-
-  const [distinctValues, setDistinctValues] = useState([]);
-  const [selectState, setSelectState] = useState('');
-  const [seenState, setSeenState] = useState(false);
-  const [withdrawState, setWithdrawState] = useState(false);
-  const [hijackDataState, setHijackDataState] = useState({
-    peers_seen: [],
-    peers_withdrawn: [],
-    comment: '',
-    seen: false,
-    resolved: false,
-    ignored: false,
-    prefix: '',
-    hijack_as: '',
-    type: '',
-    under_mitigation: false,
-  });
-  const [hijackExists, setHijackExists] = useState(true);
-  const [filteredBgpData, setFilteredBgpData] = useState([]);
-  const [editComment, setEditComment] = useState(false);
-  const [editorState, setEditorState] = useState(() =>
-    EditorState.createWithContent(
-      ContentState.createFromText(hijackDataState.comment)
-    )
-  );
-  const seenTransitions = useTransition(seenState, null, {
-    from: { opacity: 0 },
-    enter: { opacity: 1 },
-    leave: { opacity: 0 },
-  });
-  const withdrawnTransitions = useTransition(withdrawState, null, {
-    from: { opacity: 0 },
-    enter: { opacity: 1 },
-    leave: { opacity: 0 },
-  });
-
-  const [selectActionState, setSelectActionState] = useState(
-    'hijack_action_resolve'
-  );
-  const [openModalState, setOpenModalState] = useState(false);
 
   const commentRef = React.createRef();
 
@@ -147,13 +111,6 @@ const ViewHijackPage = (props) => {
       context: context,
     }
   );
-
-  const config = useGraphQl('config', {
-    isLive: false,
-    hasDateFilter: false,
-    hasColumnFilter: false,
-    hasStatusFilter: false,
-  });
 
   return (
     <>
@@ -375,12 +332,12 @@ const ViewHijackPage = (props) => {
                           selectActionState === 'hijack_action_ignore'
                             ? setOpenModalState(true)
                             : sendHijackData(e, {
-                                hijackKey: hijackKey,
-                                selectState: selectActionState,
-                                prefix: hijackDataState.prefix,
-                                hijack_as: hijackDataState.hijack_as,
-                                type: hijackDataState.type,
-                              })
+                              hijackKey: hijackKey,
+                              selectState: selectActionState,
+                              prefix: hijackDataState.prefix,
+                              hijack_as: hijackDataState.hijack_as,
+                              type: hijackDataState.type,
+                            })
                         }
                         style={{ marginRight: '5px' }}
                         id="apply_selected"
@@ -402,9 +359,8 @@ const ViewHijackPage = (props) => {
                         style={{ marginRight: '5px', float: 'right' }}
                         id="edit_comment"
                         type="button"
-                        className={`btn btn-${
-                          !editComment ? 'primary' : 'secondary'
-                        } btn-md`}
+                        className={`btn btn-${!editComment ? 'primary' : 'secondary'
+                          } btn-md`}
                         onClick={(e) => {
                           if (editComment)
                             submitComment(e, { commentRef, hijackKey });
