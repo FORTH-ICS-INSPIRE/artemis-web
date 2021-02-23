@@ -14,8 +14,6 @@ export const useHijack = () => {
 
     const [distinctValues, setDistinctValues] = useState([]);
     const [selectState, setSelectState] = useState('');
-    const [seenState, setSeenState] = useState(false);
-    const [withdrawState, setWithdrawState] = useState(false);
     const [hijackDataState, setHijackDataState] = useState({
         peers_seen: [],
         peers_withdrawn: [],
