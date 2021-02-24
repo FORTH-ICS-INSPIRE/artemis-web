@@ -7,7 +7,7 @@ import {
   Grid,
   IconButton,
   Paper,
-  Switch
+  Switch,
 } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import { ContentState, Editor, EditorState } from 'draft-js';
@@ -36,7 +36,7 @@ import {
   isSeen,
   isUnderMitigation,
   shallMock,
-  statuses
+  statuses,
 } from '../utils/token';
 
 const ViewHijackPage = (props) => {
@@ -46,13 +46,29 @@ const ViewHijackPage = (props) => {
     worker.start();
   }
   const {
-    isLive, setIsLive, tooltips, setTooltips, context, classes,
-    distinctValues, setDistinctValues, selectState, setSelectState,
-    hijackDataState, setHijackDataState, hijackExists, setHijackExists,
-    filteredBgpData, setFilteredBgpData, editComment, setEditComment,
-    editorState, setEditorState, seenTransitions, withdrawnTransitions,
-    selectActionState, setSelectActionState, openModalState, setOpenModalState,
-    config
+    isLive,
+    setIsLive,
+    tooltips,
+    setTooltips,
+    context,
+    classes,
+    distinctValues,
+    setDistinctValues,
+    selectState,
+    setSelectState,
+    hijackDataState,
+    setHijackDataState,
+    hijackExists,
+    setHijackExists,
+    filteredBgpData,
+    setFilteredBgpData,
+    editComment,
+    setEditComment,
+    editorState,
+    setEditorState,
+    openModalState,
+    setOpenModalState,
+    config,
   } = useHijack();
 
   const router = useRouter();
@@ -61,8 +77,6 @@ const ViewHijackPage = (props) => {
   if (!hijackKey.length) router.push('/wronghijackkey');
 
   const user = props.user;
-
-  const commentRef = React.createRef();
 
   useGraphQl('hijackByKey', {
     callback: (data) => {
@@ -159,7 +173,17 @@ const ViewHijackPage = (props) => {
               </div>
             </div>
           </div>
-          <HijackInfoComponent></HijackInfoComponent>
+          <HijackInfoComponent
+            hijackDataState={hijackDataState}
+            tooltips={tooltips}
+            setTooltips={setTooltips}
+            context={context}
+            classes={classes}
+            setOpenModalState={setOpenModalState}
+            hijackKey={hijackKey}
+            editorState={editorState}
+            setEditorState={setEditorState}
+          />
           <div className="row" style={{ marginTop: '20px' }}>
             <div className="col-lg-1" />
             <div className="col-lg-10">
