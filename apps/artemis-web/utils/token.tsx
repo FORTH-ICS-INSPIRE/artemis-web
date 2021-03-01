@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactTooltip from 'react-tooltip';
 
-export const getRandomString = (len) => {
+export const getRandomString = (len): string => {
   const buf = [],
     chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789',
     charlen = chars.length;
@@ -13,18 +13,18 @@ export const getRandomString = (len) => {
   return buf.join('');
 };
 
-const getRandomInt = (min, max) => {
+const getRandomInt = (min, max): number => {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
-const appendLeadingZeroes = (n) => {
+const appendLeadingZeroes = (n): string => {
   if (n <= 9) {
     return '0' + n;
   }
   return n;
 };
 
-export const formatDate = (date) =>
+export const formatDate = (date): string =>
   date.getFullYear() +
   '-' +
   (date.getMonth() + 1) +
@@ -37,7 +37,7 @@ export const formatDate = (date) =>
   ':' +
   appendLeadingZeroes(date.getSeconds());
 
-export const diffDate = (date1, date2) => {
+export const diffDate = (date1, date2): string => {
   const ms = date2 - date1;
   const days = Math.floor(ms / (24 * 60 * 60 * 1000));
   const daysms = ms % (24 * 60 * 60 * 1000);
@@ -67,15 +67,15 @@ export const genTooltip = (column, components, label, text): any => (
   </>
 );
 
-export const isObjectEmpty = (o) => Object.keys(o).length === 0;
+export const isObjectEmpty = (o): boolean => Object.keys(o).length === 0;
 
-const isDevelopment = () => process.env.NODE_ENV === 'development';
-const isBrowser = () => typeof window !== 'undefined';
-export const shallMock = () => isDevelopment() && isBrowser();
+const isDevelopment = (): boolean => process.env.NODE_ENV === 'development';
+const isBrowser = (): boolean => typeof window !== 'undefined';
+export const shallMock = (): boolean => isDevelopment() && isBrowser();
 
-const isProduction = () => process.env.NODE_ENV === 'production';
+const isProduction = (): boolean => process.env.NODE_ENV === 'production';
 
-export const shallSubscribe = (isLive) => isLive;
+export const shallSubscribe = (isLive: boolean): boolean => isLive;
 
 export const getISODate = (filter: number): string => {
   const dateFiltered = new Date();
@@ -123,7 +123,7 @@ export const getSimpleDates = (): string[] => {
   return [timeBefore, timeNow];
 };
 
-export const findStatus = (row) => {
+export const findStatus = (row): string[] => {
   const statuses = [];
 
   if (row.withdrawn) statuses.push('Withdrawn');
@@ -137,12 +137,12 @@ export const findStatus = (row) => {
   return statuses;
 };
 
-export const getStatusField = (status: string) => {
+export const getStatusField = (status: string): string => {
   if (status.includes('Ongoing')) return 'active';
   else return status.replace(' ', '_').toLowerCase();
 };
 
-export const getSortCaret = (order) => {
+export const getSortCaret = (order): any => {
   const isDesc = !order || order === 'desc';
 
   return (
@@ -162,12 +162,13 @@ export const getWithdrawn = (hijackDataState) =>
 export const getSeen = (hijackDataState) =>
   hijackDataState ? hijackDataState.peers_seen ?? [] : [];
 
-export const isResolved = (hijackDataState) => hijackDataState?.resolved;
+export const isResolved = (hijackDataState): boolean =>
+  hijackDataState?.resolved;
 
-export const isIgnored = (hijackDataState) => hijackDataState?.ignored;
+export const isIgnored = (hijackDataState): boolean => hijackDataState?.ignored;
 
-export const isUnderMitigation = (hijackDataState) =>
+export const isUnderMitigation = (hijackDataState): boolean =>
   hijackDataState?.under_mitigation;
 
-export const isSeen = (hijackDataState) =>
+export const isSeen = (hijackDataState): boolean =>
   hijackDataState && hijackDataState.seen;

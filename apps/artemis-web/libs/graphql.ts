@@ -86,7 +86,7 @@ const createApolloClient = () => {
   });
 };
 
-export const initializeApollo = (initialState = null) => {
+export const initializeApollo = (initialState = null): any => {
   const _apolloClient = apolloClient ?? createApolloClient();
   if (initialState) {
     _apolloClient.cache.restore(initialState);
@@ -379,7 +379,7 @@ export class QueryGenerator {
       : '';
   }
 
-  public getQuery() {
+  public getQuery(): DocumentNode {
     let query: DocumentNode = null;
     switch (this.type) {
       case 'stats':
@@ -424,7 +424,7 @@ export class QueryGenerator {
   }
 }
 
-export const useApollo = (initialState) => {
+export const useApollo = (initialState): any => {
   const store = useMemo(() => initializeApollo(initialState), [initialState]);
   return store;
 };

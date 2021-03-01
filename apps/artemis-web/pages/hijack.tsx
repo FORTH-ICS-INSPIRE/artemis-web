@@ -10,13 +10,12 @@ import {
   Switch,
 } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
-import { ContentState, Editor, EditorState } from 'draft-js';
+import { ContentState, EditorState } from 'draft-js';
 import 'draft-js/dist/Draft.css';
 import DefaultErrorPage from 'next/error';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React from 'react';
-import { animated } from 'react-spring';
 import 'react-toastify/dist/ReactToastify.css';
 import AuthHOC from '../components/401-hoc/401-hoc';
 import BGPTableComponent from '../components/bgp-table/bgp-table';
@@ -24,20 +23,9 @@ import DataplaneTableComponent from '../components/dataplane-table/dataplane-tab
 import HijackInfoComponent from '../components/hijack-info/hijack-info';
 import LearnRuleComponent from '../components/learn-rule/learn-rule';
 import Tooltip from '../components/tooltip/tooltip';
-import { sendHijackData, submitComment } from '../utils/fetch-data';
 import { useGraphQl } from '../utils/hooks/use-graphql';
 import { useHijack } from '../utils/hooks/use-hijack';
-import {
-  findStatus,
-  getSeen,
-  getWithdrawn,
-  isIgnored,
-  isResolved,
-  isSeen,
-  isUnderMitigation,
-  shallMock,
-  statuses,
-} from '../utils/token';
+import { findStatus, shallMock, statuses } from '../utils/token';
 
 const ViewHijackPage = (props) => {
   if (shallMock()) {
@@ -74,7 +62,6 @@ const ViewHijackPage = (props) => {
   const router = useRouter();
 
   const hijackKey: string = router.query.key.toString() ?? '';
-  if (!hijackKey.length) router.push('/wronghijackkey');
 
   const user = props.user;
 
@@ -83,7 +70,7 @@ const ViewHijackPage = (props) => {
       const hijacks = data.view_hijacks;
       const hijackExists = hijacks.length !== 0;
 
-      if (hijackExists) {
+      if (!hijackExists) {
         setHijackExists(false);
       } else {
         setHijackDataState(hijacks[0]);
@@ -102,8 +89,6 @@ const ViewHijackPage = (props) => {
     hasColumnFilter: false,
     hasStatusFilter: false,
   });
-
-  if (!hijackExists) router.push('/wronghijackkey');
 
   const onChangeValue = (event) => {
     setSelectState(event.target.value);
@@ -206,12 +191,10 @@ const ViewHijackPage = (props) => {
                     </DialogTitle>
                     <DialogContent dividers>
                       <div id="modal_display_config_comparison">
-                        <div id="modal_display_config_comparison">
-                          <LearnRuleComponent
-                            hijack={hijackDataState}
-                            config={config}
-                          />
-                        </div>
+                        <LearnRuleComponent
+                          hijack={hijackDataState}
+                          config={config}
+                        />
                       </div>
                     </DialogContent>
                   </Dialog>
@@ -259,7 +242,7 @@ const ViewHijackPage = (props) => {
                             selectState === 'peer_asn'
                           )
                             value = (
-                              <div key={i}>
+                              <div key={1 + '_' + i}>
                                 <Tooltip
                                   tooltips={tooltips}
                                   setTooltips={setTooltips}
@@ -270,8 +253,13 @@ const ViewHijackPage = (props) => {
                               </div>
                             );
                           return (
-                            <Grid key={i} item xs>
-                              <Paper className={classes.paper}>{value}</Paper>
+                            <Grid key={0 + '_' + i} item xs>
+                              <Paper
+                                key={2 + '_' + i}
+                                className={classes.paper}
+                              >
+                                {value}
+                              </Paper>
                             </Grid>
                           );
                         } else return <> </>;

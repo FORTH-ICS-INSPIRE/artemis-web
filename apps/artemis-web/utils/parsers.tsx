@@ -3,7 +3,7 @@ import Tooltip from '../components/tooltip/tooltip';
 import { fetchASNData } from './fetch-data';
 import { formatDate, genTooltip } from './token';
 
-export function extractUser(req) {
+export function extractUser(req): any {
   if (!req.user) return null;
 
   const { _id, name, email, role, lastLogin } = req.user;
@@ -16,7 +16,7 @@ export function extractUser(req) {
   };
 }
 
-export function extractLdapUser(req) {
+export function extractLdapUser(req): any {
   if (!req.user) return null;
 
   const mail = req.user[process.env.LDAP_EMAIL_FIELDNAME];
@@ -56,7 +56,7 @@ export function extractLdapUser(req) {
   };
 }
 
-export function parseJwt(token) {
+export function parseJwt(token): any {
   try {
     return JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
   } catch (e) {
@@ -64,11 +64,11 @@ export function parseJwt(token) {
   }
 }
 
-function hasProperty(name, property) {
+function hasProperty(name, property): boolean {
   return Object.prototype.hasOwnProperty.call(name, property);
 }
 
-function extractCountries(countries) {
+function extractCountries(countries): any {
   const countries_set = new Set();
   for (const resource in countries.data.located_resources) {
     if (hasProperty(countries.data.located_resources, resource))
@@ -151,7 +151,7 @@ function extractAbuse(abuse) {
   return abuse_html;
 }
 
-function extractInnerHTML(data_, ASN_int) {
+function extractInnerHTML(data_, ASN_int): string[] {
   const html = [];
   const inner_html = [];
   html.push('<p class="tooltip-custom-margin">ASN: ');
@@ -176,7 +176,7 @@ function extractInnerHTML(data_, ASN_int) {
   return html;
 }
 
-export function parseASNData(ASN_int, name, countries, abuse) {
+export function parseASNData(ASN_int, name, countries, abuse): string {
   const data_ = {};
   data_['name'] = name.data.names ? name.data.names[ASN_int] : '';
 
@@ -200,7 +200,10 @@ export function parseASNData(ASN_int, name, countries, abuse) {
   return join_text;
 }
 
-function extractHijackInfoLeft(hijack, { tooltips, setTooltips, context }) {
+function extractHijackInfoLeft(
+  hijack,
+  { tooltips, setTooltips, context }
+): any {
   const hijackInfo = {
     'Hijacker AS:': [
       <Tooltip
@@ -444,7 +447,7 @@ export async function extractDistinctTooltips(asns) {
   return tooltips;
 }
 
-export async function extractHijackTooltips(hijack) {
+export async function extractHijackTooltips(hijack): Promise<any> {
   const ASN_int_origin: number = hijack.hijack_as;
   const ASN_int_peers: number = hijack.peers_seen;
 

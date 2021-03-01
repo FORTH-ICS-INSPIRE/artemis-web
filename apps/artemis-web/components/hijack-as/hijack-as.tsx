@@ -1,8 +1,8 @@
-import { getSeen, getWithdrawn } from 'apps/artemis-web/utils/token';
+import { Grid, Paper } from '@material-ui/core';
 import React from 'react';
 import { animated, useTransition } from 'react-spring';
+import { getSeen, getWithdrawn } from '../../utils/token';
 import Tooltip from '../tooltip/tooltip';
-import { Grid, Paper } from '@material-ui/core';
 
 const HijackAS = (props) => {
   const seenTransitions = useTransition(props.seenState, null, {

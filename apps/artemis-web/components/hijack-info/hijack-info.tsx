@@ -1,53 +1,28 @@
+import { Editor } from 'draft-js';
+import React, { Component } from 'react';
+import { sendHijackData, submitComment } from '../../utils/fetch-data';
+import { extractHijackInfos } from '../../utils/parsers';
 import {
-  formatDate,
-  getSeen,
-  getWithdrawn,
   isIgnored,
   isResolved,
   isSeen,
   isUnderMitigation,
 } from '../../utils/token';
-import DMP from 'diff_match_patch';
-import React, { Component } from 'react';
-import { Controlled as CodeMirror } from 'react-codemirror2';
-import fetch from 'cross-fetch';
-import { extractHijackInfos } from '../../utils/parsers';
-import {
-  sendHijackData,
-  submitComment,
-} from 'apps/artemis-web/utils/fetch-data';
-import { animated, useTransition } from 'react-spring';
-import { Grid, Paper } from '@material-ui/core';
-import Tooltip from '../tooltip/tooltip';
-import { useState } from 'react';
-import { ContentState, Editor, EditorState } from 'draft-js';
 import HijackAS from '../hijack-as/hijack-as';
 
 class HijackInfoComponent extends Component<any, any> {
-  hijackDataState: any;
-  tooltips: any;
-  setTooltips: any;
-  context: any;
   seenTransitions: any;
   withdrawnTransitions: any;
   classes: any;
   setOpenModalState: any;
   hijackKey: any;
-  editorState: any;
   commentRef: any;
-  setEditorState: any;
 
   constructor(props) {
     super(props);
-    this.hijackDataState = props.hijackDataState;
-    this.tooltips = props.tooltips;
-    this.setTooltips = props.setTooltips;
-    this.context = props.context;
     this.classes = props.classes;
     this.setOpenModalState = props.setOpenModalState;
     this.hijackKey = props.hijackKey;
-    this.editorState = props.editorState;
-    this.setEditorState = props.setEditorState;
 
     this.state = {
       seenState: false,
@@ -61,11 +36,11 @@ class HijackInfoComponent extends Component<any, any> {
 
   render() {
     const [hijackInfoLeft, hijackInfoRight] = extractHijackInfos(
-      this.hijackDataState,
+      this.props.hijackDataState,
       {
-        tooltips: this.tooltips,
-        setTooltips: this.setTooltips,
-        context: this.context,
+        tooltips: this.props.tooltips,
+        setTooltips: this.props.setTooltips,
+        context: this.props.context,
       }
     );
     const commentRef = this.commentRef;
@@ -79,7 +54,7 @@ class HijackInfoComponent extends Component<any, any> {
             <div className="card">
               <div className="card-header">
                 Hijack Information
-                {isSeen(this.hijackDataState) ? (
+                {isSeen(this.props.hijackDataState) ? (
                   <span
                     id="hijack_acknowledged_badge"
                     className="badge badge-acknowledged float-right badge-primary"
@@ -168,11 +143,11 @@ class HijackInfoComponent extends Component<any, any> {
                       </div>
                       <div className="col-lg-8">
                         <button
-                          onClick={() =>
+                          onClick={() => {
                             this.setState({
                               withdrawState: !this.state.withdrawState,
-                            })
-                          }
+                            });
+                          }}
                           className="btn btn-info"
                           type="button"
                           data-toggle="collapse"
@@ -207,18 +182,18 @@ class HijackInfoComponent extends Component<any, any> {
                       className="form-control form-control-sm-auto"
                       id="action_selection"
                     >
-                      {!isResolved(this.hijackDataState) &&
-                        !isIgnored(this.hijackDataState) && (
+                      {!isResolved(this.props.hijackDataState) &&
+                        !isIgnored(this.props.hijackDataState) && (
                           <>
                             <option value="hijack_action_resolve">
                               Mark as Resolved
                             </option>
-                            <option value="hijack_action_mitigate">
-                              Mitigate Hijack
+                            <option value="hijack_action_ignore">
+                              Mark as Ignored
                             </option>
                           </>
                         )}
-                      {!isUnderMitigation(this.hijackDataState) ? (
+                      {!isUnderMitigation(this.props.hijackDataState) ? (
                         <option value="hijack_action_mitigate">
                           Mitigate Hijack
                         </option>
@@ -227,7 +202,7 @@ class HijackInfoComponent extends Component<any, any> {
                           Un-mitigate Hijack
                         </option>
                       )}
-                      {!isSeen(this.hijackDataState) ? (
+                      {!isSeen(this.props.hijackDataState) ? (
                         <option value="hijack_action_acknowledge">
                           Mark as Acknowledged
                         </option>
@@ -247,9 +222,9 @@ class HijackInfoComponent extends Component<any, any> {
                           : sendHijackData(e, {
                               hijackKey: hijackKey,
                               selectState: this.state.selectActionState,
-                              prefix: this.hijackDataState.prefix,
-                              hijack_as: this.hijackDataState.hijack_as,
-                              type: this.hijackDataState.type,
+                              prefix: this.props.hijackDataState.prefix,
+                              hijack_as: this.props.hijackDataState.hijack_as,
+                              type: this.props.hijackDataState.type,
                             })
                       }
                       style={{ marginRight: '5px' }}
@@ -288,8 +263,8 @@ class HijackInfoComponent extends Component<any, any> {
                     <Editor
                       ref={commentRef}
                       readOnly={!this.state.editComment}
-                      editorState={this.editorState}
-                      onChange={this.setEditorState}
+                      editorState={this.props.editorState}
+                      onChange={this.props.setEditorState}
                     />
                   </div>
                 </div>
@@ -304,10 +279,12 @@ class HijackInfoComponent extends Component<any, any> {
               <div className="card-body">
                 <HijackAS
                   classes={this.classes}
-                  tooltips={this.tooltips}
-                  setTooltips={this.setTooltips}
-                  contect={this.context}
-                  hijackDataState={this.hijackDataState}
+                  tooltips={this.props.tooltips}
+                  setTooltips={this.props.setTooltips}
+                  context={this.props.context}
+                  withdrawState={this.state.withdrawState}
+                  seenState={this.state.seenState}
+                  hijackDataState={this.props.hijackDataState}
                 />
               </div>
             </div>

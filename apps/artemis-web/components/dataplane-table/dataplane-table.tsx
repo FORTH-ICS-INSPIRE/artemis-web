@@ -1,13 +1,8 @@
 // import { useSubscription } from '@apollo/client/react/hooks/useSubscription';
 import { Button } from '@material-ui/core';
-import Link from 'next/link';
 import React, { useState } from 'react';
 import BootstrapTable from 'react-bootstrap-table-next';
-import filterFactory, {
-  Comparator,
-  selectFilter,
-  textFilter,
-} from 'react-bootstrap-table2-filter';
+import filterFactory from 'react-bootstrap-table2-filter';
 import paginationFactory, {
   PaginationListStandalone,
   PaginationProvider,
@@ -21,10 +16,7 @@ import {
   formatDate,
   fromEntries,
   genTooltip,
-  getISODate,
   getSortCaret,
-  isObjectEmpty,
-  shallSubscribe,
 } from '../../utils/token';
 import ErrorBoundary from '../error-boundary/error-boundary';
 import Tooltip from '../tooltip/tooltip';
