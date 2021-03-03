@@ -87,6 +87,13 @@ export const useStyles = makeStyles((_theme) => ({
     margin: _theme.spacing(1),
     backgroundColor: _theme.palette.secondary.main,
   },
+  button: {
+    color: 'white',
+    backgroundColor: '#007bff',
+    '&:hover, &:focus': {
+      backgroundColor: '#007bff',
+    },
+  },
   form: {
     width: '100%', // Fix IE 11 issue.
     marginTop: _theme.spacing(3),

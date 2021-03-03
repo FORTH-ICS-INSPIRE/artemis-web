@@ -29,6 +29,7 @@ import {
 import Tooltip from '../tooltip/tooltip';
 import ErrorBoundary from '../error-boundary/error-boundary';
 import { sendData } from '../../utils/fetch-data';
+import { useStyles } from 'apps/artemis-web/utils/styles';
 
 const getExactMatchFilter = (stateValue, fieldName) =>
   textFilter({
@@ -475,13 +476,15 @@ const HijackTableComponent = (props) => {
       );
       x.document.close();
     };
+
+    const classes = useStyles();
+
     return (
       <div style={{ display: 'inline' }}>
         <Button
-          className="btn btn-success"
           style={{ float: 'right', marginBottom: '10px' }}
           variant="contained"
-          color="primary"
+          className={classes.button}
           onClick={handleClick}
         >
           Download Table

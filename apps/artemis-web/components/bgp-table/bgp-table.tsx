@@ -1,5 +1,6 @@
 // import { useSubscription } from '@apollo/client/react/hooks/useSubscription';
 import { Button } from '@material-ui/core';
+import { useStyles } from 'apps/artemis-web/utils/styles';
 import Link from 'next/link';
 import React, { useState } from 'react';
 import BootstrapTable from 'react-bootstrap-table-next';
@@ -677,13 +678,15 @@ const BGPTableComponent = (props) => {
       x.document.close();
     };
 
+    const classes = useStyles();
+
     return (
       <div>
         <Button
-          className="btn btn-success"
+          // className="btn btn-success"
           style={{ float: 'right', marginBottom: '10px' }}
           variant="contained"
-          color="primary"
+          className={classes.button}
           onClick={handleClick}
         >
           Download Table

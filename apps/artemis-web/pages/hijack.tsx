@@ -117,7 +117,7 @@ const ViewHijackPage = (props) => {
             <div className="col-lg-1" />
             <div className="col-lg-10">
               <div className="row">
-                <div className="col-lg-8" style={{ color: 'black' }}>
+                <div className="col-lg-9" style={{ color: 'black' }}>
                   <h1>
                     Viewing Hijack
                     <small id="hijack_status">
@@ -140,7 +140,7 @@ const ViewHijackPage = (props) => {
                   <h2 style={{ color: 'black' }}> Live Update: </h2>{' '}
                 </div>
                 <div className="col-lg-1">
-                <FormGroup>
+                  <FormGroup>
                     <FormControlLabel
                       control={
                         <AntSwitch
@@ -155,8 +155,8 @@ const ViewHijackPage = (props) => {
                     />
                   </FormGroup>
                 </div>
-                <hr style={{ backgroundColor: 'white' }} />
               </div>
+              <hr style={{ backgroundColor: 'white' }} />
             </div>
           </div>
           <HijackInfoComponent
