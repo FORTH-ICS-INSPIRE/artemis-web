@@ -12,49 +12,49 @@ enableFetchMocks();
 configure({ adapter: new Adapter() });
 
 describe('HijackInfoComponent', () => {
-  // window.matchMedia = () => ({
-  //   addListener: () => {
-  //     return;
-  //   },
-  //   removeListener: () => {
-  //     return;
-  //   },
-  // });
+  window.matchMedia = () => ({
+    addListener: () => {
+      return;
+    },
+    removeListener: () => {
+      return;
+    },
+  });
 
   it('should render successfully', async () => {
-    // const mock = {
-    //   classes: {
-    //     paper: 'makeStyles-paper-10',
-    //     avatar: 'makeStyles-avatar-11',
-    //     form: 'makeStyles-form-12',
-    //   },
-    //   context: {
-    //     tooltips: {},
-    //     setTooltips: () => {
-    //       return '';
-    //     },
-    //   },
-    //   editorState: EditorState.createWithContent(
-    //     ContentState.createFromText('')
-    //   ),
-    //   hijackDataState: { seen: false, resolved: false, ignored: false },
-    //   hijackKey: '85db93fdcecb9a8ec81dcd9a4333bb92',
-    //   setEditorState: () => {
-    //     return '';
-    //   },
-    //   setOpenModalState: () => {
-    //     return '';
-    //   },
-    //   setTooltips: () => {
-    //     return '';
-    //   },
-    //   tooltips: {},
-    // };
-    // const promise = Promise.resolve();
-    // jest.fn(() => promise);
-    // const { baseElement } = render(<HijackInfoComponent {...mock} />);
-    // expect(baseElement).toBeTruthy();
+    const mock = {
+      classes: {
+        paper: 'makeStyles-paper-10',
+        avatar: 'makeStyles-avatar-11',
+        form: 'makeStyles-form-12',
+      },
+      context: {
+        tooltips: {},
+        setTooltips: () => {
+          return '';
+        },
+      },
+      editorState: EditorState.createWithContent(
+        ContentState.createFromText('')
+      ),
+      hijackDataState: { seen: false, resolved: false, ignored: false },
+      hijackKey: '85db93fdcecb9a8ec81dcd9a4333bb92',
+      setEditorState: () => {
+        return '';
+      },
+      setOpenModalState: () => {
+        return '';
+      },
+      setTooltips: () => {
+        return '';
+      },
+      tooltips: {},
+    };
+    const promise = Promise.resolve();
+    jest.fn(() => promise);
+    const { baseElement } = render(<HijackInfoComponent {...mock} />);
+    expect(baseElement).toBeTruthy();
 
-    // await act(() => promise);
+    await act(() => promise);
   });
 });
