@@ -92,7 +92,7 @@ const SystemPage = (props) => {
               <div className="col-lg-10">
                 <div className="row">
                   <div className="col-lg-8">
-                    <h1 style={{ color: 'white' }}>System</h1>{' '}
+                    <h1 style={{ color: 'black' }}>System</h1>{' '}
                   </div>
                   <div className="col-lg-1"></div>
                 </div>

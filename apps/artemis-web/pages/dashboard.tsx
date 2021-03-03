@@ -48,9 +48,9 @@ const DashboardPage = (props) => {
               <div className="col-lg-10">
                 <div className="row">
                   <div className="col-lg-8">
-                    <h1 style={{ color: 'white' }}>Dashboard</h1>{' '}
+                    <h1 style={{ color: 'black' }}>Dashboard</h1>{' '}
                   </div>
-                  <div className="col-lg-1">
+                  {/* <div className="col-lg-1">
                     {process.env.NODE_ENV === 'development' && (
                       <Button
                         variant="contained"
@@ -65,7 +65,7 @@ const DashboardPage = (props) => {
                         NOTIFY ME!
                       </Button>
                     )}
-                  </div>
+                  </div> */}
                 </div>
                 <hr style={{ backgroundColor: 'white' }} />
               </div>
@@ -89,7 +89,7 @@ const DashboardPage = (props) => {
             </div>
             <div className="row" style={{ marginTop: '20px' }}>
               <div className="col-lg-1" />
-              <div className="col-lg-10">
+              <div className="col-lg-6">
                 <div className="card">
                   <div className="card-header">
                     Ongoing, Non-Dormant Hijacks{' '}
@@ -97,11 +97,43 @@ const DashboardPage = (props) => {
                   <div className="card-body" style={{ textAlign: 'center' }}>
                     {' '}
                     <OngoingHijackTableComponent isLive={true} />
+                    <div>
+                      Times are shown in your local time zone GMT+2
+                      (Europe/Athens).
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="col-lg-4">
+                <div className="card">
+                  <div className="card-header"> System Status </div>
+                  <div className="card-body" style={{ textAlign: 'center' }}>
+                    <ErrorBoundary
+                      containsData={STATS_DATA}
+                      noDataMessage={'No modules found.'}
+                      errorImage={true}
+                      customError={STATS_RES.error}
+                    >
+                      <StatusTable data={STATS_DATA} />
+                    </ErrorBoundary>
+                  </div>
+                </div>
+                <div className="card" style={{ marginTop: '20px' }}>
+                  <div className="card-header"> Statistics </div>
+                  <div className="card-body" style={{ textAlign: 'center' }}>
+                    <ErrorBoundary
+                      containsData={INDEX_DATA}
+                      noDataMessage={'No statistics found.'}
+                      customError={INDEX_RES.error}
+                      errorImage={true}
+                    >
+                      <StatisticsTable data={INDEX_DATA} />
+                    </ErrorBoundary>
                   </div>
                 </div>
               </div>
             </div>
-            <div className="row" style={{ marginTop: '20px' }}>
+            {/* <div className="row" style={{ marginTop: '20px' }}>
               <div className="col-lg-1" />
               <div className="col-lg-5">
                 <div className="card">
@@ -133,7 +165,7 @@ const DashboardPage = (props) => {
                   </div>
                 </div>
               </div>
-            </div>
+            </div> */}
             <ToastContainer />
           </div>
         )}

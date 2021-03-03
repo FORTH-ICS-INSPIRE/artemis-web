@@ -25,7 +25,7 @@ const ConfigComparisonPage = (props) => {
               <div className="col-lg-10">
                 <div className="row">
                   <div className="col-lg-8">
-                    <h1 style={{ color: 'white' }}>Configuration Comparison</h1>{' '}
+                    <h1 style={{ color: 'black' }}>Configuration Comparison</h1>{' '}
                   </div>
                 </div>
                 <hr style={{ backgroundColor: 'white' }} />

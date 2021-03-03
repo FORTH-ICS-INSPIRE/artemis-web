@@ -47,7 +47,7 @@ const getTextFilter = (stateValue, fieldName) =>
     defaultValue: stateValue, // default filtering value
   });
 
-const getExpandRow = (expandState) => {
+const getExpandRow = (expandState, tooltips, setTooltips, context) => {
   return {
     showExpandColumn: true,
     expandByColumnOnly: true,
@@ -95,7 +95,21 @@ const getExpandRow = (expandState) => {
                   )}
                 </b>
               </td>
-              <td>{row.as_path}</td>
+              <td>
+                {row.as_path.map((asn, j) => {
+                  return (
+                    <div key={j} style={{ float: 'left', marginLeft: '4px' }}>
+                      <Tooltip
+                        tooltips={tooltips}
+                        setTooltips={setTooltips}
+                        asn={asn}
+                        label={`asn ${i} ${j}`}
+                        context={context}
+                      />
+                    </div>
+                  );
+                })}
+              </td>
             </tr>
             <tr>
               <td>
@@ -721,7 +735,12 @@ const BGPTableComponent = (props) => {
               keyField="id"
               data={bgpData}
               columns={filteredCols}
-              expandRow={getExpandRow(expandState)}
+              expandRow={getExpandRow(
+                expandState,
+                tooltips,
+                setTooltips,
+                context
+              )}
               filter={filterFactory()}
               striped
               hover

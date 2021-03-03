@@ -8,9 +8,7 @@ describe('StatisticsTable', () => {
     const { baseElement } = render(
       <StatsTable
         data={{
-          view_index_all_stats: [
-            {}
-          ],
+          view_index_all_stats: [{}],
         }}
       />
     );

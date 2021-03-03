@@ -16,7 +16,7 @@ import NotAuthHOC from '../components/401-hoc/401-hoc';
 import BGPTableComponent from '../components/bgp-table/bgp-table';
 import Tooltip from '../components/tooltip/tooltip';
 import TooltipContext from '../context/tooltip-context';
-import { useStyles } from '../utils/styles';
+import { AntSwitch, useStyles } from '../utils/styles';
 import { getSimpleDates, shallMock } from '../utils/token';
 
 const BGPUpdates = (props) => {
@@ -72,18 +72,18 @@ const BGPUpdates = (props) => {
             <div className="col-lg-1" />
             <div className="col-lg-10">
               <div className="row">
-                <div className="col-lg-8" style={{ color: 'white' }}>
-                  <h1>BGP Updates</h1>
+                <div className="col-lg-9" style={{ color: 'white' }}>
+                  <h1 style={{ color: 'black' }}>BGP Updates</h1>
                 </div>
-                <div className="col-lg-1"></div>
+                {/* <div className="col-lg-1"></div> */}
                 <div className="col-lg-2">
-                  <h2 style={{ color: 'white' }}>Live Updates</h2>{' '}
+                  <h2 style={{ color: 'black' }}>Live Update:</h2>{' '}
                 </div>
                 <div className="col-lg-1">
                   <FormGroup>
                     <FormControlLabel
                       control={
-                        <Switch
+                        <AntSwitch
                           onChange={() => {
                             setIsLive(!isLive);
                           }}
@@ -242,6 +242,7 @@ const BGPUpdates = (props) => {
           <div className="row" style={{ marginTop: '20px' }}>
             <div className="col-lg-1" />
             <div className="col-lg-10">
+              <h1>Additional actions</h1>
               <div className="card">
                 <div className="card-header"> View distinct values </div>
                 <div className="card-body">

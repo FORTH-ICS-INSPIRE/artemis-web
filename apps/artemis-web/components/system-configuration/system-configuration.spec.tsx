@@ -17,7 +17,6 @@ describe('ConfigComparisonComponent', () => {
     //     },
     //   };
     // };
-
     // const { baseElement } = render(
     //   <SystemConfigurationComponent CONFIG_DATA={null} />
     // );

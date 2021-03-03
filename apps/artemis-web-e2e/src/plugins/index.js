@@ -21,9 +21,9 @@ module.exports = (on, config) => {
   on('file:preprocessor', preprocessTypescript(config));
   on('before:browser:launch', (browser = {}, launchOptions) => {
     if (browser.family === 'chromium' && browser.name !== 'electron') {
-      launchOptions.args.push('--disable-dev-shm-usage')
+      launchOptions.args.push('--disable-dev-shm-usage');
     }
 
-    return launchOptions
+    return launchOptions;
   });
 };

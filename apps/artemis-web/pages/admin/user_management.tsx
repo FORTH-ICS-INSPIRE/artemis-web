@@ -73,7 +73,7 @@ const UserManagementPage = (props) => {
               <div className="col-lg-10">
                 <div className="row">
                   <div className="col-lg-8">
-                    <h1 style={{ color: 'white' }}>User Management</h1>{' '}
+                    <h1 style={{ color: 'black' }}>User Management</h1>{' '}
                   </div>
                   <div className="col-lg-1"></div>
                 </div>
