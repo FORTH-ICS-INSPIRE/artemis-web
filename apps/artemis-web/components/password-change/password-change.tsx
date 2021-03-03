@@ -63,7 +63,7 @@ const PasswordChange = (props) => {
             id="password_change_form"
             method="post"
             onSubmit={handleSubmit}
-            className={classes.form}
+            className="login-form"
           >
             {errorMsg ? <p style={{ color: 'red' }}>{errorMsg}</p> : null}
             {successMsg ? <p style={{ color: 'green' }}>{successMsg}</p> : null}

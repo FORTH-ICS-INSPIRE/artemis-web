@@ -25,6 +25,7 @@ import LearnRuleComponent from '../components/learn-rule/learn-rule';
 import Tooltip from '../components/tooltip/tooltip';
 import { useGraphQl } from '../utils/hooks/use-graphql';
 import { useHijack } from '../utils/hooks/use-hijack';
+import { AntSwitch } from '../utils/styles';
 import { findStatus, shallMock, statuses } from '../utils/token';
 
 const ViewHijackPage = (props) => {
@@ -116,7 +117,7 @@ const ViewHijackPage = (props) => {
             <div className="col-lg-1" />
             <div className="col-lg-10">
               <div className="row">
-                <div className="col-lg-8" style={{ color: 'white' }}>
+                <div className="col-lg-8" style={{ color: 'black' }}>
                   <h1>
                     Viewing Hijack
                     <small id="hijack_status">
@@ -134,15 +135,15 @@ const ViewHijackPage = (props) => {
                     </small>
                   </h1>
                 </div>
-                <div className="col-lg-1"></div>
+                {/* <div className="col-lg-1"></div> */}
                 <div className="col-lg-2">
-                  <h2 style={{ color: 'white' }}> Live Updates </h2>{' '}
+                  <h2 style={{ color: 'black' }}> Live Update: </h2>{' '}
                 </div>
                 <div className="col-lg-1">
-                  <FormGroup>
+                <FormGroup>
                     <FormControlLabel
                       control={
-                        <Switch
+                        <AntSwitch
                           onChange={() => {
                             setIsLive(!isLive);
                           }}

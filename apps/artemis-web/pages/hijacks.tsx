@@ -86,12 +86,12 @@ const HijacksPage = (props) => {
             <div className="col-lg-1" />
             <div className="col-lg-10">
               <div className="row">
-                <div className="col-lg-8" style={{ color: 'black' }}>
+                <div className="col-lg-9" style={{ color: 'black' }}>
                   <h1>Hijacks</h1>
                 </div>
-                <div className="col-lg-1"></div>
+                {/* <div className="col-lg-1"></div> */}
                 <div className="col-lg-2">
-                  <h2 style={{ color: 'black' }}>Live Updates </h2>{' '}
+                  <h2 style={{ color: 'black' }}>Live Update:</h2>{' '}
                 </div>
                 <div className="col-lg-1">
                   <FormGroup>

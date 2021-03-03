@@ -97,10 +97,10 @@ const DashboardPage = (props) => {
                   <div className="card-body" style={{ textAlign: 'center' }}>
                     {' '}
                     <OngoingHijackTableComponent isLive={true} />
-                    <div>
+                    {/* <div>
                       Times are shown in your local time zone GMT+2
                       (Europe/Athens).
-                    </div>
+                    </div> */}
                   </div>
                 </div>
               </div>
