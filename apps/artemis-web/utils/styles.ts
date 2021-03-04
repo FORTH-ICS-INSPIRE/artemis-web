@@ -36,14 +36,14 @@ const mainSecondaryColor = darkState ? deepOrange[900] : deepPurple[500];
 export const AntSwitch = withStyles((theme: Theme) =>
   createStyles({
     root: {
-      width: 60,
-      height: 34,
+      width: 64,
+      height: 38,
       padding: 2,
-      paddingRight: 10,
+      paddingRight: 6,
       margin: theme.spacing(1),
     },
     switchBase: {
-      padding: 4,
+      paddingTop: 6,
       '&$checked': {
         transform: 'translateX(16px)',
         color: theme.palette.common.white,
@@ -63,7 +63,7 @@ export const AntSwitch = withStyles((theme: Theme) =>
       height: 26,
     },
     track: {
-      borderRadius: 30 / 2,
+      borderRadius: 40 / 2,
       border: `1px solid ${theme.palette.grey[400]}`,
       backgroundColor: '#ccc',
       opacity: 1,

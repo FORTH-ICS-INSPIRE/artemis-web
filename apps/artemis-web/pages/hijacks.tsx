@@ -311,7 +311,10 @@ const HijacksPage = (props) => {
             <div className="col-lg-1" />
             <div className="col-lg-10">
               <div className="card">
-                <div className="card-header">
+                <div
+                  className="card-header"
+                  style={{ backgroundColor: 'white' }}
+                >
                   Select Status:
                   <button
                     onClick={() => setStatus('Ongoing')}
@@ -445,6 +448,10 @@ const HijacksPage = (props) => {
                   >
                     Outdated
                   </button>
+                  <span style={{ float: 'right' }}>
+                    Times are shown in your local time zone{' '}
+                    <b>GMT+2 (Europe/Athens).</b>
+                  </span>
                 </div>
               </div>
             </div>

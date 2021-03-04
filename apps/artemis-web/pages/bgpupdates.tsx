@@ -103,7 +103,10 @@ const BGPUpdates = (props) => {
             <div className="col-lg-1" />
             <div className="col-lg-10">
               <div className="card">
-                <div className="card-header">
+                <div
+                  className="card-header"
+                  style={{ backgroundColor: 'white' }}
+                >
                   <div className="row">
                     <div className="col-lg-12">
                       <Button

@@ -72,14 +72,16 @@ const DesktopHeader = (props) => {
                   keepMounted
                   open={Boolean(anchorAdmin)}
                   onClose={handleCloseAdmin}
-                  style={{ top: '36px' }}
+                  style={{ top: '14px' }}
                 >
-                  <MenuItem onClick={handleCloseAdmin}>
-                    <Link href="/admin/system">System</Link>
-                  </MenuItem>
-                  <MenuItem onClick={handleCloseAdmin}>
-                    <Link href="/admin/user_management">User Management</Link>
-                  </MenuItem>
+                  <Link href="/admin/system">
+                    <MenuItem onClick={handleCloseAdmin}>System</MenuItem>
+                  </Link>
+                  <Link href="/admin/user_management">
+                    <MenuItem onClick={handleCloseAdmin}>
+                      User Management
+                    </MenuItem>
+                  </Link>
                 </Menu>
               </div>
             </li>
@@ -97,14 +99,18 @@ const DesktopHeader = (props) => {
                   keepMounted
                   open={Boolean(anchorAction)}
                   onClose={handleCloseAction}
-                  style={{ top: '36px' }}
+                  style={{ top: '14px' }}
                 >
-                  <MenuItem onClick={handleCloseAction}>
-                    <Link href="/password_change">Password Change</Link>
-                  </MenuItem>
-                  <MenuItem onClick={handleCloseAction}>
-                    <Link href="/config_comparison">Config Comparison</Link>
-                  </MenuItem>
+                  <Link href="/password_change">
+                    <MenuItem onClick={handleCloseAction}>
+                      Password Change
+                    </MenuItem>
+                  </Link>
+                  <Link href="/config_comparison">
+                    <MenuItem onClick={handleCloseAction}>
+                      Config Comparison
+                    </MenuItem>
+                  </Link>
                 </Menu>
               </div>
             </li>
