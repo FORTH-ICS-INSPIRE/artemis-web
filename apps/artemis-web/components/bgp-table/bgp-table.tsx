@@ -1,6 +1,6 @@
 // import { useSubscription } from '@apollo/client/react/hooks/useSubscription';
 import { Button } from '@material-ui/core';
-import { useStyles } from 'apps/artemis-web/utils/styles';
+import { useStyles } from '../../utils/styles';
 import Link from 'next/link';
 import React, { useState } from 'react';
 import BootstrapTable from 'react-bootstrap-table-next';
@@ -231,8 +231,8 @@ const getExpandRow = (expandState, tooltips, setTooltips, context) => {
                 {row.hijack_key.toString().length > 0 ? (
                   <Link href={`/hijack?key=${row.hijack_key}`}>View</Link>
                 ) : (
-                  ''
-                )}
+                    ''
+                  )}
               </td>
             </tr>
             <tr>
@@ -465,8 +465,8 @@ function handleData(
             value ? (
               <img alt="" src="handled.png" />
             ) : (
-              <img alt="" src="./unhadled.png" />
-            ),
+                <img alt="" src="./unhadled.png" />
+              ),
           ];
         else return [key, value];
       })
@@ -586,11 +586,10 @@ const BGPTableComponent = (props) => {
             key={option.text}
             value={option.text}
             onClick={() => onSizePerPageChange(option.page)}
-            className={`btn ${
-              currSizePerPage === `${option.page}`
+            className={`btn ${currSizePerPage === `${option.page}`
                 ? 'btn-secondary'
                 : 'btn-warning'
-            }`}
+              }`}
           >
             {option.text}
           </option>
@@ -672,8 +671,8 @@ const BGPTableComponent = (props) => {
       x.document.open();
       x.document.write(
         '<html><body><pre>' +
-          JSON.stringify(await res.json(), null, '\t') +
-          '</pre></body></html>'
+        JSON.stringify(await res.json(), null, '\t') +
+        '</pre></body></html>'
       );
       x.document.close();
     };

@@ -160,11 +160,7 @@ const MobileHeader = (props) => {
             </li>
           )}
           <li className="menu-item">
-            <a
-              target="_blank"
-              rel="noreferrer"
-              href="https://www.inspire.edu.gr/artemis/"
-            >
+            <a target="_blank" rel="noreferrer" href="https://bgpartemis.org/">
               About
             </a>
           </li>

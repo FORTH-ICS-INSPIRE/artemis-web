@@ -23,6 +23,7 @@ class ConfigComparisonComponent extends Component<unknown, stateType> {
     ) {
       this.CodeMirror = require('codemirror/lib/codemirror');
       require('codemirror/lib/codemirror.css');
+      require('codemirror/theme/3024-day.css');
       require('codemirror/theme/eclipse.css');
       require('codemirror/theme/neat.css');
       require('codemirror/addon/lint/lint.css');
@@ -75,7 +76,7 @@ class ConfigComparisonComponent extends Component<unknown, stateType> {
       });
 
       this.CodeMirror.MergeView(this._ref, {
-        theme: 'material',
+        theme: '3024-day',
         value: this.state.currentConfigLeft,
         origLeft: null,
         origRight: this.state.currentConfigRight,
@@ -112,6 +113,7 @@ class ConfigComparisonComponent extends Component<unknown, stateType> {
             <div className="card-body">
               <div className="row">
                 <div className="col-lg-6">
+                  Select config: <br />
                   <select
                     onChange={(e) => this.handleOptions(e.target.value, 'left')}
                     style={{ marginBottom: '10px' }}
@@ -126,6 +128,7 @@ class ConfigComparisonComponent extends Component<unknown, stateType> {
                   </select>
                 </div>
                 <div className="col-lg-6">
+                  Select config: <br />
                   <select
                     onChange={(e) =>
                       this.handleOptions(e.target.value, 'right')
@@ -163,7 +166,7 @@ class ConfigComparisonComponent extends Component<unknown, stateType> {
                         'CodeMirror-linenumbers',
                         'CodeMirror-foldgutter',
                       ],
-                      theme: 'material',
+                      theme: '3024-day',
                       lineNumbers: true,
                     }}
                     onBeforeChange={(editor, data, value) => {
@@ -178,7 +181,7 @@ class ConfigComparisonComponent extends Component<unknown, stateType> {
                   <CodeMirror
                     value={this.state.currentCommentRight}
                     options={{
-                      mode: 'yaml',
+                      mode: 'text',
                       styleActiveLine: true,
                       foldGutter: true,
                       readonly: true,
@@ -186,7 +189,7 @@ class ConfigComparisonComponent extends Component<unknown, stateType> {
                         'CodeMirror-linenumbers',
                         'CodeMirror-foldgutter',
                       ],
-                      theme: 'material',
+                      theme: '3024-day',
                       lineNumbers: true,
                     }}
                     onBeforeChange={(editor, data, value) => {

@@ -1,4 +1,5 @@
 import { Button, FormControlLabel, FormGroup, Grid } from '@material-ui/core';
+import { AntSwitch, useStyles } from '../../utils/styles';
 import React from 'react';
 import Switch from 'react-ios-switch';
 import { useGraphQl } from '../../utils/hooks/use-graphql';
@@ -17,6 +18,8 @@ const SystemModule = (props) => {
     name: module.toLowerCase(),
   });
 
+  const classes = useStyles();
+
   return (
     <Grid item xs={3}>
       <div className="card">
@@ -27,7 +30,9 @@ const SystemModule = (props) => {
             <div className="col-lg-5">
               <Button
                 variant="contained"
-                color={state[module] ? 'primary' : 'secondary'}
+                className={
+                  state[module] ? classes.activeButton : classes.inactiveButton
+                }
               >
                 {`Active (${totalActive}/${totalModules})`}
               </Button>
@@ -36,10 +41,8 @@ const SystemModule = (props) => {
               <FormGroup>
                 <FormControlLabel
                   control={
-                    <Switch
+                    <AntSwitch
                       checked={state[module]}
-                      onColor="#3f51b5"
-                      offColor="#f50057"
                       onChange={() => {
                         setState((prevState) => ({
                           ...prevState,

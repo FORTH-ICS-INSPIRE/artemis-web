@@ -114,7 +114,7 @@ const DesktopHeader = (props) => {
               className="nav-link"
               target="_blank"
               rel="noreferrer"
-              href="https://www.inspire.edu.gr/artemis/"
+              href="https://bgpartemis.org/"
             >
               About
             </a>

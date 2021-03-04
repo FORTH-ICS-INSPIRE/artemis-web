@@ -1,9 +1,11 @@
 import { Button } from '@material-ui/core';
+import { useStyles } from '../../utils/styles';
 import fetch from 'cross-fetch';
 import React, { useEffect, useState } from 'react';
 import { Controlled as CodeMirror } from 'react-codemirror2';
 import { formatDate } from '../../utils/token';
-
+import 'codemirror/lib/codemirror.css';
+import 'codemirror/theme/3024-day.css';
 type stateType = {
   configs: any[];
   currentConfigLeft: string;
@@ -66,6 +68,9 @@ const SystemConfigurationComponent = (props) => {
       }
     }
   }
+
+  const classes = useStyles();
+
   return (
     <>
       <div style={{ marginTop: '20px' }} className="row">
@@ -81,34 +86,34 @@ const SystemConfigurationComponent = (props) => {
                     onClick={(e) => onClick(e, 'save')}
                     style={{ float: 'right' }}
                     variant="contained"
-                    color="primary"
+                    className={classes.inactiveButton}
                   >
                     Save
                   </Button>
                   <Button
                     onClick={() => setEditState(!editState)}
-                    style={{ float: 'right' }}
+                    style={{ float: 'right', marginRight: '5px' }}
                     variant="contained"
-                    color="secondary"
+                    className={classes.cancelButton}
                   >
                     cancel
                   </Button>{' '}
                 </>
               ) : (
-                <Button
-                  onClick={() => setEditState(!editState)}
-                  style={{ float: 'right' }}
-                  variant="contained"
-                  color="secondary"
-                >
-                  Edit
-                </Button>
-              )}
+                  <Button
+                    onClick={() => setEditState(!editState)}
+                    style={{ float: 'right' }}
+                    variant="contained"
+                    className={classes.button}
+                  >
+                    Edit
+                  </Button>
+                )}
               <Button
                 onClick={(e) => onClick(e, 'load')}
-                style={{ float: 'right' }}
+                style={{ float: 'right', marginRight: '10px' }}
                 variant="contained"
-                color="primary"
+                className={classes.button}
               >
                 Load AS-SETs
               </Button>
@@ -131,11 +136,11 @@ const SystemConfigurationComponent = (props) => {
                 ref={configRef}
                 value={configState}
                 options={{
-                  mode: 'yaml',
+                  mode: 'jsx',
                   styleActiveLine: true,
                   foldGutter: true,
                   gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter'],
-                  theme: 'material',
+                  theme: '3024-day',
                   lineNumbers: true,
                 }}
                 onBeforeChange={(editor, data, value) => {
@@ -147,8 +152,8 @@ const SystemConfigurationComponent = (props) => {
                   Last Update:{' '}
                   {CONFIG_DATA
                     ? formatDate(
-                        new Date(CONFIG_DATA.view_configs[0].time_modified)
-                      )
+                      new Date(CONFIG_DATA.view_configs[0].time_modified)
+                    )
                     : 'Never'}
                 </span>
                 <span style={{ float: 'right' }}>
@@ -172,11 +177,11 @@ const SystemConfigurationComponent = (props) => {
                 ref={commentRef}
                 value={commentState}
                 options={{
-                  mode: 'yaml',
+                  mode: 'text',
                   styleActiveLine: true,
                   foldGutter: true,
                   gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter'],
-                  theme: 'material',
+                  theme: '3024-day',
                   lineNumbers: true,
                 }}
                 onBeforeChange={(editor, data, value) => {

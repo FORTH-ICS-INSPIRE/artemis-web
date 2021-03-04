@@ -29,7 +29,7 @@ import {
 import Tooltip from '../tooltip/tooltip';
 import ErrorBoundary from '../error-boundary/error-boundary';
 import { sendData } from '../../utils/fetch-data';
-import { useStyles } from 'apps/artemis-web/utils/styles';
+import { useStyles } from '../../utils/styles';
 
 const getExactMatchFilter = (stateValue, fieldName) =>
   textFilter({
@@ -276,8 +276,8 @@ function handleData(
           row.resolved || row.under_mitigation ? (
             <img alt="" src="./handled.png" />
           ) : (
-            <img alt="" src="./unhadled.png" />
-          ),
+              <img alt="" src="./unhadled.png" />
+            ),
         key: row.key,
         more: <Link href={`/hijack?key=${row.key}`}>View</Link>,
       };
@@ -390,11 +390,10 @@ const HijackTableComponent = (props) => {
             key={option.text}
             value={option.text}
             onClick={() => onSizePerPageChange(option.page)}
-            className={`btn ${
-              currSizePerPage === `${option.page}`
+            className={`btn ${currSizePerPage === `${option.page}`
                 ? 'btn-secondary'
                 : 'btn-warning'
-            }`}
+              }`}
           >
             {option.text}
           </option>
@@ -471,8 +470,8 @@ const HijackTableComponent = (props) => {
       x.document.open();
       x.document.write(
         '<html><body><pre>' +
-          JSON.stringify(await res.json(), null, '\t') +
-          '</pre></body></html>'
+        JSON.stringify(await res.json(), null, '\t') +
+        '</pre></body></html>'
       );
       x.document.close();
     };

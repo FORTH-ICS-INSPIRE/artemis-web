@@ -87,6 +87,27 @@ export const useStyles = makeStyles((_theme) => ({
     margin: _theme.spacing(1),
     backgroundColor: _theme.palette.secondary.main,
   },
+  activeButton: {
+    color: 'white',
+    backgroundColor: '#28a745',
+    '&:hover, &:focus': {
+      backgroundColor: '#28a745',
+    },
+  },
+  inactiveButton: {
+    color: 'white',
+    backgroundColor: '#DC3545',
+    '&:hover, &:focus': {
+      backgroundColor: '#DC3545',
+    },
+  },
+  cancelButton: {
+    color: 'black',
+    backgroundColor: '#FFC107',
+    '&:hover, &:focus': {
+      backgroundColor: '#FFC107',
+    },
+  },
   button: {
     color: 'white',
     backgroundColor: '#007bff',

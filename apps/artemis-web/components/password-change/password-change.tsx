@@ -52,7 +52,7 @@ const PasswordChange = (props) => {
         <div className={classes.paper}>
           <img
             width="150"
-            src="./login.png"
+            src="./password.png"
             alt="avatar"
             className="img-responsive"
           />
