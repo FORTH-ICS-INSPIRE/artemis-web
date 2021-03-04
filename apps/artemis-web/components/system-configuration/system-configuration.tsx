@@ -6,6 +6,7 @@ import { Controlled as CodeMirror } from 'react-codemirror2';
 import { formatDate } from '../../utils/token';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/3024-day.css';
+
 type stateType = {
   configs: any[];
   currentConfigLeft: string;
@@ -70,6 +71,7 @@ const SystemConfigurationComponent = (props) => {
   }
 
   const classes = useStyles();
+  require('codemirror/mode/yaml/yaml');
 
   return (
     <>
@@ -100,15 +102,15 @@ const SystemConfigurationComponent = (props) => {
                   </Button>{' '}
                 </>
               ) : (
-                  <Button
-                    onClick={() => setEditState(!editState)}
-                    style={{ float: 'right' }}
-                    variant="contained"
-                    className={classes.button}
-                  >
-                    Edit
-                  </Button>
-                )}
+                <Button
+                  onClick={() => setEditState(!editState)}
+                  style={{ float: 'right' }}
+                  variant="contained"
+                  className={classes.button}
+                >
+                  Edit
+                </Button>
+              )}
               <Button
                 onClick={(e) => onClick(e, 'load')}
                 style={{ float: 'right', marginRight: '10px' }}
@@ -136,7 +138,7 @@ const SystemConfigurationComponent = (props) => {
                 ref={configRef}
                 value={configState}
                 options={{
-                  mode: 'jsx',
+                  mode: 'yaml',
                   styleActiveLine: true,
                   foldGutter: true,
                   gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter'],
@@ -152,8 +154,8 @@ const SystemConfigurationComponent = (props) => {
                   Last Update:{' '}
                   {CONFIG_DATA
                     ? formatDate(
-                      new Date(CONFIG_DATA.view_configs[0].time_modified)
-                    )
+                        new Date(CONFIG_DATA.view_configs[0].time_modified)
+                      )
                     : 'Never'}
                 </span>
                 <span style={{ float: 'right' }}>

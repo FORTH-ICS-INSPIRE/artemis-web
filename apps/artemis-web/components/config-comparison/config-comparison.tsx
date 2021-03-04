@@ -32,6 +32,7 @@ class ConfigComparisonComponent extends Component<unknown, stateType> {
       require('codemirror/addon/lint/lint');
       require('codemirror/addon/lint/javascript-lint');
       require('codemirror/addon/merge/merge');
+      require('codemirror/mode/yaml/yaml');
     }
 
     this.state = {
