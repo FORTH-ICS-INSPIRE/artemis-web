@@ -101,6 +101,13 @@ export const useStyles = makeStyles((_theme) => ({
       backgroundColor: '#DC3545',
     },
   },
+  filterButton: {
+    color: 'black',
+    backgroundColor: '#FFC107',
+    '&:hover, &:focus': {
+      backgroundColor: '#FFC107',
+    },
+  },
   cancelButton: {
     color: 'black',
     backgroundColor: '#FFC107',

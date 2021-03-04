@@ -117,14 +117,19 @@ const HijacksPage = (props) => {
             <div className="col-lg-1" />
             <div className="col-lg-10">
               <div className="card">
-                <div className="card-header">
+                <div
+                  className="card-header"
+                  style={{ backgroundColor: 'white' }}
+                >
                   <div className="row">
                     <div className="col-lg-4">
                       <div className="row">
                         <div className="col-lg-12">
                           <Button
                             className={
-                              0 === filterButton ? 'selectedButton' : ''
+                              0 === filterButton
+                                ? 'selectedButton'
+                                : 'defaultButton'
                             }
                             style={{ marginRight: '5px' }}
                             variant="outlined"
@@ -141,7 +146,9 @@ const HijacksPage = (props) => {
                           </Button>
                           <Button
                             className={
-                              1 === filterButton ? 'selectedButton' : ''
+                              1 === filterButton
+                                ? 'selectedButton'
+                                : 'defaultButton'
                             }
                             style={{ marginRight: '5px' }}
                             variant="outlined"
@@ -158,7 +165,9 @@ const HijacksPage = (props) => {
                           </Button>
                           <Button
                             className={
-                              2 === filterButton ? 'selectedButton' : ''
+                              2 === filterButton
+                                ? 'selectedButton'
+                                : 'defaultButton'
                             }
                             style={{ marginRight: '5px' }}
                             variant="outlined"
@@ -175,7 +184,9 @@ const HijacksPage = (props) => {
                           </Button>
                           <Button
                             className={
-                              3 === filterButton ? 'selectedButton' : ''
+                              3 === filterButton
+                                ? 'selectedButton'
+                                : 'defaultButton'
                             }
                             variant="outlined"
                             style={{ marginRight: '5px' }}
@@ -192,7 +203,9 @@ const HijacksPage = (props) => {
                           </Button>
                           <Button
                             className={
-                              4 === filterButton ? 'selectedButton' : ''
+                              4 === filterButton
+                                ? 'selectedButton'
+                                : 'defaultButton'
                             }
                             style={{ marginRight: '5px' }}
                             variant="outlined"

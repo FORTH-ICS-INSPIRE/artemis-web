@@ -107,7 +107,11 @@ const BGPUpdates = (props) => {
                   <div className="row">
                     <div className="col-lg-12">
                       <Button
-                        className={0 === filterButton ? 'selectedButton' : ''}
+                        className={
+                          0 === filterButton
+                            ? 'selectedButton'
+                            : 'defaultButton'
+                        }
                         style={{ marginRight: '5px' }}
                         variant="outlined"
                         color="primary"
@@ -122,7 +126,11 @@ const BGPUpdates = (props) => {
                         All
                       </Button>
                       <Button
-                        className={1 === filterButton ? 'selectedButton' : ''}
+                        className={
+                          1 === filterButton
+                            ? 'selectedButton'
+                            : 'defaultButton'
+                        }
                         style={{ marginRight: '5px' }}
                         variant="outlined"
                         color="primary"
@@ -137,7 +145,11 @@ const BGPUpdates = (props) => {
                         Past 1h
                       </Button>
                       <Button
-                        className={2 === filterButton ? 'selectedButton' : ''}
+                        className={
+                          2 === filterButton
+                            ? 'selectedButton'
+                            : 'defaultButton'
+                        }
                         style={{ marginRight: '5px' }}
                         variant="outlined"
                         color="primary"
@@ -152,7 +164,11 @@ const BGPUpdates = (props) => {
                         Past 24h
                       </Button>
                       <Button
-                        className={3 === filterButton ? 'selectedButton' : ''}
+                        className={
+                          3 === filterButton
+                            ? 'selectedButton'
+                            : 'defaultButton'
+                        }
                         style={{ marginRight: '5px' }}
                         variant="outlined"
                         color="primary"
@@ -167,7 +183,11 @@ const BGPUpdates = (props) => {
                         Past 48h
                       </Button>
                       <Button
-                        className={4 === filterButton ? 'selectedButton' : ''}
+                        className={
+                          4 === filterButton
+                            ? 'selectedButton'
+                            : 'defaultButton'
+                        }
                         style={{ marginRight: '5px' }}
                         variant="outlined"
                         color="primary"
