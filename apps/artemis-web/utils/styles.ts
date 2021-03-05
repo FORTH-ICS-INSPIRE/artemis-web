@@ -74,6 +74,61 @@ export const AntSwitch = withStyles((theme: Theme) =>
   })
 )(Switch);
 
+export const styles = (_theme) => ({
+  avatar: {
+    margin: _theme.spacing(1),
+    backgroundColor: _theme.palette.secondary.main,
+  },
+  activeButton: {
+    color: 'white',
+    backgroundColor: '#28a745',
+    '&:hover, &:focus': {
+      backgroundColor: '#28a745',
+    },
+  },
+  inactiveButton: {
+    color: 'white',
+    backgroundColor: '#DC3545',
+    '&:hover, &:focus': {
+      backgroundColor: '#DC3545',
+    },
+  },
+  filterButton: {
+    color: 'black',
+    backgroundColor: '#FFC107',
+    '&:hover, &:focus': {
+      backgroundColor: '#FFC107',
+    },
+  },
+  cancelButton: {
+    color: 'black',
+    backgroundColor: '#FFC107',
+    '&:hover, &:focus': {
+      backgroundColor: '#FFC107',
+    },
+  },
+  button: {
+    color: 'white',
+    backgroundColor: '#007bff',
+    '&:hover, &:focus': {
+      backgroundColor: '#007bff',
+    },
+  },
+  form: {
+    width: '100%', // Fix IE 11 issue.
+    marginTop: _theme.spacing(3),
+  },
+  submit: {
+    margin: _theme.spacing(3, 0, 2),
+  },
+  input: {
+    color: 'black',
+    marginTop: '15px',
+    marginBottom: '15px',
+    fontSize: '1.75rem',
+  },
+});
+
 export const useStyles = makeStyles((_theme) => ({
   paper: {
     // marginTop: _theme.spacing(16),

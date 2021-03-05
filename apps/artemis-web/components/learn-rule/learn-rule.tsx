@@ -1,4 +1,5 @@
-import { Button } from '@material-ui/core';
+import { Button, withStyles } from '@material-ui/core';
+import { styles } from '../../utils/styles';
 import DMP from 'diff_match_patch';
 import React, { Component } from 'react';
 import { sendData } from '../../utils/fetch-data';
@@ -12,7 +13,7 @@ type stateType = {
 };
 
 class LearnRuleComponent extends Component<
-  { hijack: any; config: any },
+  { hijack: any; config: any; classes: any },
   stateType
 > {
   CodeMirror: any;
@@ -113,6 +114,8 @@ class LearnRuleComponent extends Component<
   }
 
   render() {
+    const { classes } = this.props;
+
     return (
       <div className="row">
         <div className="card" style={{ width: '100%' }}>
@@ -127,10 +130,10 @@ class LearnRuleComponent extends Component<
               <div className="col-lg-6" />
               <div className="col-lg-6">
                 <Button
-                  className="btn btn-success"
+                  className={classes.cancelButton}
                   style={{ float: 'right', marginLeft: '10px' }}
                   variant="contained"
-                  color="secondary"
+                  // color="secondary"
                   onClick={async (e) => {
                     await sendData(e, {
                       hijackKeys: [this.hijack.key],
@@ -143,10 +146,10 @@ class LearnRuleComponent extends Component<
                   Procceed with no change
                 </Button>
                 <Button
-                  className="btn btn-success"
+                  className={classes.button}
                   style={{ float: 'right', marginBottom: '10px' }}
                   variant="contained"
-                  color="primary"
+                  // color="primary"
                   onClick={(e) => this.learnRule(e)}
                 >
                   Add rule
@@ -160,4 +163,4 @@ class LearnRuleComponent extends Component<
   }
 }
 
-export default LearnRuleComponent;
+export default withStyles(styles)(LearnRuleComponent);
