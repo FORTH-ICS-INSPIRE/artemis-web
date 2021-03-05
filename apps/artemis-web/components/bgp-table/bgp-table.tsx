@@ -96,10 +96,13 @@ const getExpandRow = (expandState, tooltips, setTooltips, context) => {
                   )}
                 </b>
               </td>
-              <td>
+              <td style={{ textAlign: 'center' }}>
                 {row.as_path.map((asn, j) => {
                   return (
-                    <div key={j} style={{ float: 'left', marginLeft: '4px' }}>
+                    <div
+                      key={j}
+                      style={{ display: 'inline-block', marginLeft: '4px' }}
+                    >
                       <Tooltip
                         tooltips={tooltips}
                         setTooltips={setTooltips}

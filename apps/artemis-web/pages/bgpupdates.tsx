@@ -17,7 +17,7 @@ import BGPTableComponent from '../components/bgp-table/bgp-table';
 import Tooltip from '../components/tooltip/tooltip';
 import TooltipContext from '../context/tooltip-context';
 import { AntSwitch, useStyles } from '../utils/styles';
-import { getSimpleDates, shallMock } from '../utils/token';
+import { genTooltip, getSimpleDates, shallMock } from '../utils/token';
 
 const BGPUpdates = (props) => {
   const [isLive, setIsLive] = useState(true);
@@ -126,7 +126,13 @@ const BGPUpdates = (props) => {
                           setDistinctValues([]);
                         }}
                       >
-                        All
+                        {genTooltip(
+                          'All',
+                          null,
+                          'All',
+                          'The time window for seeing BGP updates or hijack events.',
+                          'timefilter'
+                        )}
                       </Button>
                       <Button
                         className={
@@ -145,7 +151,13 @@ const BGPUpdates = (props) => {
                           setDistinctValues([]);
                         }}
                       >
-                        Past 1h
+                        {genTooltip(
+                          'Past 1h',
+                          null,
+                          'Past 1h',
+                          'The time window for seeing BGP updates or hijack events.',
+                          'timefilter'
+                        )}
                       </Button>
                       <Button
                         className={
@@ -164,7 +176,13 @@ const BGPUpdates = (props) => {
                           setDistinctValues([]);
                         }}
                       >
-                        Past 24h
+                        {genTooltip(
+                          'Past 24h',
+                          null,
+                          'Past 24h',
+                          'The time window for seeing BGP updates or hijack events.',
+                          'timefilter'
+                        )}
                       </Button>
                       <Button
                         className={
@@ -183,7 +201,13 @@ const BGPUpdates = (props) => {
                           setDistinctValues([]);
                         }}
                       >
-                        Past 48h
+                        {genTooltip(
+                          'Past 48h',
+                          null,
+                          'Past 48h',
+                          'The time window for seeing BGP updates or hijack events.',
+                          'timefilter'
+                        )}
                       </Button>
                       <Button
                         className={
@@ -200,7 +224,13 @@ const BGPUpdates = (props) => {
                           setDistinctValues([]);
                         }}
                       >
-                        Custom
+                        {genTooltip(
+                          'Custom',
+                          null,
+                          'Custom',
+                          'The time window for seeing BGP updates or hijack events.',
+                          'timefilter'
+                        )}
                       </Button>
                     </div>
                   </div>

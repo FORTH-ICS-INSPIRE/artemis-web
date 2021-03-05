@@ -52,7 +52,13 @@ export const diffDate = (date1, date2): string => {
 export const fromEntries = (xs: [string | number | symbol, any][]) =>
   xs.reduce((acc, [key, value]) => ({ ...acc, [key]: value }), {});
 
-export const genTooltip = (column, components, label, text): any => (
+export const genTooltip = (
+  column,
+  components,
+  label,
+  text,
+  classname = null
+): any => (
   <>
     <div data-tip data-for={label}>
       {
@@ -61,7 +67,7 @@ export const genTooltip = (column, components, label, text): any => (
         </span>
       }
     </div>
-    <ReactTooltip html={true} id={label}>
+    <ReactTooltip className={classname ?? ''} html={true} id={label}>
       {text}
     </ReactTooltip>
   </>

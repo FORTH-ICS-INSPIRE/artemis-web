@@ -18,7 +18,7 @@ import HijackTableComponent from '../components/hijack-table/hijack-table';
 import Tooltip from '../components/tooltip/tooltip';
 import TooltipContext from '../context/tooltip-context';
 import { AntSwitch, useStyles } from '../utils/styles';
-import { getSimpleDates, shallMock } from '../utils/token';
+import { genTooltip, getSimpleDates, shallMock } from '../utils/token';
 
 const HijacksPage = (props) => {
   const [isLive, setIsLive] = useState(true);
@@ -142,7 +142,13 @@ const HijacksPage = (props) => {
                               setDistinctValues([]);
                             }}
                           >
-                            All
+                            {genTooltip(
+                              'All',
+                              null,
+                              'All',
+                              'The time window for seeing BGP updates or hijack events.',
+                              'timefilter'
+                            )}
                           </Button>
                           <Button
                             className={
@@ -161,7 +167,13 @@ const HijacksPage = (props) => {
                               setDistinctValues([]);
                             }}
                           >
-                            Past 1h
+                            {genTooltip(
+                              'Past 1h',
+                              null,
+                              'Past 1h',
+                              'The time window for seeing BGP updates or hijack events.',
+                              'timefilter'
+                            )}
                           </Button>
                           <Button
                             className={
@@ -180,7 +192,13 @@ const HijacksPage = (props) => {
                               setDistinctValues([]);
                             }}
                           >
-                            Past 24h
+                            {genTooltip(
+                              'Past 24h',
+                              null,
+                              'Past 24h',
+                              'The time window for seeing BGP updates or hijack events.',
+                              'timefilter'
+                            )}
                           </Button>
                           <Button
                             className={
@@ -199,7 +217,13 @@ const HijacksPage = (props) => {
                               setDistinctValues([]);
                             }}
                           >
-                            Past 48h
+                            {genTooltip(
+                              'Past 48h',
+                              null,
+                              'Past 48h',
+                              'The time window for seeing BGP updates or hijack events.',
+                              'timefilter'
+                            )}
                           </Button>
                           <Button
                             className={
@@ -216,7 +240,13 @@ const HijacksPage = (props) => {
                               setDistinctValues([]);
                             }}
                           >
-                            Custom
+                            {genTooltip(
+                              'Custom',
+                              null,
+                              'Custom',
+                              'The time window for seeing BGP updates or hijack events.',
+                              'timefilter'
+                            )}
                           </Button>
                         </div>
                       </div>
@@ -332,7 +362,13 @@ const HijacksPage = (props) => {
                     data-placement="top"
                     data-original-title='<p class="tooltip-custom-margin">Ongoing hijack events</br>(not ignored or resolved).</p>'
                   >
-                    Ongoing
+                    {genTooltip(
+                      'Ongoing',
+                      null,
+                      'Ongoing',
+                      'Ongoing hijack events</br>(not ignored or resolved).'
+                      // 'timefilter'
+                    )}
                   </button>{' '}
                   /
                   <button
@@ -351,7 +387,13 @@ const HijacksPage = (props) => {
                     data-placement="top"
                     data-original-title='<p class="tooltip-custom-margin">Dormant hijack events</br>(ongoing, but not updated within the last X hours).</p>'
                   >
-                    Dormant
+                    {genTooltip(
+                      'Dormant',
+                      null,
+                      'Dormant',
+                      'Dormant hijack events</br>(ongoing, but not updated within the last X hours).'
+                      // 'timefilter'
+                    )}
                   </button>{' '}
                   /
                   <button
@@ -370,7 +412,13 @@ const HijacksPage = (props) => {
                     data-placement="top"
                     data-original-title='<p class="tooltip-custom-margin">Resolved hijack events</br>(marked by the user).</p>'
                   >
-                    Resolved
+                    {genTooltip(
+                      'Resolved',
+                      null,
+                      'Resolved',
+                      'Resolved hijack events</br>(marked by the user).'
+                      // 'timefilter'
+                    )}
                   </button>{' '}
                   /
                   <button
@@ -389,7 +437,13 @@ const HijacksPage = (props) => {
                     data-placement="top"
                     data-original-title='<p class="tooltip-custom-margin">Ignored hijack events</br>(marked by the user).</p>'
                   >
-                    Ignored
+                    {genTooltip(
+                      'Ignored',
+                      null,
+                      'Ignored',
+                      'Ignored hijack events</br>(marked by the user).'
+                      // 'timefilter'
+                    )}
                   </button>{' '}
                   /
                   <button
@@ -406,9 +460,15 @@ const HijacksPage = (props) => {
                     title=""
                     data-toggle="tooltip"
                     data-placement="top"
-                    data-original-title='<p class="tooltip-custom-margin">Hijack events that are currently under mitigation</br>(triggered by the user).</p>'
+                    data-original-title='<p class="tooltip-custom-margin">Hijack events that are currently under mitigation (triggered by the user)</br>Hijack events that are currently under mitigation</br>(triggered by the user).</p>'
                   >
-                    Under Mitigation
+                    {genTooltip(
+                      'Under Mitigation',
+                      null,
+                      'Under Mitigation',
+                      'Hijack events that are currently under mitigation</br>(triggered by the user).'
+                      // 'timefilter'
+                    )}
                   </button>{' '}
                   /
                   <button
@@ -427,7 +487,13 @@ const HijacksPage = (props) => {
                     data-placement="top"
                     data-original-title='<p class="tooltip-custom-margin">Withdrawn hijack events</br>(marked automatically).</p>'
                   >
-                    Withdrawn
+                    {genTooltip(
+                      'Withdrawn',
+                      null,
+                      'Withdrawn',
+                      'Withdrawn hijack events</br>(marked automatically).'
+                      // 'timefilter'
+                    )}
                   </button>{' '}
                   /
                   <button
@@ -446,7 +512,13 @@ const HijacksPage = (props) => {
                     data-placement="top"
                     data-original-title='<p class="tooltip-custom-margin">Hijack events that match a configuration that is now deprecated</br>(marked by the user).</p>'
                   >
-                    Outdated
+                    {genTooltip(
+                      'Outdated',
+                      null,
+                      'Outdated',
+                      'Hijack events that match a configuration that is now deprecated</br>(marked by the user).'
+                      // 'timefilter'
+                    )}
                   </button>
                   <span style={{ float: 'right' }}>
                     Times are shown in your local time zone{' '}

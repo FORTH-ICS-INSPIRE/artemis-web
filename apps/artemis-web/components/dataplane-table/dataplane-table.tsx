@@ -89,7 +89,7 @@ const getColumns = () => [
     },
   },
   {
-    dataField: 'hijacker_as',
+    dataField: 'hijack_as_original',
     headerTitle: false,
     headerFormatter: (column, colIndex, components) =>
       genTooltip(
@@ -139,11 +139,11 @@ function handleData(dataplaneData, tooltips, setTooltips, context) {
 
   if (dataplaneData && dataplaneData.length) {
     dataplane = dataplaneData.map((row, i) => {
-      const hijack_as = (
+      const hijacker_as = (
         <Tooltip
           tooltips={tooltips}
           setTooltips={setTooltips}
-          asn={row['hijack_as']}
+          asn={row['hijacker_as']}
           label={`hijack_as${i}`}
           context={context}
         />
@@ -151,7 +151,7 @@ function handleData(dataplaneData, tooltips, setTooltips, context) {
 
       return {
         ...row,
-        hijack_as_original: hijack_as,
+        hijack_as_original: hijacker_as,
       };
     });
   } else {
