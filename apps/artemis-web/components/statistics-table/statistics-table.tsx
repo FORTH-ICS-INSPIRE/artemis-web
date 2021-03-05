@@ -71,7 +71,7 @@ class StatisticsTable extends Component<StatisticsType, unknown> {
                         {firstCaps}
                       </div>
                       <ReactTooltip html={true} id={'stats' + i}>
-                        {tooltips[i - 1]}
+                        {tooltips[i]}
                       </ReactTooltip>
                     </td>
                     <td>{stat[1]}</td>

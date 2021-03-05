@@ -66,6 +66,23 @@ class StatusTable extends Component<StatsType, any> {
         )
     );
 
+    monitor.sort(function (a, b) {
+      const keyA = a.name,
+        keyB = b.name;
+
+      if (keyA < keyB) return -1;
+      if (keyA > keyB) return 1;
+      return 0;
+    });
+    backend.sort(function (a, b) {
+      const keyA = a.name,
+        keyB = b.name;
+
+      if (keyA < keyB) return -1;
+      if (keyA > keyB) return 1;
+      return 0;
+    });
+
     const tooltips = {
       autoignore:
         'Backend microservice that automatically ignores hijack alerts of low impact and/or visibility based on user configuration.',

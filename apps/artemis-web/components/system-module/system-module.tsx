@@ -30,6 +30,7 @@ const SystemModule = (props) => {
             <div className="col-lg-6">
               <Button
                 variant="contained"
+                style={{ marginTop: '9px' }}
                 className={
                   state[module] ? classes.activeButton : classes.inactiveButton
                 }
