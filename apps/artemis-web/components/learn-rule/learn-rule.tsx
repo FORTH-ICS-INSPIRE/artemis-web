@@ -39,6 +39,8 @@ class LearnRuleComponent extends Component<
       require('codemirror/addon/lint/lint');
       require('codemirror/addon/lint/javascript-lint');
       require('codemirror/addon/merge/merge');
+      require('codemirror/mode/yaml/yaml');
+      require('codemirror/theme/3024-day.css');
     }
 
     this.state = {
@@ -95,7 +97,7 @@ class LearnRuleComponent extends Component<
         config.substring(config.indexOf('monitors:'), config.length);
 
       this.CodeMirror.MergeView(this._ref, {
-        theme: 'material',
+        theme: '3024-day',
         value: config,
         origLeft: null,
         origRight: configRight,
