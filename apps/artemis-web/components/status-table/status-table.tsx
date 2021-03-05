@@ -54,19 +54,19 @@ class StatusTable extends Component<StatsType, any> {
       }
     });
     const monitorModules = this.monitorModules;
-    const monitor = STATS_DATA.view_processes.filter((module) =>
+    let monitor = STATS_DATA.view_processes.filter((module) =>
       monitorModules.includes(
         module.name.substring(0, module.name.indexOf('-'))
       )
     );
-    const backend = STATS_DATA.view_processes.filter(
+    let backend = STATS_DATA.view_processes.filter(
       (module) =>
         !monitorModules.includes(
           module.name.substring(0, module.name.indexOf('-'))
         )
     );
 
-    monitor.sort(function (a, b) {
+    monitor = monitor.sort(function (a, b) {
       const keyA = a.name,
         keyB = b.name;
 
@@ -74,7 +74,7 @@ class StatusTable extends Component<StatsType, any> {
       if (keyA > keyB) return 1;
       return 0;
     });
-    backend.sort(function (a, b) {
+    backend = backend.sort(function (a, b) {
       const keyA = a.name,
         keyB = b.name;
 
