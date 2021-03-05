@@ -122,7 +122,7 @@ const HijacksPage = (props) => {
                   style={{ backgroundColor: 'white' }}
                 >
                   <div className="row">
-                    <div className="col-lg-4">
+                    <div className="col-lg-5">
                       <div className="row">
                         <div className="col-lg-12">
                           <Button
@@ -267,7 +267,7 @@ const HijacksPage = (props) => {
                         </div>
                       </div>
                     </div>
-                    <div className="col-lg-5 offset-lg-3">
+                    <div className="col-lg-5 offset-lg-1">
                       <div
                         className="form-group row"
                         style={{ textAlign: 'right' }}

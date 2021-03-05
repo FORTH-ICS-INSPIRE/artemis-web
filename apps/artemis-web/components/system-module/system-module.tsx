@@ -26,18 +26,25 @@ const SystemModule = (props) => {
         <div className="card-header"> {labels[key]} </div>
         <div className="card-body">
           <div className="row">
-            <div className="col-lg-2" />
-            <div className="col-lg-5">
+            <div className="col-lg-1" />
+            <div className="col-lg-6">
               <Button
                 variant="contained"
                 className={
                   state[module] ? classes.activeButton : classes.inactiveButton
                 }
               >
-                {`Active (${totalActive}/${totalModules})`}
+                {
+                  <span>
+                    Active{' '}
+                    <span className="badge badge-light">
+                      {totalActive}/{totalModules}
+                    </span>
+                  </span>
+                }
               </Button>
             </div>
-            <div className="col-lg-3">
+            <div className="col-lg-4">
               <FormGroup>
                 <FormControlLabel
                   control={
