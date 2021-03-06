@@ -68,7 +68,7 @@ const ViewHijackPage = (props) => {
 
   useGraphQl('hijackByKey', {
     callback: (data) => {
-      const hijacks = data.view_hijacks;
+      const hijacks = data.subscriptionData.data.view_hijacks;
       const hijackExists = hijacks.length !== 0;
 
       if (!hijackExists) {
@@ -82,7 +82,7 @@ const ViewHijackPage = (props) => {
         );
       }
     },
-    isLive: false,
+    isLive: true,
     key: hijackKey,
     sortOrder: 'desc',
     sortColumn: 'time_last',
