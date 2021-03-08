@@ -11,7 +11,7 @@ type MyProps = {
   };
 };
 
-class Footer extends React.Component<MyProps> {
+class FooterComponent extends React.Component<MyProps> {
   render() {
     const { classes } = this.props;
     const { root, footer, link } = classes;
@@ -29,9 +29,9 @@ class Footer extends React.Component<MyProps> {
   }
 }
 
-const Styles = () => {
+const Footer = () => {
   const classes = useFooterStyles();
-  return <Footer classes={classes} />;
+  return <FooterComponent classes={classes} />;
 };
 
-export default Styles;
+export default Footer;

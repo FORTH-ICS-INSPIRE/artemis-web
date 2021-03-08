@@ -154,7 +154,13 @@ const SystemConfigurationComponent = (props) => {
                   Last Update:{' '}
                   {CONFIG_DATA
                     ? formatDate(
-                        new Date(CONFIG_DATA.view_configs[0].time_modified)
+                        new Date(
+                          new Date(
+                            CONFIG_DATA.view_configs[0].time_modified
+                          ).toLocaleString('en-US', {
+                            timeZone: 'Europe/Athens',
+                          })
+                        )
                       )
                     : 'Never'}
                 </span>

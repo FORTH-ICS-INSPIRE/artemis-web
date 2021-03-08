@@ -129,7 +129,8 @@ class ConfigComparisonComponent extends Component<unknown, stateType> {
                   </select>
                 </div>
                 <div className="col-lg-6">
-                  Select config: <br />
+                  <span style={{ marginLeft: '50px' }}>Select config:</span>{' '}
+                  <br />
                   <select
                     onChange={(e) =>
                       this.handleOptions(e.target.value, 'right')
