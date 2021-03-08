@@ -249,8 +249,8 @@ function handleData(
       const _status = findStatus(row);
       return {
         id: i,
-        time_last: formatDate(new Date(row.time_last)),
-        time_detected: formatDate(new Date(row.time_detected)),
+        time_last: formatDate(new Date(row.time_last), 2),
+        time_detected: formatDate(new Date(row.time_detected), 2),
         prefix: row.prefix,
         configured_prefix: row.configured_prefix,
         type: row.type,

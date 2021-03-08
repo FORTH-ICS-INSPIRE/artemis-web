@@ -5,6 +5,7 @@ import Head from 'next/head';
 import React, { useEffect, useState } from 'react';
 import AuthHOC from '../../components/401-hoc/401-hoc';
 import UserListComponent from '../../components/user-list/user-list';
+import { formatDate } from 'apps/artemis-web/utils/token';
 
 const UserManagementPage = (props) => {
   const user = props.user;
@@ -46,9 +47,14 @@ const UserManagementPage = (props) => {
       });
 
       if (res.status === 200) {
-        const list = (await res.json()).filter(
+        let list = (await res.json()).filter(
           (cUser) => cUser.email !== user.email
         );
+        console.log(list);
+        list = list.map((user) => {
+          user.lastLogin = formatDate(new Date(user.lastLogin), 2);
+          return user;
+        });
         setUserList(list);
         setPendingList(list.filter((user) => user.role === 'pending'));
         setNormalList(list.filter((user) => user.role === 'user'));

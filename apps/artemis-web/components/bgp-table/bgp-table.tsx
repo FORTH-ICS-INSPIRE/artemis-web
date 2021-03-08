@@ -459,7 +459,7 @@ function handleData(
   bgp = bgp.map((row, i) =>
     fromEntries(
       Object.entries(row).map(([key, value]: [string, any]) => {
-        if (key === 'timestamp') return [key, formatDate(new Date(value))];
+        if (key === 'timestamp') return [key, formatDate(new Date(value), 2)];
         else if (key === 'service') return [key, value.replace(/\|/g, ' -> ')];
         else if (key === 'as_path') return [key, value];
         else if (key === 'handled')

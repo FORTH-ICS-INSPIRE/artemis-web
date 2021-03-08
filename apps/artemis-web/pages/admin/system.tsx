@@ -77,6 +77,8 @@ const SystemPage = (props) => {
     }
   });
 
+  keys.sort();
+
   if (modules.length !== 0 && keys.length === 0) setState(states);
 
   return (

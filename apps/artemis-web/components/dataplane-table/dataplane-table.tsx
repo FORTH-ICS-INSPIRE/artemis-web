@@ -73,6 +73,22 @@ const getColumns = () => [
     text: 'Target IP',
   },
   {
+    dataField: 'msm_stop_time',
+    headerTitle: false,
+    headerFormatter: (column, colIndex, components) =>
+      genTooltip(
+        column,
+        components,
+        'msm_stop_title',
+        'The date and time that the measurement stops.'
+      ),
+    sort: true,
+    sortCaret: (order) => {
+      return getSortCaret(order);
+    },
+    text: 'Stop Time',
+  },
+  {
     dataField: 'num_of_probes',
     headerTitle: false,
     headerFormatter: (column, colIndex, components) =>
@@ -161,7 +177,10 @@ function handleData(dataplaneData, tooltips, setTooltips, context) {
   dataplane = dataplane.map((row, i) =>
     fromEntries(
       Object.entries(row).map(([key, value]: [string, any]) => {
-        if (key === 'msm_start_time') return [key, formatDate(new Date(value))];
+        if (key === 'msm_start_time')
+          return [key, formatDate(new Date(value), 2)];
+        else if (key === 'msm_stop_time')
+          return [key, formatDate(new Date(value), 2)];
         else return [key, value];
       })
     )

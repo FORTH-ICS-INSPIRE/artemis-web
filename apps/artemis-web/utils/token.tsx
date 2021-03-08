@@ -24,18 +24,23 @@ const appendLeadingZeroes = (n): string => {
   return n;
 };
 
-export const formatDate = (date): string =>
-  date.getFullYear() +
-  '-' +
-  (date.getMonth() + 1) +
-  '-' +
-  date.getDate() +
-  ' ' +
-  appendLeadingZeroes(date.getHours()) +
-  ':' +
-  appendLeadingZeroes(date.getMinutes()) +
-  ':' +
-  appendLeadingZeroes(date.getSeconds());
+export const formatDate = (date, incr = 0): string => {
+  date.setHours(date.getHours() + incr);
+
+  return (
+    date.getFullYear() +
+    '-' +
+    (date.getMonth() + 1) +
+    '-' +
+    date.getDate() +
+    ' ' +
+    appendLeadingZeroes(date.getHours()) +
+    ':' +
+    appendLeadingZeroes(date.getMinutes()) +
+    ':' +
+    appendLeadingZeroes(date.getSeconds())
+  );
+};
 
 export const diffDate = (date1, date2): string => {
   const ms = date2 - date1;

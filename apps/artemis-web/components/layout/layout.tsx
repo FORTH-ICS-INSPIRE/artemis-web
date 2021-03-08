@@ -1,6 +1,7 @@
 import React from 'react';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
+import Footer from '../footer/footer';
 
 export default class Layout extends React.Component<any> {
   render() {
