@@ -43,11 +43,11 @@ describe('artemis-web', () => {
     cy.get('#modules').find('tr').its('length').should('be.gt', 0);
   });
 
-  it('diplays modules', () => {
-    cy.visit('/dashboard');
-    cy.wait(2000);
-    // Custom command example, see `../support/commands.ts` file
-    cy.get('#modules').find('tr').its('length').should('be.gt', 0);
-  });
+  // it('diplays modules', () => {
+  //   cy.visit('/dashboard');
+  //   cy.wait(2000);
+  //   // Custom command example, see `../support/commands.ts` file
+  //   cy.get('#modules').find('tr').its('length').should('be.gt', 0);
+  // });
 
   });
