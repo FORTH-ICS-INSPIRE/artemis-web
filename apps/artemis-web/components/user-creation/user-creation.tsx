@@ -1,4 +1,5 @@
 import { Button, Grid, TextField } from '@material-ui/core';
+import { useStyles } from '../../utils/styles';
 import React, { useState } from 'react';
 
 const UserCreationComponent = (props) => {
@@ -35,6 +36,8 @@ const UserCreationComponent = (props) => {
       setSuccessMsg('');
     }
   };
+
+  const classes = useStyles();
 
   return (
     <form id="password_change_form" method="post" onSubmit={handleSubmit}>
@@ -90,7 +93,8 @@ const UserCreationComponent = (props) => {
             type="submit"
             fullWidth
             variant="contained"
-            color="primary"
+            className={classes.button}
+            // color="primary"
             // className={classes.submit}
             id="submit"
           >

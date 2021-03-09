@@ -1,5 +1,6 @@
 // import { useSubscription } from '@apollo/client/react/hooks/useSubscription';
 import { Button } from '@material-ui/core';
+import { useStyles } from '../../utils/styles';
 import React, { useState } from 'react';
 import BootstrapTable from 'react-bootstrap-table-next';
 import filterFactory from 'react-bootstrap-table2-filter';
@@ -361,13 +362,15 @@ const DataplaneTableComponent = (props) => {
       x.document.close();
     };
 
+    const classes = useStyles();
+
     return (
       <div>
         <Button
-          className="btn btn-success"
+          // className="btn btn-success"
           style={{ float: 'right', marginBottom: '10px' }}
           variant="contained"
-          color="primary"
+          className={classes.button}
           onClick={handleClick}
         >
           Download Table

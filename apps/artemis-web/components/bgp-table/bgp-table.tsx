@@ -418,7 +418,7 @@ function handleData(
         <Tooltip
           tooltips={tooltips}
           setTooltips={setTooltips}
-          asn={row['origin_as']}
+          asn={row['origin_as'] === -1 ? '-' : row['origin_as']}
           label={`origin${i}`}
           context={context}
         />

@@ -5,7 +5,7 @@ import Head from 'next/head';
 import React, { useEffect, useState } from 'react';
 import AuthHOC from '../../components/401-hoc/401-hoc';
 import UserListComponent from '../../components/user-list/user-list';
-import { formatDate } from 'apps/artemis-web/utils/token';
+import { formatDate } from '../../utils/token';
 
 const UserManagementPage = (props) => {
   const user = props.user;
