@@ -43,12 +43,12 @@ const UsersPasswordComponent = (props) => {
       {errorMsg ? <p style={{ color: 'red' }}>{errorMsg}</p> : null}
       {successMsg ? <p style={{ color: 'green' }}>{successMsg}</p> : null}
       <div className="row">
-        <div className="col-lg-12" style={{ fontWeight: 'bold' }}>
+        <div className="col-lg-9 offset-lg-1" style={{ fontWeight: 'bold' }}>
           Select user to change her password:
         </div>
       </div>
       <div className="row" style={{ marginTop: '30px' }}>
-        <div className="col-lg-8">
+        <div className="col-lg-9 offset-lg-1">
           <select
             // ref={promoteRef as React.RefObject<HTMLSelectElement>}
             className="form-control"
@@ -62,7 +62,7 @@ const UsersPasswordComponent = (props) => {
         </div>
       </div>
       <div className="row" style={{ marginTop: '30px' }}>
-        <div className="col-lg-8">
+        <div className="col-lg-9 offset-lg-1">
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <TextField
@@ -79,7 +79,7 @@ const UsersPasswordComponent = (props) => {
         </div>
       </div>
       <div className="row" style={{ marginTop: '15px' }}>
-        <div className="col-lg-8">
+        <div className="col-lg-9 offset-lg-1">
           <Button
             type="submit"
             fullWidth

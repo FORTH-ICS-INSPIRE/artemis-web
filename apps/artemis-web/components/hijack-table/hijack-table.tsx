@@ -255,15 +255,18 @@ function handleData(
         configured_prefix: row.configured_prefix,
         type: row.type,
         as_original: row.hijack_as,
-        hijack_as: (
-          <Tooltip
-            tooltips={tooltips}
-            setTooltips={setTooltips}
-            asn={row.hijack_as}
-            label={`hijack_as_` + i + '_' + offset}
-            context={context}
-          />
-        ),
+        hijack_as:
+          row.hijack_as === -1 ? (
+            <span>-</span>
+          ) : (
+            <Tooltip
+              tooltips={tooltips}
+              setTooltips={setTooltips}
+              asn={row.hijack_as}
+              label={`hijack_as_` + i + '_' + offset}
+              context={context}
+            />
+          ),
         status: (
           <span className={'badge badge-pill badge-' + statuses[_status[0]]}>
             {_status[0]}

@@ -34,27 +34,34 @@ const HijackAS = (props) => {
                   style={props}
                   className={'card-header multi-collapse collapse show'}
                 >
-                  Peers Seen Hijack BGP Announcement:
-                  <Grid container spacing={3}>
-                    {getSeen(hijackDataState).map((value, i) => {
-                      const asn = value;
-                      if (value !== undefined)
-                        return (
-                          <Grid key={i} item xs={3}>
-                            <Paper className={classes.paper}>
-                              <Tooltip
-                                tooltips={tooltips}
-                                setTooltips={setTooltips}
-                                asn={asn}
-                                label={`seen${i}`}
-                                context={context}
-                              />
-                            </Paper>
-                          </Grid>
-                        );
-                      else return <> </>;
-                    })}
-                  </Grid>
+                  <div
+                    className="card-header"
+                    style={{ backgroundColor: 'rgba(0, 0, 0, 0.0)' }}
+                  >
+                    Peers Seen Hijack BGP Announcement:
+                  </div>
+                  <div className="card-body">
+                    <Grid container spacing={3}>
+                      {getSeen(hijackDataState).map((value, i) => {
+                        const asn = value;
+                        if (value !== undefined)
+                          return (
+                            <Grid key={i} item xs={3}>
+                              <Paper className={classes.paper}>
+                                <Tooltip
+                                  tooltips={tooltips}
+                                  setTooltips={setTooltips}
+                                  asn={asn}
+                                  label={`seen${i}`}
+                                  context={context}
+                                />
+                              </Paper>
+                            </Grid>
+                          );
+                        else return <> </>;
+                      })}
+                    </Grid>
+                  </div>
                 </animated.div>
               ) : (
                 <animated.div key={key}></animated.div>
@@ -73,27 +80,34 @@ const HijackAS = (props) => {
                   style={{ ...props, borderTop: '0px' }}
                   className={'card-header multi-collapse collapse show'}
                 >
-                  Peers Seen Hijack BGP Withdrawal:
-                  <Grid container spacing={3}>
-                    {getWithdrawn(hijackDataState).map((value, i) => {
-                      const asn = value;
-                      if (value !== undefined)
-                        return (
-                          <Grid key={i} item xs={3}>
-                            <Paper className={classes.paper}>
-                              <Tooltip
-                                tooltips={tooltips}
-                                setTooltips={setTooltips}
-                                asn={asn}
-                                label={`withdrawn${i}`}
-                                context={context}
-                              />
-                            </Paper>
-                          </Grid>
-                        );
-                      else return <> </>;
-                    })}
-                  </Grid>
+                  <div
+                    className="card-header"
+                    style={{ backgroundColor: 'rgba(0, 0, 0, 0.0)' }}
+                  >
+                    Peers Seen Hijack BGP Withdrawal:
+                  </div>
+                  <div className="card-body">
+                    <Grid container spacing={3}>
+                      {getWithdrawn(hijackDataState).map((value, i) => {
+                        const asn = value;
+                        if (value !== undefined)
+                          return (
+                            <Grid key={i} item xs={3}>
+                              <Paper className={classes.paper}>
+                                <Tooltip
+                                  tooltips={tooltips}
+                                  setTooltips={setTooltips}
+                                  asn={asn}
+                                  label={`withdrawn${i}`}
+                                  context={context}
+                                />
+                              </Paper>
+                            </Grid>
+                          );
+                        else return <> </>;
+                      })}
+                    </Grid>
+                  </div>
                 </animated.div>
               ) : (
                 <animated.div key={key}></animated.div>

@@ -19,6 +19,7 @@ import ToolkitProvider from 'react-bootstrap-table2-toolkit';
 import TooltipContext from '../../context/tooltip-context';
 import { useGraphQl } from '../../utils/hooks/use-graphql';
 import {
+  expandColumnComponent,
   formatDate,
   fromEntries,
   genTooltip,
@@ -26,27 +27,12 @@ import {
   getSortCaret,
   isObjectEmpty,
   shallSubscribe,
+  expandedColumnHeaderComponent,
+  getExactMatchFilter,
+  getTextFilter,
 } from '../../utils/token';
 import ErrorBoundary from '../error-boundary/error-boundary';
 import Tooltip from '../tooltip/tooltip';
-
-const getExactMatchFilter = (stateValue, fieldName) =>
-  textFilter({
-    placeholder: fieldName, // custom the input placeholder
-    className: 'my-custom-text-filter', // custom classname on input
-    defaultValue: stateValue, // default filtering value
-    comparator: Comparator.EQ, // default is Comparator.LIKE
-    caseSensitive: true, // default is false, and true will only work when comparator is LIKE
-    style: {}, // your custom styles on input
-    delay: 1000, // how long will trigger filtering after user typing, default is 500 ms
-    id: 'id', // assign a unique value for htmlFor attribute, it's useful when you have same dataField across multiple table in one page
-  });
-
-const getTextFilter = (stateValue, fieldName) =>
-  textFilter({
-    placeholder: fieldName, // custom the input placeholder
-    defaultValue: stateValue, // default filtering value
-  });
 
 const getExpandRow = (expandState, tooltips, setTooltips, context) => {
   return {
@@ -54,6 +40,8 @@ const getExpandRow = (expandState, tooltips, setTooltips, context) => {
     expandByColumnOnly: true,
     expandColumnPosition: 'right',
     expanded: expandState,
+    expandColumnRenderer: expandColumnComponent,
+    expandHeaderColumnRenderer: expandedColumnHeaderComponent,
     renderer: (row, i) => {
       return (
         <table>
@@ -414,24 +402,30 @@ function handleData(
 
   if (bgpData && bgpData.length) {
     bgp = bgpData.map((row, i) => {
-      const origin_as = (
-        <Tooltip
-          tooltips={tooltips}
-          setTooltips={setTooltips}
-          asn={row['origin_as'] === -1 ? '-' : row['origin_as']}
-          label={`origin${i}`}
-          context={context}
-        />
-      );
-      const peer_as = (
-        <Tooltip
-          tooltips={tooltips}
-          setTooltips={setTooltips}
-          asn={row['peer_asn']}
-          label={`peer${i}`}
-          context={context}
-        />
-      );
+      const origin_as =
+        row['origin_as'] === -1 ? (
+          <span>-</span>
+        ) : (
+          <Tooltip
+            tooltips={tooltips}
+            setTooltips={setTooltips}
+            asn={row['origin_as']}
+            label={`origin${i}`}
+            context={context}
+          />
+        );
+      const peer_as =
+        row['peer_asn'] === -1 ? (
+          <span>-</span>
+        ) : (
+          <Tooltip
+            tooltips={tooltips}
+            setTooltips={setTooltips}
+            asn={row['peer_asn']}
+            label={`peer${i}`}
+            context={context}
+          />
+        );
       const as_path = row.as_path.map((asn, j) => {
         return (
           <div key={j} style={{ float: 'left', marginLeft: '4px' }}>

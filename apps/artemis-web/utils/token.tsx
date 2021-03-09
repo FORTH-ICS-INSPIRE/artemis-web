@@ -1,5 +1,10 @@
 import React from 'react';
 import ReactTooltip from 'react-tooltip';
+import filterFactory, {
+  Comparator,
+  selectFilter,
+  textFilter,
+} from 'react-bootstrap-table2-filter';
 
 export const getRandomString = (len): string => {
   const buf = [],
@@ -183,3 +188,48 @@ export const isUnderMitigation = (hijackDataState): boolean =>
 
 export const isSeen = (hijackDataState): boolean =>
   hijackDataState && hijackDataState.seen;
+
+export const getExactMatchFilter = (stateValue, fieldName) =>
+  textFilter({
+    placeholder: fieldName, // custom the input placeholder
+    className: 'my-custom-text-filter', // custom classname on input
+    defaultValue: stateValue, // default filtering value
+    comparator: Comparator.EQ, // default is Comparator.LIKE
+    caseSensitive: true, // default is false, and true will only work when comparator is LIKE
+    style: {}, // your custom styles on input
+    delay: 1000, // how long will trigger filtering after user typing, default is 500 ms
+    id: 'id', // assign a unique value for htmlFor attribute, it's useful when you have same dataField across multiple table in one page
+  });
+
+export const getTextFilter = (stateValue, fieldName) =>
+  textFilter({
+    placeholder: fieldName, // custom the input placeholder
+    defaultValue: stateValue, // default filtering value
+  });
+
+export const expandColumnComponent = ({ expanded, rowKey, expandable }) => {
+  let content: JSX.Element = <></>;
+
+  if (expandable) {
+    content = expanded ? (
+      <img src="details_close.png" />
+    ) : (
+      <img src="details_open.png" />
+    );
+  } else {
+    content = <></>;
+  }
+  return <div> {content} </div>;
+};
+
+export const expandedColumnHeaderComponent = ({ isAnyExpands }) => {
+  return (
+    <div
+      onClick={(e) => {
+        e.stopPropagation();
+      }}
+    >
+      More
+    </div>
+  );
+};

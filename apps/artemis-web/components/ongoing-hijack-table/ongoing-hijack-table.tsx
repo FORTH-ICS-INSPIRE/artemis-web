@@ -20,27 +20,22 @@ import {
   getSortCaret,
   isObjectEmpty,
   shallSubscribe,
+  expandedColumnHeaderComponent,
+  getExactMatchFilter,
+  getTextFilter,
+  expandColumnComponent,
 } from '../../utils/token';
 import ErrorBoundary from '../error-boundary/error-boundary';
 import Tooltip from '../tooltip/tooltip';
-
-const getExactMatchFilter = (stateValue, fieldName) =>
-  textFilter({
-    placeholder: fieldName, // custom the input placeholder
-    className: 'my-custom-text-filter', // custom classname on input
-    defaultValue: stateValue, // default filtering value
-    comparator: Comparator.EQ, // default is Comparator.LIKE
-    caseSensitive: true, // default is false, and true will only work when comparator is LIKE
-    style: {}, // your custom styles on input
-    delay: 1000, // how long will trigger filtering after user typing, default is 500 ms
-    id: 'id', // assign a unique value for htmlFor attribute, it's useful when you have same dataField across multiple table in one page
-  });
 
 const getExpandRow = (expandState) => {
   return {
     showExpandColumn: true,
     expandByColumnOnly: true,
     expandColumnPosition: 'right',
+    expanded: expandState,
+    expandColumnRenderer: expandColumnComponent,
+    expandHeaderColumnRenderer: expandedColumnHeaderComponent,
     renderer: (row) => {
       return (
         <table>
@@ -383,21 +378,24 @@ function handleData(data, tooltips, setTooltips, context, offset) {
     hijacks = HIJACK_DATA.map((row, i) => {
       return {
         id: i,
-        time_last: formatDate(new Date(row.time_last)),
-        time_detected: formatDate(new Date(row.time_detected)),
+        time_last: formatDate(new Date(row.time_last), 2),
+        time_detected: formatDate(new Date(row.time_detected), 2),
         prefix: row.prefix,
         configured_prefix: row.configured_prefix,
         type: row.type,
         as_original: row.hijack_as,
-        hijack_as: (
-          <Tooltip
-            tooltips={tooltips}
-            setTooltips={setTooltips}
-            asn={row.hijack_as}
-            label={`hijack_as_` + i + '_' + offset}
-            context={context}
-          />
-        ),
+        hijack_as:
+          row.hijack_as === -1 ? (
+            <span>-</span>
+          ) : (
+            <Tooltip
+              tooltips={tooltips}
+              setTooltips={setTooltips}
+              asn={row.hijack_as}
+              label={`hijack_as_` + i + '_' + offset}
+              context={context}
+            />
+          ),
         rpki_status: row.rpki_status,
         num_peers_seen: row.num_peers_seen,
         num_asns_inf: row.num_asns_inf,

@@ -1,4 +1,4 @@
-import { getSortCaret } from 'apps/artemis-web/utils/token';
+import { getSortCaret } from '../../utils/token';
 import React from 'react';
 import BootstrapTable from 'react-bootstrap-table-next';
 

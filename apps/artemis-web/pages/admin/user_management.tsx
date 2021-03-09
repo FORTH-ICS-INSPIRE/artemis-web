@@ -6,6 +6,7 @@ import React, { useEffect, useState } from 'react';
 import AuthHOC from '../../components/401-hoc/401-hoc';
 import UserListComponent from '../../components/user-list/user-list';
 import { formatDate } from '../../utils/token';
+import { useStyles } from '../../utils/styles';
 
 const UserManagementPage = (props) => {
   const user = props.user;
@@ -65,6 +66,8 @@ const UserManagementPage = (props) => {
     })();
   }, [user.email]);
 
+  const classes = useStyles();
+
   return (
     <>
       <Head>
@@ -119,8 +122,9 @@ const UserManagementPage = (props) => {
                             manageUser(e, 'approval', approvalRef.current.value)
                           }
                           id="approval"
-                          variant="outlined"
-                          color="primary"
+                          variant="contained"
+                          className={classes.button}
+                          // color="primary"
                         >
                           Approve User
                         </Button>
@@ -158,8 +162,8 @@ const UserManagementPage = (props) => {
                             manageUser(e, 'promote', promoteRef.current.value)
                           }
                           id="promote"
-                          variant="outlined"
-                          color="primary"
+                          variant="contained"
+                          className={classes.button}
                         >
                           Promote to Admin
                         </Button>
@@ -197,8 +201,8 @@ const UserManagementPage = (props) => {
                             manageUser(e, 'demote', demoteRef.current.value)
                           }
                           id="demote"
-                          variant="outlined"
-                          color="primary"
+                          variant="contained"
+                          className={classes.button}
                         >
                           Demote to User
                         </Button>
@@ -236,8 +240,8 @@ const UserManagementPage = (props) => {
                             manageUser(e, 'delete', deleteRef.current.value)
                           }
                           id="delete"
-                          variant="outlined"
-                          color="primary"
+                          variant="contained"
+                          className={classes.button}
                         >
                           Delete User
                         </Button>

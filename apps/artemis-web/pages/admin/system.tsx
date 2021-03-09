@@ -25,7 +25,7 @@ const SystemPage = (props) => {
   });
   const STATS_DATA: any = STATS_RES?.data;
   let CONFIG_DATA: any = useGraphQl('config', {
-    isLive: false,
+    isLive: true,
     hasDateFilter: false,
     hasColumnFilter: false,
   });

@@ -44,12 +44,12 @@ const UserCreationComponent = (props) => {
       {errorMsg ? <p style={{ color: 'red' }}>{errorMsg}</p> : null}
       {successMsg ? <p style={{ color: 'green' }}>{successMsg}</p> : null}
       <div className="row">
-        <div className="col-lg-12" style={{ fontWeight: 'bold' }}>
+        <div className="col-lg-9 offset-lg-1" style={{ fontWeight: 'bold' }}>
           Credentials for the new user:
         </div>
       </div>
       <div className="row" style={{ marginTop: '30px' }}>
-        <div className="col-lg-8">
+        <div className="col-lg-9 offset-lg-1">
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <TextField
@@ -88,7 +88,7 @@ const UserCreationComponent = (props) => {
         </div>
       </div>
       <div className="row" style={{ marginTop: '15px' }}>
-        <div className="col-lg-8">
+        <div className="col-lg-9 offset-lg-1">
           <Button
             type="submit"
             fullWidth

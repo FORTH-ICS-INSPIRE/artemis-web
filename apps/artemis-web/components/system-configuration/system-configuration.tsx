@@ -149,7 +149,7 @@ const SystemConfigurationComponent = (props) => {
                   if (editState) setConfigState(value);
                 }}
               />
-              <div>
+              <div style={{ marginTop: '4px' }}>
                 <span style={{ float: 'left' }}>
                   Last Update:{' '}
                   {CONFIG_DATA

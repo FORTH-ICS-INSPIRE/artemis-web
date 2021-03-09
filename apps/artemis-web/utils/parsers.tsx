@@ -285,7 +285,7 @@ function extractHijackInfoLeft(
       ),
     ],
     Config: [
-      formatDate(new Date(hijack.timestamp_of_config)),
+      formatDate(new Date(hijack.timestamp_of_config), 2),
       genTooltip(
         'Config:',
         null,
@@ -308,7 +308,7 @@ function extractHijackInfoLeft(
 function extractHijackInfoRight(hijack) {
   const hijackInfo = {
     'Time Started': [
-      formatDate(new Date(hijack.time_started)),
+      formatDate(new Date(hijack.time_started), 2),
       genTooltip(
         'Time Started:',
         null,
@@ -317,7 +317,7 @@ function extractHijackInfoRight(hijack) {
       ),
     ],
     'Time Detected': [
-      formatDate(new Date(hijack.time_detected)),
+      formatDate(new Date(hijack.time_detected), 2),
       genTooltip(
         'Time Detected:',
         null,
@@ -326,7 +326,7 @@ function extractHijackInfoRight(hijack) {
       ),
     ],
     'Last Update': [
-      formatDate(new Date(hijack.time_last)),
+      hijack.time_last ? formatDate(new Date(hijack.time_last), 2) : 'Never',
       genTooltip(
         'Last Update:',
         null,
@@ -335,7 +335,7 @@ function extractHijackInfoRight(hijack) {
       ),
     ],
     'Time Ended': [
-      formatDate(new Date(hijack.time_ended)),
+      hijack.time_ended ? formatDate(new Date(hijack.time_ended), 2) : 'Never',
       genTooltip(
         'Time Ended:',
         null,

@@ -126,7 +126,7 @@ class HijackInfoComponent extends Component<any, any> {
                       );
                     })}
                     <div className="row" style={{ marginTop: '20px' }}>
-                      <div className="col-lg-4">
+                      <div className="col-lg-5">
                         <button
                           onClick={() =>
                             this.setState({ seenState: !this.state.seenState })
@@ -141,7 +141,7 @@ class HijackInfoComponent extends Component<any, any> {
                           BGP Announcement
                         </button>
                       </div>
-                      <div className="col-lg-8">
+                      <div className="col-lg-5 offset-lg-1">
                         <button
                           onClick={() => {
                             this.setState({
