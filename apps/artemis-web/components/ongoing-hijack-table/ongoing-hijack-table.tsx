@@ -24,6 +24,7 @@ import {
   getExactMatchFilter,
   getTextFilter,
   expandColumnComponent,
+  genTooltip,
 } from '../../utils/token';
 import ErrorBoundary from '../error-boundary/error-boundary';
 import Tooltip from '../tooltip/tooltip';
@@ -161,22 +162,13 @@ const getColumns = (stateValues) => [
     text: 'Last Update',
     sort: true,
     headerTitle: false,
-    headerFormatter: (column, colIndex, components) => (
-      <>
-        <div data-tip data-for={'last_update_title'}>
-          {
-            <span>
-              {column.text} {components.sortElement}
-            </span>
-          }
-        </div>
-        <ReactTooltip html={true} id={'last_update_title'}>
-          {
-            'The timestamp of the newest known (to the system) BGP update that is related to the hijack.'
-          }
-        </ReactTooltip>
-      </>
-    ),
+    headerFormatter: (column, colIndex, components) =>
+      genTooltip(
+        column,
+        components,
+        'last_update_title',
+        'The timestamp of the newest known (to the system) BGP update that is related to the hijack.'
+      ),
     sortCaret: (order) => {
       return getSortCaret(order);
     },
@@ -186,20 +178,13 @@ const getColumns = (stateValues) => [
     text: 'Time Detected',
     sort: true,
     headerTitle: false,
-    headerFormatter: (column, colIndex, components) => (
-      <>
-        <div data-tip data-for={'time_detected_title'}>
-          {
-            <span>
-              {column.text} {components.sortElement}
-            </span>
-          }
-        </div>
-        <ReactTooltip html={true} id={'time_detected_title'}>
-          {'The time when a hijack event was first detected by the system.'}
-        </ReactTooltip>
-      </>
-    ),
+    headerFormatter: (column, colIndex, components) =>
+      genTooltip(
+        column,
+        components,
+        'time_detected_title',
+        'The time when a hijack event was first detected by the system.'
+      ),
     sortCaret: (order) => {
       return getSortCaret(order);
     },
@@ -207,32 +192,26 @@ const getColumns = (stateValues) => [
   {
     dataField: 'prefix',
     headerTitle: false,
-    headerFormatter: (column, colIndex) => (
-      <>
-        <div data-tip data-for={'hprefix_title'}>
-          {column.text}
-        </div>
-        <ReactTooltip html={true} id={'hprefix_title'}>
-          {'The IPv4/IPv6 prefix that was hijacked.'}
-        </ReactTooltip>
-      </>
-    ),
+    headerFormatter: (column, colIndex, components) =>
+      genTooltip(
+        column,
+        components,
+        'hprefix_title',
+        'The IPv4/IPv6 prefix that was hijacked.'
+      ),
     text: 'Hijacked Prefix',
     filter: getExactMatchFilter(stateValues['prefix'], 'Prefix'),
   },
   {
     dataField: 'configured_prefix',
     headerTitle: false,
-    headerFormatter: (column, colIndex) => (
-      <>
-        <div data-tip data-for={'mprefix_title'}>
-          {column.text}
-        </div>
-        <ReactTooltip html={true} id={'mprefix_title'}>
-          {'The configured IPv4/IPv6 prefix that matched the hijacked prefix.'}
-        </ReactTooltip>
-      </>
-    ),
+    headerFormatter: (column, colIndex, components) =>
+      genTooltip(
+        column,
+        components,
+        'mprefix_title',
+        'The configured IPv4/IPv6 prefix that matched the hijacked prefix.'
+      ),
     text: 'Matched Prefix',
     filter: getExactMatchFilter(
       stateValues['configured_prefix'],
@@ -242,18 +221,13 @@ const getColumns = (stateValues) => [
   {
     dataField: 'type',
     headerTitle: false,
-    headerFormatter: (column, colIndex) => (
-      <>
-        <div data-tip data-for={'type_title'}>
-          {column.text}
-        </div>
-        <ReactTooltip html={true} id={'type_title'}>
-          {
-            'The type of the hijack in 4 dimensions: prefix|path|data plane|policy<ul><li>[Prefix] S → Sub-prefix hijack</li>'
-          }
-        </ReactTooltip>
-      </>
-    ),
+    headerFormatter: (column, colIndex, components) =>
+      genTooltip(
+        column,
+        components,
+        'type_title',
+        'The type of the hijack in 4 dimensions: prefix|path|data plane|policy<ul><li>[Prefix] S → Sub-prefix hijack</li>'
+      ),
     text: 'Type',
     filter: textFilter({
       defaultValue: stateValues['type'],
@@ -263,34 +237,26 @@ const getColumns = (stateValues) => [
   {
     dataField: 'hijack_as',
     headerTitle: false,
-    headerFormatter: (column, colIndex) => (
-      <>
-        <div data-tip data-for={'as_title'}>
-          {column.text}
-        </div>
-        <ReactTooltip html={true} id={'as_title'}>
-          {
-            'The AS that is potentially responsible for the hijack.</br>Note that this is an experimental field.'
-          }
-        </ReactTooltip>
-      </>
-    ),
+    headerFormatter: (column, colIndex, components) =>
+      genTooltip(
+        column,
+        components,
+        'as_title',
+        'The AS that is potentially responsible for the hijack.</br>Note that this is an experimental field.'
+      ),
     text: 'Hijacked AS',
     filter: getExactMatchFilter(stateValues['hijack_as'], 'Hijacked AS'),
   },
   {
     dataField: 'rpki_status',
     headerTitle: false,
-    headerFormatter: (column, colIndex) => (
-      <>
-        <div data-tip data-for={'rpki_title'}>
-          {column.text}
-        </div>
-        <ReactTooltip html={true} id={'rpki_title'}>
-          {'The RPKI status of the hijacked prefix.'}
-        </ReactTooltip>
-      </>
-    ),
+    headerFormatter: (column, colIndex, components) =>
+      genTooltip(
+        column,
+        components,
+        'rpki_title',
+        'The RPKI status of the hijacked prefix.'
+      ),
     text: 'RPKI',
     filter: selectFilter({
       placeholder: 'RPKI',
@@ -304,22 +270,13 @@ const getColumns = (stateValues) => [
   {
     dataField: 'num_peers_seen',
     headerTitle: false,
-    headerFormatter: (column, colIndex, components) => (
-      <>
-        <div data-tip data-for={'peers_title'}>
-          {
-            <span>
-              {column.text} {components.sortElement}
-            </span>
-          }
-        </div>
-        <ReactTooltip html={true} id={'peers_title'}>
-          {
-            'Number of peers/monitors (i.e., ASNs)</br>that have seen hijack updates.'
-          }
-        </ReactTooltip>
-      </>
-    ),
+    headerFormatter: (column, colIndex, components) =>
+      genTooltip(
+        column,
+        components,
+        'peers_title',
+        'Number of peers/monitors (i.e., ASNs)</br>that have seen hijack updates.'
+      ),
     text: '# Peers Seen',
     sort: true,
     sortCaret: (order) => {
@@ -330,22 +287,13 @@ const getColumns = (stateValues) => [
     dataField: 'num_asns_inf',
     text: '# ASes Infected',
     headerTitle: false,
-    headerFormatter: (column, colIndex, components) => (
-      <>
-        <div data-tip data-for={'ASes_title'}>
-          {
-            <span>
-              {column.text} {components.sortElement}
-            </span>
-          }
-        </div>
-        <ReactTooltip html={true} id={'ASes_title'}>
-          {
-            'Number of infected ASes that seem to</br>route traffic towards the hijacker AS.</br>Note that this is an experimental field '
-          }
-        </ReactTooltip>
-      </>
-    ),
+    headerFormatter: (column, colIndex, components) =>
+      genTooltip(
+        column,
+        components,
+        'ASes_title',
+        'Number of infected ASes that seem to</br>route traffic towards the hijacker AS.</br>Note that this is an experimental field'
+      ),
     sort: true,
     sortCaret: (order) => {
       return getSortCaret(order);
@@ -354,18 +302,13 @@ const getColumns = (stateValues) => [
   {
     dataField: 'ack',
     headerTitle: false,
-    headerFormatter: (column, colIndex) => (
-      <>
-        <div data-tip data-for={'ack_title'}>
-          {column.text}
-        </div>
-        <ReactTooltip html={true} id={'ack_title'}>
-          {
-            'Whether the user has acknowledged/confirmed the hijack as a true positive.<br>If the resolve|mitigate buttons are pressed this<br>is automatically set to True (default value: False).'
-          }
-        </ReactTooltip>
-      </>
-    ),
+    headerFormatter: (column, colIndex, components) =>
+      genTooltip(
+        column,
+        components,
+        'ack_title',
+        'Whether the user has acknowledged/confirmed the hijack as a true positive.<br>If the resolve|mitigate buttons are pressed this<br>is automatically set to True (default value: False).'
+      ),
     text: 'Ack',
   },
 ];
@@ -487,7 +430,12 @@ const OngoingHijackTableComponent = (props) => {
     currSizePerPage,
     onSizePerPageChange,
   }) => (
-    <div id="paging" className="btn-group" role="group">
+    <div
+      style={{ marginBottom: '10px' }}
+      id="paging"
+      className="btn-group"
+      role="group"
+    >
       Show
       <select
         style={{ width: '80px' }}

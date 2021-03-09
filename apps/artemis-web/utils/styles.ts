@@ -221,7 +221,8 @@ export const useFooterStyles = makeStyles((theme) => ({
     height: '4.5rem',
     bottom: '0px',
     width: '100%',
-    backgroundColor: theme.palette.grey[800],
+    backgroundColor: '#f2f2f2',
+    borderTop: '1px solid #e4e4e4',
   },
   link: {
     color: '#ffff',

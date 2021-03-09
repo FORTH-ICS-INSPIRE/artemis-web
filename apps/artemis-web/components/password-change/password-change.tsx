@@ -38,8 +38,15 @@ const PasswordChange = (props) => {
     });
 
     if (res.status === 200) {
-      setSuccessMsg((await res.json()).message);
+      setSuccessMsg(
+        (await res.json()).message +
+          '\n Please login with your new credentials.'
+      );
       setErrorMsg('');
+      await fetch('/api/auth/logout', {
+        method: 'DELETE',
+      });
+      setTimeout(() => (document.location.href = '/login'), 3000);
     } else {
       setErrorMsg((await res.json()).message);
       setSuccessMsg('');
