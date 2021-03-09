@@ -18,7 +18,6 @@ describe('artemis-web', () => {
     cy.get('h1').should('have.text', 'Dashboard');
   });
 
-
   it('after login > Dashboard', () => {
     // Custom command example, see `../support/commands.ts` file
     cy.visit('/dashboard');
