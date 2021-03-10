@@ -29,7 +29,7 @@ export default class Layout extends React.Component<any> {
         </Head>
         <div className="layout">
           <Header />
-          {children}
+          <div className="main-container">{children}</div>
           <Footer />
         </div>
       </>

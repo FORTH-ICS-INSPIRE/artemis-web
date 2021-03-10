@@ -18,7 +18,10 @@ class FooterComponent extends React.Component<MyProps> {
 
     return (
       <footer className="footer">
-        <Container maxWidth="lg">
+        <Container
+          style={{ marginLeft: '0px', paddingLeft: '8.333333%' }}
+          maxWidth="lg"
+        >
           <Copyright _class={link} />
         </Container>
       </footer>

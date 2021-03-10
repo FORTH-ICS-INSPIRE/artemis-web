@@ -64,10 +64,7 @@ const BGPUpdates = (props) => {
         <title>ARTEMIS - BGP Updates</title>
       </Head>
       {user && (
-        <div
-          className="container overview col-lg-12"
-          style={{ paddingTop: '120px' }}
-        >
+        <div className="container overview col-lg-12">
           <div className="row">
             <div className="col-lg-1" />
             <div className="col-lg-10">
