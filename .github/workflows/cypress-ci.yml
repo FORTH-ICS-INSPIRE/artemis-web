@@ -33,7 +33,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: yarn install --frozen-lockfile
-      - run: yarn run nx e2e artemis-web-e2e --browser firefox
+      - run: yarn run nx e2e artemis-web-e2e --browser chrome
         env:
           MONGODB_HOST: mongodb
           MONGODB_PORT: ${{ job.services.mongodb.ports[27017] }}
