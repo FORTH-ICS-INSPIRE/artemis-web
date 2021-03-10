@@ -223,6 +223,7 @@ export const useFooterStyles = makeStyles((theme) => ({
     width: '100%',
     backgroundColor: '#f2f2f2',
     borderTop: '1px solid #e4e4e4',
+    color: 'black',
   },
   link: {
     color: '#ffff',

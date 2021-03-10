@@ -34,7 +34,6 @@ describe('artemis-web', () => {
     cy.login();
   });
 
-
   it('change password', () => {
     // Custom command example, see `../support/commands.ts` file
     cy.visit('/password_change');
@@ -65,5 +64,4 @@ describe('artemis-web', () => {
     cy.get('h1').should('have.text', 'Dashboard');
     cy.get('#modules').find('tr').its('length').should('be.gt', 0);
   });
-
 });

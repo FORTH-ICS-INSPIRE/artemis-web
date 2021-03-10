@@ -10,6 +10,17 @@ p > img {
   float: right;
 }
 
+.footer {
+  position: relative;
+  width: 100%;
+  line-height: 46px;
+  background-color: #f2f2f2;
+  border-top: 1px solid #e4e4e4;
+  color: black;
+  padding-top: 30px;
+  padding-bottom: 30px;
+}
+
 .login-form {
   border: 1px solid grey !important;
   padding: 15px;
@@ -93,6 +104,8 @@ body {
   min-height: 100%; */
   /* background-color: #121212 !important; */
   font-size: 1rem;
+  display: grid;
+  min-height: 100vh;
 }
 
 #config > .react-codemirror2 > .CodeMirror {
@@ -123,9 +136,13 @@ footer > .MuiContainer-root {
   margin-right: 0%;
 }
 
+.layout > .container {
+  margin-bottom: 40px;
+}
+
 #login-container {
   position: relative;
-  min-height: 70vh;
+  min-height: 87vh;
 }
 
 #page-container {

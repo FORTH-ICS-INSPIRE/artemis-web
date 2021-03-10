@@ -17,14 +17,11 @@ class FooterComponent extends React.Component<MyProps> {
     const { root, footer, link } = classes;
 
     return (
-      <div className={root}>
-        <CssBaseline />
-        <footer className={footer}>
-          <Container maxWidth="lg">
-            <Copyright _class={link} />
-          </Container>
-        </footer>
-      </div>
+      <footer className="footer">
+        <Container maxWidth="lg">
+          <Copyright _class={link} />
+        </Container>
+      </footer>
     );
   }
 }
