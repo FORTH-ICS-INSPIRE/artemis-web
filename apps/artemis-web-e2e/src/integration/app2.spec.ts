@@ -16,7 +16,5 @@ describe('artemis-web', () => {
     cy.loginLDAP();
     cy.waitFor('h1');
     cy.get('h1').should('have.text', 'Dashboard');
-    cy.wait(2000);
-    cy.get('#modules').find('tr').its('length').should('be.gt', 0);
   });
 });
