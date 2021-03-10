@@ -16,7 +16,6 @@ jobs:
     # Because of this the network configuration changes from host based network to a container network.
     container:
       image: cypress/included:6.6.0
-      options: --user 1001 --shm-size=4g
     services:
       mongodb:
         image: mongo
