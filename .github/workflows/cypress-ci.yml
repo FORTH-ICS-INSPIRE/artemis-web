@@ -15,7 +15,8 @@ jobs:
     # runs all of the steps inside the specified container rather than on the VM host.
     # Because of this the network configuration changes from host based network to a container network.
     container:
-      image: cypress/browsers:node12.13.0-chrome80-ff73
+      image: cypress/included:6.6.0
+      options: --user 1001 --shm-size=4g
     services:
       mongodb:
         image: mongo
@@ -31,9 +32,9 @@ jobs:
           - '636:636'
 
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
       - run: yarn install --frozen-lockfile
-      - run: yarn run nx e2e artemis-web-e2e
+      - run: yarn run nx e2e artemis-web-e2e --browser firefox
         env:
           MONGODB_HOST: mongodb
           MONGODB_PORT: ${{ job.services.mongodb.ports[27017] }}
