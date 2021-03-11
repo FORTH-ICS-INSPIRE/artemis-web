@@ -29,7 +29,7 @@ Cypress.Commands.add('typeLogin', (user) => {
 
       cy.get('input[name=password]').type(user.password);
 
-      cy.get('input[type=checkbox]').click();
+      cy.get('input[type=checkbox]').click({force: true});
     }
   });
 });
@@ -56,7 +56,7 @@ Cypress.Commands.add('login', () => {
     // synchronously query from body
     // to find which element was created
     if ($body.find('input[name=email]').length) {
-      cy.get('button[type=submit]').click();
+      cy.get('button[type=submit]').click({force: true});
       cy.wait(1000);
     }
   });

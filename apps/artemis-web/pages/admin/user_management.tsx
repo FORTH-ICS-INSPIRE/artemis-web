@@ -72,7 +72,7 @@ const UserManagementPage = (props) => {
       <Head>
         <title>ARTEMIS - User Management</title>
       </Head>
-      <div id="page-container" style={{ paddingTop: '120px' }}>
+      <div id="page-container">
         {user && (
           <div id="content-wrap" style={{ paddingBottom: '5rem' }}>
             {errorMsg && <p className="error">{errorMsg}</p>}

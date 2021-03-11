@@ -157,6 +157,7 @@ main {
 #page-container {
   position: relative;
   min-height: 100vh;
+  padding-top: 40px;
 }
 
 .navbar > .container {
