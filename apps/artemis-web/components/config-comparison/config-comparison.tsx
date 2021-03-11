@@ -15,6 +15,7 @@ type stateType = {
 class ConfigComparisonComponent extends Component<unknown, stateType> {
   CodeMirror: any;
   _ref: any;
+  mergeView: any;
   constructor(props) {
     super(props);
     if (
@@ -77,7 +78,7 @@ class ConfigComparisonComponent extends Component<unknown, stateType> {
         currentCommentRight: this.state.configs[0]?.comment,
       });
 
-      this.CodeMirror.MergeView(this._ref, {
+      this.mergeView = this.CodeMirror.MergeView(this._ref, {
         theme: '3024-day',
         value: this.state.currentConfigLeft,
         origLeft: null,
@@ -99,12 +100,16 @@ class ConfigComparisonComponent extends Component<unknown, stateType> {
         currentConfigLeft: this.state.configs[key].raw_config,
         currentCommentLeft: this.state.configs[key].comment,
       });
-    }
-    else
+      this.mergeView.edit.setValue(this.state.configs[key].raw_config);
+    } else {
       this.setState({
         currentConfigRight: this.state.configs[key].raw_config,
         currentCommentRight: this.state.configs[key].comment,
       });
+      this.mergeView
+        .rightOriginal()
+        .doc.setValue(this.state.configs[key].raw_config);
+    }
   }
 
   render() {
