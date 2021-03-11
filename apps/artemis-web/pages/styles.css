@@ -139,10 +139,6 @@ body {
   min-height: 60px;
 }
 
-.main-container {
-  min-height: calc(87vh - 80px);
-}
-
 main {
   min-height: calc(87vh - 80px);
 }
@@ -151,6 +147,7 @@ main {
   position: relative;
   margin-top: 80px;
   margin-bottom: 80px;
+  min-height: calc(87vh - 80px);
 }
 
 .main-container > .container {

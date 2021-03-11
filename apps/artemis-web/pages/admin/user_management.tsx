@@ -51,7 +51,6 @@ const UserManagementPage = (props) => {
         let list = (await res.json()).filter(
           (cUser) => cUser.email !== user.email
         );
-        console.log(list);
         list = list.map((user) => {
           user.lastLogin = formatDate(new Date(user.lastLogin), 2);
           return user;
