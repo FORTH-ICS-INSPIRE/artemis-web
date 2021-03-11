@@ -112,19 +112,16 @@ export class QueryGenerator {
 
   private setModuleState() {
     return gql`
-      mutation updateIntendedProcessStates($name: String, $running: Boolean) {
-        update_view_processes(
-          where: { name: { _eq: $name } }
-          _set: { running: $running }
-        ) {
-          affected_rows
-          returning {
-            name
-            running
-          }
+    mutation updateIntendedProcessStates($name: String, $running: Boolean) {
+      update_view_intended_process_states(where: {name: {_eq: $name}}, _set: {running: $running}) {
+        affected_rows
+        returning {
+          name
+          running
         }
       }
-    `;
+    }
+  `;
   }
 
   private getHijacksQuery() {

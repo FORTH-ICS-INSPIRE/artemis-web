@@ -66,6 +66,7 @@ class ConfigComparisonComponent extends Component<unknown, stateType> {
       );
 
       const configs = await res.json();
+
       this.setState({ configs: configs.configs });
       this.setState({
         currentConfigLeft: this.state.configs[0].raw_config,
@@ -93,11 +94,12 @@ class ConfigComparisonComponent extends Component<unknown, stateType> {
   }
 
   handleOptions(key, position) {
-    if (position === 'left')
+    if (position === 'left') {
       this.setState({
         currentConfigLeft: this.state.configs[key].raw_config,
         currentCommentLeft: this.state.configs[key].comment,
       });
+    }
     else
       this.setState({
         currentConfigRight: this.state.configs[key].raw_config,

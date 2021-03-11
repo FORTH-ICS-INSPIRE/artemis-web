@@ -214,6 +214,9 @@ class HijackInfoComponent extends Component<any, any> {
                       <option value="hijack_action_delete">
                         Delete Hijack
                       </option>
+                      <option value="hijack_action_export">
+                        Export Hijack
+                      </option>
                     </select>
                     <button
                       onClick={(e) =>

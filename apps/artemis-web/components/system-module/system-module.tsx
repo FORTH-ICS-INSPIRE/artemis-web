@@ -15,7 +15,7 @@ const SystemModule = (props) => {
     isLive: false,
     isMutation: true,
     running: state[module],
-    name: module.toLowerCase(),
+    name: module.toLowerCase().substring(0, module.toLowerCase().indexOf('-')),
   });
 
   const classes = useStyles();
