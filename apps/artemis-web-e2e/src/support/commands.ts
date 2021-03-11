@@ -67,7 +67,7 @@ Cypress.Commands.add('loginLDAP', () => {
     // synchronously query from body
     // to find which element was created
     if ($body.find('input[name=email]').length) {
-      cy.get('#ldap_login').click();
+      cy.get('#ldap_login').click({force: true});
       cy.wait(1000);
     }
   });
