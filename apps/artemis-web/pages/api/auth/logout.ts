@@ -12,6 +12,6 @@ const logout = (req: NextApiRequestExtended, res: NextApiResponseExtended) => {
   res.status(204).end();
 };
 
-const handler = nc().use(auth).get(logout).delete(logout);
+const handler = nc().use(auth).delete(logout);
 
 export default handler;
