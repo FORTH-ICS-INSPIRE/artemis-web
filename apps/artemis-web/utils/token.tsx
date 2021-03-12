@@ -233,3 +233,27 @@ export const expandedColumnHeaderComponent = ({ isAnyExpands }) => {
     </div>
   );
 };
+
+export const exportHijack = async (hijack_key) => {
+  const res = await fetch('/api/download_tables', {
+    method: 'POST',
+    credentials: 'include',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      action: 'view_hijacks',
+      parameters: '(key.eq.' + hijack_key + ')',
+    }),
+  });
+
+  const x = window.open();
+  x.document.open();
+  x.document.write(
+    '<html><body><pre>' +
+      JSON.stringify(await res.json(), null, '\t') +
+      '</pre></body></html>'
+  );
+  x.document.close();
+};

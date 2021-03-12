@@ -22,7 +22,8 @@ class FooterComponent extends React.Component<MyProps> {
           style={{ marginLeft: '0px', paddingLeft: '8.333333%' }}
           maxWidth="lg"
         >
-          <Copyright _class={link} />
+          ARTEMIS v.'latest@'
+          {/* <Copyright _class={link} /> */}
         </Container>
       </footer>
     );

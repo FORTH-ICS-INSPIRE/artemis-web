@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { sendHijackData, submitComment } from '../../utils/fetch-data';
 import { extractHijackInfos } from '../../utils/parsers';
 import {
+  exportHijack,
   isIgnored,
   isResolved,
   isSeen,
@@ -222,6 +223,9 @@ class HijackInfoComponent extends Component<any, any> {
                       onClick={(e) =>
                         this.state.selectActionState === 'hijack_action_ignore'
                           ? this.setOpenModalState(true)
+                          : this.state.selectActionState ===
+                            'hijack_action_export'
+                          ? exportHijack(hijackKey)
                           : sendHijackData(e, {
                               hijackKey: hijackKey,
                               selectState: this.state.selectActionState,
