@@ -323,15 +323,18 @@ const BGPUpdates = (props) => {
                           selectState === 'origin_as' ||
                           selectState === 'peer_asn'
                         )
-                          value = (
-                            <Tooltip
-                              tooltips={tooltips}
-                              setTooltips={setTooltips}
-                              asn={asn}
-                              label={`originD${i}`}
-                              context={context}
-                            />
-                          );
+                          value =
+                            asn === -1 ? (
+                              <span>-</span>
+                            ) : (
+                              <Tooltip
+                                tooltips={tooltips}
+                                setTooltips={setTooltips}
+                                asn={asn}
+                                label={`originD${i}`}
+                                context={context}
+                              />
+                            );
                         return (
                           <Grid key={i} item xs={3}>
                             <Paper className={classes.paper}>{value}</Paper>

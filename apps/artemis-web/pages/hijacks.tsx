@@ -558,15 +558,18 @@ const HijacksPage = (props) => {
                       if (value !== undefined) {
                         const asn = value;
                         if (selectState === 'hijack_as')
-                          value = (
-                            <Tooltip
-                              tooltips={tooltips}
-                              setTooltips={setTooltips}
-                              asn={asn}
-                              label={`originD${i}`}
-                              context={context}
-                            />
-                          );
+                          value =
+                            asn === -1 ? (
+                              <span>-</span>
+                            ) : (
+                              <Tooltip
+                                tooltips={tooltips}
+                                setTooltips={setTooltips}
+                                asn={asn}
+                                label={`originH${i}`}
+                                context={context}
+                              />
+                            );
                         return (
                           <Grid key={i} item xs={3}>
                             <Paper className={classes.paper}>{value}</Paper>
