@@ -62,18 +62,6 @@ const getColumns = () => [
     text: 'Start Time',
   },
   {
-    dataField: 'target_ip',
-    headerTitle: false,
-    headerFormatter: (column, colIndex, components) =>
-      genTooltip(
-        column,
-        components,
-        'target_ip_title',
-        'The target measurement IP of the Victim AS.'
-      ),
-    text: 'Target IP',
-  },
-  {
     dataField: 'msm_stop_time',
     headerTitle: false,
     headerFormatter: (column, colIndex, components) =>
@@ -88,6 +76,18 @@ const getColumns = () => [
       return getSortCaret(order);
     },
     text: 'Stop Time',
+  },
+  {
+    dataField: 'target_ip',
+    headerTitle: false,
+    headerFormatter: (column, colIndex, components) =>
+      genTooltip(
+        column,
+        components,
+        'target_ip_title',
+        'The target measurement IP of the Victim AS.'
+      ),
+    text: 'Target IP',
   },
   {
     dataField: 'num_of_probes',

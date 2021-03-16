@@ -93,7 +93,7 @@ const UserCreationComponent = (props) => {
             type="submit"
             fullWidth
             variant="contained"
-            className={classes.button}
+            className="material-button"
             // color="primary"
             // className={classes.submit}
             id="submit"

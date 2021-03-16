@@ -143,17 +143,17 @@ export const useStyles = makeStyles((_theme) => ({
     backgroundColor: _theme.palette.secondary.main,
   },
   activeButton: {
-    color: 'white',
-    backgroundColor: '#28a745',
+    color: 'white !important',
+    backgroundColor: '#28a745 !important',
     '&:hover, &:focus': {
-      backgroundColor: '#28a745',
+      backgroundColor: '#28a745 !important',
     },
   },
   inactiveButton: {
-    color: 'white',
-    backgroundColor: '#DC3545',
+    color: 'white !important',
+    backgroundColor: '#DC3545 !important',
     '&:hover, &:focus': {
-      backgroundColor: '#DC3545',
+      backgroundColor: '#DC3545 !important',
     },
   },
   filterButton: {
@@ -164,17 +164,17 @@ export const useStyles = makeStyles((_theme) => ({
     },
   },
   cancelButton: {
-    color: 'black',
-    backgroundColor: '#FFC107',
+    color: 'black !important',
+    backgroundColor: '#FFC107 !important',
     '&:hover, &:focus': {
-      backgroundColor: '#FFC107',
+      backgroundColor: '#FFC107 !important',
     },
   },
   button: {
-    color: 'white',
-    backgroundColor: '#007bff',
+    color: 'white !important',
+    backgroundColor: '#007bff !important',
     '&:hover, &:focus': {
-      backgroundColor: '#007bff',
+      backgroundColor: '#007bff !important',
     },
   },
   form: {

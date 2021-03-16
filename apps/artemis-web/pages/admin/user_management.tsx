@@ -122,8 +122,7 @@ const UserManagementPage = (props) => {
                           }
                           id="approval"
                           variant="contained"
-                          className={classes.button}
-                          // color="primary"
+                          className="material-button" // color="primary"
                         >
                           Approve User
                         </Button>
@@ -162,7 +161,7 @@ const UserManagementPage = (props) => {
                           }
                           id="promote"
                           variant="contained"
-                          className={classes.button}
+                          className="material-button"
                         >
                           Promote to Admin
                         </Button>
@@ -201,7 +200,7 @@ const UserManagementPage = (props) => {
                           }
                           id="demote"
                           variant="contained"
-                          className={classes.button}
+                          className="material-button"
                         >
                           Demote to User
                         </Button>
@@ -240,7 +239,7 @@ const UserManagementPage = (props) => {
                           }
                           id="delete"
                           variant="contained"
-                          className={classes.button}
+                          className="material-button"
                         >
                           Delete User
                         </Button>

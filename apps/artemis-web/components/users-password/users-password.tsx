@@ -85,7 +85,7 @@ const UsersPasswordComponent = (props) => {
             fullWidth
             variant="contained"
             // color="primary"
-            className={classes.button}
+            className="material-button"
             // className={classes.submit}
             id="submit"
           >

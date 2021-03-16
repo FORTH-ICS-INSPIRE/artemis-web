@@ -139,6 +139,16 @@ body {
   min-height: 60px;
 }
 
+.material-button:hover,
+.material-button:focus {
+  background-color: #007bff !important;
+}
+
+.material-button {
+  color: white !important;
+  background-color: #007bff !important;
+}
+
 main {
   min-height: calc(87vh - 80px);
 }

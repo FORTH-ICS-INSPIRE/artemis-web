@@ -106,7 +106,7 @@ const SystemConfigurationComponent = (props) => {
                   onClick={() => setEditState(!editState)}
                   style={{ float: 'right' }}
                   variant="contained"
-                  className={classes.button}
+                  className="material-button"
                 >
                   Edit
                 </Button>
@@ -115,7 +115,7 @@ const SystemConfigurationComponent = (props) => {
                 onClick={(e) => onClick(e, 'load')}
                 style={{ float: 'right', marginRight: '10px' }}
                 variant="contained"
-                className={classes.button}
+                className="material-button"
               >
                 Load AS-SETs
               </Button>
