@@ -1,6 +1,7 @@
 import { Button } from '@material-ui/core';
 import Head from 'next/head';
 import React from 'react';
+import { useMedia } from 'react-media';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import AuthHOC from '../components/401-hoc/401-hoc';
@@ -34,6 +35,12 @@ const DashboardPage = (props) => {
     hasColumnFilter: false,
   });
   const INDEX_DATA = INDEX_RES.data;
+
+  const GLOBAL_MEDIA_QUERIES = {
+    pc: '(min-width: 700px)',
+    mobile: '(max-width: 700px)',
+  };
+  const matches = useMedia({ queries: GLOBAL_MEDIA_QUERIES });
 
   return (
     <>
@@ -82,8 +89,8 @@ const DashboardPage = (props) => {
                       (
                       {user &&
                         new Date(user.lastLogin).toLocaleDateString() +
-                          ' ' +
-                          new Date(user.lastLogin).toLocaleTimeString()}
+                        ' ' +
+                        new Date(user.lastLogin).toLocaleTimeString()}
                       )
                     </b>
                     . You are {user && user.role}.
@@ -93,7 +100,7 @@ const DashboardPage = (props) => {
             </div>
             <div className="row" style={{ marginTop: '20px' }}>
               <div className="col-lg-1" />
-              <div className="col-lg-6">
+              <div className={matches.pc ? "col-lg-6" : "col-lg-10"}>
                 <div className="card">
                   <div className="card-header">
                     Ongoing, Non-Dormant Hijacks{' '}
@@ -108,68 +115,70 @@ const DashboardPage = (props) => {
                   <b>GMT+2 (Europe/Athens).</b>
                 </span>
               </div>
-              <div className="col-lg-4">
-                <div className="card">
-                  <div className="card-header"> System Status </div>
-                  <div className="card-body" style={{ textAlign: 'center' }}>
-                    <ErrorBoundary
-                      containsData={STATS_DATA}
-                      noDataMessage={'No modules found.'}
-                      errorImage={true}
-                      customError={STATS_RES.error}
-                    >
-                      <StatusTable data={STATS_DATA} />
-                    </ErrorBoundary>
+              {matches.pc && (
+                <div className="col-lg-4">
+                  <div className="card">
+                    <div className="card-header"> System Status </div>
+                    <div className="card-body" style={{ textAlign: 'center' }}>
+                      <ErrorBoundary
+                        containsData={STATS_DATA}
+                        noDataMessage={'No modules found.'}
+                        errorImage={true}
+                        customError={STATS_RES.error}
+                      >
+                        <StatusTable data={STATS_DATA} />
+                      </ErrorBoundary>
+                    </div>
                   </div>
-                </div>
-                <div className="card" style={{ marginTop: '20px' }}>
-                  <div className="card-header"> Statistics </div>
-                  <div className="card-body" style={{ textAlign: 'center' }}>
-                    <ErrorBoundary
-                      containsData={INDEX_DATA}
-                      noDataMessage={'No statistics found.'}
-                      customError={INDEX_RES.error}
-                      errorImage={true}
-                    >
-                      <StatisticsTable data={INDEX_DATA} />
-                    </ErrorBoundary>
+                  <div className="card" style={{ marginTop: '20px' }}>
+                    <div className="card-header"> Statistics </div>
+                    <div className="card-body" style={{ textAlign: 'center' }}>
+                      <ErrorBoundary
+                        containsData={INDEX_DATA}
+                        noDataMessage={'No statistics found.'}
+                        customError={INDEX_RES.error}
+                        errorImage={true}
+                      >
+                        <StatisticsTable data={INDEX_DATA} />
+                      </ErrorBoundary>
+                    </div>
                   </div>
-                </div>
-              </div>
+                </div>)}
             </div>
-            {/* <div className="row" style={{ marginTop: '20px' }}>
-              <div className="col-lg-1" />
-              <div className="col-lg-5">
-                <div className="card">
-                  <div className="card-header"> System Status </div>
-                  <div className="card-body" style={{ textAlign: 'center' }}>
-                    <ErrorBoundary
-                      containsData={STATS_DATA}
-                      noDataMessage={'No modules found.'}
-                      errorImage={true}
-                      customError={STATS_RES.error}
-                    >
-                      <StatusTable data={STATS_DATA} />
-                    </ErrorBoundary>
+            {matches.mobile && (
+              <div className="row" style={{ marginTop: '20px' }}>
+                <div className="col-lg-1" />
+                <div className="col-lg-5">
+                  <div className="card">
+                    <div className="card-header"> System Status </div>
+                    <div className="card-body" style={{ textAlign: 'center' }}>
+                      <ErrorBoundary
+                        containsData={STATS_DATA}
+                        noDataMessage={'No modules found.'}
+                        errorImage={true}
+                        customError={STATS_RES.error}
+                      >
+                        <StatusTable data={STATS_DATA} />
+                      </ErrorBoundary>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div className="col-lg-5">
-                <div className="card">
-                  <div className="card-header"> Statistics </div>
-                  <div className="card-body" style={{ textAlign: 'center' }}>
-                    <ErrorBoundary
-                      containsData={INDEX_DATA}
-                      noDataMessage={'No statistics found.'}
-                      customError={INDEX_RES.error}
-                      errorImage={true}
-                    >
-                      <StatisticsTable data={INDEX_DATA} />
-                    </ErrorBoundary>
+                <div className="col-lg-5">
+                  <div className="card">
+                    <div className="card-header"> Statistics </div>
+                    <div className="card-body" style={{ textAlign: 'center' }}>
+                      <ErrorBoundary
+                        containsData={INDEX_DATA}
+                        noDataMessage={'No statistics found.'}
+                        customError={INDEX_RES.error}
+                        errorImage={true}
+                      >
+                        <StatisticsTable data={INDEX_DATA} />
+                      </ErrorBoundary>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </div> */}
+              </div>)}
             <ToastContainer />
           </div>
         )}

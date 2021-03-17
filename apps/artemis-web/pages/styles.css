@@ -17,8 +17,8 @@ p > img {
   background-color: #f2f2f2;
   border-top: 1px solid #e4e4e4;
   color: black;
-  padding-top: 30px;
-  padding-bottom: 30px;
+  padding-top: 15px;
+  padding-bottom: 15px;
 }
 
 .login-form {
@@ -162,6 +162,13 @@ main {
 
 .main-container > .container {
   padding-top: 40px;
+}
+
+@media all and (max-width: 700px) and (min-width: 300px) {
+  .main-container {
+    min-height: calc(117vh - 80px);
+  }
+  
 }
 
 #page-container {

@@ -63,7 +63,7 @@ const MobileHeader = (props) => {
       background: '#373a47',
       fontSize: '1.15em',
       overflowY: 'hidden',
-      padding: '2.5em 1.5em 0',
+      padding: '2.5em 0em 0',
     },
     bmMorphShape: {
       fill: '#373a47',
