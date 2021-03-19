@@ -4,9 +4,10 @@ type PropsType = {
   customError: any;
   containsData: boolean;
   noDataMessage: string;
+  errorImage?: boolean;
 };
 
-class ErrorBoundary extends Component<PropsType, {}> {
+class ErrorBoundary extends Component<PropsType, unknown> {
   state = {
     hasError: false,
     errorMessage: '',
@@ -18,7 +19,7 @@ class ErrorBoundary extends Component<PropsType, {}> {
     }
   }
 
-  componentDidCatch = (error, info) => {
+  componentDidCatch = (error: any, info) => {
     this.setState({ hasError: true, errorMessage: error });
   };
 
@@ -27,7 +28,7 @@ class ErrorBoundary extends Component<PropsType, {}> {
       return (
         <div>
           <p>
-            <img width="256" src="error.png"></img>
+            <img alt="" width="256" src="error.png"></img>
           </p>
           <h3>{this.state.errorMessage}</h3>
         </div>
@@ -36,7 +37,10 @@ class ErrorBoundary extends Component<PropsType, {}> {
       return (
         <div>
           <p>
-            <img src="checkmark.png"></img>
+            <img
+              alt=""
+              src={this.props.errorImage ? 'error.png' : 'checkmark.png'}
+            ></img>
           </p>
           <h3>{this.props.noDataMessage}</h3>
         </div>

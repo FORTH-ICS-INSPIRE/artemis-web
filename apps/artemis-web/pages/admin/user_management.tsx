@@ -1,8 +1,12 @@
 import { Button } from '@material-ui/core';
+import UserCreationComponent from '../../components/user-creation/user-creation';
+import UsersPasswordComponent from '../../components/users-password/users-password';
 import Head from 'next/head';
 import React, { useEffect, useState } from 'react';
 import AuthHOC from '../../components/401-hoc/401-hoc';
 import UserListComponent from '../../components/user-list/user-list';
+import { formatDate } from '../../utils/token';
+import { useStyles } from '../../utils/styles';
 
 const UserManagementPage = (props) => {
   const user = props.user;
@@ -44,9 +48,13 @@ const UserManagementPage = (props) => {
       });
 
       if (res.status === 200) {
-        const list = (await res.json()).filter(
+        let list = (await res.json()).filter(
           (cUser) => cUser.email !== user.email
         );
+        list = list.map((user) => {
+          user.lastLogin = formatDate(new Date(user.lastLogin), 2);
+          return user;
+        });
         setUserList(list);
         setPendingList(list.filter((user) => user.role === 'pending'));
         setNormalList(list.filter((user) => user.role === 'user'));
@@ -55,14 +63,16 @@ const UserManagementPage = (props) => {
         setErrorMsg((await res.json()).message);
       }
     })();
-  }, []);
+  }, [user.email]);
+
+  const classes = useStyles();
 
   return (
     <>
       <Head>
         <title>ARTEMIS - User Management</title>
       </Head>
-      <div id="page-container" style={{ paddingTop: '120px' }}>
+      <div id="page-container">
         {user && (
           <div id="content-wrap" style={{ paddingBottom: '5rem' }}>
             {errorMsg && <p className="error">{errorMsg}</p>}
@@ -71,7 +81,7 @@ const UserManagementPage = (props) => {
               <div className="col-lg-10">
                 <div className="row">
                   <div className="col-lg-8">
-                    <h1 style={{ color: 'white' }}>User Management</h1>{' '}
+                    <h1 style={{ color: 'black' }}>User Management</h1>{' '}
                   </div>
                   <div className="col-lg-1"></div>
                 </div>
@@ -98,8 +108,8 @@ const UserManagementPage = (props) => {
                           className="form-control"
                           id="distinct_values_selection"
                         >
-                          {pendingList.map((user) => (
-                            <option>{user.name}</option>
+                          {pendingList.map((user, i) => (
+                            <option key={`1${i}`}>{user.name}</option>
                           ))}
                         </select>
                       </div>
@@ -111,8 +121,8 @@ const UserManagementPage = (props) => {
                             manageUser(e, 'approval', approvalRef.current.value)
                           }
                           id="approval"
-                          variant="outlined"
-                          color="primary"
+                          variant="contained"
+                          className="material-button" // color="primary"
                         >
                           Approve User
                         </Button>
@@ -137,8 +147,8 @@ const UserManagementPage = (props) => {
                           className="form-control"
                           id="distinct_values_selection"
                         >
-                          {normalList.map((user) => (
-                            <option>{user.name}</option>
+                          {normalList.map((user, i) => (
+                            <option key={`2${i}`}>{user.name}</option>
                           ))}
                         </select>
                       </div>
@@ -150,8 +160,8 @@ const UserManagementPage = (props) => {
                             manageUser(e, 'promote', promoteRef.current.value)
                           }
                           id="promote"
-                          variant="outlined"
-                          color="primary"
+                          variant="contained"
+                          className="material-button"
                         >
                           Promote to Admin
                         </Button>
@@ -176,8 +186,8 @@ const UserManagementPage = (props) => {
                           className="form-control"
                           id="distinct_values_selection"
                         >
-                          {adminList.map((user) => (
-                            <option>{user.name}</option>
+                          {adminList.map((user, i) => (
+                            <option key={`3${i}`}>{user.name}</option>
                           ))}
                         </select>
                       </div>
@@ -189,8 +199,8 @@ const UserManagementPage = (props) => {
                             manageUser(e, 'demote', demoteRef.current.value)
                           }
                           id="demote"
-                          variant="outlined"
-                          color="primary"
+                          variant="contained"
+                          className="material-button"
                         >
                           Demote to User
                         </Button>
@@ -215,8 +225,8 @@ const UserManagementPage = (props) => {
                           className="form-control"
                           id="distinct_values_selection"
                         >
-                          {userList.map((user) => (
-                            <option>{user.name}</option>
+                          {userList.map((user, i) => (
+                            <option key={`4${i}`}>{user.name}</option>
                           ))}
                         </select>
                       </div>
@@ -228,8 +238,8 @@ const UserManagementPage = (props) => {
                             manageUser(e, 'delete', deleteRef.current.value)
                           }
                           id="delete"
-                          variant="outlined"
-                          color="primary"
+                          variant="contained"
+                          className="material-button"
                         >
                           Delete User
                         </Button>
@@ -246,6 +256,29 @@ const UserManagementPage = (props) => {
                   <div className="card-header"> User list </div>
                   <div className="card-body">
                     <UserListComponent data={userList} />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="row" style={{ marginTop: '30px' }}>
+              <div className="col-lg-1" />
+              <div className="col-lg-5">
+                <div className="card">
+                  <div className="card-header"> Password Change </div>
+                  <div className="card-body">
+                    <UsersPasswordComponent
+                      data={userList}
+                    ></UsersPasswordComponent>
+                  </div>
+                </div>
+              </div>
+              <div className="col-lg-5">
+                <div className="card">
+                  <div className="card-header"> Create User </div>
+                  <div className="card-body">
+                    <UserCreationComponent
+                      data={userList}
+                    ></UserCreationComponent>
                   </div>
                 </div>
               </div>

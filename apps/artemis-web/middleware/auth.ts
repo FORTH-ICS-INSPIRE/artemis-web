@@ -8,6 +8,7 @@ const auth = nc()
   .use(
     session({
       cookie: {
+        maxAge: 1800,
         secure: process.env.NODE_ENV === 'production',
       },
     })

@@ -17,7 +17,7 @@ const PendingPage = () => {
                 <div className="row">
                   <div className="col-lg-3" />
                   <div className="col-lg-7">
-                    <img src="./pending_approval.png"></img>
+                    <img alt="" src="./pending_approval.png"></img>
                   </div>
                 </div>
                 <div className="row" style={{ marginTop: '20px' }}>

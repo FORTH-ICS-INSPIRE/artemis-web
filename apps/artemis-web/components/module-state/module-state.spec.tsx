@@ -5,7 +5,13 @@ import ModuleState from './module-state';
 
 describe('ModuleState', () => {
   it('should render successfully', () => {
-    const { baseElement } = render(<ModuleState />);
+    const { baseElement } = render(
+      <table>
+        <tbody>
+          <ModuleState />
+        </tbody>
+      </table>
+    );
     expect(baseElement).toBeTruthy();
   });
 });

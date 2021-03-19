@@ -11,10 +11,18 @@ type StatsType = {
 
 class StatusTable extends Component<StatsType, any> {
   _isMounted: boolean;
+  monitorModules: any;
 
   constructor(props) {
     super(props);
     this.state = { date: new Date() };
+    this.monitorModules = [
+      'bgpstreamhisttap',
+      'bgpstreamkafkatap',
+      'bgpstreamlivetap',
+      'exabgptap',
+      'riperistap',
+    ];
   }
 
   componentDidMount() {
@@ -32,7 +40,70 @@ class StatusTable extends Component<StatsType, any> {
 
   render() {
     const STATS_DATA = this.props.data;
+    const modulesSet = {};
+    STATS_DATA.view_processes.forEach((module) => {
+      const modName = module.name.substring(0, module.name.indexOf('-'));
+      if (modName in modulesSet) {
+        modulesSet[modName].push([
+          module.name,
+          module.running,
+          module.timestamp,
+        ]);
+      } else {
+        modulesSet[modName] = [[module.name, module.running, module.timestamp]];
+      }
+    });
+    const monitorModules = this.monitorModules;
+    let monitor = STATS_DATA.view_processes.filter((module) =>
+      monitorModules.includes(
+        module.name.substring(0, module.name.indexOf('-'))
+      )
+    );
+    let backend = STATS_DATA.view_processes.filter(
+      (module) =>
+        !monitorModules.includes(
+          module.name.substring(0, module.name.indexOf('-'))
+        )
+    );
+
+    monitor = monitor.sort(function (a, b) {
+      const keyA = a.name,
+        keyB = b.name;
+
+      if (keyA < keyB) return -1;
+      if (keyA > keyB) return 1;
+      return 0;
+    });
+    backend = backend.sort(function (a, b) {
+      const keyA = a.name,
+        keyB = b.name;
+
+      if (keyA < keyB) return -1;
+      if (keyA > keyB) return 1;
+      return 0;
+    });
+
     const tooltips = {
+      autoignore:
+        'Backend microservice that automatically ignores hijack alerts of low impact and/or visibility based on user configuration.',
+      autostarter:
+        'Backend microservice that automatically checks the health of the backend and monitor (taps) microservices and activates them via their REST interface in case they are down.',
+      notifier:
+        'Backend microservice that sends BGP hijack alerts to different logging endpoints, according to user configuration.',
+      fileobserver:
+        'Backend microservice that detects content changes in the configuration file and notifies configuration.',
+      prefixtree:
+        'Backend microservice that holds the configuration prefix tree (prefixes bundled with ARTEMIS rules) in-memory for quick lookups.',
+      riperistap:
+        'Monitor/tap microservice that collects real-time BGP update information from RIPE RIS live.',
+      exabgptap:
+        'Monitor/tap microservice that collects real-time BGP update information from local BGP feeds via exaBGP.',
+      bgpstreamlivetap:
+        'Monitor/tap microservice that collects real-time BGP update information from RIPE RIS RIB collections, RouteViews RIB collections and Public CAIDA BMP feeds.',
+      bgpstreamkafkatap:
+        'Monitor/tap microservice that collects real-time BGP update information via Kafka from public and private BMP feeds.',
+      bgpstreamhisttap:
+        'Monitor/tap microservice that replays historical BGP updates.',
       clock:
         'ARTEMIS module serving as the clock signal generator for periodic tasks done in other modules (e.g., database).',
       configuration:
@@ -50,32 +121,69 @@ class StatusTable extends Component<StatsType, any> {
     };
 
     return (
-      <table id="modules" className="table table-hover">
-        <thead>
-          <tr>
-            <th style={{ textAlign: 'left' }}>Module</th>
-            <th style={{ textAlign: 'left' }}>Status</th>
-            <th style={{ textAlign: 'left' }}>Uptime</th>
-          </tr>
-        </thead>
-        <tbody>
-          {STATS_DATA && STATS_DATA ? (
-            STATS_DATA.view_processes.map((process, i) => {
-              return (
-                <ModuleState
-                  key={i}
-                  process={process}
-                  index={i}
-                  tooltip={tooltips[process.name]}
-                  date={this.state.date}
-                ></ModuleState>
-              );
-            })
-          ) : (
-            <tr></tr>
-          )}
-        </tbody>
-      </table>
+      <>
+        <h5>Backend Microservices</h5>
+        <table id="modules" className="table table-hover">
+          <thead>
+            <tr>
+              <th style={{ textAlign: 'left' }}>Name</th>
+              <th style={{ textAlign: 'left' }}>Status</th>
+              <th style={{ textAlign: 'left' }}>Uptime</th>
+            </tr>
+          </thead>
+          <tbody>
+            {STATS_DATA && backend ? (
+              backend.map((process, i) => {
+                return (
+                  <ModuleState
+                    key={i}
+                    process={process}
+                    modules={modulesSet}
+                    index={i}
+                    tooltip={
+                      tooltips[process.name.slice(0, process.name.indexOf('-'))]
+                    }
+                    date={this.state.date}
+                  ></ModuleState>
+                );
+              })
+            ) : (
+              <tr></tr>
+            )}
+          </tbody>
+        </table>
+
+        <h5>Monitor (tap) Microservices</h5>
+        <table id="modules" className="table table-hover">
+          <thead>
+            <tr>
+              <th style={{ textAlign: 'left' }}>Name</th>
+              <th style={{ textAlign: 'left' }}>Status</th>
+              <th style={{ textAlign: 'left' }}>Uptime</th>
+            </tr>
+          </thead>
+          <tbody>
+            {STATS_DATA && monitor ? (
+              monitor.map((process, i) => {
+                return (
+                  <ModuleState
+                    key={i + '2'}
+                    process={process}
+                    modules={modulesSet}
+                    index={i + '2'}
+                    tooltip={
+                      tooltips[process.name.slice(0, process.name.indexOf('-'))]
+                    }
+                    date={this.state.date}
+                  ></ModuleState>
+                );
+              })
+            ) : (
+              <tr></tr>
+            )}
+          </tbody>
+        </table>
+      </>
     );
   }
 }

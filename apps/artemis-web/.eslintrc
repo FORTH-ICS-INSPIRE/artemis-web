@@ -271,7 +271,7 @@
     "default-case": "off",
     "no-dupe-class-members": "off",
     "no-undef": "off",
-    "@typescript-eslint/camelcase": "warn",
+    "@typescript-eslint/camelcase": "off",
     "@typescript-eslint/consistent-type-assertions": "warn",
     "no-array-constructor": "off",
     "@typescript-eslint/no-array-constructor": "warn",

@@ -5,8 +5,8 @@ import React from 'react';
 import { useJWT } from '../utils/hooks/use-jwt';
 
 const SignupPage = (props) => {
-  const SignUpComponent = dynamic(() =>
-    import('../components/sign-up/sign-up')
+  const SignUpComponent = dynamic(
+    () => import('../components/sign-up/sign-up')
   );
 
   const [user, loading] = useJWT();
@@ -26,7 +26,7 @@ const SignupPage = (props) => {
       </Head>
       <div id="login-container">
         {!user && !loading && (
-          <div id="content-wrap" style={{ paddingBottom: '5rem' }}>
+          <div id="content-wrap">
             <SignUpComponent />
           </div>
         )}

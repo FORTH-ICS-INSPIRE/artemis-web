@@ -38,8 +38,15 @@ const PasswordChange = (props) => {
     });
 
     if (res.status === 200) {
-      setSuccessMsg((await res.json()).message);
+      setSuccessMsg(
+        (await res.json()).message +
+          '\n Please login with your new credentials.'
+      );
       setErrorMsg('');
+      await fetch('/api/auth/logout', {
+        method: 'DELETE',
+      });
+      setTimeout(() => (document.location.href = '/login'), 3000);
     } else {
       setErrorMsg((await res.json()).message);
       setSuccessMsg('');
@@ -52,7 +59,7 @@ const PasswordChange = (props) => {
         <div className={classes.paper}>
           <img
             width="150"
-            src="./login.png"
+            src="./password.png"
             alt="avatar"
             className="img-responsive"
           />
@@ -63,7 +70,7 @@ const PasswordChange = (props) => {
             id="password_change_form"
             method="post"
             onSubmit={handleSubmit}
-            className={classes.form}
+            className="login-form"
           >
             {errorMsg ? <p style={{ color: 'red' }}>{errorMsg}</p> : null}
             {successMsg ? <p style={{ color: 'green' }}>{successMsg}</p> : null}

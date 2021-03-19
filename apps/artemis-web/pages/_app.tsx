@@ -6,7 +6,7 @@ import Layout from '../components/layout/layout';
 import TooltipContext from '../context/tooltip-context';
 
 const useStateWithLocalStorage = (localStorageKey) => {
-  const [value, setValue] = React.useState(
+  const [value, setValue] = useState(
     localStorage.getItem(localStorageKey)
       ? JSON.parse(localStorage.getItem(localStorageKey))
       : {}

@@ -1,13 +1,10 @@
-import nc from 'next-connect';
-import isEmail from 'validator/lib/isEmail';
-import normalizeEmail from 'validator/lib/normalizeEmail';
 import argon2 from 'argon2';
-import auth from '../../../middleware/auth';
-import { nanoid } from 'nanoid';
+import nc from 'next-connect';
 import {
   NextApiRequestExtended,
   NextApiResponseExtended,
 } from '../../../definitions';
+import auth from '../../../middleware/auth';
 
 const handler = nc()
   .use(auth)
@@ -15,7 +12,7 @@ const handler = nc()
     try {
       const { old_password, new_password } = req.body;
       if (!req.user) throw new Error('You need to be logged in.');
-      console.log(req.user.password);
+
       if (!(await argon2.verify(req.user.password, old_password)))
         throw new Error('Old password is wrong.');
 

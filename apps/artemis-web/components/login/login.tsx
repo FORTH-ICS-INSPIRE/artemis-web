@@ -64,10 +64,10 @@ const Login = (props) => {
             component="h1"
             variant="h5"
           >
-            Login
+            Sign In
           </Typography>
           {errorMsg && <p className="error">{errorMsg}</p>}
-          <form method="post">
+          <form method="post" className="login-form">
             <input name="stype" type="hidden" defaultValue="login" />
             <TextField
               variant="outlined"

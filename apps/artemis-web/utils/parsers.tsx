@@ -3,7 +3,7 @@ import Tooltip from '../components/tooltip/tooltip';
 import { fetchASNData } from './fetch-data';
 import { formatDate, genTooltip } from './token';
 
-export function extractUser(req) {
+export function extractUser(req): any {
   if (!req.user) return null;
 
   const { _id, name, email, role, lastLogin } = req.user;
@@ -16,10 +16,17 @@ export function extractUser(req) {
   };
 }
 
-export function extractLdapUser(req) {
+export function extractLdapUser(req): any {
   if (!req.user) return null;
 
   const mail = req.user[process.env.LDAP_EMAIL_FIELDNAME];
+  let role = 'user';
+
+  req.user._groups.forEach((group) => {
+    if (group.cn === process.env.LDAP_ADMIN_GROUP) {
+      role = 'admin';
+    }
+  });
 
   req.db.collection('users').updateOne(
     {
@@ -32,7 +39,7 @@ export function extractLdapUser(req) {
         password: '<REDUCTED>',
         lastLogin: new Date(),
         currentLogin: new Date(),
-        role: 'user', // just for testing. normally it will be 'pending'
+        role: role, // just for testing. normally it will be 'pending'
       },
     },
     {
@@ -44,12 +51,12 @@ export function extractLdapUser(req) {
     _id: 999,
     name: mail,
     email: mail,
-    role: 'user',
+    role: role,
     lastLogin: new Date(),
   };
 }
 
-export function parseJwt(token) {
+export function parseJwt(token): any {
   try {
     return JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
   } catch (e) {
@@ -57,11 +64,11 @@ export function parseJwt(token) {
   }
 }
 
-function hasProperty(name, property) {
+function hasProperty(name, property): boolean {
   return Object.prototype.hasOwnProperty.call(name, property);
 }
 
-function extractCountries(countries) {
+function extractCountries(countries): any {
   const countries_set = new Set();
   for (const resource in countries.data.located_resources) {
     if (hasProperty(countries.data.located_resources, resource))
@@ -144,7 +151,7 @@ function extractAbuse(abuse) {
   return abuse_html;
 }
 
-function extractInnerHTML(data_, ASN_int) {
+function extractInnerHTML(data_, ASN_int): string[] {
   const html = [];
   const inner_html = [];
   html.push('<p class="tooltip-custom-margin">ASN: ');
@@ -169,7 +176,7 @@ function extractInnerHTML(data_, ASN_int) {
   return html;
 }
 
-export function parseASNData(ASN_int, name, countries, abuse) {
+export function parseASNData(ASN_int, name, countries, abuse): string {
   const data_ = {};
   data_['name'] = name.data.names ? name.data.names[ASN_int] : '';
 
@@ -193,13 +200,25 @@ export function parseASNData(ASN_int, name, countries, abuse) {
   return join_text;
 }
 
-function extractHijackInfoLeft(hijack, { tooltips, setTooltips, context }) {
+function extractHijackInfoLeft(
+  hijack,
+  { tooltips, setTooltips, context }
+): any {
   const hijackInfo = {
     'Hijacker AS:': [
       <Tooltip
         tooltips={tooltips}
         setTooltips={setTooltips}
         asn={hijack.hijack_as}
+        html={
+          <input
+            id="info_type"
+            className="form-control"
+            type="text"
+            readOnly={true}
+            value={hijack.hijack_as ?? ''}
+          />
+        }
         label={`hijack_as`}
         context={context}
       />,
@@ -266,7 +285,7 @@ function extractHijackInfoLeft(hijack, { tooltips, setTooltips, context }) {
       ),
     ],
     Config: [
-      formatDate(new Date(hijack.timestamp_of_config)),
+      formatDate(new Date(hijack.timestamp_of_config), 2),
       genTooltip(
         'Config:',
         null,
@@ -289,7 +308,7 @@ function extractHijackInfoLeft(hijack, { tooltips, setTooltips, context }) {
 function extractHijackInfoRight(hijack) {
   const hijackInfo = {
     'Time Started': [
-      formatDate(new Date(hijack.time_started)),
+      formatDate(new Date(hijack.time_started), 2),
       genTooltip(
         'Time Started:',
         null,
@@ -298,7 +317,7 @@ function extractHijackInfoRight(hijack) {
       ),
     ],
     'Time Detected': [
-      formatDate(new Date(hijack.time_detected)),
+      formatDate(new Date(hijack.time_detected), 2),
       genTooltip(
         'Time Detected:',
         null,
@@ -307,7 +326,7 @@ function extractHijackInfoRight(hijack) {
       ),
     ],
     'Last Update': [
-      formatDate(new Date(hijack.time_last)),
+      hijack.time_last ? formatDate(new Date(hijack.time_last), 2) : 'Never',
       genTooltip(
         'Last Update:',
         null,
@@ -316,7 +335,7 @@ function extractHijackInfoRight(hijack) {
       ),
     ],
     'Time Ended': [
-      formatDate(new Date(hijack.time_ended)),
+      hijack.time_ended ? formatDate(new Date(hijack.time_ended), 2) : 'Never',
       genTooltip(
         'Time Ended:',
         null,
@@ -414,12 +433,12 @@ export async function extractDistinctTooltips(asns) {
     const ASN_int: number | string =
       asns[i] !== '-' ? parseInt(asns[i], 10) : '-';
     const [name_origin, countries_origin, abuse_origin] =
-      ASN_int == '-'
+      ASN_int === '-'
         ? ['', '', '']
         : await fetchASNData(parseInt(ASN_int.toString(), 10));
 
     const tooltip =
-      ASN_int == '-'
+      ASN_int === '-'
         ? ''
         : parseASNData(ASN_int, name_origin, countries_origin, abuse_origin);
     tooltips[ASN_int] = tooltip;
@@ -428,7 +447,7 @@ export async function extractDistinctTooltips(asns) {
   return tooltips;
 }
 
-export async function extractHijackTooltips(hijack) {
+export async function extractHijackTooltips(hijack): Promise<any> {
   const ASN_int_origin: number = hijack.hijack_as;
   const ASN_int_peers: number = hijack.peers_seen;
 

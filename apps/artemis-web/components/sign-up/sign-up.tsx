@@ -48,7 +48,7 @@ const SignUp = (props) => {
           <Typography className={classes.input} component="h1" variant="h5">
             Sign up
           </Typography>
-          <form method="post" onSubmit={handleSubmit} className={classes.form}>
+          <form method="post" onSubmit={handleSubmit} className="login-form">
             {errorMsg ? <p style={{ color: 'red' }}>{errorMsg}</p> : null}
             <input name="emailVerified" type="hidden" defaultValue={'true'} />
             <input name="stype" type="hidden" defaultValue="signup" />

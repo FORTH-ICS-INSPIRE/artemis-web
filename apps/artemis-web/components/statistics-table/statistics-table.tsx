@@ -24,7 +24,7 @@ type StatisticsType = {
   data: IndexType;
 };
 
-class StatisticsTable extends Component<StatisticsType, {}> {
+class StatisticsTable extends Component<StatisticsType, unknown> {
   render() {
     const STATISTICS_DATA = this.props.data;
     const tooltips = [
@@ -61,6 +61,8 @@ class StatisticsTable extends Component<StatisticsType, {}> {
                         word.slice(1) +
                         ' ')
                   );
+
+                if (firstCaps.includes('Typename')) return;
 
                 return (
                   <tr key={i}>

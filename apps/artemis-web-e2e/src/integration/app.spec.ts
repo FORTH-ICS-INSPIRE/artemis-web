@@ -23,48 +23,15 @@ describe('artemis-web', () => {
     // Custom command example, see `../support/commands.ts` file
     cy.get('#logout', { timeout: 2000 }).click({ force: true });
     cy.wait(2000);
-    cy.get('h1').should('have.text', 'Login');
-  });
-
-  it('logs in with ldap', () => {
-    cy.visit('/login');
-    cy.wait(2000);
-    cy.get('h1').should('have.text', 'Login');
-    cy.typeLogin({ email: 'hermes@planetexpress.com', password: 'hermes' });
-    cy.loginLDAP();
-    cy.waitFor('h1');
-    cy.get('h1').should('have.text', 'Dashboard');
-  });
-
-  it('logs out', () => {
-    // Custom command example, see `../support/commands.ts` file
-    cy.get('#logout', { timeout: 4000 }).click({ force: true });
-    cy.wait(2000);
-    cy.get('h1').should('have.text', 'Login');
+    cy.get('h1').should('have.text', 'Sign In');
   });
 
   it('logs in', () => {
     cy.visit('/login');
     cy.wait(2000);
-    cy.get('h1').should('have.text', 'Login');
+    cy.get('h1').should('have.text', 'Sign In');
     cy.typeLogin({ email: newEmail, password: newPass });
     cy.login();
-  });
-
-  it('after login > Dashboard', () => {
-    // Custom command example, see `../support/commands.ts` file
-    cy.visit('/dashboard');
-    cy.wait(2000);
-    cy.waitFor('h1');
-    cy.get('h1').should('have.text', 'Dashboard');
-    cy.get('#modules').find('tr').its('length').should('be.gt', 0);
-  });
-
-  it('diplays modules', () => {
-    cy.visit('/dashboard');
-    cy.wait(2000);
-    // Custom command example, see `../support/commands.ts` file
-    cy.get('#modules').find('tr').its('length').should('be.gt', 0);
   });
 
   it('change password', () => {
@@ -79,5 +46,22 @@ describe('artemis-web', () => {
     cy.get('#submit').click();
     cy.wait(1000);
     cy.get('#password_change_form').contains('has been updated');
+  });
+
+  it('logs in', () => {
+    cy.visit('/login');
+    cy.wait(2000);
+    cy.get('h1').should('have.text', 'Sign In');
+    cy.typeLogin({ email: newEmail, password: '1234' });
+    cy.login();
+  });
+
+  it('after login > Dashboard', () => {
+    // Custom command example, see `../support/commands.ts` file
+    cy.visit('/dashboard');
+    cy.wait(2000);
+    cy.waitFor('h1');
+    cy.get('h1').should('have.text', 'Dashboard');
+    // cy.get('#modules').find('tr').its('length').should('be.gt', 0);
   });
 });

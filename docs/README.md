@@ -46,13 +46,13 @@ For more instructions and potential debugging on this please consult this [webpa
 2. Download ARTEMIS from GitHub (if not already downloaded):
 
 ```
-   git clone https://github.com/CuriouzK0d3r/artemis_web
+   git clone https://github.com/FORTH-ICS-INSPIRE/artemis-web
 ```
 
 3. The docker-compose utility is configured to pull the latest **stable** released images that are built remotely on [docker cloud](https://cloud.docker.com/). Run the following:
 
 ```
-cd artemis_web
+cd artemis-web
 docker-compose pull
 ```
 
@@ -78,19 +78,29 @@ cd artemis_web
 yarn install
 ```
 
-### Running the ARTEMIS Web App
+### Running the ARTEMIS Web App in development mode
 
 1. To get the mongo db up and running, execute:
 
 ```
-cd artemis_web
+cd artemis-web
 docker-compose up # add -d for detached state
 ```
 
 2. To get the app running, run the following:
 
 ```
-yarn run start
+MONGODB_HOST=localhost LDAP_HOST=localhost yarn start
 ```
 
 3. Open a browser and visit http://localhost:4200
+
+### Running the ARTEMIS Web App in production mode
+
+1. To get the app running, run the following:
+
+```
+docker-compose -f docker-compose.prod.yml up # add -d for detached state
+```
+
+3. Open a browser and visit https://localhost

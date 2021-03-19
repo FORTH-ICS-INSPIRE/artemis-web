@@ -1,4 +1,5 @@
 import { Button } from '@material-ui/core';
+import { useGraphQl } from '../../utils/hooks/use-graphql';
 import Link from 'next/link';
 import React, { useState } from 'react';
 import BootstrapTable from 'react-bootstrap-table-next';
@@ -15,23 +16,36 @@ import paginationFactory, {
 } from 'react-bootstrap-table2-paginator';
 import ToolkitProvider from 'react-bootstrap-table2-toolkit';
 import TooltipContext from '../../context/tooltip-context';
-import { formatDate, genTooltip } from '../../utils/token';
+import {
+  findStatus,
+  formatDate,
+  genTooltip,
+  getISODate,
+  getSortCaret,
+  getStatusField,
+  isObjectEmpty,
+  shallSubscribe,
+} from '../../utils/token';
 import Tooltip from '../tooltip/tooltip';
+import ErrorBoundary from '../error-boundary/error-boundary';
+import { sendData } from '../../utils/fetch-data';
+import { useStyles } from '../../utils/styles';
 
-const exactMatchFilter = textFilter({
-  placeholder: '', // custom the input placeholder
-  className: 'my-custom-text-filter', // custom classname on input
-  defaultValue: '', // default filtering value
-  comparator: Comparator.EQ, // default is Comparator.LIKE
-  caseSensitive: true, // default is false, and true will only work when comparator is LIKE
-  style: {}, // your custom styles on input
-  delay: 1000, // how long will trigger filtering after user typing, default is 500 ms
-  id: 'id', // assign a unique value for htmlFor attribute, it's useful when you have same dataField across multiple table in one page
-});
+const getExactMatchFilter = (stateValue, fieldName) =>
+  textFilter({
+    placeholder: fieldName, // custom the input placeholder
+    className: 'my-custom-text-filter', // custom classname on input
+    defaultValue: stateValue, // default filtering value
+    comparator: Comparator.EQ, // default is Comparator.LIKE
+    caseSensitive: true, // default is false, and true will only work when comparator is LIKE
+    style: {}, // your custom styles on input
+    delay: 1000, // how long will trigger filtering after user typing, default is 500 ms
+    id: 'id', // assign a unique value for htmlFor attribute, it's useful when you have same dataField across multiple table in one page
+  });
 
-const columns = [
+const getColumns = (stateValues) => [
   {
-    dataField: 'update',
+    dataField: 'time_last',
     text: 'Last Update',
     sort: true,
     headerTitle: false,
@@ -43,33 +57,11 @@ const columns = [
         'The timestamp of the newest known (to the system) BGP update that is related to the hijack.'
       ),
     sortCaret: (order) => {
-      if (!order)
-        return (
-          <span>
-            &nbsp;&nbsp;&darr;
-            <span style={{ color: 'red' }}>/&uarr;</span>
-          </span>
-        );
-      if (order === 'asc')
-        return (
-          <span>
-            &nbsp;&nbsp;&darr;
-            <span style={{ color: 'red' }}>/&uarr;</span>
-          </span>
-        );
-      if (order === 'desc')
-        return (
-          <span>
-            &nbsp;&nbsp;
-            <span style={{ color: 'red' }}>&darr;</span>
-            /&uarr;
-          </span>
-        );
-      return null;
+      return getSortCaret(order);
     },
   },
   {
-    dataField: 'time',
+    dataField: 'time_detected',
     text: 'Time Detected',
     sort: true,
     headerTitle: false,
@@ -81,29 +73,7 @@ const columns = [
         'The time when a hijack event was first detected by the system'
       ),
     sortCaret: (order) => {
-      if (!order)
-        return (
-          <span>
-            &nbsp;&nbsp;&darr;
-            <span style={{ color: 'red' }}>/&uarr;</span>
-          </span>
-        );
-      if (order === 'asc')
-        return (
-          <span>
-            &nbsp;&nbsp;&darr;
-            <span style={{ color: 'red' }}>/&uarr;</span>
-          </span>
-        );
-      if (order === 'desc')
-        return (
-          <span>
-            &nbsp;&nbsp;
-            <span style={{ color: 'red' }}>&darr;</span>
-            /&uarr;
-          </span>
-        );
-      return null;
+      return getSortCaret(order);
     },
   },
   {
@@ -119,7 +89,7 @@ const columns = [
     text: 'Status',
   },
   {
-    dataField: 'hprefix',
+    dataField: 'prefix',
     headerTitle: false,
     headerFormatter: (column, colIndex, components) =>
       genTooltip(
@@ -129,10 +99,10 @@ const columns = [
         'The IPv4/IPv6 prefix that was hijacked'
       ),
     text: 'Hijacked Prefix',
-    filter: exactMatchFilter,
+    filter: getExactMatchFilter(stateValues['prefix'], 'Hijacked Prefix'),
   },
   {
-    dataField: 'mprefix',
+    dataField: 'configured_prefix',
     headerTitle: false,
     headerFormatter: (column, colIndex, components) =>
       genTooltip(
@@ -142,10 +112,13 @@ const columns = [
         'The configured IPv4/IPv6 prefix that matched the hijacked prefix.'
       ),
     text: 'Matched Prefix',
-    filter: exactMatchFilter,
+    filter: getExactMatchFilter(
+      stateValues['configured_prefix'],
+      'Matched Prefix'
+    ),
   },
   {
-    dataField: 'htype',
+    dataField: 'type',
     headerTitle: false,
     headerFormatter: (column, colIndex, components) =>
       genTooltip(
@@ -155,10 +128,13 @@ const columns = [
         'The type of the hijack in 4 dimensions: prefix|path|data plane|policy<ul><li>[Prefix] S → Sub-prefix hijack</li>'
       ),
     text: 'Type',
-    filter: textFilter(),
+    filter: textFilter({
+      placeholder: 'Type',
+      defaultValue: stateValues['type'],
+    }),
   },
   {
-    dataField: 'as',
+    dataField: 'hijack_as',
     headerTitle: false,
     headerFormatter: (column, colIndex, components) =>
       genTooltip(
@@ -167,11 +143,11 @@ const columns = [
         'as_title',
         'The AS that is potentially responsible for the hijack.</br>Note that this is an experimental field.'
       ),
-    text: 'Hijacked AS',
-    filter: exactMatchFilter,
+    text: 'Hijacker AS',
+    filter: getExactMatchFilter(stateValues['hijack_as'], 'Hijacker AS'),
   },
   {
-    dataField: 'rpki',
+    dataField: 'rpki_status',
     headerTitle: false,
     headerFormatter: (column, colIndex, components) =>
       genTooltip(
@@ -182,6 +158,8 @@ const columns = [
       ),
     text: 'RPKI',
     filter: selectFilter({
+      placeholder: 'RPKI',
+      defaultValue: stateValues['rpki_status'],
       options: ['VD', 'IA', 'IL', 'IU', 'NF', 'NA'].reduce((acc, elem) => {
         acc[elem] = elem; // or what ever object you want inside
         return acc;
@@ -189,7 +167,7 @@ const columns = [
     }),
   },
   {
-    dataField: 'peers',
+    dataField: 'num_peers_seen',
     headerTitle: false,
     headerFormatter: (column, colIndex, components) =>
       genTooltip(
@@ -201,33 +179,11 @@ const columns = [
     text: '# Peers Seen',
     sort: true,
     sortCaret: (order) => {
-      if (!order)
-        return (
-          <span>
-            &nbsp;&nbsp;&darr;
-            <span style={{ color: 'red' }}>/&uarr;</span>
-          </span>
-        );
-      if (order === 'asc')
-        return (
-          <span>
-            &nbsp;&nbsp;&darr;
-            <span style={{ color: 'red' }}>/&uarr;</span>
-          </span>
-        );
-      if (order === 'desc')
-        return (
-          <span>
-            &nbsp;&nbsp;
-            <span style={{ color: 'red' }}>&darr;</span>
-            /&uarr;
-          </span>
-        );
-      return null;
+      return getSortCaret(order);
     },
   },
   {
-    dataField: 'ASes',
+    dataField: 'num_asns_inf',
     text: '# ASes Infected',
     headerTitle: false,
     headerFormatter: (column, colIndex, components) =>
@@ -239,29 +195,7 @@ const columns = [
       ),
     sort: true,
     sortCaret: (order) => {
-      if (!order)
-        return (
-          <span>
-            &nbsp;&nbsp;&darr;
-            <span style={{ color: 'red' }}>/&uarr;</span>
-          </span>
-        );
-      if (order === 'asc')
-        return (
-          <span>
-            &nbsp;&nbsp;&darr;
-            <span style={{ color: 'red' }}>/&uarr;</span>
-          </span>
-        );
-      if (order === 'desc')
-        return (
-          <span>
-            &nbsp;&nbsp;
-            <span style={{ color: 'red' }}>&darr;</span>
-            /&uarr;
-          </span>
-        );
-      return null;
+      return getSortCaret(order);
     },
   },
   {
@@ -300,49 +234,142 @@ const statuses = {
   Outdated: 'dark',
 };
 
-const HijackTableComponent = (props) => {
-  const HIJACK_DATA = props.data;
+function handleData(
+  data,
+  tooltips,
+  setTooltips,
+  context,
+  offset,
+  setFilteredHijackData
+) {
+  const HIJACK_DATA = data;
   let hijacks;
-  const context = React.useContext(TooltipContext);
-  const [tooltips, setTooltips] = useState({});
-
   if (HIJACK_DATA && HIJACK_DATA.length) {
-    hijacks = HIJACK_DATA.map((row, i) => ({
-      id: row.id,
-      update: formatDate(new Date(row.time_last)),
-      time: formatDate(new Date(row.time_detected)),
-      hprefix: row.prefix,
-      mprefix: row.configured_prefix,
-      htype: row.type,
-      status: (
-        <span className={'badge badge-pill badge-' + statuses[row.status]}>
-          {row.status}
-        </span>
-      ),
-      as_original: row.hijack_as,
-      as: (
-        <Tooltip
-          tooltips={tooltips}
-          setTooltips={setTooltips}
-          asn={row.hijack_as}
-          label={`hijack_as`}
-          context={context}
-        />
-      ),
-      rpki: row.rpki_status,
-      peers: row.num_peers_seen,
-      ASes: row.num_asns_inf,
-      ack:
-        row.resolved || row.under_mitigation ? (
-          <img alt="" src="./handled.png" />
-        ) : (
-          <img alt="" src="./unhadled.png" />
+    hijacks = HIJACK_DATA.map((row, i) => {
+      const _status = findStatus(row);
+      return {
+        id: i,
+        time_last: formatDate(new Date(row.time_last), 2),
+        time_detected: formatDate(new Date(row.time_detected), 2),
+        prefix: row.prefix,
+        configured_prefix: row.configured_prefix,
+        type: row.type,
+        as_original: row.hijack_as,
+        hijack_as:
+          row.hijack_as === -1 ? (
+            <span>-</span>
+          ) : (
+            <Tooltip
+              tooltips={tooltips}
+              setTooltips={setTooltips}
+              asn={row.hijack_as}
+              label={`hijack_as_` + i + '_' + offset}
+              context={context}
+            />
+          ),
+        status: (
+          <span className={'badge badge-pill badge-' + statuses[_status[0]]}>
+            {_status[0]}
+          </span>
         ),
-      more: <Link href={`/hijack?key=${row.key}`}>View</Link>,
-    }));
+        rpki_status: row.rpki_status,
+        num_peers_seen: row.num_peers_seen,
+        num_asns_inf: row.num_asns_inf,
+        ack:
+          row.resolved || row.under_mitigation ? (
+            <img alt="" src="./handled.png" />
+          ) : (
+            <img alt="" src="./unhadled.png" />
+          ),
+        key: row.key,
+        more: <Link href={`/hijack?key=${row.key}`}>View</Link>,
+      };
+    });
   } else {
     hijacks = [];
   }
+
+  hijacks.forEach((entry, i) => {
+    entry.id = i;
+  });
+
+  setFilteredHijackData(hijacks);
+
+  return hijacks;
+}
+
+const HijackTableComponent = (props) => {
+  const { setFilteredHijackData, filter, filterStatus, filterTo } = props;
+  const context = React.useContext(TooltipContext);
+  const [tooltips, setTooltips] = useState({});
+  const [page, setPage] = useState(0);
+  const [sizePerPage, setSizePerPage] = useState(10);
+  const [columnFilter, setColumnFilter] = useState({});
+  const dateFrom: string = getISODate(filter);
+  const dateTo: string = getISODate(filterTo ?? 0);
+  const [limitState, setLimitState] = useState(10);
+  const [offsetState, setOffsetState] = useState(0);
+  const [sortState, setSortState] = useState('desc');
+  const [sortColumnState, setSortColumnState] = useState('time_last');
+  const [hijackData, setHijackData] = useState([]);
+  const [hijackState, setHijackState] = useState([]);
+  const [selectState, setSelectState] = useState('hijack_action_resolve');
+  const [stateValues, setStateValues] = useState({
+    prefix: '',
+    configured_prefix: '',
+    hijack_as: '',
+    rpki_status: '',
+    type: '',
+  });
+
+  const HIJACK_COUNT: any = useGraphQl('hijackCount', {
+    isLive: shallSubscribe(props.isLive),
+    hasColumnFilter: !isObjectEmpty(columnFilter),
+    columnFilter: columnFilter,
+    hasDateFilter: filter !== 0,
+    dateRange: { dateTo: dateTo, dateFrom: dateFrom },
+    hasStatusFilter: filterStatus ? filterStatus.length !== 0 : false,
+    statusFilter:
+      filterStatus && filterStatus.length !== 0
+        ? `{ ${getStatusField(filterStatus)} : {_eq: true } }`
+        : '',
+  });
+
+  const hijackCount = HIJACK_COUNT.data
+    ? HIJACK_COUNT.data.count_data.aggregate.count
+    : 0;
+
+  useGraphQl('hijacks', {
+    callback: (data) => {
+      const processedData = handleData(
+        shallSubscribe(props.isLive)
+          ? data.subscriptionData.data.view_hijacks.slice(0, limitState)
+          : data.view_hijacks.slice(0, limitState),
+        tooltips,
+        setTooltips,
+        context,
+        offsetState,
+        setFilteredHijackData
+      );
+      setHijackData(processedData);
+    },
+    isLive: shallSubscribe(props.isLive),
+    limits: {
+      limit: limitState,
+      offset: offsetState,
+    },
+    sortOrder: sortState,
+    sortColumn: sortColumnState,
+    hasDateFilter: filter !== 0,
+    dateRange: { dateTo: dateTo, dateFrom: dateFrom },
+    hasColumnFilter: !isObjectEmpty(columnFilter),
+    columnFilter: columnFilter,
+    hasStatusFilter: filterStatus ? filterStatus.length !== 0 : false,
+    statusFilter:
+      filterStatus && filterStatus.length !== 0
+        ? `{ ${getStatusField(filterStatus)} : {_eq: true } }`
+        : '',
+  });
 
   const customTotal = (from, to, size) => (
     <span className="react-bootstrap-table-pagination-total">
@@ -380,7 +407,23 @@ const HijackTableComponent = (props) => {
     </div>
   );
 
+  const pageButtonRenderer = ({ page, active, onPageChange }) => {
+    const handleClick = (e) => {
+      e.preventDefault();
+      onPageChange(page);
+    };
+
+    return (
+      <li key={page} className={(active ? 'active' : '') + ' page-item'}>
+        <a onClick={handleClick} href="#" className="page-link">
+          {page !== 'Next' && page !== 'Back' ? page + 1 : page}
+        </a>
+      </li>
+    );
+  };
+
   const options = {
+    pageButtonRenderer,
     sizePerPageRenderer,
     pageStartIndex: 0,
     withFirstAndLast: false, // Hide the going to First and Last page button
@@ -417,16 +460,34 @@ const HijackTableComponent = (props) => {
   };
 
   const MyExportCSV = (props) => {
-    const handleClick = () => {
-      props.onExport();
+    const handleClick = async () => {
+      const res = await fetch('/api/download_tables', {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ action: 'view_hijacks' }),
+      });
+      const x = window.open();
+      x.document.open();
+      x.document.write(
+        '<html><body><pre>' +
+          JSON.stringify(await res.json(), null, '\t') +
+          '</pre></body></html>'
+      );
+      x.document.close();
     };
+
+    const classes = useStyles();
+
     return (
-      <div>
+      <div style={{ display: 'inline' }}>
         <Button
-          className="btn btn-success"
           style={{ float: 'right', marginBottom: '10px' }}
           variant="contained"
-          color="primary"
+          className={classes.button}
           onClick={handleClick}
         >
           Download Table
@@ -435,47 +496,187 @@ const HijackTableComponent = (props) => {
     );
   };
 
+  const HijackActions = (props) => {
+    const data = props.data;
+    const { hijackState, setHijackState, selectState, setSelectState } = props;
+
+    return (
+      <>
+        <button
+          onClick={() => setHijackState(data)}
+          style={{ marginRight: '5px' }}
+          id="select_page"
+          type="button"
+          className="btn btn-primary btn-sm"
+        >
+          Select Page
+        </button>
+        <span
+          style={{ marginRight: '5px' }}
+          className="btn-group-toggle"
+          data-toggle="buttons"
+        >
+          <label className="btn btn-secondary active btn-sm">
+            <input type="checkbox" autoComplete="off" /> Selected Hijacks{' '}
+            <b id="selected_hijacks_num">{hijackState.length}</b>
+          </label>
+        </span>
+        <select
+          onChange={(e) => setSelectState(e.target.value)}
+          style={{
+            width: '200px',
+            display: 'inline-block',
+            marginRight: '5px',
+          }}
+          className="form-control form-control-sm-auto"
+          id="action_selection"
+        >
+          <option value="hijack_action_resolve">Mark as Resolved</option>
+          <option value="hijack_action_ignore">Mark as Ignored</option>
+          <option value="hijack_action_acknowledge">
+            Mark as Acknowledged
+          </option>
+          <option value="hijack_action_acknowledge_not">
+            Mark as Not Acknowledged
+          </option>
+          <option value="hijack_action_delete">Delete Hijack</option>
+        </select>
+        <button
+          onClick={(e) =>
+            sendData(e, {
+              hijackKeys: hijackState.map((hijack) => hijack.key),
+              selectState: selectState,
+            })
+          }
+          style={{ marginRight: '5px' }}
+          id="apply_selected"
+          type="button"
+          className="btn btn-primary btn-sm"
+        >
+          Apply
+        </button>
+        <button
+          onClick={() => setHijackState([])}
+          id="clear_all_selected"
+          type="button"
+          className="btn btn-danger btn-sm"
+        >
+          Clear
+        </button>
+      </>
+    );
+  };
+
+  const handleTableChange = (
+    type,
+    { page, sizePerPage, sortOrder, filters, sortField }
+  ) => {
+    const currentIndex = page * sizePerPage;
+    setPage(page);
+    setSizePerPage(sizePerPage);
+    if (currentIndex) setOffsetState(currentIndex);
+    if (sizePerPage) setLimitState(sizePerPage);
+    if (sortOrder) {
+      setSortColumnState(sortField);
+      setSortState(sortOrder);
+    }
+    if (filters) {
+      const key = Object.keys(filters)[0];
+      if (filters[key])
+        setStateValues({ ...stateValues, [key]: filters[key].filterVal });
+      else setStateValues({ ...stateValues, [key]: '' });
+      setColumnFilter(filters);
+    }
+  };
+
+  const tableRowEvents = {
+    onClick: (e, row, rowIndex) => {
+      const existsInState = hijackState.some(
+        (hijack) => hijack.key === row.key
+      );
+
+      if (existsInState)
+        setHijackState(hijackState.filter((hijack) => hijack.key !== row.key));
+      else setHijackState(hijackState.concat([row]));
+    },
+  };
+
+  const rowClasses = (row, rowIndex) =>
+    hijackState.some((hijack) => hijack.key === row.key) ? 'highlight-row' : '';
+
   const contentTable = ({ paginationProps, paginationTableProps }) => (
     <ToolkitProvider
       keyField="id"
-      columns={columns}
-      data={hijacks}
+      columns={getColumns(stateValues)}
+      data={hijackData}
+      dataSize={hijackCount}
       exportCSV={{ onlyExportFiltered: true, exportAll: false }}
     >
       {(toolkitprops) => {
-        paginationProps.dataSize = hijacks.length;
+        paginationProps.dataSize = hijackCount;
         return (
-          <>
+          <div>
             <div className="header-filter">
               <SizePerPageDropdownStandalone {...paginationProps} />
-              <MyExportCSV {...toolkitprops.csvProps}>Export CSV!!</MyExportCSV>
+              <HijackActions
+                data={hijackData}
+                hijackState={hijackState}
+                setHijackState={setHijackState}
+                selectState={selectState}
+                setSelectState={setSelectState}
+              />
+              <MyExportCSV {...toolkitprops.csvProps} />
             </div>
             <BootstrapTable
+              remote
               wrapperClasses="table-responsive"
               keyField="id"
-              data={hijacks}
-              columns={columns}
+              data={hijackData}
+              columns={getColumns(stateValues)}
               filter={filterFactory()}
               filterPosition="bottom"
+              onTableChange={handleTableChange}
               striped
               condensed
               hover
+              rowClasses={rowClasses}
+              rowEvents={tableRowEvents}
+              noDataIndication={() => {
+                return (
+                  <div>
+                    <p>
+                      <img
+                        alt=""
+                        id="nodata"
+                        width="256"
+                        src="checkmark.png"
+                      ></img>
+                    </p>
+                    <h3>{'No hijack alerts! Go grab a beer!'}</h3>
+                  </div>
+                );
+              }}
               {...toolkitprops.baseProps}
               {...paginationTableProps}
             />
-
             <PaginationTotalStandalone {...paginationProps} />
             <PaginationListStandalone {...paginationProps} />
-          </>
+          </div>
         );
       }}
     </ToolkitProvider>
   );
 
   return (
-    <PaginationProvider pagination={paginationFactory(options)}>
-      {contentTable}
-    </PaginationProvider>
+    <ErrorBoundary
+      containsData={true}
+      noDataMessage={'No hijack alerts.'}
+      customError={HIJACK_COUNT.error}
+    >
+      <PaginationProvider pagination={paginationFactory(options)}>
+        {contentTable}
+      </PaginationProvider>
+    </ErrorBoundary>
   );
 };
 

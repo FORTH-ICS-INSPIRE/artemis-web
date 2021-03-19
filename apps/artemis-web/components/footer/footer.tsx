@@ -11,27 +11,28 @@ type MyProps = {
   };
 };
 
-class Footer extends React.Component<MyProps> {
+class FooterComponent extends React.Component<MyProps> {
   render() {
     const { classes } = this.props;
     const { root, footer, link } = classes;
 
     return (
-      <div className={root}>
-        <CssBaseline />
-        <footer className={footer}>
-          <Container maxWidth="lg">
-            <Copyright _class={link} />
-          </Container>
-        </footer>
-      </div>
+      <footer className="footer">
+        <Container
+          style={{ marginLeft: '0px', paddingLeft: '8.333333%' }}
+          maxWidth="lg"
+        >
+          ARTEMIS v.'latest@'
+          {/* <Copyright _class={link} /> */}
+        </Container>
+      </footer>
     );
   }
 }
 
-const Styles = () => {
+const Footer = () => {
   const classes = useFooterStyles();
-  return <Footer classes={classes} />;
+  return <FooterComponent classes={classes} />;
 };
 
-export default Styles;
+export default Footer;

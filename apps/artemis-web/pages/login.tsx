@@ -23,7 +23,7 @@ const LoginPage = (props) => {
       </Head>
       <div id="login-container">
         {!user && !loading && (
-          <div id="content-wrap" style={{ paddingBottom: '5rem' }}>
+          <div id="content-wrap">
             <LoginComponent {...props} />
           </div>
         )}
