@@ -22,7 +22,6 @@ import {
   genTooltip,
   getSimpleDates,
   GLOBAL_MEDIA_QUERIES,
-  matches,
   shallMock,
 } from '../utils/token';
 
