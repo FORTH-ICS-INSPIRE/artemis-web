@@ -8,6 +8,7 @@ import {
 } from '@material-ui/core';
 import Head from 'next/head';
 import React, { useState } from 'react';
+import { useMedia } from 'react-media';
 import { RangePicker } from 'react-minimal-datetime-range';
 import 'react-minimal-datetime-range/lib/react-minimal-datetime-range.min.css';
 import { ToastContainer } from 'react-toastify';
@@ -17,7 +18,13 @@ import BGPTableComponent from '../components/bgp-table/bgp-table';
 import Tooltip from '../components/tooltip/tooltip';
 import TooltipContext from '../context/tooltip-context';
 import { AntSwitch, useStyles } from '../utils/styles';
-import { genTooltip, getSimpleDates, shallMock } from '../utils/token';
+import {
+  genTooltip,
+  getSimpleDates,
+  GLOBAL_MEDIA_QUERIES,
+  matches,
+  shallMock,
+} from '../utils/token';
 
 const BGPUpdates = (props) => {
   const [isLive, setIsLive] = useState(true);
@@ -58,6 +65,8 @@ const BGPUpdates = (props) => {
   const [dateTime1, setDateTime1] = useState(dates[0]);
   const [dateTime2, setDateTime2] = useState(dates[1]);
 
+  const matches = useMedia({ queries: GLOBAL_MEDIA_QUERIES });
+
   return (
     <>
       <Head>
@@ -73,9 +82,11 @@ const BGPUpdates = (props) => {
                   <h1 style={{ color: 'black' }}>BGP Updates</h1>
                 </div>
                 {/* <div className="col-lg-1"></div> */}
-                <div className="col-lg-2">
-                  <h2 style={{ color: 'black' }}>Live Update:</h2>{' '}
-                </div>
+                {matches.pc && (
+                  <div className="col-lg-2">
+                    <h2 style={{ color: 'black' }}>Live Update:</h2>{' '}
+                  </div>
+                )}
                 <div className="col-lg-1">
                   <FormGroup>
                     <FormControlLabel

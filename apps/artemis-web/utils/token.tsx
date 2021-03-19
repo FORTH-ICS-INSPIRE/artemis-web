@@ -5,6 +5,7 @@ import filterFactory, {
   selectFilter,
   textFilter,
 } from 'react-bootstrap-table2-filter';
+import { useMedia } from 'react-media';
 
 export const getRandomString = (len): string => {
   const buf = [],
@@ -256,4 +257,9 @@ export const exportHijack = async (hijack_key) => {
       '</pre></body></html>'
   );
   x.document.close();
+};
+
+export const GLOBAL_MEDIA_QUERIES = {
+  pc: '(min-width: 700px)',
+  mobile: '(max-width: 700px)',
 };

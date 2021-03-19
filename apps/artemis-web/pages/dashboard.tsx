@@ -1,4 +1,3 @@
-import { Button } from '@material-ui/core';
 import Head from 'next/head';
 import React from 'react';
 import { useMedia } from 'react-media';
@@ -10,7 +9,7 @@ import OngoingHijackTableComponent from '../components/ongoing-hijack-table/ongo
 import StatisticsTable from '../components/statistics-table/statistics-table';
 import StatusTable from '../components/status-table/status-table';
 import { useGraphQl } from '../utils/hooks/use-graphql';
-import { shallMock } from '../utils/token';
+import { GLOBAL_MEDIA_QUERIES, shallMock } from '../utils/token';
 
 const DashboardPage = (props) => {
   if (shallMock()) {
@@ -36,10 +35,6 @@ const DashboardPage = (props) => {
   });
   const INDEX_DATA = INDEX_RES.data;
 
-  const GLOBAL_MEDIA_QUERIES = {
-    pc: '(min-width: 700px)',
-    mobile: '(max-width: 700px)',
-  };
   const matches = useMedia({ queries: GLOBAL_MEDIA_QUERIES });
 
   return (
@@ -89,8 +84,8 @@ const DashboardPage = (props) => {
                       (
                       {user &&
                         new Date(user.lastLogin).toLocaleDateString() +
-                        ' ' +
-                        new Date(user.lastLogin).toLocaleTimeString()}
+                          ' ' +
+                          new Date(user.lastLogin).toLocaleTimeString()}
                       )
                     </b>
                     . You are {user && user.role}.
@@ -100,7 +95,7 @@ const DashboardPage = (props) => {
             </div>
             <div className="row" style={{ marginTop: '20px' }}>
               <div className="col-lg-1" />
-              <div className={matches.pc ? "col-lg-6" : "col-lg-10"}>
+              <div className={matches.pc ? 'col-lg-6' : 'col-lg-10'}>
                 <div className="card">
                   <div className="card-header">
                     Ongoing, Non-Dormant Hijacks{' '}
@@ -143,7 +138,8 @@ const DashboardPage = (props) => {
                       </ErrorBoundary>
                     </div>
                   </div>
-                </div>)}
+                </div>
+              )}
             </div>
             {matches.mobile && (
               <div className="row" style={{ marginTop: '20px' }}>
@@ -178,7 +174,8 @@ const DashboardPage = (props) => {
                     </div>
                   </div>
                 </div>
-              </div>)}
+              </div>
+            )}
             <ToastContainer />
           </div>
         )}

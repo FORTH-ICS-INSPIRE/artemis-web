@@ -16,6 +16,7 @@ import DefaultErrorPage from 'next/error';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React from 'react';
+import { useMedia } from 'react-media';
 import 'react-toastify/dist/ReactToastify.css';
 import AuthHOC from '../components/401-hoc/401-hoc';
 import BGPTableComponent from '../components/bgp-table/bgp-table';
@@ -26,7 +27,12 @@ import Tooltip from '../components/tooltip/tooltip';
 import { useGraphQl } from '../utils/hooks/use-graphql';
 import { useHijack } from '../utils/hooks/use-hijack';
 import { AntSwitch } from '../utils/styles';
-import { findStatus, shallMock, statuses } from '../utils/token';
+import {
+  findStatus,
+  GLOBAL_MEDIA_QUERIES,
+  shallMock,
+  statuses,
+} from '../utils/token';
 
 const ViewHijackPage = (props) => {
   if (shallMock()) {
@@ -103,6 +109,8 @@ const ViewHijackPage = (props) => {
     );
   };
 
+  const matches = useMedia({ queries: GLOBAL_MEDIA_QUERIES });
+
   return (
     <>
       <Head>
@@ -136,9 +144,11 @@ const ViewHijackPage = (props) => {
                   </h1>
                 </div>
                 {/* <div className="col-lg-1"></div> */}
-                <div className="col-lg-2">
-                  <h2 style={{ color: 'black' }}> Live Update: </h2>{' '}
-                </div>
+                {matches.pc && (
+                  <div className="col-lg-2">
+                    <h2 style={{ color: 'black' }}> Live Update: </h2>{' '}
+                  </div>
+                )}
                 <div className="col-lg-1">
                   <FormGroup>
                     <FormControlLabel
@@ -161,6 +171,7 @@ const ViewHijackPage = (props) => {
           </div>
           <HijackInfoComponent
             hijackDataState={hijackDataState}
+            isMobile={matches.mobile}
             tooltips={tooltips}
             setTooltips={setTooltips}
             context={context}
@@ -270,7 +281,7 @@ const ViewHijackPage = (props) => {
               </div>
             </div>
           </div>
-          <div className="row" style={{ marginTop: '20px' }}>
+          {/* <div className="row" style={{ marginTop: '20px' }}>
             <div className="col-lg-1" />
             <div className="col-lg-10">
               <div className="card">
@@ -280,7 +291,7 @@ const ViewHijackPage = (props) => {
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
       )}
       {user && !hijackExists && (
