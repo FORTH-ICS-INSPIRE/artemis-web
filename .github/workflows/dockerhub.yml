@@ -33,6 +33,8 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           pull: true
+          # context: .
+          file: ./apps/artemis-web/Dockerfile
           push: true
           tags: inspiregroup/artemis-frontend-web:latest
       -
