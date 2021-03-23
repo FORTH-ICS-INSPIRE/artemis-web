@@ -34,7 +34,7 @@ jobs:
         with:
           load: true
           context: .
-          file: ./apps/artemis-web/Dockerfile
+          file: ./Dockerfile
           push: false
           tags: inspiregroup/artemis-frontend-web:latest
       -
