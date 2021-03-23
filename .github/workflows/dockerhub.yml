@@ -35,7 +35,7 @@ jobs:
           load: true
           context: .
           file: ./apps/artemis-web/Dockerfile
-          push: true
+          push: false
           tags: inspiregroup/artemis-frontend-web:latest
       -
         name: Image digest
