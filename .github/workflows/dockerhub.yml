@@ -8,9 +8,22 @@ on:
     branches:
       - master
 
+env:
+  G_PULL_REQUEST_BRANCH: ${{ github.head_ref }}
+  G_BRANCH: ${{ github.base_ref }}
+  G_PR_REPO_SLUG: ${{ github.event.pull_request.head.repo.full_name }}
+  G_REPO_SLUG: ${{ github.repository }}
+  G_PULL_REQUEST: ${{ github.event.number }}
+  G_REF: ${{ github.ref }}
+  EVENT: ${{ github.event_name }}
+  BUILD_TAG: ''
+  IS_FORK: ''
+  PUSH: ''
+
 jobs:
   docker:
     runs-on: ubuntu-latest
+    if: github.repository == 'FORTH-ICS-INSPIRE/artemis-web'
     steps:
       -
         name: Set up QEMU
@@ -27,15 +40,32 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - 
+        name: set env vars
+        run: |
+          if [ $G_REF == 'refs/heads/master' ] && [ $EVENT == 'push' ]; then
+            echo "BUILD_TAG=latest" >> $GITHUB_ENV;
+          else
+            echo "BUILD_TAG=dev-PR$G_PULL_REQUEST" >> $GITHUB_ENV;
+          fi;
+          if ([ $G_REPO_SLUG != 'FORTH-ICS-INSPIRE/artemis-web' ]) || ([ $EVENT == 'pull_request' ] && [ $G_PR_REPO_SLUG != 'FORTH-ICS-INSPIRE/artemis-web' ]); then
+            echo "IS_FORK=true" >> $GITHUB_ENV;
+          fi;
+          if ([ $G_REPO_SLUG != 'FORTH-ICS-INSPIRE/artemis-web' ]) || ([ $EVENT == 'pull_request' ] && [ $G_PR_REPO_SLUG != 'FORTH-ICS-INSPIRE/artemis-web' ]); then
+            echo "PUSH=false" >> $GITHUB_ENV;
+          else
+            echo "PUSH=true" >> $GITHUB_ENV;
+          fi;
       -
         name: Build and push
+        if: github.event_name == 'pull_request'
         id: docker_build
         uses: docker/build-push-action@v2
         with:
           pull: true
           file: ./apps/artemis-web/Dockerfile
           push: true
-          tags: inspiregroup/artemis-frontend-web:latest
+          tags: inspiregroup/artemis-frontend-web:${{ env.BUILD_TAG }}
       -
         name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
