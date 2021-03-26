@@ -49,7 +49,7 @@ class HijackInfoComponent extends Component<any, any> {
     );
     const commentRef = this.commentRef;
     const hijackKey = this.hijackKey;
-
+    
     return (
       <>
         <div className="row" style={{ marginTop: '20px' }}>
@@ -136,8 +136,8 @@ class HijackInfoComponent extends Component<any, any> {
                           onClick={() =>
                             this.setState({ seenState: !this.state.seenState })
                           }
-                          className="btn btn-info"
                           type="button"
+                          className="btn btn-primary btn-md"
                           data-toggle="collapse"
                           data-target="#seenHijackUpdate"
                           aria-expanded="false"
@@ -153,7 +153,7 @@ class HijackInfoComponent extends Component<any, any> {
                               withdrawState: !this.state.withdrawState,
                             });
                           }}
-                          className="btn btn-info"
+                          className="btn btn-primary btn-md"
                           type="button"
                           data-toggle="collapse"
                           data-target="#seenHijackWithdraw"
@@ -267,6 +267,9 @@ class HijackInfoComponent extends Component<any, any> {
                         onClick={(e) => {
                           if (this.state.editComment)
                             submitComment(e, { commentRef, hijackKey });
+                          else
+                            commentRef.current.focus();
+
                           this.setState({
                             editComment: !this.state.editComment,
                           });

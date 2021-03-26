@@ -39,17 +39,17 @@ const DesktopHeader = (props) => {
         <ul className="nav navbar-nav navbar-right">
           {user && user.role !== 'pending' && (
             <>
-              <li className="nav-item">
+              <li className={window.location.pathname === '/dashboard' ? "nav-item visited" : "nav-item"}>
                 <Link href="/dashboard" className="nav-link">
                   Dashboard
                 </Link>
               </li>
-              <li className="nav-item">
+              <li className={window.location.pathname === '/bgpupdates' ? "nav-item visited" : "nav-item"}>
                 <Link href="/bgpupdates" className="nav-link">
                   BGP Updates
                 </Link>
               </li>
-              <li className="nav-item">
+              <li className={window.location.pathname === '/hijacks' ? "nav-item visited" : "nav-item"}>
                 <Link href="/hijacks" className="nav-link">
                   Hijacks
                 </Link>
@@ -60,7 +60,7 @@ const DesktopHeader = (props) => {
         <ul className="navbar-nav mr-auto" />
         <ul className="nav navbar-nav navbar-right">
           {user && user.role === 'admin' && (
-            <li className="nav-item">
+            <li className={window.location.pathname.includes('/admin') ? "nav-item visited" : "nav-item"}>
               <div>
                 <a href="#" className="nav-link" onClick={handleClickAdmin}>
                   Admin
@@ -87,7 +87,7 @@ const DesktopHeader = (props) => {
             </li>
           )}
           {user && user.role !== 'pending' && (
-            <li className="nav-item">
+            <li className={window.location.pathname.includes('config_comparison') || window.location.pathname.includes('password_change') ? "nav-item visited" : "nav-item"}>
               <div>
                 <a href="#" className="nav-link" onClick={handleClickAction}>
                   Actions
@@ -127,12 +127,12 @@ const DesktopHeader = (props) => {
           </li>
           {!user && (
             <>
-              <li id="security.login" className="nav-item">
+              <li id="security.login" className={window.location.pathname === '/login' ? "nav-item visited" : "nav-item"}>
                 <Link className="nav-link" href="/login">
                   Login
                 </Link>
               </li>
-              <li id="security.register_user" className="nav-item">
+              <li id="security.register_user" className={window.location.pathname === '/signup' ? "nav-item visited" : "nav-item"}>
                 <Link className="nav-link" href="/signup">
                   Create Account
                 </Link>

@@ -53,13 +53,13 @@ const SystemPage = (props) => {
     'bgpstreamkafkatap',
   ];
   const modulesLabels = {
-    riperistap: 'RIPE RIS Monitor Service',
-    bgpstreamlivetap: 'BGPStream Live Monitor Service',
-    bgpstreamkafkatap: 'BGPStream Kafka Monitor Service',
-    bgpstreamhisttap: 'BGPStream Historical Monitor Service',
-    exabgptap: 'ExaBGP Monitor Service',
-    detection: 'Detection Service',
-    mitigation: 'Mitigation Service',
+    riperistap: 'RIPE RIS Monitor',
+    bgpstreamlivetap: 'BGPStream Live Monitor',
+    bgpstreamkafkatap: 'BGPStream Kafka Monitor',
+    bgpstreamhisttap: 'BGPStream Historical Monitor',
+    exabgptap: 'ExaBGP Monitor',
+    detection: 'Detection',
+    mitigation: 'Mitigation',
   };
 
   modules.forEach((module) => (states[module[0].toString()] = module[1]));
