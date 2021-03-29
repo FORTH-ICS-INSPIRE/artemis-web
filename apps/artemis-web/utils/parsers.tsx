@@ -170,7 +170,7 @@ function extractInnerHTML(data_, ASN_int): string[] {
   inner_html.push(data_['abuse_html']);
 
   html.push(inner_html.join(''));
-  html.push('<small>(Click on AS number to copy on clickboard)</small>');
+  // html.push('<small>(Click on AS number to copy on clickboard)</small>');
   html.push('</p>');
 
   return html;
@@ -463,11 +463,11 @@ export async function extractHijackTooltips(hijack): Promise<any> {
   const tooltip1 =
     ASN_int_origin && ASN_int_origin.toString() !== '-'
       ? parseASNData(
-          ASN_int_origin,
-          name_origin,
-          countries_origin,
-          abuse_origin
-        )
+        ASN_int_origin,
+        name_origin,
+        countries_origin,
+        abuse_origin
+      )
       : '';
 
   const tooltip2 =
