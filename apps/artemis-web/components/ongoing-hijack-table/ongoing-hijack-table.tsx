@@ -438,7 +438,7 @@ const OngoingHijackTableComponent = (props) => {
     >
       Show
       <select
-        style={{ width: '80px' }}
+        style={{ width: '80px', marginLeft: '10px', marginRight: '10px' }}
         className="custom-select custom-select-sm form-control form-control-sm"
       >
         {options.map((option, i) => (
@@ -446,11 +446,10 @@ const OngoingHijackTableComponent = (props) => {
             key={i}
             value={option.text}
             onClick={() => onSizePerPageChange(option.page)}
-            className={`btn ${
-              currSizePerPage === `${option.page}`
-                ? 'btn-secondary'
-                : 'btn-warning'
-            }`}
+            className={`btn ${currSizePerPage === `${option.page}`
+              ? 'btn-secondary'
+              : 'btn-warning'
+              }`}
           >
             {option.text}
           </option>

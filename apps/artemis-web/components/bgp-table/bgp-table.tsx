@@ -575,7 +575,7 @@ const BGPTableComponent = (props) => {
     <div id="paging" className="btn-group" role="group">
       Show
       <select
-        style={{ width: '80px' }}
+        style={{ width: '80px', marginLeft: '10px', marginRight: '10px' }}
         className="custom-select custom-select-sm form-control form-control-sm"
       >
         {options.map((option) => (
@@ -583,11 +583,10 @@ const BGPTableComponent = (props) => {
             key={option.text}
             value={option.text}
             onClick={() => onSizePerPageChange(option.page)}
-            className={`btn ${
-              currSizePerPage === `${option.page}`
+            className={`btn ${currSizePerPage === `${option.page}`
                 ? 'btn-secondary'
                 : 'btn-warning'
-            }`}
+              }`}
           >
             {option.text}
           </option>
@@ -669,8 +668,8 @@ const BGPTableComponent = (props) => {
       x.document.open();
       x.document.write(
         '<html><body><pre>' +
-          JSON.stringify(await res.json(), null, '\t') +
-          '</pre></body></html>'
+        JSON.stringify(await res.json(), null, '\t') +
+        '</pre></body></html>'
       );
       x.document.close();
     };

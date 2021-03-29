@@ -84,8 +84,8 @@ const DashboardPage = (props) => {
                       (
                       {user &&
                         new Date(user.lastLogin).toLocaleDateString() +
-                          ' ' +
-                          new Date(user.lastLogin).toLocaleTimeString()}
+                        ' ' +
+                        new Date(user.lastLogin).toLocaleTimeString()}
                       )
                     </b>
                     . You are {user && user.role}.
@@ -95,7 +95,7 @@ const DashboardPage = (props) => {
             </div>
             <div className="row" style={{ marginTop: '20px' }}>
               <div className="col-lg-1" />
-              <div className={matches.pc ? 'col-lg-6' : 'col-lg-10'}>
+              <div className={!matches.pc ? 'col-lg-6' : 'col-lg-10'}>
                 <div className="card">
                   <div className="card-header">
                     Ongoing, Non-Dormant Hijacks{' '}
@@ -110,7 +110,7 @@ const DashboardPage = (props) => {
                   <b>GMT+2 (Europe/Athens).</b>
                 </span>
               </div>
-              {matches.pc && (
+              {!matches.pc && (
                 <div className="col-lg-4">
                   <div className="card">
                     <div className="card-header"> System Status </div>
@@ -141,7 +141,7 @@ const DashboardPage = (props) => {
                 </div>
               )}
             </div>
-            {matches.mobile && (
+            {matches.pc && (
               <div className="row" style={{ marginTop: '20px' }}>
                 <div className="col-lg-1" />
                 <div className="col-lg-5">
