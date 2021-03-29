@@ -49,7 +49,7 @@ class HijackInfoComponent extends Component<any, any> {
     );
     const commentRef = this.commentRef;
     const hijackKey = this.hijackKey;
-    
+
     return (
       <>
         <div className="row" style={{ marginTop: '20px' }}>
@@ -267,8 +267,7 @@ class HijackInfoComponent extends Component<any, any> {
                         onClick={(e) => {
                           if (this.state.editComment)
                             submitComment(e, { commentRef, hijackKey });
-                          else
-                            commentRef.current.focus();
+                          else commentRef.current.focus();
 
                           this.setState({
                             editComment: !this.state.editComment,

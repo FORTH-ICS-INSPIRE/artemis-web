@@ -463,11 +463,11 @@ export async function extractHijackTooltips(hijack): Promise<any> {
   const tooltip1 =
     ASN_int_origin && ASN_int_origin.toString() !== '-'
       ? parseASNData(
-        ASN_int_origin,
-        name_origin,
-        countries_origin,
-        abuse_origin
-      )
+          ASN_int_origin,
+          name_origin,
+          countries_origin,
+          abuse_origin
+        )
       : '';
 
   const tooltip2 =
