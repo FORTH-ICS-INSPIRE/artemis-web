@@ -575,7 +575,7 @@ const BGPTableComponent = (props) => {
     <div id="paging" className="btn-group" role="group">
       Show
       <select
-        style={{ width: '80px' }}
+        style={{ width: '80px', marginLeft: '10px', marginRight: '10px' }}
         className="custom-select custom-select-sm form-control form-control-sm"
       >
         {options.map((option) => (

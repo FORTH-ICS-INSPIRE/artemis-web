@@ -153,6 +153,14 @@ main {
   min-height: calc(87vh - 80px);
 }
 
+.visited > a {
+  color: white !important;
+}
+
+.visited > div > a {
+  color: white !important;
+}
+
 .main-container {
   position: relative;
   margin-top: 80px;
