@@ -170,7 +170,7 @@ function extractInnerHTML(data_, ASN_int): string[] {
   inner_html.push(data_['abuse_html']);
 
   html.push(inner_html.join(''));
-  html.push('<small>(Click on AS number to copy on clickboard)</small>');
+  // html.push('<small>(Click on AS number to copy on clickboard)</small>');
   html.push('</p>');
 
   return html;

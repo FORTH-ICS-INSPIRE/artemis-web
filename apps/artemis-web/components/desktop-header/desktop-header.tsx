@@ -30,6 +30,12 @@ const DesktopHeader = (props) => {
     document.location.href = '/login';
   };
 
+  const getItemClass = (path1, path2 = '+-"') =>
+    window.location.pathname.includes(path1) ||
+    window.location.pathname.includes(path2)
+      ? 'nav-item visited'
+      : 'nav-item';
+
   return (
     <div className="container">
       <a className="navbar-brand" href="/">
@@ -39,17 +45,17 @@ const DesktopHeader = (props) => {
         <ul className="nav navbar-nav navbar-right">
           {user && user.role !== 'pending' && (
             <>
-              <li className="nav-item">
+              <li className={getItemClass('/dashboard')}>
                 <Link href="/dashboard" className="nav-link">
                   Dashboard
                 </Link>
               </li>
-              <li className="nav-item">
+              <li className={getItemClass('/bgpupdates')}>
                 <Link href="/bgpupdates" className="nav-link">
                   BGP Updates
                 </Link>
               </li>
-              <li className="nav-item">
+              <li className={getItemClass('/hijacks')}>
                 <Link href="/hijacks" className="nav-link">
                   Hijacks
                 </Link>
@@ -60,7 +66,7 @@ const DesktopHeader = (props) => {
         <ul className="navbar-nav mr-auto" />
         <ul className="nav navbar-nav navbar-right">
           {user && user.role === 'admin' && (
-            <li className="nav-item">
+            <li className={getItemClass('/admin')}>
               <div>
                 <a href="#" className="nav-link" onClick={handleClickAdmin}>
                   Admin
@@ -87,7 +93,9 @@ const DesktopHeader = (props) => {
             </li>
           )}
           {user && user.role !== 'pending' && (
-            <li className="nav-item">
+            <li
+              className={getItemClass('config_comparison', 'password_change')}
+            >
               <div>
                 <a href="#" className="nav-link" onClick={handleClickAction}>
                   Actions
@@ -127,12 +135,15 @@ const DesktopHeader = (props) => {
           </li>
           {!user && (
             <>
-              <li id="security.login" className="nav-item">
+              <li id="security.login" className={getItemClass('/login')}>
                 <Link className="nav-link" href="/login">
                   Login
                 </Link>
               </li>
-              <li id="security.register_user" className="nav-item">
+              <li
+                id="security.register_user"
+                className={getItemClass('/signup')}
+              >
                 <Link className="nav-link" href="/signup">
                   Create Account
                 </Link>
