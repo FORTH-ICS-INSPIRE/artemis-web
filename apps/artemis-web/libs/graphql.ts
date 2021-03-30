@@ -165,11 +165,26 @@ export class QueryGenerator {
   }
 
   private getBgpCountQuery() {
+    let args = '';
+    if (this.options.hasColumnFilter) {
+      let column = Object.keys(this.options.columnFilter)[0];
+      const filterValue = this.options.columnFilter[column].filterVal;
+
+      if (column === 'as_path2')
+        args = 'args: {as_paths: "{' + filterValue + '}" }';
+    }
+
     return gql`
             ${this.operationType} getLiveTableCount {
-              count_data: view_bgpupdates_aggregate${this.getWhereCondition(
-                this.options.hasDateFilter || this.options.hasColumnFilter
-              )}
+              count_data: ${
+                args.length
+                  ? 'search_bgpupdates_as_path_aggregate'
+                  : 'view_bgpupdates_aggregate'
+              } ${this.getWhereCondition(
+      this.options.hasDateFilter || this.options.hasColumnFilter,
+      'timestamp',
+      args
+    )}
               {
                 aggregate {
                   count
@@ -260,11 +275,21 @@ export class QueryGenerator {
     `;
   }
   private getBGPUpdates() {
+    let args = '';
+    if (this.options.hasColumnFilter) {
+      let column = Object.keys(this.options.columnFilter)[0];
+      const filterValue = this.options.columnFilter[column].filterVal;
+
+      if (column === 'as_path2')
+        args = 'args: {as_paths: "{' + filterValue + '}" }';
+    }
+
     return gql`
       ${this.operationType} bgpupdates${this.getQueryVars()} {
-      view_bgpupdates(
+      view_bgpupdates${args.length ? ': search_bgpupdates_as_path' : ''}(
         ${this.getConditionLimit()}
         ${this.getWhereCondition()}
+        ${args}
         order_by: { timestamp: ${this.options.sortOrder} }
       ) {
         prefix
@@ -303,23 +328,46 @@ export class QueryGenerator {
   }
 
   private getBGPUpdatesByKey() {
+    let args = '';
+    if (this.options.hasColumnFilter) {
+      let column = Object.keys(this.options.columnFilter)[0];
+      const filterValue = this.options.columnFilter[column].filterVal;
+
+      if (column === 'as_path2') args = ', as_paths: "{' + filterValue + '}"';
+    }
+
     return gql`${
       this.operationType
-    } getLiveTableData${this.getQueryVars()} { view_bgpupdates: search_bgpupdates_by_hijack_key(
+    } getLiveTableData${this.getQueryVars()} { view_bgpupdates: ${
+      args.length
+        ? 'search_bgpupdates_by_as_path_and_hijack_key'
+        : 'search_bgpupdates_by_hijack_key'
+    }(
          order_by: {timestamp: ${this.options.sortOrder}}
          ${this.getConditionLimit()}
          ${this.getWhereCondition()}
-         args: {key: \"${this.options.key}\"}) {
+         args: {key: \"${this.options.key}\" ${args}}) {
             prefix origin_as peer_asn as_path service type communities timestamp hijack_key handled matched_prefix orig_path
           }}`;
   }
 
   private getBGPCountByKey() {
+    let args = '';
+    if (this.options.hasColumnFilter) {
+      let column = Object.keys(this.options.columnFilter)[0];
+      const filterValue = this.options.columnFilter[column].filterVal;
+
+      if (column === 'as_path2') args = ', as_paths: "{' + filterValue + '}"';
+    }
     return gql`
     ${this.operationType} getLiveTableCount($key: String!) {
-      count_data: search_bgpupdates_by_hijack_key_aggregate(
+      count_data: ${
+        args.length
+          ? 'search_bgpupdates_by_as_path_and_hijack_key_aggregate'
+          : 'search_bgpupdates_by_hijack_key_aggregate'
+      }(
         ${this.getWhereCondition()}
-        args: {key: $key}) {
+        args: {key: $key ${args}}) {
            aggregate {
              count
            }
@@ -343,7 +391,11 @@ export class QueryGenerator {
     return this.options.limits ? `($offset: Int!, $limit: Int!)` : '';
   }
 
-  private getWhereCondition(parenthesis = false, dateField = 'timestamp') {
+  private getWhereCondition(
+    parenthesis = false,
+    dateField = 'timestamp',
+    args = ''
+  ) {
     if (
       this.options.hasDateFilter ||
       this.options.hasColumnFilter ||
@@ -361,13 +413,16 @@ export class QueryGenerator {
         if (column.includes('original'))
           column = column.replace('_original', '');
         else if (column === 'as_path2') column = 'as_path';
-        condition = condition + `{ ${column}: {_eq: "${filterValue}"} }`;
+
+        if (column === 'service') {
+          condition = condition + `{ ${column}: {_like: "%${filterValue}%"} }`;
+        } else if (column !== 'as_path')
+          condition = condition + `{ ${column}: {_eq: "${filterValue}"} }`;
       }
       if (this.options.statusFilter) {
         condition = condition + this.options.statusFilter;
       }
-
-      return condition + `] },${parenthesis ? ')' : ''}`;
+      return condition + `] },${args} ${parenthesis ? ')' : ''}`;
     } else return '';
   }
 
