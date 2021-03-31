@@ -55,6 +55,27 @@ const handler = nc()
         }
 
         break;
+      case 'show':
+        resp = await fetch(`http://${configHost}:${port}/hijackLearnRule`, {
+          method: 'POST',
+          body: JSON.stringify({
+            key: req.body.hijack_key,
+            prefix: req.body.prefix,
+            type: req.body.type_,
+            hijack_as: req.body.hijack_as,
+            action: req.body.action,
+          }),
+        });
+
+        if (resp.status === 200) {
+          res.status(200);
+          res.json(await resp.json());
+        } else {
+          res.status(500);
+          res.json({ status: 'Error' });
+        }
+
+        break;
       default:
         resp = await fetch(`http://${host}:${port}/hijackMultiAction`, {
           method: 'POST',

@@ -21,6 +21,10 @@ p > img {
   padding-bottom: 15px;
 }
 
+.disappear {
+  display: none;
+}
+
 .login-form {
   border: 1px solid grey !important;
   padding: 15px;

@@ -10,6 +10,8 @@ type stateType = {
   currentConfigRight: string;
   currentCommentLeft: string;
   currentCommentRight: string;
+  isConfigSuccess: boolean;
+  configMessage: string;
 };
 
 class LearnRuleComponent extends Component<
@@ -20,6 +22,7 @@ class LearnRuleComponent extends Component<
   _ref: any;
   config: any;
   hijack: any;
+  mergeView: any;
 
   constructor(props) {
     super(props);
@@ -50,7 +53,40 @@ class LearnRuleComponent extends Component<
       currentCommentLeft: '',
       currentConfigRight: '',
       currentCommentRight: '',
+      isConfigSuccess: false,
+      configMessage: '',
     };
+  }
+
+  async getConfig() {
+    const { key, prefix, type, hijack_as } = this.hijack;
+    const reqData = {
+      hijack_key: key,
+      hijack_as: hijack_as,
+      type_: type,
+      prefix: prefix,
+      action: 'show',
+    };
+
+    const res = await fetch('/api/hijack', {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(reqData),
+    });
+
+    const config = await res.json();
+    this.setState({
+      configMessage: config.new_yaml_conf,
+      isConfigSuccess: config.success,
+    });
+
+    if (config.success)
+      this.mergeView.rightOriginal().doc.setValue(config.new_yaml_conf);
+    this.mergeView.edit.setValue(this.state.currentConfigLeft);
   }
 
   async learnRule(e) {
@@ -91,17 +127,18 @@ class LearnRuleComponent extends Component<
       const dashedPrefix = prefix.replace(/\./g, '_').replace('/', '_');
 
       const config: string = this.config.data.view_configs[0].raw_config;
-      const learnedRule = `  LEARNED_H_${key}_P_${dashedPrefix}: &LEARNED_H_${key}_P_${dashedPrefix}\n  - ${prefix}\n`;
-      const configRight =
-        config.substring(0, config.indexOf('monitors:')) +
-        learnedRule +
-        config.substring(config.indexOf('monitors:'), config.length);
+      console.log(this.config.data.view_configs);
 
-      this.CodeMirror.MergeView(this._ref, {
+      console.log(config);
+      this.getConfig();
+
+      this.setState({ currentConfigLeft: config });
+
+      this.mergeView = this.CodeMirror.MergeView(this._ref, {
         theme: '3024-day',
-        value: config,
+        value: this.state.currentConfigLeft,
         origLeft: null,
-        origRight: configRight,
+        origRight: this.state.currentConfigRight,
         allowEditingOriginals: true,
         lineNumbers: true,
         mode: 'yaml',
@@ -121,12 +158,18 @@ class LearnRuleComponent extends Component<
         <div className="card" style={{ width: '100%' }}>
           <div className="card-header"> </div>
           <div className="card-body">
-            <div className="row">
+            <div className={this.state.isConfigSuccess ? 'row' : 'disappear'}>
               <div className="col-lg-6">Old configuration</div>
               <div className="col-lg-6">New configuration</div>
             </div>
-            <div ref={(ref) => (this._ref = ref)}></div>
-            <div className="row" style={{ marginTop: '20px' }}>
+            <div
+              className={this.state.isConfigSuccess ? '' : 'disappear'}
+              ref={(ref) => (this._ref = ref)}
+            ></div>
+            <div
+              className={this.state.isConfigSuccess ? 'row' : 'disappear'}
+              style={{ marginTop: '20px' }}
+            >
               <div className="col-lg-6" />
               <div className="col-lg-6">
                 <Button
@@ -156,6 +199,12 @@ class LearnRuleComponent extends Component<
                 </Button>
               </div>
             </div>
+            {!this.state.isConfigSuccess && (
+              <div style={{ color: 'red' }}>
+                {' '}
+                {this.state.configMessage.toUpperCase()}{' '}
+              </div>
+            )}
           </div>
         </div>
       </div>
