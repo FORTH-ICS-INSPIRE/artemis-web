@@ -12,6 +12,7 @@ type stateType = {
   currentCommentRight: string;
   isConfigSuccess: boolean;
   configMessage: string;
+  success: boolean;
 };
 
 class LearnRuleComponent extends Component<
@@ -55,6 +56,7 @@ class LearnRuleComponent extends Component<
       currentCommentRight: '',
       isConfigSuccess: false,
       configMessage: '',
+      success: false,
     };
   }
 
@@ -115,6 +117,12 @@ class LearnRuleComponent extends Component<
       prefix: prefix,
       hijack_as: hijack_as,
       type: type,
+    });
+
+    this.setState({
+      isConfigSuccess: false,
+      success: true,
+      configMessage: 'Rule successfully installed!',
     });
   }
 
@@ -187,7 +195,12 @@ class LearnRuleComponent extends Component<
                       hijack_as: this.hijack.hijack_as,
                       type: this.hijack.type,
                     });
-                    // window.location.reload();
+                    this.setState({
+                      isConfigSuccess: false,
+                      success: true,
+                      configMessage:
+                        'Hijack ignored with no additional change!',
+                    });
                   }}
                 >
                   Procceed with no change
@@ -204,7 +217,7 @@ class LearnRuleComponent extends Component<
               </div>
             </div>
             {!this.state.isConfigSuccess && (
-              <div style={{ color: 'red' }}>
+              <div style={{ color: !this.state.success ? 'red' : 'green' }}>
                 {' '}
                 {this.state.configMessage.toUpperCase()}{' '}
               </div>
