@@ -38,17 +38,18 @@ const handler = nc()
         resp = await fetch(`http://${configHost}:${port}/hijackLearnRule`, {
           method: 'POST',
           body: JSON.stringify({
-            key: req.body.key,
+            key: req.body.hijack_key,
             prefix: req.body.prefix,
             type: req.body.type_,
             hijack_as: req.body.hijack_as,
-            action: req.body.action,
+            action: 'approve',
           }),
         });
 
         if (resp.status === 200) {
           res.status(200);
-          res.json({ status: 'rule learned.' });
+          const rule = await resp.json();
+          res.json(rule);
         } else {
           res.status(500);
           res.json({ status: 'Error' });

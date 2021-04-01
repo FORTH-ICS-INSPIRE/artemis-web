@@ -247,10 +247,11 @@ function handleData(
   if (HIJACK_DATA && HIJACK_DATA.length) {
     hijacks = HIJACK_DATA.map((row, i) => {
       const _status = findStatus(row);
+
       return {
         id: i,
-        time_last: formatDate(new Date(row.time_last), 2),
-        time_detected: formatDate(new Date(row.time_detected), 2),
+        time_last: formatDate(new Date(row.time_last), 3),
+        time_detected: formatDate(new Date(row.time_detected), 3),
         prefix: row.prefix,
         configured_prefix: row.configured_prefix,
         type: row.type,
@@ -268,9 +269,13 @@ function handleData(
             />
           ),
         status: (
-          <span className={'badge badge-pill badge-' + statuses[_status[0]]}>
-            {_status[0]}
-          </span>
+          <>
+            {_status.map((status) => (
+              <span className={'badge badge-pill badge-' + statuses[status]}>
+                {status}
+              </span>
+            ))}
+          </>
         ),
         rpki_status: row.rpki_status,
         num_peers_seen: row.num_peers_seen,

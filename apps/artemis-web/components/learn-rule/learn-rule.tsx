@@ -2,7 +2,7 @@ import { Button, withStyles } from '@material-ui/core';
 import { styles } from '../../utils/styles';
 import DMP from 'diff_match_patch';
 import React, { Component } from 'react';
-import { sendData } from '../../utils/fetch-data';
+import { sendData, sendHijackData } from '../../utils/fetch-data';
 
 type stateType = {
   configs: any[];
@@ -109,8 +109,13 @@ class LearnRuleComponent extends Component<
       body: JSON.stringify(reqData),
     });
 
-    window.location.reload();
-    return true;
+    await sendHijackData(e, {
+      hijackKey: key,
+      selectState: 'hijack_action_ignore',
+      prefix: prefix,
+      hijack_as: hijack_as,
+      type: type,
+    });
   }
 
   async componentDidMount() {
@@ -127,9 +132,6 @@ class LearnRuleComponent extends Component<
       const dashedPrefix = prefix.replace(/\./g, '_').replace('/', '_');
 
       const config: string = this.config.data.view_configs[0].raw_config;
-      console.log(this.config.data.view_configs);
-
-      console.log(config);
       this.getConfig();
 
       this.setState({ currentConfigLeft: config });
@@ -178,12 +180,14 @@ class LearnRuleComponent extends Component<
                   variant="contained"
                   // color="secondary"
                   onClick={async (e) => {
-                    await sendData(e, {
-                      hijackKeys: [this.hijack.key],
-                      state: true,
-                      selectState: 'ignore',
+                    await sendHijackData(e, {
+                      hijackKey: this.hijack.key,
+                      selectState: 'hijack_action_ignore',
+                      prefix: this.hijack.prefix,
+                      hijack_as: this.hijack.hijack_as,
+                      type: this.hijack.type,
                     });
-                    window.location.reload();
+                    // window.location.reload();
                   }}
                 >
                   Procceed with no change
