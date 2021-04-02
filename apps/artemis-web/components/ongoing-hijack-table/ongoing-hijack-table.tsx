@@ -321,8 +321,8 @@ function handleData(data, tooltips, setTooltips, context, offset) {
     hijacks = HIJACK_DATA.map((row, i) => {
       return {
         id: i,
-        time_last: formatDate(new Date(row.time_last), 2),
-        time_detected: formatDate(new Date(row.time_detected), 2),
+        time_last: formatDate(new Date(row.time_last), 3),
+        time_detected: formatDate(new Date(row.time_detected), 3),
         prefix: row.prefix,
         configured_prefix: row.configured_prefix,
         type: row.type,
@@ -342,12 +342,11 @@ function handleData(data, tooltips, setTooltips, context, offset) {
         rpki_status: row.rpki_status,
         num_peers_seen: row.num_peers_seen,
         num_asns_inf: row.num_asns_inf,
-        ack:
-          row.resolved || row.under_mitigation ? (
-            <img alt="" src="./handled.png" />
-          ) : (
-            <img alt="" src="./unhadled.png" />
-          ),
+        ack: row.seen ? (
+          <img alt="" src="./handled.png" />
+        ) : (
+          <img alt="" src="./unhadled.png" />
+        ),
       };
     });
   } else {

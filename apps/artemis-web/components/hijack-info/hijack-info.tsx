@@ -19,6 +19,7 @@ class HijackInfoComponent extends Component<any, any> {
   hijackKey: any;
   commentRef: any;
   isMobile: any;
+  selectRef: any;
 
   constructor(props) {
     super(props);
@@ -29,13 +30,13 @@ class HijackInfoComponent extends Component<any, any> {
     this.state = {
       seenState: false,
       withdrawState: false,
-      selectActionState: 'hijack_action_resolve',
       editComment: false,
     };
 
     this.isMobile = props.isMobile;
 
     this.commentRef = React.createRef();
+    this.selectRef = React.createRef();
   }
 
   render() {
@@ -49,6 +50,8 @@ class HijackInfoComponent extends Component<any, any> {
     );
     const commentRef = this.commentRef;
     const hijackKey = this.hijackKey;
+
+    const mRef = this.selectRef;
 
     return (
       <>
@@ -178,9 +181,7 @@ class HijackInfoComponent extends Component<any, any> {
                     <div className="card-header">Hijack Actions</div>
                     <div className="card-body">
                       <select
-                        onChange={(e) =>
-                          this.setState({ selectActionState: e.target.value })
-                        }
+                        ref={this.selectRef}
                         style={{
                           width: '200px',
                           display: 'inline-block',
@@ -227,15 +228,13 @@ class HijackInfoComponent extends Component<any, any> {
                       </select>
                       <button
                         onClick={(e) =>
-                          this.state.selectActionState ===
-                          'hijack_action_ignore'
+                          mRef.current.value === 'hijack_action_ignore'
                             ? this.setOpenModalState(true)
-                            : this.state.selectActionState ===
-                              'hijack_action_export'
+                            : mRef.current.value === 'hijack_action_export'
                             ? exportHijack(hijackKey)
                             : sendHijackData(e, {
                                 hijackKey: hijackKey,
-                                selectState: this.state.selectActionState,
+                                selectState: mRef.current.value,
                                 prefix: this.props.hijackDataState.prefix,
                                 hijack_as: this.props.hijackDataState.hijack_as,
                                 type: this.props.hijackDataState.type,

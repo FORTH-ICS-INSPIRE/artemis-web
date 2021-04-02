@@ -2,7 +2,7 @@ import { Button, withStyles } from '@material-ui/core';
 import { styles } from '../../utils/styles';
 import DMP from 'diff_match_patch';
 import React, { Component } from 'react';
-import { sendData } from '../../utils/fetch-data';
+import { sendData, sendHijackData } from '../../utils/fetch-data';
 
 type stateType = {
   configs: any[];
@@ -10,6 +10,9 @@ type stateType = {
   currentConfigRight: string;
   currentCommentLeft: string;
   currentCommentRight: string;
+  isConfigSuccess: boolean;
+  configMessage: string;
+  success: boolean;
 };
 
 class LearnRuleComponent extends Component<
@@ -20,6 +23,7 @@ class LearnRuleComponent extends Component<
   _ref: any;
   config: any;
   hijack: any;
+  mergeView: any;
 
   constructor(props) {
     super(props);
@@ -50,7 +54,41 @@ class LearnRuleComponent extends Component<
       currentCommentLeft: '',
       currentConfigRight: '',
       currentCommentRight: '',
+      isConfigSuccess: false,
+      configMessage: '',
+      success: false,
     };
+  }
+
+  async getConfig() {
+    const { key, prefix, type, hijack_as } = this.hijack;
+    const reqData = {
+      hijack_key: key,
+      hijack_as: hijack_as,
+      type_: type,
+      prefix: prefix,
+      action: 'show',
+    };
+
+    const res = await fetch('/api/hijack', {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(reqData),
+    });
+
+    const config = await res.json();
+    this.setState({
+      configMessage: config.new_yaml_conf,
+      isConfigSuccess: config.success,
+    });
+
+    if (config.success)
+      this.mergeView.rightOriginal().doc.setValue(config.new_yaml_conf);
+    this.mergeView.edit.setValue(this.state.currentConfigLeft);
   }
 
   async learnRule(e) {
@@ -73,8 +111,19 @@ class LearnRuleComponent extends Component<
       body: JSON.stringify(reqData),
     });
 
-    window.location.reload();
-    return true;
+    await sendHijackData(e, {
+      hijackKey: key,
+      selectState: 'hijack_action_ignore',
+      prefix: prefix,
+      hijack_as: hijack_as,
+      type: type,
+    });
+
+    this.setState({
+      isConfigSuccess: false,
+      success: true,
+      configMessage: 'Rule successfully installed!',
+    });
   }
 
   async componentDidMount() {
@@ -91,17 +140,15 @@ class LearnRuleComponent extends Component<
       const dashedPrefix = prefix.replace(/\./g, '_').replace('/', '_');
 
       const config: string = this.config.data.view_configs[0].raw_config;
-      const learnedRule = `  LEARNED_H_${key}_P_${dashedPrefix}: &LEARNED_H_${key}_P_${dashedPrefix}\n  - ${prefix}\n`;
-      const configRight =
-        config.substring(0, config.indexOf('monitors:')) +
-        learnedRule +
-        config.substring(config.indexOf('monitors:'), config.length);
+      this.getConfig();
 
-      this.CodeMirror.MergeView(this._ref, {
+      this.setState({ currentConfigLeft: config });
+
+      this.mergeView = this.CodeMirror.MergeView(this._ref, {
         theme: '3024-day',
-        value: config,
+        value: this.state.currentConfigLeft,
         origLeft: null,
-        origRight: configRight,
+        origRight: this.state.currentConfigRight,
         allowEditingOriginals: true,
         lineNumbers: true,
         mode: 'yaml',
@@ -121,12 +168,18 @@ class LearnRuleComponent extends Component<
         <div className="card" style={{ width: '100%' }}>
           <div className="card-header"> </div>
           <div className="card-body">
-            <div className="row">
+            <div className={this.state.isConfigSuccess ? 'row' : 'disappear'}>
               <div className="col-lg-6">Old configuration</div>
               <div className="col-lg-6">New configuration</div>
             </div>
-            <div ref={(ref) => (this._ref = ref)}></div>
-            <div className="row" style={{ marginTop: '20px' }}>
+            <div
+              className={this.state.isConfigSuccess ? '' : 'disappear'}
+              ref={(ref) => (this._ref = ref)}
+            ></div>
+            <div
+              className={this.state.isConfigSuccess ? 'row' : 'disappear'}
+              style={{ marginTop: '20px' }}
+            >
               <div className="col-lg-6" />
               <div className="col-lg-6">
                 <Button
@@ -135,12 +188,19 @@ class LearnRuleComponent extends Component<
                   variant="contained"
                   // color="secondary"
                   onClick={async (e) => {
-                    await sendData(e, {
-                      hijackKeys: [this.hijack.key],
-                      state: true,
-                      selectState: 'ignore',
+                    await sendHijackData(e, {
+                      hijackKey: this.hijack.key,
+                      selectState: 'hijack_action_ignore',
+                      prefix: this.hijack.prefix,
+                      hijack_as: this.hijack.hijack_as,
+                      type: this.hijack.type,
                     });
-                    window.location.reload();
+                    this.setState({
+                      isConfigSuccess: false,
+                      success: true,
+                      configMessage:
+                        'Hijack ignored with no additional change!',
+                    });
                   }}
                 >
                   Procceed with no change
@@ -156,6 +216,12 @@ class LearnRuleComponent extends Component<
                 </Button>
               </div>
             </div>
+            {!this.state.isConfigSuccess && (
+              <div style={{ color: !this.state.success ? 'red' : 'green' }}>
+                {' '}
+                {this.state.configMessage.toUpperCase()}{' '}
+              </div>
+            )}
           </div>
         </div>
       </div>

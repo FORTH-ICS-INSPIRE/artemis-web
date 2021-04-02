@@ -38,7 +38,29 @@ const handler = nc()
         resp = await fetch(`http://${configHost}:${port}/hijackLearnRule`, {
           method: 'POST',
           body: JSON.stringify({
-            key: req.body.key,
+            key: req.body.hijack_key,
+            prefix: req.body.prefix,
+            type: req.body.type_,
+            hijack_as: req.body.hijack_as,
+            action: 'approve',
+          }),
+        });
+
+        if (resp.status === 200) {
+          res.status(200);
+          const rule = await resp.json();
+          res.json(rule);
+        } else {
+          res.status(500);
+          res.json({ status: 'Error' });
+        }
+
+        break;
+      case 'show':
+        resp = await fetch(`http://${configHost}:${port}/hijackLearnRule`, {
+          method: 'POST',
+          body: JSON.stringify({
+            key: req.body.hijack_key,
             prefix: req.body.prefix,
             type: req.body.type_,
             hijack_as: req.body.hijack_as,
@@ -48,7 +70,7 @@ const handler = nc()
 
         if (resp.status === 200) {
           res.status(200);
-          res.json({ status: 'rule learned.' });
+          res.json(await resp.json());
         } else {
           res.status(500);
           res.json({ status: 'Error' });
