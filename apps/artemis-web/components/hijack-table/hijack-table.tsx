@@ -280,12 +280,11 @@ function handleData(
         rpki_status: row.rpki_status,
         num_peers_seen: row.num_peers_seen,
         num_asns_inf: row.num_asns_inf,
-        ack:
-          row.resolved || row.under_mitigation ? (
-            <img alt="" src="./handled.png" />
-          ) : (
-            <img alt="" src="./unhadled.png" />
-          ),
+        ack: row.seen ? (
+          <img alt="" src="./handled.png" />
+        ) : (
+          <img alt="" src="./unhadled.png" />
+        ),
         key: row.key,
         more: <Link href={`/hijack?key=${row.key}`}>View</Link>,
       };
