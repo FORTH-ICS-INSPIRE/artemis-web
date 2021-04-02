@@ -108,6 +108,7 @@ export const sendHijackData = async (
     hijack_action_acknowledge_not: 'seen',
     hijack_action_delete: 'delete',
     hijack_action_mitigate: 'mitigate',
+    hijack_action_unmitigate: 'unmitigate',
   };
 
   if (selectState === 'hijack_action_acknowledge_not') state = false;
