@@ -17,6 +17,7 @@ import paginationFactory, {
 import ToolkitProvider from 'react-bootstrap-table2-toolkit';
 import TooltipContext from '../../context/tooltip-context';
 import {
+  compareObjects,
   findStatus,
   formatDate,
   genTooltip,
@@ -438,6 +439,7 @@ const HijackTableComponent = (props) => {
     nextPageTitle: 'First page',
     prePageTitle: 'Pre page',
     firstPageTitle: 'Next page',
+    page: page,
     lastPageTitle: 'Last page',
     showTotal: true,
     custom: true,
@@ -578,17 +580,27 @@ const HijackTableComponent = (props) => {
     const currentIndex = page * sizePerPage;
     setPage(page);
     setSizePerPage(sizePerPage);
-    if (currentIndex) setOffsetState(currentIndex);
-    if (sizePerPage) setLimitState(sizePerPage);
+
+    setOffsetState(currentIndex);
+    setLimitState(sizePerPage);
     if (sortOrder) {
       setSortColumnState(sortField);
       setSortState(sortOrder);
     }
     if (filters) {
-      const key = Object.keys(filters)[0];
-      if (filters[key])
-        setStateValues({ ...stateValues, [key]: filters[key].filterVal });
-      else setStateValues({ ...stateValues, [key]: '' });
+      const keys = Object.keys(filters);
+
+      keys.forEach((key) => {
+        if (filters[key])
+          setStateValues({ ...stateValues, [key]: filters[key].filterVal });
+        else setStateValues({ ...stateValues, [key]: '' });
+      });
+
+      if (currentIndex && !compareObjects(filters, columnFilter)) {
+        setPage(0);
+        setOffsetState(0);
+      }
+
       setColumnFilter(filters);
     }
   };

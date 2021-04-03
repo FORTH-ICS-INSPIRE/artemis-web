@@ -408,16 +408,18 @@ export class QueryGenerator {
           condition +
           `{ ${dateField}: {_gte: "${this.options.dateRange.dateFrom}"} },{ ${dateField}: {_lte: "${this.options.dateRange.dateTo}"} },`;
       if (this.options.hasColumnFilter) {
-        let column = Object.keys(this.options.columnFilter)[0];
-        const filterValue = this.options.columnFilter[column].filterVal;
-        if (column.includes('original'))
-          column = column.replace('_original', '');
-        else if (column === 'as_path2') column = 'as_path';
+        Object.keys(this.options.columnFilter).forEach((column) => {
+          const filterValue = this.options.columnFilter[column].filterVal;
+          if (column.includes('original'))
+            column = column.replace('_original', '');
+          else if (column === 'as_path2') column = 'as_path';
 
-        if (column === 'service') {
-          condition = condition + `{ ${column}: {_like: "%${filterValue}%"} }`;
-        } else if (column !== 'as_path')
-          condition = condition + `{ ${column}: {_eq: "${filterValue}"} }`;
+          if (column === 'service') {
+            condition =
+              condition + `{ ${column}: {_like: "%${filterValue}%"} }`;
+          } else if (column !== 'as_path')
+            condition = condition + `{ ${column}: {_eq: "${filterValue}"} }`;
+        });
       }
       if (this.options.statusFilter) {
         condition = condition + this.options.statusFilter;
