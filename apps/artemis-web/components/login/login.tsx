@@ -12,6 +12,7 @@ import { ThemeProvider } from '@material-ui/core/styles';
 import { theme, useStyles } from '../../utils/styles';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
+import { csrfToken } from '../../libs/csrf';
 
 const Login = (props) => {
   const [errorMsg, setErrorMsg] = useState('');
@@ -21,6 +22,7 @@ const Login = (props) => {
     rememberMe: false,
   });
   const router = useRouter();
+  const { csrfToken } = props;
 
   async function onClick(e, endpoint) {
     e.preventDefault();
@@ -31,6 +33,7 @@ const Login = (props) => {
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
+        'XSRF-TOKEN': csrfToken,
       },
       body: JSON.stringify(formData),
     });
