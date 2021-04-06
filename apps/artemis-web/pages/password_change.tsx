@@ -2,6 +2,7 @@ import Head from 'next/head';
 import React from 'react';
 import AuthHOC from '../components/401-hoc/401-hoc';
 import PasswordChangeComponent from '../components/password-change/password-change';
+import { setup } from '../libs/csrf';
 import { useJWT } from '../utils/hooks/use-jwt';
 
 const PasswordChangePage = (props) => {
@@ -24,3 +25,7 @@ const PasswordChangePage = (props) => {
 };
 
 export default AuthHOC(PasswordChangePage, ['admin', 'user']);
+
+export const getServerSideProps = setup(async () => {
+  return { props: {} };
+});

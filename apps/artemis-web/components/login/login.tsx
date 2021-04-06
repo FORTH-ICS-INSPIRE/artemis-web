@@ -21,18 +21,6 @@ const Login = (props) => {
     rememberMe: false,
   });
   const router = useRouter();
-  const { csrfToken } = props;
-
-  fetch("http://localhost:4200/api/setup")
-    .then((response) => {
-      console.log(response);
-      if (response.ok) {
-        console.log("response ok");
-        console.log("csrf token setup correctly");
-        // console.log("cookies", document.cookie);
-      }
-    })
-    .catch((error) => console.error(error));
 
   async function onClick(e, endpoint) {
     e.preventDefault();
@@ -43,7 +31,6 @@ const Login = (props) => {
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
-        'xsrf-token': csrfToken,
       },
       body: JSON.stringify(formData),
     });

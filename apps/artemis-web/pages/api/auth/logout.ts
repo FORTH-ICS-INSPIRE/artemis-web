@@ -4,6 +4,7 @@ import {
   NextApiRequestExtended,
   NextApiResponseExtended,
 } from '../../../definitions';
+import { csrf } from '../../../libs/csrf';
 
 const logout = (req: NextApiRequestExtended, res: NextApiResponseExtended) => {
   req.logOut();

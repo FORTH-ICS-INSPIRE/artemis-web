@@ -1895,12 +1895,14 @@ var csrf = function (handler, _a) {
           if (!tokenFromCookieUnsigned) {
             throw new HttpError(403, csrfErrorMessage);
           }
+
           // verify CSRF token
           if (!tokens.verify(csrfSecret, tokenFromCookieUnsigned)) {
             throw new HttpError(403, csrfErrorMessage);
           }
           newReqCsrfToken = tokens.create(csrfSecret);
           newReqCsrfTokenSigned = cookieSignature.sign(newReqCsrfToken, secret);
+
           res.setHeader("Set-Cookie", serialize_1(tokenKey, newReqCsrfTokenSigned, cookieOptions));
           return [2 /*return*/, handler(req, res)];
         }
@@ -1932,6 +1934,7 @@ var setup = function (handler, _a) {
           : args[0].res;
         reqCsrfToken = tokens.create(csrfSecret);
         reqCsrfTokenSigned = cookieSignature.sign(reqCsrfToken, secret);
+
         res.setHeader("Set-Cookie", serialize_1(tokenKey, reqCsrfTokenSigned, cookieOptions));
         return [2 /*return*/, handler(req, res)];
       });
@@ -1944,7 +1947,7 @@ var defaultOptions = {
   csrfErrorMessage: "Invalid CSRF token",
   ignoredMethods: ["GET", "HEAD", "OPTIONS"],
   cookieOptions: {
-    httpOnly: true,
+    httpOnly: false,
     path: "/",
     SameSite: "lax",
     secure: process.env.NODE_ENV === "production",
@@ -1958,6 +1961,7 @@ function nextCsrf(userOptions) {
   // generate options for the csrf middleware
   var csrfOptions = __assign({}, options);
   // generate middleware to verify CSRF token with the CSRF as parameter
+
   return {
     csrfToken: csrfToken,
     setup: function (handler) {

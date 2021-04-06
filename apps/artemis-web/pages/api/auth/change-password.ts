@@ -1,3 +1,4 @@
+import { csrf } from '../../../libs/csrf';
 import argon2 from 'argon2';
 import nc from 'next-connect';
 import {
@@ -32,4 +33,4 @@ const handler = nc()
     }
   });
 
-export default handler;
+export default csrf(handler);
