@@ -6,6 +6,7 @@ import {
   NextApiResponseExtended,
 } from '../../../definitions';
 import jwt from 'jsonwebtoken';
+import { csrf } from 'apps/artemis-web/libs/csrf';
 
 const handler = nc()
   .use(auth)
@@ -30,4 +31,4 @@ const handler = nc()
     }
   });
 
-export default handler;
+export default csrf(handler);

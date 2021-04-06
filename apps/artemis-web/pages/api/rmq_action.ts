@@ -9,6 +9,7 @@ import * as Amqp from 'amqp-ts';
 import { BrokerExchangeOptions, BrokerQueueOptions } from 'typescript-rabbitmq';
 import Broker from 'typescript-rabbitmq';
 import uuidv4 from 'uuid/v4';
+import { csrf } from 'apps/artemis-web/libs/csrf';
 
 const sendRMQAction = async (obj) => {
   const { exchangeName, payload, routing_key } = obj;

@@ -2,6 +2,7 @@ import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React from 'react';
+import { setup } from '../libs/csrf';
 import { useJWT } from '../utils/hooks/use-jwt';
 
 const LoginPage = (props) => {
@@ -33,3 +34,8 @@ const LoginPage = (props) => {
 };
 
 export default LoginPage;
+
+
+export const getServerSideProps = setup(async () => {
+  return { props: {} };
+});

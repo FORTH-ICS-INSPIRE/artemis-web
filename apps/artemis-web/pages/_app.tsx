@@ -4,7 +4,6 @@ import { ApolloProvider } from '@apollo/client';
 import { useApollo } from '../libs/graphql';
 import Layout from '../components/layout/layout';
 import TooltipContext from '../context/tooltip-context';
-import { csrfToken } from '../libs/csrf';
 
 const useStateWithLocalStorage = (localStorageKey) => {
   const [value, setValue] = useState(
@@ -35,7 +34,7 @@ function MyApp({ Component, pageProps }) {
         <TooltipContext.Provider
           value={{ tooltips: tooltips, setTooltips: setTooltips }}
         >
-          <Component {...pageProps} csrfToken={csrfToken} />
+          <Component {...pageProps} />
         </TooltipContext.Provider>
       </Layout>
     </ApolloProvider>

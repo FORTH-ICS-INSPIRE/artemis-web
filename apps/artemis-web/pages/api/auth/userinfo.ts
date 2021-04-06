@@ -2,6 +2,7 @@ import nc from 'next-connect';
 import auth from '../../../middleware/auth';
 import { extractUser } from '../../../utils/parsers';
 import { NextApiRequest, NextApiResponse } from 'next';
+import { csrf } from 'apps/artemis-web/libs/csrf';
 
 const handler = nc()
   .use(auth)
@@ -9,4 +10,4 @@ const handler = nc()
     res.json({ user: extractUser(req) });
   });
 
-export default handler;
+export default csrf(handler);
