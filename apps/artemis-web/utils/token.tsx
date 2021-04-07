@@ -293,8 +293,8 @@ export const exportHijack = async (hijack_key) => {
   x.document.open();
   x.document.write(
     '<html><body><pre>' +
-      JSON.stringify(await res.json(), null, '\t') +
-      '</pre></body></html>'
+    JSON.stringify(await res.json(), null, '\t') +
+    '</pre></body></html>'
   );
   x.document.close();
 };
