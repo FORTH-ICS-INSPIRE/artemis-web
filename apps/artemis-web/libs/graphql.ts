@@ -28,56 +28,56 @@ const createApolloClient = () => {
   const httpLink =
     typeof window !== 'undefined'
       ? createHttpLink({
-          uri: `https://${window.location.hostname}/api/graphql`,
-          useGETForQueries: false,
-        })
+        uri: `https://${window.location.hostname}/api/graphql`,
+        useGETForQueries: false,
+      })
       : null;
 
   const authLink =
     typeof window !== 'undefined'
       ? setContext(async (_, { headers }) => {
-          await requestToken();
-          return {
-            headers: {
-              ...headers,
-              authorization: accessToken ? `Bearer ${accessToken}` : '',
-            },
-          };
-        })
+        await requestToken();
+        return {
+          headers: {
+            ...headers,
+            authorization: accessToken ? `Bearer ${accessToken}` : '',
+          },
+        };
+      })
       : null;
 
   const wsLink =
     typeof window !== 'undefined'
       ? new WebSocketLink({
-          uri: `wss://${window.location.hostname}/api/graphql`,
-          options: {
-            reconnect: true,
-            lazy: true,
-            connectionParams: async () => {
-              await requestToken();
-              return {
-                headers: {
-                  authorization: `Bearer ${accessToken}`,
-                },
-              };
-            },
+        uri: `wss://${window.location.hostname}/api/graphql`,
+        options: {
+          reconnect: true,
+          lazy: true,
+          connectionParams: async () => {
+            await requestToken();
+            return {
+              headers: {
+                authorization: `Bearer ${accessToken}`,
+              },
+            };
           },
-        })
+        },
+      })
       : null;
 
   const splitLink =
     typeof window !== 'undefined'
       ? split(
-          ({ query }) => {
-            const definition = getMainDefinition(query);
-            return (
-              definition.kind === 'OperationDefinition' &&
-              definition.operation === 'subscription'
-            );
-          },
-          wsLink,
-          authLink.concat(httpLink)
-        )
+        ({ query }) => {
+          const definition = getMainDefinition(query);
+          return (
+            definition.kind === 'OperationDefinition' &&
+            definition.operation === 'subscription'
+          );
+        },
+        wsLink,
+        authLink.concat(httpLink)
+      )
       : null;
 
   return new ApolloClient({
@@ -132,7 +132,7 @@ export class QueryGenerator {
     ${this.operationType} hijacks${this.getQueryVars()} {
       view_hijacks(
         ${this.getConditionLimit()}
-        ${this.getWhereCondition(false, 'time_last')}
+        ${this.getWhereCondition(false, 'time_last', '', 'hijacks')}
         order_by: { ${this.options.sortColumn}: ${this.options.sortOrder} }
       ) {
         active
@@ -176,15 +176,14 @@ export class QueryGenerator {
 
     return gql`
             ${this.operationType} getLiveTableCount {
-              count_data: ${
-                args.length
-                  ? 'search_bgpupdates_as_path_aggregate'
-                  : 'view_bgpupdates_aggregate'
-              } ${this.getWhereCondition(
-      this.options.hasDateFilter || this.options.hasColumnFilter,
-      'timestamp',
-      args
-    )}
+              count_data: ${args.length
+        ? 'search_bgpupdates_as_path_aggregate'
+        : 'view_bgpupdates_aggregate'
+      } ${this.getWhereCondition(
+        this.options.hasDateFilter || this.options.hasColumnFilter,
+        'timestamp',
+        args
+      )}
               {
                 aggregate {
                   count
@@ -197,9 +196,9 @@ export class QueryGenerator {
     return gql`
             ${this.operationType} getLiveTableCount {
               count_data: view_hijacks_aggregate${this.getWhereCondition(
-                true,
-                'time_last'
-              )}
+      true,
+      'time_last', '', 'hijacks'
+    )}
               { aggregate { count } }
             }`;
   }
@@ -336,13 +335,11 @@ export class QueryGenerator {
       if (column === 'as_path2') args = ', as_paths: "{' + filterValue + '}"';
     }
 
-    return gql`${
-      this.operationType
-    } getLiveTableData${this.getQueryVars()} { view_bgpupdates: ${
-      args.length
+    return gql`${this.operationType
+      } getLiveTableData${this.getQueryVars()} { view_bgpupdates: ${args.length
         ? 'search_bgpupdates_by_as_path_and_hijack_key'
         : 'search_bgpupdates_by_hijack_key'
-    }(
+      }(
          order_by: {timestamp: ${this.options.sortOrder}}
          ${this.getConditionLimit()}
          ${this.getWhereCondition()}
@@ -361,10 +358,9 @@ export class QueryGenerator {
     }
     return gql`
     ${this.operationType} getLiveTableCount($key: String!) {
-      count_data: ${
-        args.length
-          ? 'search_bgpupdates_by_as_path_and_hijack_key_aggregate'
-          : 'search_bgpupdates_by_hijack_key_aggregate'
+      count_data: ${args.length
+        ? 'search_bgpupdates_by_as_path_and_hijack_key_aggregate'
+        : 'search_bgpupdates_by_hijack_key_aggregate'
       }(
         ${this.getWhereCondition()}
         args: {key: $key ${args}}) {
@@ -394,7 +390,8 @@ export class QueryGenerator {
   private getWhereCondition(
     parenthesis = false,
     dateField = 'timestamp',
-    args = ''
+    args = '',
+    type = ''
   ) {
     if (
       this.options.hasDateFilter ||
@@ -408,16 +405,21 @@ export class QueryGenerator {
           condition +
           `{ ${dateField}: {_gte: "${this.options.dateRange.dateFrom}"} },{ ${dateField}: {_lte: "${this.options.dateRange.dateTo}"} },`;
       if (this.options.hasColumnFilter) {
-        let column = Object.keys(this.options.columnFilter)[0];
-        const filterValue = this.options.columnFilter[column].filterVal;
-        if (column.includes('original'))
-          column = column.replace('_original', '');
-        else if (column === 'as_path2') column = 'as_path';
+        Object.keys(this.options.columnFilter).forEach((column) => {
+          const filterValue = this.options.columnFilter[column].filterVal;
+          if (column.includes('original'))
+            column = column.replace('_original', '');
+          else if (column === 'as_path2') column = 'as_path';
 
-        if (column === 'service') {
-          condition = condition + `{ ${column}: {_like: "%${filterValue}%"} }`;
-        } else if (column !== 'as_path')
-          condition = condition + `{ ${column}: {_eq: "${filterValue}"} }`;
+          if (column === 'service') {
+            condition =
+              condition + `{ ${column}: {_like: "%${filterValue}%"} }`;
+          } else if (column === 'type' && type === 'hijacks') {
+            condition =
+              condition + `{ ${column}: {_like: "%${filterValue}%"} }`;
+          } else if (column !== 'as_path')
+            condition = condition + `{ ${column}: {_eq: "${filterValue.replace(/ -> |-> | -> |->/gi, '|')}"} }`;
+        });
       }
       if (this.options.statusFilter) {
         condition = condition + this.options.statusFilter;
