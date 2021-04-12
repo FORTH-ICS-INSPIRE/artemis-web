@@ -7,6 +7,7 @@ import {
 import auth from '../../middleware/auth';
 import argon2 from 'argon2';
 import { nanoid } from 'nanoid';
+import { csrf } from '../../libs/csrf';
 
 const handler = nc()
   .use(auth)
@@ -81,4 +82,4 @@ const handler = nc()
     });
   });
 
-export default handler;
+export default csrf(handler);

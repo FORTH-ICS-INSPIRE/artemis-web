@@ -1,8 +1,8 @@
-'use strict';
-
 Object.defineProperty(exports, '__esModule', { value: true });
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 var crypto = require('crypto');
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 var util$1 = require('util');
 
 function _interopDefaultLegacy(e) {
@@ -36,7 +36,8 @@ var extendStatics = function (d, b) {
         d.__proto__ = b;
       }) ||
     function (d, b) {
-      for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+      for (var p in b)
+        if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p];
     };
   return extendStatics(d, b);
 };
@@ -194,7 +195,7 @@ function __generator(thisArg, body) {
     return { value: op[0] ? op[1] : void 0, done: true };
   }
 }
-
+/* eslint-disable-line no-restricted-globals */
 var commonjsGlobal =
   typeof globalThis !== 'undefined'
     ? globalThis
@@ -202,8 +203,10 @@ var commonjsGlobal =
     ? window
     : typeof global !== 'undefined'
     ? global
-    : typeof self !== 'undefined'
-    ? self
+    : // eslint-disable-next-line no-restricted-globals
+    typeof self !== 'undefined'
+    ? // eslint-disable-next-line no-restricted-globals
+      self
     : {};
 
 function createCommonjsModule(fn, basedir, module) {
@@ -401,7 +404,9 @@ var util = createCommonjsModule(function (module, exports) {
           console.error('%s %d: %s', set, pid, msg);
         };
       } else {
-        debugs[set] = function () {};
+        debugs[set] = function () {
+          return;
+        };
       }
     }
     return debugs[set];
@@ -991,7 +996,11 @@ var assert_1 = createCommonjsModule(function (module) {
   var hasOwn = Object.prototype.hasOwnProperty;
   var pSlice = Array.prototype.slice;
   var functionsHaveNames = (function () {
-    return function foo() {}.name === 'foo';
+    return (
+      function foo() {
+        return;
+      }.name === 'foo'
+    );
   })();
   function pToString(obj) {
     return Object.prototype.toString.call(obj);
@@ -1348,7 +1357,7 @@ var assert_1 = createCommonjsModule(function (module) {
       // Ignore.  The instanceof check doesn't work for arrow functions.
     }
 
-    if (Error.isPrototypeOf(expected)) {
+    if (Object.prototype.isPrototypeOf.call(Error, expected)) {
       return false;
     }
 
@@ -2120,7 +2129,7 @@ var csrf = function (handler, _a) {
       return __generator(this, function (_b) {
         try {
           tokenFromCookie = getCookie(req, tokenKey);
-          console.log(tokenFromCookie);
+
           tokenFromCookieUnsigned = cookieSignature.unsign(
             tokenFromCookie,
             secret

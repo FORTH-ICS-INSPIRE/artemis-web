@@ -3,6 +3,7 @@ import {
   createHttpLink,
   DocumentNode,
   gql,
+  InMemoryCache,
   NormalizedCacheObject,
   split,
 } from '@apollo/client';
@@ -166,7 +167,7 @@ export class QueryGenerator {
   private getBgpCountQuery() {
     let args = '';
     if (this.options.hasColumnFilter) {
-      let column = Object.keys(this.options.columnFilter)[0];
+      const column = Object.keys(this.options.columnFilter)[0];
       const filterValue = this.options.columnFilter[column].filterVal;
 
       if (column === 'as_path2')
@@ -276,7 +277,7 @@ export class QueryGenerator {
   private getBGPUpdates() {
     let args = '';
     if (this.options.hasColumnFilter) {
-      let column = Object.keys(this.options.columnFilter)[0];
+      const column = Object.keys(this.options.columnFilter)[0];
       const filterValue = this.options.columnFilter[column].filterVal;
 
       if (column === 'as_path2')
@@ -329,7 +330,7 @@ export class QueryGenerator {
   private getBGPUpdatesByKey() {
     let args = '';
     if (this.options.hasColumnFilter) {
-      let column = Object.keys(this.options.columnFilter)[0];
+      const column = Object.keys(this.options.columnFilter)[0];
       const filterValue = this.options.columnFilter[column].filterVal;
 
       if (column === 'as_path2') args = ', as_paths: "{' + filterValue + '}"';
@@ -353,7 +354,7 @@ export class QueryGenerator {
   private getBGPCountByKey() {
     let args = '';
     if (this.options.hasColumnFilter) {
-      let column = Object.keys(this.options.columnFilter)[0];
+      const column = Object.keys(this.options.columnFilter)[0];
       const filterValue = this.options.columnFilter[column].filterVal;
 
       if (column === 'as_path2') args = ', as_paths: "{' + filterValue + '}"';

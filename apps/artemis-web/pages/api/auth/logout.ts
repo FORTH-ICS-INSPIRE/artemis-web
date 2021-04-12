@@ -15,4 +15,4 @@ const logout = (req: NextApiRequestExtended, res: NextApiResponseExtended) => {
 
 const handler = nc().use(auth).delete(logout);
 
-export default handler;
+export default csrf(handler);

@@ -9,7 +9,7 @@ import * as Amqp from 'amqp-ts';
 import { BrokerExchangeOptions, BrokerQueueOptions } from 'typescript-rabbitmq';
 import Broker from 'typescript-rabbitmq';
 import uuidv4 from 'uuid/v4';
-import { csrf } from 'apps/artemis-web/libs/csrf';
+import { csrf } from '../../libs/csrf';
 
 const sendRMQAction = async (obj) => {
   const { exchangeName, payload, routing_key } = obj;
@@ -159,4 +159,4 @@ const handler = nc()
     res.status(200);
   });
 
-export default handler;
+export default csrf(handler);
