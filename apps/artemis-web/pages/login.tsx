@@ -35,7 +35,6 @@ const LoginPage = (props) => {
 
 export default LoginPage;
 
-
 export const getServerSideProps = setup(async () => {
   return { props: {} };
 });

@@ -3,7 +3,6 @@ import {
   createHttpLink,
   DocumentNode,
   gql,
-  InMemoryCache,
   NormalizedCacheObject,
   split,
 } from '@apollo/client';

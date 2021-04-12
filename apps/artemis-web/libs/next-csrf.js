@@ -5,10 +5,12 @@ Object.defineProperty(exports, '__esModule', { value: true });
 var crypto = require('crypto');
 var util$1 = require('util');
 
-function _interopDefaultLegacy(e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
+function _interopDefaultLegacy(e) {
+  return e && typeof e === 'object' && 'default' in e ? e : { default: e };
+}
 
-var crypto__default = /*#__PURE__*/_interopDefaultLegacy(crypto);
-var util__default = /*#__PURE__*/_interopDefaultLegacy(util$1);
+var crypto__default = /*#__PURE__*/ _interopDefaultLegacy(crypto);
+var util__default = /*#__PURE__*/ _interopDefaultLegacy(util$1);
 
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation.
@@ -27,89 +29,210 @@ PERFORMANCE OF THIS SOFTWARE.
 /* global Reflect, Promise */
 
 var extendStatics = function (d, b) {
-  extendStatics = Object.setPrototypeOf ||
-    ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-    function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+  extendStatics =
+    Object.setPrototypeOf ||
+    ({ __proto__: [] } instanceof Array &&
+      function (d, b) {
+        d.__proto__ = b;
+      }) ||
+    function (d, b) {
+      for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    };
   return extendStatics(d, b);
 };
 
 function __extends(d, b) {
   extendStatics(d, b);
-  function __() { this.constructor = d; }
-  d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+  function __() {
+    this.constructor = d;
+  }
+  d.prototype =
+    b === null ? Object.create(b) : ((__.prototype = b.prototype), new __());
 }
 
 var __assign = function () {
-  __assign = Object.assign || function __assign(t) {
-    for (var s, i = 1, n = arguments.length; i < n; i++) {
-      s = arguments[i];
-      for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
-    }
-    return t;
-  };
+  __assign =
+    Object.assign ||
+    function __assign(t) {
+      for (var s, i = 1, n = arguments.length; i < n; i++) {
+        s = arguments[i];
+        for (var p in s)
+          if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+      }
+      return t;
+    };
   return __assign.apply(this, arguments);
 };
 
 function __awaiter(thisArg, _arguments, P, generator) {
-  function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+  function adopt(value) {
+    return value instanceof P
+      ? value
+      : new P(function (resolve) {
+          resolve(value);
+        });
+  }
   return new (P || (P = Promise))(function (resolve, reject) {
-    function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-    function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-    function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+    function fulfilled(value) {
+      try {
+        step(generator.next(value));
+      } catch (e) {
+        reject(e);
+      }
+    }
+    function rejected(value) {
+      try {
+        step(generator['throw'](value));
+      } catch (e) {
+        reject(e);
+      }
+    }
+    function step(result) {
+      result.done
+        ? resolve(result.value)
+        : adopt(result.value).then(fulfilled, rejected);
+    }
     step((generator = generator.apply(thisArg, _arguments || [])).next());
   });
 }
 
 function __generator(thisArg, body) {
-  var _ = { label: 0, sent: function () { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
-  return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function () { return this; }), g;
-  function verb(n) { return function (v) { return step([n, v]); }; }
+  var _ = {
+      label: 0,
+      sent: function () {
+        if (t[0] & 1) throw t[1];
+        return t[1];
+      },
+      trys: [],
+      ops: [],
+    },
+    f,
+    y,
+    t,
+    g;
+  return (
+    (g = { next: verb(0), throw: verb(1), return: verb(2) }),
+    typeof Symbol === 'function' &&
+      (g[Symbol.iterator] = function () {
+        return this;
+      }),
+    g
+  );
+  function verb(n) {
+    return function (v) {
+      return step([n, v]);
+    };
+  }
   function step(op) {
-    if (f) throw new TypeError("Generator is already executing.");
-    while (_) try {
-      if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
-      if (y = 0, t) op = [op[0] & 2, t.value];
-      switch (op[0]) {
-        case 0: case 1: t = op; break;
-        case 4: _.label++; return { value: op[1], done: false };
-        case 5: _.label++; y = op[1]; op = [0]; continue;
-        case 7: op = _.ops.pop(); _.trys.pop(); continue;
-        default:
-          if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
-          if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
-          if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
-          if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
-          if (t[2]) _.ops.pop();
-          _.trys.pop(); continue;
+    if (f) throw new TypeError('Generator is already executing.');
+    while (_)
+      try {
+        if (
+          ((f = 1),
+          y &&
+            (t =
+              op[0] & 2
+                ? y['return']
+                : op[0]
+                ? y['throw'] || ((t = y['return']) && t.call(y), 0)
+                : y.next) &&
+            !(t = t.call(y, op[1])).done)
+        )
+          return t;
+        if (((y = 0), t)) op = [op[0] & 2, t.value];
+        switch (op[0]) {
+          case 0:
+          case 1:
+            t = op;
+            break;
+          case 4:
+            _.label++;
+            return { value: op[1], done: false };
+          case 5:
+            _.label++;
+            y = op[1];
+            op = [0];
+            continue;
+          case 7:
+            op = _.ops.pop();
+            _.trys.pop();
+            continue;
+          default:
+            if (
+              !((t = _.trys), (t = t.length > 0 && t[t.length - 1])) &&
+              (op[0] === 6 || op[0] === 2)
+            ) {
+              _ = 0;
+              continue;
+            }
+            if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) {
+              _.label = op[1];
+              break;
+            }
+            if (op[0] === 6 && _.label < t[1]) {
+              _.label = t[1];
+              t = op;
+              break;
+            }
+            if (t && _.label < t[2]) {
+              _.label = t[2];
+              _.ops.push(op);
+              break;
+            }
+            if (t[2]) _.ops.pop();
+            _.trys.pop();
+            continue;
+        }
+        op = body.call(thisArg, _);
+      } catch (e) {
+        op = [6, e];
+        y = 0;
+      } finally {
+        f = t = 0;
       }
-      op = body.call(thisArg, _);
-    } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
-    if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    if (op[0] & 5) throw op[1];
+    return { value: op[0] ? op[1] : void 0, done: true };
   }
 }
 
-var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
+var commonjsGlobal =
+  typeof globalThis !== 'undefined'
+    ? globalThis
+    : typeof window !== 'undefined'
+    ? window
+    : typeof global !== 'undefined'
+    ? global
+    : typeof self !== 'undefined'
+    ? self
+    : {};
 
 function createCommonjsModule(fn, basedir, module) {
-  return module = {
-    path: basedir,
-    exports: {},
-    require: function (path, base) {
-      return commonjsRequire(path, (base === undefined || base === null) ? module.path : base);
-    }
-  }, fn(module, module.exports), module.exports;
+  return (
+    (module = {
+      path: basedir,
+      exports: {},
+      require: function (path, base) {
+        return commonjsRequire(
+          path,
+          base === undefined || base === null ? module.path : base
+        );
+      },
+    }),
+    fn(module, module.exports),
+    module.exports
+  );
 }
 
 function commonjsRequire() {
-  throw new Error('Dynamic requires are not currently supported by @rollup/plugin-commonjs');
+  throw new Error(
+    'Dynamic requires are not currently supported by @rollup/plugin-commonjs'
+  );
 }
 
 var cookieSignature = createCommonjsModule(function (module, exports) {
   /**
    * Module dependencies.
    */
-
-
 
   /**
    * Sign the given `val` with `secret`.
@@ -121,13 +244,19 @@ var cookieSignature = createCommonjsModule(function (module, exports) {
    */
 
   exports.sign = function (val, secret) {
-    if ('string' != typeof val) throw new TypeError("Cookie value must be provided as a string.");
-    if ('string' != typeof secret) throw new TypeError("Secret string must be provided.");
-    return val + '.' + crypto__default['default']
-      .createHmac('sha256', secret)
-      .update(val)
-      .digest('base64')
-      .replace(/\=+$/, '');
+    if ('string' != typeof val)
+      throw new TypeError('Cookie value must be provided as a string.');
+    if ('string' != typeof secret)
+      throw new TypeError('Secret string must be provided.');
+    return (
+      val +
+      '.' +
+      crypto__default['default']
+        .createHmac('sha256', secret)
+        .update(val)
+        .digest('base64')
+        .replace(/\=+$/, '')
+    );
   };
 
   /**
@@ -141,15 +270,19 @@ var cookieSignature = createCommonjsModule(function (module, exports) {
    */
 
   exports.unsign = function (val, secret) {
-    if ('string' != typeof val) throw new TypeError("Signed cookie string must be provided.");
-    if ('string' != typeof secret) throw new TypeError("Secret string must be provided.");
-    var str = val.slice(0, val.lastIndexOf('.'))
-      , mac = exports.sign(str, secret)
-      , macBuffer = Buffer.from(mac)
-      , valBuffer = Buffer.alloc(macBuffer.length);
+    if ('string' != typeof val)
+      throw new TypeError('Signed cookie string must be provided.');
+    if ('string' != typeof secret)
+      throw new TypeError('Secret string must be provided.');
+    var str = val.slice(0, val.lastIndexOf('.')),
+      mac = exports.sign(str, secret),
+      macBuffer = Buffer.from(mac),
+      valBuffer = Buffer.alloc(macBuffer.length);
 
     valBuffer.write(val);
-    return crypto__default['default'].timingSafeEqual(macBuffer, valBuffer) ? str : false;
+    return crypto__default['default'].timingSafeEqual(macBuffer, valBuffer)
+      ? str
+      : false;
   };
 });
 
@@ -198,8 +331,10 @@ var util = createCommonjsModule(function (module, exports) {
       if (x === '%%') return '%';
       if (i >= len) return x;
       switch (x) {
-        case '%s': return String(args[i++]);
-        case '%d': return Number(args[i++]);
+        case '%s':
+          return String(args[i++]);
+        case '%d':
+          return Number(args[i++]);
         case '%j':
           try {
             return JSON.stringify(args[i++]);
@@ -219,7 +354,6 @@ var util = createCommonjsModule(function (module, exports) {
     }
     return str;
   };
-
 
   // Mark that a method should not be used.
   // Returns a modified function which warns once by default.
@@ -254,12 +388,10 @@ var util = createCommonjsModule(function (module, exports) {
     return deprecated;
   };
 
-
   var debugs = {};
   var debugEnviron;
   exports.debuglog = function (set) {
-    if (isUndefined(debugEnviron))
-      debugEnviron = process.env.NODE_DEBUG || '';
+    if (isUndefined(debugEnviron)) debugEnviron = process.env.NODE_DEBUG || '';
     set = set.toUpperCase();
     if (!debugs[set]) {
       if (new RegExp('\\b' + set + '\\b', 'i').test(debugEnviron)) {
@@ -269,12 +401,11 @@ var util = createCommonjsModule(function (module, exports) {
           console.error('%s %d: %s', set, pid, msg);
         };
       } else {
-        debugs[set] = function () { };
+        debugs[set] = function () {};
       }
     }
     return debugs[set];
   };
-
 
   /**
    * Echos the value of a value. Trys to print the value out
@@ -288,7 +419,7 @@ var util = createCommonjsModule(function (module, exports) {
     // default options
     var ctx = {
       seen: [],
-      stylize: stylizeNoColor
+      stylize: stylizeNoColor,
     };
     // legacy...
     if (arguments.length >= 3) ctx.depth = arguments[2];
@@ -310,54 +441,57 @@ var util = createCommonjsModule(function (module, exports) {
   }
   exports.inspect = inspect;
 
-
   // http://en.wikipedia.org/wiki/ANSI_escape_code#graphics
   inspect.colors = {
-    'bold': [1, 22],
-    'italic': [3, 23],
-    'underline': [4, 24],
-    'inverse': [7, 27],
-    'white': [37, 39],
-    'grey': [90, 39],
-    'black': [30, 39],
-    'blue': [34, 39],
-    'cyan': [36, 39],
-    'green': [32, 39],
-    'magenta': [35, 39],
-    'red': [31, 39],
-    'yellow': [33, 39]
+    bold: [1, 22],
+    italic: [3, 23],
+    underline: [4, 24],
+    inverse: [7, 27],
+    white: [37, 39],
+    grey: [90, 39],
+    black: [30, 39],
+    blue: [34, 39],
+    cyan: [36, 39],
+    green: [32, 39],
+    magenta: [35, 39],
+    red: [31, 39],
+    yellow: [33, 39],
   };
 
   // Don't use 'blue' not visible on cmd.exe
   inspect.styles = {
-    'special': 'cyan',
-    'number': 'yellow',
-    'boolean': 'yellow',
-    'undefined': 'grey',
-    'null': 'bold',
-    'string': 'green',
-    'date': 'magenta',
+    special: 'cyan',
+    number: 'yellow',
+    boolean: 'yellow',
+    undefined: 'grey',
+    null: 'bold',
+    string: 'green',
+    date: 'magenta',
     // "name": intentionally not styling
-    'regexp': 'red'
+    regexp: 'red',
   };
-
 
   function stylizeWithColor(str, styleType) {
     var style = inspect.styles[styleType];
 
     if (style) {
-      return '\u001b[' + inspect.colors[style][0] + 'm' + str +
-        '\u001b[' + inspect.colors[style][1] + 'm';
+      return (
+        '\u001b[' +
+        inspect.colors[style][0] +
+        'm' +
+        str +
+        '\u001b[' +
+        inspect.colors[style][1] +
+        'm'
+      );
     } else {
       return str;
     }
   }
 
-
   function stylizeNoColor(str, styleType) {
     return str;
   }
-
 
   function arrayToHash(array) {
     var hash = {};
@@ -369,17 +503,18 @@ var util = createCommonjsModule(function (module, exports) {
     return hash;
   }
 
-
   function formatValue(ctx, value, recurseTimes) {
     // Provide a hook for user-specified inspect functions.
     // Check that value is an object with an inspect function on it
-    if (ctx.customInspect &&
+    if (
+      ctx.customInspect &&
       value &&
       isFunction(value.inspect) &&
       // Filter out the util module, it's inspect function is special
       value.inspect !== exports.inspect &&
       // Also filter out any prototype objects using the circular check.
-      !(value.constructor && value.constructor.prototype === value)) {
+      !(value.constructor && value.constructor.prototype === value)
+    ) {
       var ret = value.inspect(recurseTimes, ctx);
       if (!isString(ret)) {
         ret = formatValue(ctx, ret, recurseTimes);
@@ -403,8 +538,10 @@ var util = createCommonjsModule(function (module, exports) {
 
     // IE doesn't make error fields non-enumerable
     // http://msdn.microsoft.com/en-us/library/ie/dww52sbt(v=vs.94).aspx
-    if (isError(value)
-      && (keys.indexOf('message') >= 0 || keys.indexOf('description') >= 0)) {
+    if (
+      isError(value) &&
+      (keys.indexOf('message') >= 0 || keys.indexOf('description') >= 0)
+    ) {
       return formatError(value);
     }
 
@@ -425,7 +562,9 @@ var util = createCommonjsModule(function (module, exports) {
       }
     }
 
-    var base = '', array = false, braces = ['{', '}'];
+    var base = '',
+      array = false,
+      braces = ['{', '}'];
 
     // Make Array say that they are Array
     if (isArray(value)) {
@@ -473,7 +612,14 @@ var util = createCommonjsModule(function (module, exports) {
       output = formatArray(ctx, value, recurseTimes, visibleKeys, keys);
     } else {
       output = keys.map(function (key) {
-        return formatProperty(ctx, value, recurseTimes, visibleKeys, key, array);
+        return formatProperty(
+          ctx,
+          value,
+          recurseTimes,
+          visibleKeys,
+          key,
+          array
+        );
       });
     }
 
@@ -482,50 +628,48 @@ var util = createCommonjsModule(function (module, exports) {
     return reduceToSingleString(output, base, braces);
   }
 
-
   function formatPrimitive(ctx, value) {
-    if (isUndefined(value))
-      return ctx.stylize('undefined', 'undefined');
+    if (isUndefined(value)) return ctx.stylize('undefined', 'undefined');
     if (isString(value)) {
-      var simple = '\'' + JSON.stringify(value).replace(/^"|"$/g, '')
-        .replace(/'/g, "\\'")
-        .replace(/\\"/g, '"') + '\'';
+      var simple =
+        "'" +
+        JSON.stringify(value)
+          .replace(/^"|"$/g, '')
+          .replace(/'/g, "\\'")
+          .replace(/\\"/g, '"') +
+        "'";
       return ctx.stylize(simple, 'string');
     }
-    if (isNumber(value))
-      return ctx.stylize('' + value, 'number');
-    if (isBoolean(value))
-      return ctx.stylize('' + value, 'boolean');
+    if (isNumber(value)) return ctx.stylize('' + value, 'number');
+    if (isBoolean(value)) return ctx.stylize('' + value, 'boolean');
     // For some reason typeof null is "object", so special case here.
-    if (isNull(value))
-      return ctx.stylize('null', 'null');
+    if (isNull(value)) return ctx.stylize('null', 'null');
   }
-
 
   function formatError(value) {
     return '[' + Error.prototype.toString.call(value) + ']';
   }
 
-
   function formatArray(ctx, value, recurseTimes, visibleKeys, keys) {
     var output = [];
     for (var i = 0, l = value.length; i < l; ++i) {
       if (hasOwnProperty(value, String(i))) {
-        output.push(formatProperty(ctx, value, recurseTimes, visibleKeys,
-          String(i), true));
+        output.push(
+          formatProperty(ctx, value, recurseTimes, visibleKeys, String(i), true)
+        );
       } else {
         output.push('');
       }
     }
     keys.forEach(function (key) {
       if (!key.match(/^\d+$/)) {
-        output.push(formatProperty(ctx, value, recurseTimes, visibleKeys,
-          key, true));
+        output.push(
+          formatProperty(ctx, value, recurseTimes, visibleKeys, key, true)
+        );
       }
     });
     return output;
   }
-
 
   function formatProperty(ctx, value, recurseTimes, visibleKeys, key, array) {
     var name, str, desc;
@@ -553,13 +697,22 @@ var util = createCommonjsModule(function (module, exports) {
         }
         if (str.indexOf('\n') > -1) {
           if (array) {
-            str = str.split('\n').map(function (line) {
-              return '  ' + line;
-            }).join('\n').substr(2);
+            str = str
+              .split('\n')
+              .map(function (line) {
+                return '  ' + line;
+              })
+              .join('\n')
+              .substr(2);
           } else {
-            str = '\n' + str.split('\n').map(function (line) {
-              return '   ' + line;
-            }).join('\n');
+            str =
+              '\n' +
+              str
+                .split('\n')
+                .map(function (line) {
+                  return '   ' + line;
+                })
+                .join('\n');
           }
         }
       } else {
@@ -575,7 +728,8 @@ var util = createCommonjsModule(function (module, exports) {
         name = name.substr(1, name.length - 2);
         name = ctx.stylize(name, 'name');
       } else {
-        name = name.replace(/'/g, "\\'")
+        name = name
+          .replace(/'/g, "\\'")
           .replace(/\\"/g, '"')
           .replace(/(^"|"$)/g, "'");
         name = ctx.stylize(name, 'string');
@@ -585,7 +739,6 @@ var util = createCommonjsModule(function (module, exports) {
     return name + ': ' + str;
   }
 
-
   function reduceToSingleString(output, base, braces) {
     var length = output.reduce(function (prev, cur) {
       if (cur.indexOf('\n') >= 0);
@@ -593,17 +746,18 @@ var util = createCommonjsModule(function (module, exports) {
     }, 0);
 
     if (length > 60) {
-      return braces[0] +
+      return (
+        braces[0] +
         (base === '' ? '' : base + '\n ') +
         ' ' +
         output.join(',\n  ') +
         ' ' +
-        braces[1];
+        braces[1]
+      );
     }
 
     return braces[0] + base + ' ' + output.join(', ') + ' ' + braces[1];
   }
-
 
   // NOTE: These type checking functions intentionally don't use `instanceof`
   // because it is fragile and can be easily faked with `Object.create()`.
@@ -663,8 +817,10 @@ var util = createCommonjsModule(function (module, exports) {
   exports.isDate = isDate;
 
   function isError(e) {
-    return isObject(e) &&
-      (objectToString(e) === '[object Error]' || e instanceof Error);
+    return (
+      isObject(e) &&
+      (objectToString(e) === '[object Error]' || e instanceof Error)
+    );
   }
   exports.isError = isError;
 
@@ -674,12 +830,14 @@ var util = createCommonjsModule(function (module, exports) {
   exports.isFunction = isFunction;
 
   function isPrimitive(arg) {
-    return arg === null ||
+    return (
+      arg === null ||
       typeof arg === 'boolean' ||
       typeof arg === 'number' ||
       typeof arg === 'string' ||
-      typeof arg === 'symbol' ||  // ES6 symbol
-      typeof arg === 'undefined';
+      typeof arg === 'symbol' || // ES6 symbol
+      typeof arg === 'undefined'
+    );
   }
   exports.isPrimitive = isPrimitive;
 
@@ -689,30 +847,44 @@ var util = createCommonjsModule(function (module, exports) {
     return Object.prototype.toString.call(o);
   }
 
-
   function pad(n) {
     return n < 10 ? '0' + n.toString(10) : n.toString(10);
   }
 
-
-  var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep',
-    'Oct', 'Nov', 'Dec'];
+  var months = [
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec',
+  ];
 
   // 26 Feb 16:19:34
   function timestamp() {
     var d = new Date();
-    var time = [pad(d.getHours()),
-    pad(d.getMinutes()),
-    pad(d.getSeconds())].join(':');
+    var time = [
+      pad(d.getHours()),
+      pad(d.getMinutes()),
+      pad(d.getSeconds()),
+    ].join(':');
     return [d.getDate(), months[d.getMonth()], time].join(' ');
   }
 
-
   // log is just a thin wrapper to console.log that prepends a timestamp
   exports.log = function () {
-    console.log('%s - %s', timestamp(), exports.format.apply(exports, arguments));
+    console.log(
+      '%s - %s',
+      timestamp(),
+      exports.format.apply(exports, arguments)
+    );
   };
-
 
   /**
    * Inherit the prototype methods from one constructor into another.
@@ -747,7 +919,6 @@ var util = createCommonjsModule(function (module, exports) {
 });
 
 var assert_1 = createCommonjsModule(function (module) {
-
   // compare and isBuffer taken from https://github.com/feross/buffer/blob/680e9e5e488f22aac27599a57dc844a6315928dd/index.js
   // original notice:
 
@@ -782,7 +953,10 @@ var assert_1 = createCommonjsModule(function (module) {
     return 0;
   }
   function isBuffer(b) {
-    if (commonjsGlobal.Buffer && typeof commonjsGlobal.Buffer.isBuffer === 'function') {
+    if (
+      commonjsGlobal.Buffer &&
+      typeof commonjsGlobal.Buffer.isBuffer === 'function'
+    ) {
       return commonjsGlobal.Buffer.isBuffer(b);
     }
     return !!(b != null && b._isBuffer);
@@ -814,12 +988,11 @@ var assert_1 = createCommonjsModule(function (module) {
   // ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
   // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-
   var hasOwn = Object.prototype.hasOwnProperty;
   var pSlice = Array.prototype.slice;
   var functionsHaveNames = (function () {
-    return function foo() { }.name === 'foo';
-  }());
+    return function foo() {}.name === 'foo';
+  })();
   function pToString(obj) {
     return Object.prototype.toString.call(obj);
   }
@@ -848,7 +1021,7 @@ var assert_1 = createCommonjsModule(function (module) {
   // AssertionError's when particular conditions are not met. The
   // assert module must conform to the following interface.
 
-  var assert = module.exports = ok;
+  var assert = (module.exports = ok);
 
   // 2. The AssertionError is defined in assert.
   // new assert.AssertionError({ message: message,
@@ -923,9 +1096,13 @@ var assert_1 = createCommonjsModule(function (module) {
     return '[Function' + name + ']';
   }
   function getMessage(self) {
-    return truncate(inspect(self.actual), 128) + ' ' +
-      self.operator + ' ' +
-      truncate(inspect(self.expected), 128);
+    return (
+      truncate(inspect(self.actual), 128) +
+      ' ' +
+      self.operator +
+      ' ' +
+      truncate(inspect(self.expected), 128)
+    );
   }
 
   // At present only the three keys mentioned above are used and
@@ -945,7 +1122,7 @@ var assert_1 = createCommonjsModule(function (module) {
       actual: actual,
       expected: expected,
       operator: operator,
-      stackStartFunction: stackStartFunction
+      stackStartFunction: stackStartFunction,
     });
   }
 
@@ -992,7 +1169,13 @@ var assert_1 = createCommonjsModule(function (module) {
 
   assert.deepStrictEqual = function deepStrictEqual(actual, expected, message) {
     if (!_deepEqual(actual, expected, true)) {
-      fail(actual, expected, message, 'deepStrictEqual', assert.deepStrictEqual);
+      fail(
+        actual,
+        expected,
+        message,
+        'deepStrictEqual',
+        assert.deepStrictEqual
+      );
     }
   };
 
@@ -1012,16 +1195,20 @@ var assert_1 = createCommonjsModule(function (module) {
       // equivalent if it is also a RegExp object with the same source and
       // properties (`global`, `multiline`, `lastIndex`, `ignoreCase`).
     } else if (util.isRegExp(actual) && util.isRegExp(expected)) {
-      return actual.source === expected.source &&
+      return (
+        actual.source === expected.source &&
         actual.global === expected.global &&
         actual.multiline === expected.multiline &&
         actual.lastIndex === expected.lastIndex &&
-        actual.ignoreCase === expected.ignoreCase;
+        actual.ignoreCase === expected.ignoreCase
+      );
 
       // 7.4. Other pairs that do not both pass typeof value == 'object',
       // equivalence is determined by ==.
-    } else if ((actual === null || typeof actual !== 'object') &&
-      (expected === null || typeof expected !== 'object')) {
+    } else if (
+      (actual === null || typeof actual !== 'object') &&
+      (expected === null || typeof expected !== 'object')
+    ) {
       return strict ? actual === expected : actual == expected;
 
       // If both values are instances of typed arrays, wrap their underlying
@@ -1030,12 +1217,18 @@ var assert_1 = createCommonjsModule(function (module) {
       // Object.prototype.toString (aka pToString). Never perform binary
       // comparisons for Float*Arrays, though, since e.g. +0 === -0 but their
       // bit patterns are not identical.
-    } else if (isView(actual) && isView(expected) &&
+    } else if (
+      isView(actual) &&
+      isView(expected) &&
       pToString(actual) === pToString(expected) &&
-      !(actual instanceof Float32Array ||
-        actual instanceof Float64Array)) {
-      return compare(new Uint8Array(actual.buffer),
-        new Uint8Array(expected.buffer)) === 0;
+      !(actual instanceof Float32Array || actual instanceof Float64Array)
+    ) {
+      return (
+        compare(
+          new Uint8Array(actual.buffer),
+          new Uint8Array(expected.buffer)
+        ) === 0
+      );
 
       // 7.5 For all other Object pairs, including Array objects, equivalence is
       // determined by having the same number of owned properties (as verified
@@ -1070,14 +1263,12 @@ var assert_1 = createCommonjsModule(function (module) {
     if (a === null || a === undefined || b === null || b === undefined)
       return false;
     // if one is a primitive, the other must be same
-    if (util.isPrimitive(a) || util.isPrimitive(b))
-      return a === b;
+    if (util.isPrimitive(a) || util.isPrimitive(b)) return a === b;
     if (strict && Object.getPrototypeOf(a) !== Object.getPrototypeOf(b))
       return false;
     var aIsArgs = isArguments(a);
     var bIsArgs = isArguments(b);
-    if ((aIsArgs && !bIsArgs) || (!aIsArgs && bIsArgs))
-      return false;
+    if ((aIsArgs && !bIsArgs) || (!aIsArgs && bIsArgs)) return false;
     if (aIsArgs) {
       a = pSlice.call(a);
       b = pSlice.call(b);
@@ -1088,15 +1279,13 @@ var assert_1 = createCommonjsModule(function (module) {
     var key, i;
     // having the same number of owned properties (keys incorporates
     // hasOwnProperty)
-    if (ka.length !== kb.length)
-      return false;
+    if (ka.length !== kb.length) return false;
     //the same set of keys (although not necessarily the same order),
     ka.sort();
     kb.sort();
     //~~~cheap key test
     for (i = ka.length - 1; i >= 0; i--) {
-      if (ka[i] !== kb[i])
-        return false;
+      if (ka[i] !== kb[i]) return false;
     }
     //equivalent values for every corresponding key, and
     //~~~possibly expensive deep test
@@ -1123,7 +1312,6 @@ var assert_1 = createCommonjsModule(function (module) {
       fail(actual, expected, message, 'notDeepStrictEqual', notDeepStrictEqual);
     }
   }
-
 
   // 9. The strict equality assertion tests strict equality, as determined by ===.
   // assert.strictEqual(actual, expected, message_opt);
@@ -1191,7 +1379,8 @@ var assert_1 = createCommonjsModule(function (module) {
 
     actual = _tryBlock(block);
 
-    message = (expected && expected.name ? ' (' + expected.name + ').' : '.') +
+    message =
+      (expected && expected.name ? ' (' + expected.name + ').' : '.') +
       (message ? ' ' + message : '.');
 
     if (shouldThrow && !actual) {
@@ -1202,15 +1391,22 @@ var assert_1 = createCommonjsModule(function (module) {
     var isUnwantedException = !shouldThrow && util.isError(actual);
     var isUnexpectedException = !shouldThrow && actual && !expected;
 
-    if ((isUnwantedException &&
-      userProvidedMessage &&
-      expectedException(actual, expected)) ||
-      isUnexpectedException) {
+    if (
+      (isUnwantedException &&
+        userProvidedMessage &&
+        expectedException(actual, expected)) ||
+      isUnexpectedException
+    ) {
       fail(actual, expected, 'Got unwanted exception' + message);
     }
 
-    if ((shouldThrow && actual && expected &&
-      !expectedException(actual, expected)) || (!shouldThrow && actual)) {
+    if (
+      (shouldThrow &&
+        actual &&
+        expected &&
+        !expectedException(actual, expected)) ||
+      (!shouldThrow && actual)
+    ) {
       throw actual;
     }
   }
@@ -1218,24 +1414,32 @@ var assert_1 = createCommonjsModule(function (module) {
   // 11. Expected to throw an error:
   // assert.throws(block, Error_opt, message_opt);
 
-  assert.throws = function (block, /*optional*/error, /*optional*/message) {
+  assert.throws = function (block, /*optional*/ error, /*optional*/ message) {
     _throws(true, block, error, message);
   };
 
   // EXTENSION! This is annoying to write outside this module.
-  assert.doesNotThrow = function (block, /*optional*/error, /*optional*/message) {
+  assert.doesNotThrow = function (
+    block,
+    /*optional*/ error,
+    /*optional*/ message
+  ) {
     _throws(false, block, error, message);
   };
 
-  assert.ifError = function (err) { if (err) throw err; };
-
-  var objectKeys = Object.keys || function (obj) {
-    var keys = [];
-    for (var key in obj) {
-      if (hasOwn.call(obj, key)) keys.push(key);
-    }
-    return keys;
+  assert.ifError = function (err) {
+    if (err) throw err;
   };
+
+  var objectKeys =
+    Object.keys ||
+    function (obj) {
+      var keys = [];
+      for (var key in obj) {
+        if (hasOwn.call(obj, key)) keys.push(key);
+      }
+      return keys;
+    };
 });
 
 var rndm = createCommonjsModule(function (module, exports) {
@@ -1251,15 +1455,22 @@ var rndm = createCommonjsModule(function (module, exports) {
   exports.create = create;
 
   function create(chars) {
-    assert_1(typeof chars === 'string', 'the list of characters must be a string!');
+    assert_1(
+      typeof chars === 'string',
+      'the list of characters must be a string!'
+    );
     var length = Buffer.byteLength(chars);
     return function rndm(len) {
       len = len || 10;
-      assert_1(typeof len === 'number' && len >= 0, 'the length of the random string must be a number!');
+      assert_1(
+        typeof len === 'number' && len >= 0,
+        'the length of the random string must be a number!'
+      );
       var salt = '';
-      for (var i = 0; i < len; i++) salt += chars[Math.floor(length * Math.random())];
-      return salt
-    }
+      for (var i = 0; i < len; i++)
+        salt += chars[Math.floor(length * Math.random())];
+      return salt;
+    };
   }
 });
 
@@ -1268,14 +1479,16 @@ var rndm = createCommonjsModule(function (module, exports) {
  * @private
  */
 
-
-
 /**
  * Module variables.
  * @private
  */
 
-var generateAttempts = crypto__default['default'].randomBytes === crypto__default['default'].pseudoRandomBytes ? 1 : 3;
+var generateAttempts =
+  crypto__default['default'].randomBytes ===
+  crypto__default['default'].pseudoRandomBytes
+    ? 1
+    : 3;
 
 /**
  * Module exports.
@@ -1297,25 +1510,29 @@ var sync$1 = randomBytesSync;
 function randomBytes(size, callback) {
   // validate callback is a function, if provided
   if (callback !== undefined && typeof callback !== 'function') {
-    throw new TypeError('argument callback must be a function')
+    throw new TypeError('argument callback must be a function');
   }
 
   // require the callback without promises
   if (!callback && !commonjsGlobal.Promise) {
-    throw new TypeError('argument callback is required')
+    throw new TypeError('argument callback is required');
   }
 
   if (callback) {
     // classic callback style
-    return generateRandomBytes(size, generateAttempts, callback)
+    return generateRandomBytes(size, generateAttempts, callback);
   }
 
   return new Promise(function executor(resolve, reject) {
-    generateRandomBytes(size, generateAttempts, function onRandomBytes(err, str) {
-      if (err) return reject(err)
-      resolve(str);
-    });
-  })
+    generateRandomBytes(
+      size,
+      generateAttempts,
+      function onRandomBytes(err, str) {
+        if (err) return reject(err);
+        resolve(str);
+      }
+    );
+  });
 }
 
 /**
@@ -1331,13 +1548,13 @@ function randomBytesSync(size) {
 
   for (var i = 0; i < generateAttempts; i++) {
     try {
-      return crypto__default['default'].randomBytes(size)
+      return crypto__default['default'].randomBytes(size);
     } catch (e) {
       err = e;
     }
   }
 
-  throw err
+  throw err;
 }
 
 /**
@@ -1350,11 +1567,14 @@ function randomBytesSync(size) {
  */
 
 function generateRandomBytes(size, attempts, callback) {
-  crypto__default['default'].randomBytes(size, function onRandomBytes(err, buf) {
-    if (!err) return callback(null, buf)
-    if (!--attempts) return callback(err)
-    setTimeout(generateRandomBytes.bind(null, size, attempts, callback), 10);
-  });
+  crypto__default['default'].randomBytes(
+    size,
+    function onRandomBytes(err, buf) {
+      if (!err) return callback(null, buf);
+      if (!--attempts) return callback(err);
+      setTimeout(generateRandomBytes.bind(null, size, attempts, callback), 10);
+    }
+  );
 }
 randomBytes_1.sync = sync$1;
 
@@ -1362,8 +1582,6 @@ randomBytes_1.sync = sync$1;
  * Module dependencies.
  * @private
  */
-
-
 
 /**
  * Module variables.
@@ -1394,25 +1612,25 @@ var sync = uidSync;
 function uid(length, callback) {
   // validate callback is a function, if provided
   if (callback !== undefined && typeof callback !== 'function') {
-    throw new TypeError('argument callback must be a function')
+    throw new TypeError('argument callback must be a function');
   }
 
   // require the callback without promises
   if (!callback && !commonjsGlobal.Promise) {
-    throw new TypeError('argument callback is required')
+    throw new TypeError('argument callback is required');
   }
 
   if (callback) {
     // classic callback style
-    return generateUid(length, callback)
+    return generateUid(length, callback);
   }
 
   return new Promise(function executor(resolve, reject) {
     generateUid(length, function onUid(err, str) {
-      if (err) return reject(err)
+      if (err) return reject(err);
       resolve(str);
     });
-  })
+  });
 }
 
 /**
@@ -1424,7 +1642,7 @@ function uid(length, callback) {
  */
 
 function uidSync(length) {
-  return toString(randomBytes_1.sync(length))
+  return toString(randomBytes_1.sync(length));
 }
 
 /**
@@ -1437,7 +1655,7 @@ function uidSync(length) {
 
 function generateUid(length, callback) {
   randomBytes_1(length, function (err, buf) {
-    if (err) return callback(err)
+    if (err) return callback(err);
     callback(null, toString(buf));
   });
 }
@@ -1451,10 +1669,11 @@ function generateUid(length, callback) {
  */
 
 function toString(buf) {
-  return buf.toString('base64')
+  return buf
+    .toString('base64')
     .replace(EQUAL_END_REGEXP, '')
     .replace(PLUS_GLOBAL_REGEXP$1, '-')
-    .replace(SLASH_GLOBAL_REGEXP$1, '_')
+    .replace(SLASH_GLOBAL_REGEXP$1, '_');
 }
 uidSafe.sync = sync;
 
@@ -1463,8 +1682,6 @@ uidSafe.sync = sync;
 // The approach is similar to the node's native implementation of timing safe buffer comparison that will be available on v6+.
 // https://github.com/nodejs/node/issues/3043
 // https://github.com/nodejs/node/pull/3073
-
-
 
 function bufferEqual(a, b) {
   if (a.length !== b.length) {
@@ -1487,8 +1704,14 @@ function timeSafeCompare(a, b) {
   var sa = String(a);
   var sb = String(b);
   var key = crypto__default['default'].pseudoRandomBytes(32);
-  var ah = crypto__default['default'].createHmac('sha256', key).update(sa).digest();
-  var bh = crypto__default['default'].createHmac('sha256', key).update(sb).digest();
+  var ah = crypto__default['default']
+    .createHmac('sha256', key)
+    .update(sa)
+    .digest();
+  var bh = crypto__default['default']
+    .createHmac('sha256', key)
+    .update(sb)
+    .digest();
 
   return bufferEqual(ah, bh) && a === b;
 }
@@ -1499,11 +1722,6 @@ var lib = timeSafeCompare;
  * Module dependencies.
  * @private
  */
-
-
-
-
-
 
 /**
  * Module variables.
@@ -1532,25 +1750,29 @@ var csrf$1 = Tokens;
 
 function Tokens(options) {
   if (!(this instanceof Tokens)) {
-    return new Tokens(options)
+    return new Tokens(options);
   }
 
   var opts = options || {};
 
-  var saltLength = opts.saltLength !== undefined
-    ? opts.saltLength
-    : 8;
+  var saltLength = opts.saltLength !== undefined ? opts.saltLength : 8;
 
-  if (typeof saltLength !== 'number' || !isFinite(saltLength) || saltLength < 1) {
-    throw new TypeError('option saltLength must be finite number > 1')
+  if (
+    typeof saltLength !== 'number' ||
+    !isFinite(saltLength) ||
+    saltLength < 1
+  ) {
+    throw new TypeError('option saltLength must be finite number > 1');
   }
 
-  var secretLength = opts.secretLength !== undefined
-    ? opts.secretLength
-    : 18;
+  var secretLength = opts.secretLength !== undefined ? opts.secretLength : 18;
 
-  if (typeof secretLength !== 'number' || !isFinite(secretLength) || secretLength < 1) {
-    throw new TypeError('option secretLength must be finite number > 1')
+  if (
+    typeof secretLength !== 'number' ||
+    !isFinite(secretLength) ||
+    secretLength < 1
+  ) {
+    throw new TypeError('option secretLength must be finite number > 1');
   }
 
   this.saltLength = saltLength;
@@ -1566,10 +1788,10 @@ function Tokens(options) {
 
 Tokens.prototype.create = function create(secret) {
   if (!secret || typeof secret !== 'string') {
-    throw new TypeError('argument secret is required')
+    throw new TypeError('argument secret is required');
   }
 
-  return this._tokenize(secret, rndm(this.saltLength))
+  return this._tokenize(secret, rndm(this.saltLength));
 };
 
 /**
@@ -1580,7 +1802,7 @@ Tokens.prototype.create = function create(secret) {
  */
 
 Tokens.prototype.secret = function secret(callback) {
-  return uidSafe(this.secretLength, callback)
+  return uidSafe(this.secretLength, callback);
 };
 
 /**
@@ -1589,7 +1811,7 @@ Tokens.prototype.secret = function secret(callback) {
  */
 
 Tokens.prototype.secretSync = function secretSync() {
-  return uidSafe.sync(this.secretLength)
+  return uidSafe.sync(this.secretLength);
 };
 
 /**
@@ -1598,7 +1820,7 @@ Tokens.prototype.secretSync = function secretSync() {
  */
 
 Tokens.prototype._tokenize = function tokenize(secret, salt) {
-  return salt + '-' + hash(salt + '-' + secret)
+  return salt + '-' + hash(salt + '-' + secret);
 };
 
 /**
@@ -1611,23 +1833,23 @@ Tokens.prototype._tokenize = function tokenize(secret, salt) {
 
 Tokens.prototype.verify = function verify(secret, token) {
   if (!secret || typeof secret !== 'string') {
-    return false
+    return false;
   }
 
   if (!token || typeof token !== 'string') {
-    return false
+    return false;
   }
 
   var index = token.indexOf('-');
 
   if (index === -1) {
-    return false
+    return false;
   }
 
   var salt = token.substr(0, index);
   var expected = this._tokenize(secret, salt);
 
-  return lib(token, expected)
+  return lib(token, expected);
 };
 
 /**
@@ -1643,7 +1865,7 @@ function hash(str) {
     .digest('base64')
     .replace(PLUS_GLOBAL_REGEXP, '-')
     .replace(SLASH_GLOBAL_REGEXP, '_')
-    .replace(EQUAL_GLOBAL_REGEXP, '')
+    .replace(EQUAL_GLOBAL_REGEXP, '');
 }
 
 var tokens = new csrf$1();
@@ -1651,7 +1873,9 @@ var tokens = new csrf$1();
 var HttpError = /** @class */ (function (_super) {
   __extends(HttpError, _super);
   function HttpError(status, message) {
-    if (status === void 0) { status = 403; }
+    if (status === void 0) {
+      status = 403;
+    }
     var params = [];
     for (var _i = 2; _i < arguments.length; _i++) {
       params[_i - 2] = arguments[_i];
@@ -1660,13 +1884,13 @@ var HttpError = /** @class */ (function (_super) {
     if (Error.captureStackTrace) {
       Error.captureStackTrace(_this, HttpError);
     }
-    _this.name = "HttpError";
+    _this.name = 'HttpError';
     _this.status = status;
     _this.message = message;
     return _this;
   }
   return HttpError;
-}(Error));
+})(Error);
 
 /*!
  * cookie
@@ -1790,7 +2014,7 @@ function serialize(name, val, options) {
     var maxAge = opt.maxAge - 0;
 
     if (isNaN(maxAge) || !isFinite(maxAge)) {
-      throw new TypeError('option maxAge is invalid')
+      throw new TypeError('option maxAge is invalid');
     }
 
     str += '; Max-Age=' + Math.floor(maxAge);
@@ -1829,8 +2053,10 @@ function serialize(name, val, options) {
   }
 
   if (opt.sameSite) {
-    var sameSite = typeof opt.sameSite === 'string'
-      ? opt.sameSite.toLowerCase() : opt.sameSite;
+    var sameSite =
+      typeof opt.sameSite === 'string'
+        ? opt.sameSite.toLowerCase()
+        : opt.sameSite;
 
     switch (sameSite) {
       case true:
@@ -1874,19 +2100,31 @@ function getCookie(req, name) {
     var parsedCookie = parse_1(req.headers.cookie);
     return parsedCookie[name];
   }
-  return "";
+  return '';
 }
 
 var csrf = function (handler, _a) {
-  var ignoredMethods = _a.ignoredMethods, csrfSecret = _a.csrfSecret, csrfErrorMessage = _a.csrfErrorMessage, secret = _a.secret, tokenKey = _a.tokenKey, cookieOptions = _a.cookieOptions;
+  var ignoredMethods = _a.ignoredMethods,
+    csrfSecret = _a.csrfSecret,
+    csrfErrorMessage = _a.csrfErrorMessage,
+    secret = _a.secret,
+    tokenKey = _a.tokenKey,
+    cookieOptions = _a.cookieOptions;
   return function (req, res) {
     return __awaiter(void 0, void 0, void 0, function () {
-      var tokenFromCookie, tokenFromCookieUnsigned, newReqCsrfToken, newReqCsrfTokenSigned;
+      var tokenFromCookie,
+        tokenFromCookieUnsigned,
+        newReqCsrfToken,
+        newReqCsrfTokenSigned;
       var _a;
       return __generator(this, function (_b) {
         try {
           tokenFromCookie = getCookie(req, tokenKey);
-          tokenFromCookieUnsigned = cookieSignature.unsign(tokenFromCookie, secret);
+          console.log(tokenFromCookie);
+          tokenFromCookieUnsigned = cookieSignature.unsign(
+            tokenFromCookie,
+            secret
+          );
           // Do nothing on if method is in `ignoreMethods`
           if (ignoredMethods.includes(req.method)) {
             return [2 /*return*/, handler(req, res)];
@@ -1903,11 +2141,18 @@ var csrf = function (handler, _a) {
           newReqCsrfToken = tokens.create(csrfSecret);
           newReqCsrfTokenSigned = cookieSignature.sign(newReqCsrfToken, secret);
 
-          res.setHeader("Set-Cookie", serialize_1(tokenKey, newReqCsrfTokenSigned, cookieOptions));
+          res.setHeader(
+            'Set-Cookie',
+            serialize_1(tokenKey, newReqCsrfTokenSigned, cookieOptions)
+          );
           return [2 /*return*/, handler(req, res)];
-        }
-        catch (error) {
-          return [2 /*return*/, res.status((_a = error.status) !== null && _a !== void 0 ? _a : 500).json({ message: error.message })];
+        } catch (error) {
+          return [
+            2 /*return*/,
+            res
+              .status((_a = error.status) !== null && _a !== void 0 ? _a : 500)
+              .json({ message: error.message }),
+          ];
         }
         return [2 /*return*/];
       });
@@ -1916,7 +2161,10 @@ var csrf = function (handler, _a) {
 };
 
 var setup = function (handler, _a) {
-  var csrfSecret = _a.csrfSecret, secret = _a.secret, tokenKey = _a.tokenKey, cookieOptions = _a.cookieOptions;
+  var csrfSecret = _a.csrfSecret,
+    secret = _a.secret,
+    tokenKey = _a.tokenKey,
+    cookieOptions = _a.cookieOptions;
   return function () {
     var args = [];
     for (var _i = 0; _i < arguments.length; _i++) {
@@ -1935,7 +2183,10 @@ var setup = function (handler, _a) {
         reqCsrfToken = tokens.create(csrfSecret);
         reqCsrfTokenSigned = cookieSignature.sign(reqCsrfToken, secret);
 
-        res.setHeader("Set-Cookie", serialize_1(tokenKey, reqCsrfTokenSigned, cookieOptions));
+        res.setHeader(
+          'Set-Cookie',
+          serialize_1(tokenKey, reqCsrfTokenSigned, cookieOptions)
+        );
         return [2 /*return*/, handler(req, res)];
       });
     });
@@ -1943,21 +2194,24 @@ var setup = function (handler, _a) {
 };
 
 var defaultOptions = {
-  tokenKey: "XSRF-TOKEN",
-  csrfErrorMessage: "Invalid CSRF token",
-  ignoredMethods: ["GET", "HEAD", "OPTIONS"],
+  tokenKey: 'XSRF-TOKEN',
+  csrfErrorMessage: 'Invalid CSRF token',
+  ignoredMethods: ['GET', 'HEAD', 'OPTIONS'],
   cookieOptions: {
-    httpOnly: false,
-    path: "/",
-    SameSite: "lax",
-    secure: process.env.NODE_ENV === "production",
+    httpOnly: true,
+    path: '/',
+    SameSite: 'lax',
+    secure: process.env.NODE_ENV === 'production',
   },
   csrfSecret: tokens.secretSync(),
 };
 function nextCsrf(userOptions) {
   var options = __assign(__assign({}, defaultOptions), userOptions);
   // generate CSRF token
-  var csrfToken = cookieSignature.sign(tokens.create(options.csrfSecret), options.secret);
+  var csrfToken = cookieSignature.sign(
+    tokens.create(options.csrfSecret),
+    options.secret
+  );
   // generate options for the csrf middleware
   var csrfOptions = __assign({}, options);
   // generate middleware to verify CSRF token with the CSRF as parameter
@@ -1972,7 +2226,9 @@ function nextCsrf(userOptions) {
         cookieOptions: options.cookieOptions,
       });
     },
-    csrf: function (handler) { return csrf(handler, csrfOptions); },
+    csrf: function (handler) {
+      return csrf(handler, csrfOptions);
+    },
   };
 }
 

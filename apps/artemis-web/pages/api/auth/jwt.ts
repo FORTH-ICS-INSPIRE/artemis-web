@@ -1,6 +1,5 @@
 import nc from 'next-connect';
 import auth from '../../../middleware/auth';
-import { extractUser } from '../../../utils/parsers';
 import {
   NextApiRequestExtended,
   NextApiResponseExtended,
