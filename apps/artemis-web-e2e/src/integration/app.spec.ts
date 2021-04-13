@@ -5,7 +5,16 @@ let newPass;
 
 describe('artemis-web', () => {
   beforeEach(() => {
-    Cypress.Cookies.preserveOnce('remember_me', 'sid', 'access_token');
+    Cypress.Cookies.preserveOnce('remember_me', 'sid', 'access_token', 'XSRF-TOKEN');
+  });
+
+  it('logs in', () => {
+    cy.visit('/login');
+    cy.wait(2000);
+    cy.get('h1').should('have.text', 'Sign In');
+    cy.typeLogin({ email: 'admin@admin.com', password: 'admin1234' });
+    cy.login();
+
   });
 
   it('signs up a new user', () => {

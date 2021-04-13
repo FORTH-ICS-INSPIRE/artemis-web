@@ -2129,7 +2129,6 @@ var csrf = function (handler, _a) {
       return __generator(this, function (_b) {
         try {
           tokenFromCookie = getCookie(req, tokenKey);
-
           tokenFromCookieUnsigned = cookieSignature.unsign(
             tokenFromCookie,
             secret
@@ -2207,10 +2206,10 @@ var defaultOptions = {
   csrfErrorMessage: 'Invalid CSRF token',
   ignoredMethods: ['GET', 'HEAD', 'OPTIONS'],
   cookieOptions: {
-    httpOnly: true,
+    httpOnly: false,
     path: '/',
     SameSite: 'lax',
-    secure: process.env.NODE_ENV === 'production',
+    secure: false,
   },
   csrfSecret: tokens.secretSync(),
 };
