@@ -35,11 +35,11 @@ import {
 } from '../utils/token';
 
 const ViewHijackPage = (props) => {
-  // if (shallMock()) {
-  //   // eslint-disable-next-line @typescript-eslint/no-var-requires
-  //   const { worker } = require('../utils/mock-sw/browser');
-  //   worker.start();
-  // }
+  if (shallMock()) {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const { worker } = require('../utils/mock-sw/browser');
+    worker.start();
+  }
   const {
     isLive,
     setIsLive,
