@@ -1,33 +1,33 @@
-#name: ZAP Baseline Scan
-#
-#on:
-#  push:
-#    branches:
-#      - master
-#
-#jobs:
-#  zap_scan:
-#    runs-on: ubuntu-latest
-#    name: Scan the webapplication
-#
-#    steps:
-#      - name: Checkout
-#        uses: actions/checkout@v2
-#      - name: Build containers
-#        run: docker-compose build
-#      - name: Start containers
-#        run: docker-compose up -d
-#      - name: Sleep for 30 seconds
-#        uses: jakejarvis/wait-action@master
-#        with:
-#          time: '30s'
-#      - name: Check running containers
-#        run: docker ps
-#      - name: ZAP Scan
-#        uses: zaproxy/action-baseline@v0.4.0
-#        with:
-#          token: ${{ secrets.GITHUB_TOKEN }}
-#          docker_name: 'owasp/zap2docker-stable'
-#          target: 'http://localhost:4200'
-#          # rules_file_name: '.zap/rules.tsv'
-#          # cmd_options: '-a'
+name: ZAP Baseline Scan
+
+on:
+ push:
+   branches:
+     - master
+
+jobs:
+ zap_scan:
+   runs-on: ubuntu-latest
+   name: Scan the webapplication
+
+   steps:
+     - name: Checkout
+       uses: actions/checkout@v2
+     - name: Build containers
+       run: docker-compose build
+     - name: Start containers
+       run: docker-compose -f docker-compose.prod.yml up -d
+     - name: Sleep for 30 seconds
+       uses: jakejarvis/wait-action@master
+       with:
+         time: '30s'
+     - name: Check running containers
+       run: docker ps
+     - name: ZAP Scan
+       uses: zaproxy/action-baseline@v0.4.0
+       with:
+         token: ${{ secrets.GITHUB_TOKEN }}
+         docker_name: 'ictu/zap2docker-weekly'
+         target: 'https://localhost'
+         # rules_file_name: '.zap/rules.tsv'
+         cmd_options: '--hook=/zap/auth_hook.py -z "auth.loginurl=https://localhost/login auth.username=admin@admin.com auth.password=admin1234 auth.username_field=email auth.password_field=password auth.submit_field=submit auth.exclude=.*logout.*"'

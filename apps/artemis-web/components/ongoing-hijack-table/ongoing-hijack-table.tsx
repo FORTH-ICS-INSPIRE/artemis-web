@@ -25,6 +25,7 @@ import {
   getTextFilter,
   expandColumnComponent,
   genTooltip,
+  compareObjects,
 } from '../../utils/token';
 import ErrorBoundary from '../error-boundary/error-boundary';
 import Tooltip from '../tooltip/tooltip';
@@ -481,6 +482,7 @@ const OngoingHijackTableComponent = (props) => {
     withFirstAndLast: false, // Hide the going to First and Last page button
     firstPageText: 'First',
     prePageText: 'Back',
+    page: page,
     nextPageText: 'Next',
     lastPageText: 'Last',
     nextPageTitle: 'First page',
@@ -490,7 +492,6 @@ const OngoingHijackTableComponent = (props) => {
     showTotal: true,
     custom: true,
     dataSize: hijackCount,
-    page: page,
     sizePerPage: sizePerPage,
     paginationTotalRenderer: customTotal,
     disablePageTitle: true,
@@ -521,17 +522,27 @@ const OngoingHijackTableComponent = (props) => {
     const currentIndex = page * sizePerPage;
     setPage(page);
     setSizePerPage(sizePerPage);
-    if (currentIndex) setOffsetState(currentIndex);
-    if (sizePerPage) setLimitState(sizePerPage);
+
+    setOffsetState(currentIndex);
+    setLimitState(sizePerPage);
     if (sortOrder) {
       setSortColumnState(sortField);
       setSortState(sortOrder);
     }
     if (filters) {
-      const key = Object.keys(filters)[0];
-      if (filters[key])
-        setStateValues({ ...stateValues, [key]: filters[key].filterVal });
-      else setStateValues({ ...stateValues, [key]: '' });
+      const keys = Object.keys(filters);
+
+      keys.forEach((key) => {
+        if (filters[key])
+          setStateValues({ ...stateValues, [key]: filters[key].filterVal });
+        else setStateValues({ ...stateValues, [key]: '' });
+      });
+
+      if (currentIndex && !compareObjects(filters, columnFilter)) {
+        setPage(0);
+        setOffsetState(0);
+      }
+
       setColumnFilter(filters);
     }
   };
