@@ -2209,7 +2209,7 @@ var defaultOptions = {
     httpOnly: true,
     path: '/',
     SameSite: 'lax',
-    secure: false,
+    secure: process.env.NODE_ENV === 'production' && process.env.TESTING === 'false',
   },
   csrfSecret: tokens.secretSync(),
 };
