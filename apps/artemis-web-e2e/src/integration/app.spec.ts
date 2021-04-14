@@ -16,6 +16,8 @@ describe('artemis-web', () => {
     const name = chance.first();
     cy.typeRegister({ name: name, email: newEmail, password: newPass });
     cy.register();
+    cy.wait(1000);
+    cy.get('h1').should('have.text', 'Dashboard');
   });
 
   it('logs out', () => {

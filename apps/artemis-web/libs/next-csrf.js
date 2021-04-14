@@ -2206,7 +2206,7 @@ var defaultOptions = {
   csrfErrorMessage: 'Invalid CSRF token',
   ignoredMethods: ['GET', 'HEAD', 'OPTIONS'],
   cookieOptions: {
-    httpOnly: false,
+    httpOnly: true,
     path: '/',
     SameSite: 'lax',
     secure: false,

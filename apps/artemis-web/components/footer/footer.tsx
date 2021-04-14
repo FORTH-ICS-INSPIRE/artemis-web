@@ -13,7 +13,6 @@ type MyProps = {
 
 class FooterComponent extends React.Component<MyProps> {
   render() {
-    console.log(process.env.NEXT_PUBLIC_SYSTEM_VERSION)
     const { classes } = this.props;
     const { root, footer, link } = classes;
 
