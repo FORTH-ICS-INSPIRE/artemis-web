@@ -1,17 +1,14 @@
 name: ZAP Baseline Scan
 
 on:
-  push:
-    branches:
-      - master
-  pull_request:
-    branches:
-      - master
+ push:
+   branches:
+     - master
 
 jobs:
  zap_scan:
    runs-on: ubuntu-latest
-   name: Scan the web application
+   name: Scan the webapplication
 
    steps:
      - name: Checkout
