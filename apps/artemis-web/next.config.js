@@ -1,4 +1,8 @@
+// /next.config.js
+const { createSecureHeaders } = require("next-secure-headers");
+
 module.exports = {
-  env: {
+  async headers() {
+    return [{ source: "/(.*)", headers: createSecureHeaders() }];
   },
 };
