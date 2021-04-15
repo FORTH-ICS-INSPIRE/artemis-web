@@ -10,9 +10,9 @@ module.exports = {
       headers: createSecureHeaders({
         contentSecurityPolicy: {
           directives: {
-            defaultSrc: ["'self'", "https://cdn.jsdelivr.net/", "https://code.jquery.com"],
-            styleSrc: ["'self'", "https://cdn.jsdelivr.net/", "https://code.jquery.com"],
-            scriptSrc: ["'self'", "https://cdn.jsdelivr.net/", "https://code.jquery.com"]
+            defaultSrc: ["'self'", "https://cdn.jsdelivr.net/", "https://code.jquery.com", "https://demo.artemis-pc.duckdns.org"],
+            styleSrc: ["'self'", "https://cdn.jsdelivr.net/", "https://code.jquery.com", "https://demo.artemis-pc.duckdns.org"],
+            scriptSrc: ["'self'", "https://cdn.jsdelivr.net/", "https://code.jquery.com", "https://demo.artemis-pc.duckdns.org"]
           },
         },
         forceHTTPSRedirect: [true, { maxAge: 60 * 60 * 24 * 4, includeSubDomains: true }],
