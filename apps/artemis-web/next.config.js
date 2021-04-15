@@ -20,7 +20,7 @@ module.exports = {
           },
         },
         forceHTTPSRedirect: [true, { maxAge: 60 * 60 * 24 * 4, includeSubDomains: true }],
-        referrerPolicy: "same-origin",
+        referrerPolicy: "strict-origin-when-cross-origin",
       }),
     }];
   },
