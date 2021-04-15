@@ -10,12 +10,12 @@ module.exports = {
       headers: createSecureHeaders({
         contentSecurityPolicy: {
           directives: {
-            defaultSrc: ["'self'", "https://cdn.jsdelivr.net/", "https://code.jquery.com", "https://demo.artemis-pc.duckdns.org"],
-            styleSrc: ["'self'", "https://cdn.jsdelivr.net/", "https://code.jquery.com", "https://demo.artemis-pc.duckdns.org"],
-            scriptSrc: ["'self'", "https://cdn.jsdelivr.net/", "https://code.jquery.com", "https://demo.artemis-pc.duckdns.org"]
+            defaultSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'", "https://cdn.jsdelivr.net/", "https://code.jquery.com", "https://demo.artemis-pc.duckdns.org"],
+            styleSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'", "https://cdn.jsdelivr.net/", "https://code.jquery.com", "https://demo.artemis-pc.duckdns.org"],
+            scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'", "https://cdn.jsdelivr.net/", "https://code.jquery.com", "https://demo.artemis-pc.duckdns.org"],
           },
         },
-        forceHTTPSRedirect: [true, { maxAge: 60 * 60 * 24 * 4, includeSubDomains: true }],
+        // forceHTTPSRedirect: [true, { maxAge: 60 * 60 * 24 * 4, includeSubDomains: true }],
         referrerPolicy: "same-origin",
       }),
     }];
