@@ -1,6 +1,7 @@
 import { Button, Grid, TextField } from '@material-ui/core';
 import { useStyles } from '../../utils/styles';
 import React, { useState } from 'react';
+import Cookies from 'js-cookie';
 
 const UsersPasswordComponent = (props) => {
   const users = props.data;
@@ -22,6 +23,7 @@ const UsersPasswordComponent = (props) => {
         action: 'changePass',
         userName: username,
         new_password: new_password,
+        _csrf: Cookies.get('XSRF-TOKEN')
       }),
     });
 
