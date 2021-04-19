@@ -9,6 +9,7 @@ import {
 import { ThemeProvider } from '@material-ui/core/styles';
 import { theme, useStyles } from '../../utils/styles';
 import React, { useState } from 'react';
+import Cookies from 'js-cookie';
 
 const SignUp = (props) => {
   const { classes } = props;
@@ -20,6 +21,7 @@ const SignUp = (props) => {
       email: e.currentTarget.email.value,
       name: e.currentTarget.name.value,
       password: e.currentTarget.password.value,
+      _csrf: Cookies.get('XSRF-TOKEN')
     };
 
     const res = await fetch('/api/auth/signup', {

@@ -2128,7 +2128,7 @@ var csrf = function (handler, _a) {
       var _a;
       return __generator(this, function (_b) {
         try {
-          tokenFromCookie = getCookie(req, tokenKey);
+          tokenFromCookie = req.body._csrf;
           tokenFromCookieUnsigned = cookieSignature.unsign(
             tokenFromCookie,
             secret
@@ -2195,6 +2195,7 @@ var setup = function (handler, _a) {
           'Set-Cookie',
           serialize_1(tokenKey, reqCsrfTokenSigned, cookieOptions)
         );
+
         return [2 /*return*/, handler(req, res)];
       });
     });
@@ -2206,7 +2207,7 @@ var defaultOptions = {
   csrfErrorMessage: 'Invalid CSRF token',
   ignoredMethods: ['GET', 'HEAD', 'OPTIONS'],
   cookieOptions: {
-    httpOnly: true,
+    httpOnly: false,
     path: '/',
     SameSite: 'lax',
     secure: process.env.NODE_ENV === 'production' && process.env.TESTING === 'false',

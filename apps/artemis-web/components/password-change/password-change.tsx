@@ -8,6 +8,7 @@ import {
 import { ThemeProvider } from '@material-ui/core/styles';
 import { theme, useStyles } from '../../utils/styles';
 import React, { useState } from 'react';
+import Cookies from 'js-cookie';
 
 const PasswordChange = (props) => {
   const { classes } = props;
@@ -29,6 +30,7 @@ const PasswordChange = (props) => {
     const body = {
       old_password: old_password,
       new_password: new_password,
+      _csrf: Cookies.get('XSRF-TOKEN'),
     };
 
     const res = await fetch('/api/auth/change-password', {
@@ -40,7 +42,7 @@ const PasswordChange = (props) => {
     if (res.status === 200) {
       setSuccessMsg(
         (await res.json()).message +
-          '\n Please login with your new credentials.'
+        '\n Please login with your new credentials.'
       );
       setErrorMsg('');
       await fetch('/api/auth/logout', {

@@ -12,6 +12,7 @@ import { ThemeProvider } from '@material-ui/core/styles';
 import { theme, useStyles } from '../../utils/styles';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
+import Cookies from 'js-cookie';
 
 const Login = (props) => {
   const [errorMsg, setErrorMsg] = useState('');
@@ -25,6 +26,7 @@ const Login = (props) => {
   async function onClick(e, endpoint) {
     e.preventDefault();
 
+    console.log(Cookies.get('XSRF-TOKEN'))
     const res = await fetch(endpoint, {
       method: 'POST',
       credentials: 'include',
@@ -32,7 +34,7 @@ const Login = (props) => {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(formData),
+      body: JSON.stringify({ ...formData, _csrf: Cookies.get('XSRF-TOKEN') }),
     });
 
     if (res.status === 200) {
