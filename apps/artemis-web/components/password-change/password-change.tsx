@@ -47,6 +47,12 @@ const PasswordChange = (props) => {
       setErrorMsg('');
       await fetch('/api/auth/logout', {
         method: 'DELETE',
+        credentials: 'include',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ _csrf: Cookies.get('XSRF-TOKEN') })
       });
       setTimeout(() => (document.location.href = '/login'), 3000);
     } else {
