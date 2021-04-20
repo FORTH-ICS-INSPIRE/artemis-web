@@ -12,8 +12,8 @@ module.exports = {
           directives: {
             defaultSrc: ["'self'"],
             styleSrc: ["'self'", "'unsafe-inline'", "https://cdn.jsdelivr.net/", "https://code.jquery.com"],
-            scriptSrc: ["'self'", "'unsafe-eval'", "https://cdn.jsdelivr.net/", "https://code.jquery.com"],
-            connectSrc: ["'self'", "https://stat.ripe.net", "wss://demo.bgpartemis.org"],
+            scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'", "https://cdn.jsdelivr.net/", "https://code.jquery.com"],
+            connectSrc: ["'self'", "https://stat.ripe.net", "wss://localhost", "wss://demo.bgpartemis.org"],
             frameAncestors: "'none",
             imgSrc: ["'self'", "data:*"],
             objectSrc: "'none",

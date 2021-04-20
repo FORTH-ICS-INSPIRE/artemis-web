@@ -26,7 +26,6 @@ const Login = (props) => {
   async function onClick(e, endpoint) {
     e.preventDefault();
 
-    console.log(Cookies.get('XSRF-TOKEN'))
     const res = await fetch(endpoint, {
       method: 'POST',
       credentials: 'include',

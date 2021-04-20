@@ -31,4 +31,4 @@ const handler = nc()
     }
   });
 
-export default csrf(handler);
+export default handler;
