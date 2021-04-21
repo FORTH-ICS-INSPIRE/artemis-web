@@ -49,6 +49,7 @@ const SystemConfigurationComponent = (props) => {
 
       if (res.status === 200) {
         setAlertState('block');
+        setEditState(false);
         setAlertMessage('Configuration file updated.');
       }
     } else {
@@ -154,9 +155,9 @@ const SystemConfigurationComponent = (props) => {
                   Last Update:{' '}
                   {CONFIG_DATA
                     ? formatDate(
-                        new Date(CONFIG_DATA.view_configs[0].time_modified),
-                        2
-                      )
+                      new Date(CONFIG_DATA.view_configs[0].time_modified),
+                      2
+                    )
                     : 'Never'}
                 </span>
                 <span style={{ float: 'right' }}>
