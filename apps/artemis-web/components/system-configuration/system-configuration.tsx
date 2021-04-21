@@ -35,6 +35,7 @@ const SystemConfigurationComponent = (props) => {
   async function onClick(e, action) {
     e.preventDefault();
     if (action === 'save') {
+      setEditState(!editState);
       const new_config = configRef.current.props.value;
       const comment = commentRef.current.props.value;
       const res = await fetch('/api/config', {
@@ -49,7 +50,6 @@ const SystemConfigurationComponent = (props) => {
 
       if (res.status === 200) {
         setAlertState('block');
-        setEditState(false);
         setAlertMessage('Configuration file updated.');
       }
     } else {
