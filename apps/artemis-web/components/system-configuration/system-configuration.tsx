@@ -155,9 +155,9 @@ const SystemConfigurationComponent = (props) => {
                   Last Update:{' '}
                   {CONFIG_DATA
                     ? formatDate(
-                      new Date(CONFIG_DATA.view_configs[0].time_modified),
-                      2
-                    )
+                        new Date(CONFIG_DATA.view_configs[0].time_modified),
+                        2
+                      )
                     : 'Never'}
                 </span>
                 <span style={{ float: 'right' }}>

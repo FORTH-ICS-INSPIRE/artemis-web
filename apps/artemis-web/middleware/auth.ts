@@ -9,7 +9,9 @@ const auth = nc()
     session({
       cookie: {
         maxAge: 1800,
-        secure: process.env.NODE_ENV === 'production' && process.env.TESTING === 'false',
+        secure:
+          process.env.NODE_ENV === 'production' &&
+          process.env.TESTING === 'false',
       },
     })
   )

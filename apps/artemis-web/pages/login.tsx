@@ -35,6 +35,6 @@ const LoginPage = (props) => {
 
 export default LoginPage;
 
-export const getServerSideProps = setup(async () => {
-  return { props: {} };
+export const getServerSideProps = setup(async (req, res, csrftoken) => {
+  return { props: { _csrf: csrftoken } };
 });

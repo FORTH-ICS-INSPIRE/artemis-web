@@ -26,6 +26,6 @@ const PasswordChangePage = (props) => {
 
 export default AuthHOC(PasswordChangePage, ['admin', 'user']);
 
-export const getServerSideProps = setup(async () => {
-  return { props: {} };
+export const getServerSideProps = setup(async (req, res, csrftoken) => {
+  return { props: { _csrf: csrftoken } };
 });

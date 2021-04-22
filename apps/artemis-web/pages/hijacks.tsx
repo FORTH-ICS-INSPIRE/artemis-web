@@ -17,6 +17,7 @@ import AuthHOC from '../components/401-hoc/401-hoc';
 import HijackTableComponent from '../components/hijack-table/hijack-table';
 import Tooltip from '../components/tooltip/tooltip';
 import TooltipContext from '../context/tooltip-context';
+import { setup } from '../libs/csrf';
 import { AntSwitch, useStyles } from '../utils/styles';
 import {
   genTooltip,
@@ -599,3 +600,7 @@ const HijacksPage = (props) => {
 };
 
 export default AuthHOC(HijacksPage, ['admin', 'user']);
+
+export const getServerSideProps = setup(async (req, res, csrftoken) => {
+  return { props: { _csrf: csrftoken } };
+});

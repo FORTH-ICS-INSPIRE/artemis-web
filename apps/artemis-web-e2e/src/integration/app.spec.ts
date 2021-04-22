@@ -5,7 +5,12 @@ let newPass;
 
 describe('artemis-web', () => {
   beforeEach(() => {
-    Cypress.Cookies.preserveOnce('remember_me', 'sid', 'access_token', 'XSRF-TOKEN');
+    Cypress.Cookies.preserveOnce(
+      'remember_me',
+      'sid',
+      'access_token',
+      'XSRF-TOKEN'
+    );
   });
 
   it('signs up a new user', () => {

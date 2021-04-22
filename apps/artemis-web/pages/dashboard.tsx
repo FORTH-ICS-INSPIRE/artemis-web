@@ -8,6 +8,7 @@ import ErrorBoundary from '../components/error-boundary/error-boundary';
 import OngoingHijackTableComponent from '../components/ongoing-hijack-table/ongoing-hijack-table';
 import StatisticsTable from '../components/statistics-table/statistics-table';
 import StatusTable from '../components/status-table/status-table';
+import { setup } from '../libs/csrf';
 import { useGraphQl } from '../utils/hooks/use-graphql';
 import { GLOBAL_MEDIA_QUERIES, shallMock } from '../utils/token';
 
@@ -84,8 +85,8 @@ const DashboardPage = (props) => {
                       (
                       {user &&
                         new Date(user.lastLogin).toLocaleDateString() +
-                        ' ' +
-                        new Date(user.lastLogin).toLocaleTimeString()}
+                          ' ' +
+                          new Date(user.lastLogin).toLocaleTimeString()}
                       )
                     </b>
                     . You are {user && user.role}.
@@ -185,3 +186,7 @@ const DashboardPage = (props) => {
 };
 
 export default AuthHOC(DashboardPage, ['admin', 'user']);
+
+export const getServerSideProps = setup(async (req, res, csrftoken) => {
+  return { props: { _csrf: csrftoken } };
+});

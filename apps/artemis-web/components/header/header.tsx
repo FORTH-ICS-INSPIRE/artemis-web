@@ -22,9 +22,9 @@ const Header = (props) => {
       }}
     >
       {matches.mobile ? (
-        <MobileHeader user={user} />
+        <MobileHeader user={user} {...props} />
       ) : (
-        <DesktopHeader user={user} />
+        <DesktopHeader user={user} {...props} />
       )}
     </nav>
   );

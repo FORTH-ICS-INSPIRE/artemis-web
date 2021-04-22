@@ -8,7 +8,6 @@ import {
 import { ThemeProvider } from '@material-ui/core/styles';
 import { theme, useStyles } from '../../utils/styles';
 import React, { useState } from 'react';
-import Cookies from 'js-cookie';
 
 const PasswordChange = (props) => {
   const { classes } = props;
@@ -30,7 +29,7 @@ const PasswordChange = (props) => {
     const body = {
       old_password: old_password,
       new_password: new_password,
-      _csrf: Cookies.get('XSRF-TOKEN'),
+      _csrf: props._csrf,
     };
 
     const res = await fetch('/api/auth/change-password', {
@@ -42,7 +41,7 @@ const PasswordChange = (props) => {
     if (res.status === 200) {
       setSuccessMsg(
         (await res.json()).message +
-        '\n Please login with your new credentials.'
+          '\n Please login with your new credentials.'
       );
       setErrorMsg('');
       await fetch('/api/auth/logout', {
@@ -52,7 +51,7 @@ const PasswordChange = (props) => {
           Accept: 'application/json',
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ _csrf: Cookies.get('XSRF-TOKEN') })
+        body: JSON.stringify({ _csrf: props._csrf }),
       });
       setTimeout(() => (document.location.href = '/login'), 3000);
     } else {
@@ -140,9 +139,9 @@ const PasswordChange = (props) => {
   );
 };
 
-const PasswordChangeComponent = () => {
+const PasswordChangeComponent = (props) => {
   const classes = useStyles();
-  return <PasswordChange classes={classes} />;
+  return <PasswordChange classes={classes} {...props} />;
 };
 
 export default PasswordChangeComponent;

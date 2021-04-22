@@ -1,7 +1,6 @@
 import { Button, Grid, TextField } from '@material-ui/core';
 import { useStyles } from '../../utils/styles';
 import React, { useState } from 'react';
-import Cookies from 'js-cookie';
 
 const UserCreationComponent = (props) => {
   const [errorMsg, setErrorMsg] = useState('');
@@ -24,7 +23,7 @@ const UserCreationComponent = (props) => {
         userName: username,
         email: email,
         new_password: new_password,
-        _csrf: Cookies.get('XSRF-TOKEN'),
+        _csrf: props._csrf,
       }),
     });
 

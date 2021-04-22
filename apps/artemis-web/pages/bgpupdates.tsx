@@ -17,6 +17,7 @@ import NotAuthHOC from '../components/401-hoc/401-hoc';
 import BGPTableComponent from '../components/bgp-table/bgp-table';
 import Tooltip from '../components/tooltip/tooltip';
 import TooltipContext from '../context/tooltip-context';
+import { setup } from '../libs/csrf';
 import { AntSwitch, useStyles } from '../utils/styles';
 import {
   genTooltip,
@@ -365,3 +366,7 @@ const BGPUpdates = (props) => {
 };
 
 export default NotAuthHOC(BGPUpdates, ['admin', 'user']);
+
+export const getServerSideProps = setup(async (req, res, csrftoken) => {
+  return { props: { _csrf: csrftoken } };
+});

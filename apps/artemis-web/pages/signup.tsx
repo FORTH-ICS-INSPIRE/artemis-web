@@ -28,7 +28,7 @@ const SignupPage = (props) => {
       <div id="login-container">
         {!user && !loading && (
           <div id="content-wrap">
-            <SignUpComponent />
+            <SignUpComponent {...props} />
           </div>
         )}
       </div>
@@ -38,6 +38,6 @@ const SignupPage = (props) => {
 
 export default SignupPage;
 
-export const getServerSideProps = setup(async () => {
-  return { props: {} };
+export const getServerSideProps = setup(async (req, res, csrftoken) => {
+  return { props: { _csrf: csrftoken } };
 });

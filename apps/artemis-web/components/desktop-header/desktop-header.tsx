@@ -1,6 +1,5 @@
 import { Link, Menu, MenuItem } from '@material-ui/core';
 import React, { useState } from 'react';
-import Cookies from 'js-cookie';
 
 const DesktopHeader = (props) => {
   const user = props.user;
@@ -24,7 +23,6 @@ const DesktopHeader = (props) => {
   };
 
   const handleLogout = async () => {
-
     await fetch('/api/auth/logout', {
       method: 'DELETE',
       credentials: 'include',
@@ -32,7 +30,7 @@ const DesktopHeader = (props) => {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ _csrf: Cookies.get('XSRF-TOKEN') })
+      body: JSON.stringify({ _csrf: props._csrf }),
     });
 
     document.location.href = '/login';
@@ -40,7 +38,7 @@ const DesktopHeader = (props) => {
 
   const getItemClass = (path1, path2 = '+-"') =>
     window.location.pathname.includes(path1) ||
-      window.location.pathname.includes(path2)
+    window.location.pathname.includes(path2)
       ? 'nav-item visited'
       : 'nav-item';
 

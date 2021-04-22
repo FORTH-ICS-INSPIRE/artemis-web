@@ -26,6 +26,7 @@ const MobileHeader = (props) => {
   const handleLogout = async () => {
     await fetch('/api/auth/logout', {
       method: 'DELETE',
+      body: JSON.stringify({ _csrf: props._csrf }),
     });
 
     document.location.href = '/login';
