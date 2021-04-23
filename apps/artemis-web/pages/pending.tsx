@@ -1,6 +1,7 @@
 import Head from 'next/head';
 import React from 'react';
 import AuthHOC from '../components/401-hoc/401-hoc';
+import { setup } from '../libs/csrf';
 
 const PendingPage = () => {
   return (
@@ -44,3 +45,7 @@ const PendingPage = () => {
 };
 
 export default AuthHOC(PendingPage, ['pending']);
+
+export const getServerSideProps = setup(async (req, res, csrftoken) => {
+  return { props: { _csrf: csrftoken } };
+});

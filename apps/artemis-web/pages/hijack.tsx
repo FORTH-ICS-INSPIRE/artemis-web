@@ -171,6 +171,7 @@ const ViewHijackPage = (props) => {
             </div>
           </div>
           <HijackInfoComponent
+            {...props}
             hijackDataState={hijackDataState}
             isMobile={matches.mobile}
             tooltips={tooltips}
@@ -205,6 +206,7 @@ const ViewHijackPage = (props) => {
                     <DialogContent dividers>
                       <div id="modal_display_config_comparison">
                         <LearnRuleComponent
+                          {...props}
                           hijack={hijackDataState}
                           config={config}
                         />

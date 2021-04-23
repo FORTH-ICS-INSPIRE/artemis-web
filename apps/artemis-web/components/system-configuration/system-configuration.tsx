@@ -45,7 +45,11 @@ const SystemConfigurationComponent = (props) => {
           Accept: 'application/json',
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ new_config: new_config, comment: comment }),
+        body: JSON.stringify({
+          new_config: new_config,
+          comment: comment,
+          _csrf: props._csrf,
+        }),
       });
 
       if (res.status === 200) {

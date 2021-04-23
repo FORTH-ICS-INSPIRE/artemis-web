@@ -2,7 +2,7 @@ import { Button, withStyles } from '@material-ui/core';
 import { styles } from '../../utils/styles';
 import DMP from 'diff_match_patch';
 import React, { Component } from 'react';
-import { sendData, sendHijackData } from '../../utils/fetch-data';
+import { sendHijackData } from '../../utils/fetch-data';
 
 type stateType = {
   configs: any[];
@@ -24,11 +24,13 @@ class LearnRuleComponent extends Component<
   config: any;
   hijack: any;
   mergeView: any;
+  _csrf: string;
 
   constructor(props) {
     super(props);
     this.config = props.config;
     this.hijack = props.hijack;
+    this._csrf = props._csrf;
 
     if (
       typeof window !== 'undefined' &&
@@ -92,6 +94,7 @@ class LearnRuleComponent extends Component<
   }
 
   async learnRule(e) {
+    const _csrf = this._csrf;
     const { key, prefix, type, hijack_as } = this.hijack;
     const reqData = {
       hijack_key: key,
@@ -117,6 +120,7 @@ class LearnRuleComponent extends Component<
       prefix: prefix,
       hijack_as: hijack_as,
       type: type,
+      _csrf: _csrf,
     });
 
     this.setState({
@@ -194,6 +198,7 @@ class LearnRuleComponent extends Component<
                       prefix: this.hijack.prefix,
                       hijack_as: this.hijack.hijack_as,
                       type: this.hijack.type,
+                      _csrf: this._csrf,
                     });
                     this.setState({
                       isConfigSuccess: false,

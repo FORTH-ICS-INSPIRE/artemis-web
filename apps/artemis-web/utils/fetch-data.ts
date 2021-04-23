@@ -9,14 +9,14 @@ function getName(ASN: number) {
 function getCountry(ASN: number) {
   return fetch(
     'https://stat.ripe.net/data/maxmind-geo-lite-announced-by-as/data.json?resource=AS' +
-    ASN
+      ASN
   ).then((response) => response.json());
 }
 
 function getAbuse(ASN: number) {
   return fetch(
     'https://stat.ripe.net/data/abuse-contact-finder/data.json?resource=AS' +
-    ASN
+      ASN
   ).then((response) => response.json());
 }
 
@@ -46,7 +46,7 @@ export const fetchTooltip = async (ASN, context, { setTooltip }) => {
   }
 };
 
-export const submitComment = async (e, { commentRef, hijackKey }) => {
+export const submitComment = async (e, { commentRef, hijackKey, _csrf }) => {
   e.preventDefault();
   const editor: any = commentRef.current;
   const comment = editor.editor.innerText;
@@ -55,6 +55,7 @@ export const submitComment = async (e, { commentRef, hijackKey }) => {
     action: 'comment',
     key: hijackKey,
     comment: comment,
+    _csrf: _csrf,
   };
 
   await fetch('/api/hijack', {
@@ -70,7 +71,7 @@ export const submitComment = async (e, { commentRef, hijackKey }) => {
 
 export const sendData = async (
   e,
-  { hijackKeys, selectState, state = false }
+  { hijackKeys, selectState, state = false, _csrf }
 ) => {
   e.preventDefault();
 
@@ -78,6 +79,7 @@ export const sendData = async (
     hijack_keys: hijackKeys,
     action: selectState,
     state: state,
+    _csrf: _csrf,
   };
 
   const res = await fetch('/api/hijack', {
@@ -95,7 +97,7 @@ export const sendData = async (
 
 export const sendHijackData = async (
   e,
-  { hijackKey, selectState, prefix, hijack_as, type }
+  { hijackKey, selectState, prefix, hijack_as, type, _csrf }
 ) => {
   e.preventDefault();
 
@@ -120,6 +122,7 @@ export const sendHijackData = async (
     prefix: prefix,
     hijack_as: hijack_as,
     hijack_type: type,
+    _csrf: _csrf,
   };
 
   const res = await fetch('/api/rmq_action', {

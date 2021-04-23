@@ -337,6 +337,7 @@ const HijacksPage = (props) => {
                 </div>
                 <div className="card-body" style={{ textAlign: 'center' }}>
                   <HijackTableComponent
+                    {...props}
                     filter={filterFrom}
                     filterTo={filterTo}
                     isLive={isLive}

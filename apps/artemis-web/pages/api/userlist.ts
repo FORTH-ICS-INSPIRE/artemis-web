@@ -20,4 +20,4 @@ const handler = nc()
     res.json(users);
   });
 
-export default csrf(handler);
+export default handler;
