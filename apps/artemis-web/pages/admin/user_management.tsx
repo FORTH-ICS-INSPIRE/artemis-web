@@ -7,6 +7,7 @@ import AuthHOC from '../../components/401-hoc/401-hoc';
 import UserListComponent from '../../components/user-list/user-list';
 import { formatDate } from '../../utils/token';
 import { useStyles } from '../../utils/styles';
+import { setup } from '../../libs/csrf';
 
 const UserManagementPage = (props) => {
   const user = props.user;
@@ -255,7 +256,7 @@ const UserManagementPage = (props) => {
                 <div className="card">
                   <div className="card-header"> User list </div>
                   <div className="card-body">
-                    <UserListComponent data={userList} />
+                    <UserListComponent {...props} data={userList} />
                   </div>
                 </div>
               </div>
@@ -268,6 +269,7 @@ const UserManagementPage = (props) => {
                   <div className="card-body">
                     <UsersPasswordComponent
                       data={userList}
+                      {...props}
                     ></UsersPasswordComponent>
                   </div>
                 </div>
@@ -278,6 +280,7 @@ const UserManagementPage = (props) => {
                   <div className="card-body">
                     <UserCreationComponent
                       data={userList}
+                      {...props}
                     ></UserCreationComponent>
                   </div>
                 </div>
@@ -291,3 +294,7 @@ const UserManagementPage = (props) => {
 };
 
 export default AuthHOC(UserManagementPage, ['admin']);
+
+export const getServerSideProps = setup(async (req, res, csrftoken) => {
+  return { props: { _csrf: csrftoken } };
+});

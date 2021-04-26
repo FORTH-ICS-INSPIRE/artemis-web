@@ -25,6 +25,12 @@ const DesktopHeader = (props) => {
   const handleLogout = async () => {
     await fetch('/api/auth/logout', {
       method: 'DELETE',
+      credentials: 'include',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ _csrf: props._csrf }),
     });
 
     document.location.href = '/login';

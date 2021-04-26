@@ -35,6 +35,7 @@ const SystemConfigurationComponent = (props) => {
   async function onClick(e, action) {
     e.preventDefault();
     if (action === 'save') {
+      setEditState(!editState);
       const new_config = configRef.current.props.value;
       const comment = commentRef.current.props.value;
       const res = await fetch('/api/config', {
@@ -44,7 +45,11 @@ const SystemConfigurationComponent = (props) => {
           Accept: 'application/json',
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ new_config: new_config, comment: comment }),
+        body: JSON.stringify({
+          new_config: new_config,
+          comment: comment,
+          _csrf: props._csrf,
+        }),
       });
 
       if (res.status === 200) {

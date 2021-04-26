@@ -13,7 +13,6 @@ type MyProps = {
 
 class FooterComponent extends React.Component<MyProps> {
   render() {
-    console.log(process.env.NEXT_PUBLIC_SYSTEM_VERSION)
     const { classes } = this.props;
     const { root, footer, link } = classes;
 
@@ -23,7 +22,8 @@ class FooterComponent extends React.Component<MyProps> {
           style={{ marginLeft: '0px', paddingLeft: '8.333333%' }}
           maxWidth="lg"
         >
-          ARTEMIS v.'{process.env.NEXT_PUBLIC_SYSTEM_VERSION}@{process.env.NEXT_PUBLIC_REVISION || 'HEAD'}'
+          ARTEMIS v.'{process.env.NEXT_PUBLIC_SYSTEM_VERSION}@
+          {process.env.NEXT_PUBLIC_REVISION || 'HEAD'}'
           {/* <Copyright _class={link} /> */}
         </Container>
       </footer>

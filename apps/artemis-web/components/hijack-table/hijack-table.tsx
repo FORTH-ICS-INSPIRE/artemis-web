@@ -304,7 +304,13 @@ function handleData(
 }
 
 const HijackTableComponent = (props) => {
-  const { setFilteredHijackData, filter, filterStatus, filterTo } = props;
+  const {
+    setFilteredHijackData,
+    filter,
+    filterStatus,
+    filterTo,
+    _csrf,
+  } = props;
   const context = React.useContext(TooltipContext);
   const [tooltips, setTooltips] = useState({});
   const [page, setPage] = useState(0);
@@ -474,7 +480,7 @@ const HijackTableComponent = (props) => {
           Accept: 'application/json',
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ action: 'view_hijacks' }),
+        body: JSON.stringify({ action: 'view_hijacks', _csrf: _csrf }),
       });
       const x = window.open();
       x.document.open();
@@ -552,6 +558,7 @@ const HijackTableComponent = (props) => {
             sendData(e, {
               hijackKeys: hijackState.map((hijack) => hijack.key),
               selectState: selectState,
+              _csrf: props._csrf,
             })
           }
           style={{ marginRight: '5px' }}
@@ -635,6 +642,7 @@ const HijackTableComponent = (props) => {
             <div className="header-filter">
               <SizePerPageDropdownStandalone {...paginationProps} />
               <HijackActions
+                _csrf={_csrf}
                 data={hijackData}
                 hijackState={hijackState}
                 setHijackState={setHijackState}

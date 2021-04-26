@@ -20,6 +20,7 @@ const SignUp = (props) => {
       email: e.currentTarget.email.value,
       name: e.currentTarget.name.value,
       password: e.currentTarget.password.value,
+      _csrf: props._csrf,
     };
 
     const res = await fetch('/api/auth/signup', {
@@ -115,7 +116,7 @@ const SignUp = (props) => {
 
 const SignUpComponent = (props) => {
   const classes = useStyles();
-  return <SignUp classes={classes} />;
+  return <SignUp classes={classes} {...props} />;
 };
 
 export default SignUpComponent;

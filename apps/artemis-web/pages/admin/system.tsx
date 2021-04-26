@@ -8,6 +8,7 @@ import React, { useState } from 'react';
 import AuthHOC from '../../components/401-hoc/401-hoc';
 import SystemModule from '../../components/system-module/system-module';
 import { useGraphQl } from '../../utils/hooks/use-graphql';
+import { setup } from 'apps/artemis-web/libs/csrf';
 
 const SystemPage = (props) => {
   if (shallMock()) {
@@ -108,6 +109,7 @@ const SystemPage = (props) => {
                   {keys.map((module, i) => {
                     return (
                       <SystemModule
+                        {...props}
                         key={i}
                         module={module}
                         subModules={subModules}
@@ -120,7 +122,10 @@ const SystemPage = (props) => {
                 </Grid>
               </div>
             </div>
-            <SystemConfigurationComponent CONFIG_DATA={CONFIG_DATA} />
+            <SystemConfigurationComponent
+              {...props}
+              CONFIG_DATA={CONFIG_DATA}
+            />
           </div>
         )}
       </div>
@@ -129,3 +134,7 @@ const SystemPage = (props) => {
 };
 
 export default AuthHOC(SystemPage, ['admin']);
+
+export const getServerSideProps = setup(async (req, res, csrftoken) => {
+  return { props: { _csrf: csrftoken } };
+});

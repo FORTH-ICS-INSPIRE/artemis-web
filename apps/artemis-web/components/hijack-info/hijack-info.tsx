@@ -238,6 +238,7 @@ class HijackInfoComponent extends Component<any, any> {
                                 prefix: this.props.hijackDataState.prefix,
                                 hijack_as: this.props.hijackDataState.hijack_as,
                                 type: this.props.hijackDataState.type,
+                                _csrf: this.props._csrf,
                               })
                         }
                         style={{ marginRight: '5px' }}
@@ -265,7 +266,11 @@ class HijackInfoComponent extends Component<any, any> {
                         } btn-md`}
                         onClick={(e) => {
                           if (this.state.editComment)
-                            submitComment(e, { commentRef, hijackKey });
+                            submitComment(e, {
+                              commentRef,
+                              hijackKey,
+                              _csrf: this.props._csrf,
+                            });
                           else commentRef.current.focus();
 
                           this.setState({

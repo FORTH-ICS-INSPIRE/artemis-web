@@ -23,6 +23,7 @@ const UserCreationComponent = (props) => {
         userName: username,
         email: email,
         new_password: new_password,
+        _csrf: props._csrf,
       }),
     });
 

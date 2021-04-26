@@ -22,6 +22,7 @@ const UsersPasswordComponent = (props) => {
         action: 'changePass',
         userName: username,
         new_password: new_password,
+        _csrf: props._csrf,
       }),
     });
 

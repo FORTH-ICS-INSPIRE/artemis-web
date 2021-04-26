@@ -29,6 +29,7 @@ const PasswordChange = (props) => {
     const body = {
       old_password: old_password,
       new_password: new_password,
+      _csrf: props._csrf,
     };
 
     const res = await fetch('/api/auth/change-password', {
@@ -45,6 +46,12 @@ const PasswordChange = (props) => {
       setErrorMsg('');
       await fetch('/api/auth/logout', {
         method: 'DELETE',
+        credentials: 'include',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ _csrf: props._csrf }),
       });
       setTimeout(() => (document.location.href = '/login'), 3000);
     } else {
@@ -132,9 +139,9 @@ const PasswordChange = (props) => {
   );
 };
 
-const PasswordChangeComponent = () => {
+const PasswordChangeComponent = (props) => {
   const classes = useStyles();
-  return <PasswordChange classes={classes} />;
+  return <PasswordChange classes={classes} {...props} />;
 };
 
 export default PasswordChangeComponent;

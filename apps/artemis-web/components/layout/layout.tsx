@@ -6,6 +6,7 @@ import Footer from '../footer/footer';
 export default class Layout extends React.Component<any> {
   render() {
     const { children } = this.props;
+    const props = this.props;
     // const Footer = dynamic(() => import('../footer/footer'));
     const Header = dynamic(() => import('../header/header'));
 
@@ -28,7 +29,7 @@ export default class Layout extends React.Component<any> {
           ></script>
         </Head>
         <div className="layout">
-          <Header />
+          <Header {...props} />
           <div className="main-container">{children}</div>
           <Footer />
         </div>

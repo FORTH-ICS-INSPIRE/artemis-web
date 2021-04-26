@@ -2,6 +2,7 @@ import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React from 'react';
+import { setup } from '../libs/csrf';
 import { useJWT } from '../utils/hooks/use-jwt';
 
 const SignupPage = (props) => {
@@ -27,7 +28,7 @@ const SignupPage = (props) => {
       <div id="login-container">
         {!user && !loading && (
           <div id="content-wrap">
-            <SignUpComponent />
+            <SignUpComponent {...props} />
           </div>
         )}
       </div>
@@ -36,3 +37,7 @@ const SignupPage = (props) => {
 };
 
 export default SignupPage;
+
+export const getServerSideProps = setup(async (req, res, csrftoken) => {
+  return { props: { _csrf: csrftoken } };
+});

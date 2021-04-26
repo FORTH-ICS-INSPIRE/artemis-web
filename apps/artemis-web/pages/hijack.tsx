@@ -24,6 +24,7 @@ import DataplaneTableComponent from '../components/dataplane-table/dataplane-tab
 import HijackInfoComponent from '../components/hijack-info/hijack-info';
 import LearnRuleComponent from '../components/learn-rule/learn-rule';
 import Tooltip from '../components/tooltip/tooltip';
+import { setup } from '../libs/csrf';
 import { useGraphQl } from '../utils/hooks/use-graphql';
 import { useHijack } from '../utils/hooks/use-hijack';
 import { AntSwitch } from '../utils/styles';
@@ -170,6 +171,7 @@ const ViewHijackPage = (props) => {
             </div>
           </div>
           <HijackInfoComponent
+            {...props}
             hijackDataState={hijackDataState}
             isMobile={matches.mobile}
             tooltips={tooltips}
@@ -204,6 +206,7 @@ const ViewHijackPage = (props) => {
                     <DialogContent dividers>
                       <div id="modal_display_config_comparison">
                         <LearnRuleComponent
+                          {...props}
                           hijack={hijackDataState}
                           config={config}
                         />
@@ -305,3 +308,7 @@ const ViewHijackPage = (props) => {
 };
 
 export default AuthHOC(ViewHijackPage, ['admin', 'user']);
+
+export const getServerSideProps = setup(async (req, res, csrftoken) => {
+  return { props: { _csrf: csrftoken } };
+});

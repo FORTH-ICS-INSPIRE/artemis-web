@@ -32,7 +32,7 @@ const Login = (props) => {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(formData),
+      body: JSON.stringify({ ...formData, _csrf: props._csrf }),
     });
 
     if (res.status === 200) {

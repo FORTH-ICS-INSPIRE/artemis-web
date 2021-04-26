@@ -2,6 +2,7 @@ import Head from 'next/head';
 import React from 'react';
 import AuthHOC from '../components/401-hoc/401-hoc';
 import ConfigComparisonComponent from '../components/config-comparison/config-comparison';
+import { setup } from '../libs/csrf';
 import { shallMock } from '../utils/token';
 
 const ConfigComparisonPage = (props) => {
@@ -45,3 +46,7 @@ const ConfigComparisonPage = (props) => {
 };
 
 export default AuthHOC(ConfigComparisonPage, ['admin', 'user']);
+
+export const getServerSideProps = setup(async (req, res, csrftoken) => {
+  return { props: { _csrf: csrftoken } };
+});
