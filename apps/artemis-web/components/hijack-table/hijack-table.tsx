@@ -658,7 +658,7 @@ const HijackTableComponent = (props) => {
               data={hijackData}
               columns={getColumns(stateValues)}
               filter={filterFactory()}
-              filterPosition="bottom"
+              filterPosition="top"
               onTableChange={handleTableChange}
               striped
               condensed
