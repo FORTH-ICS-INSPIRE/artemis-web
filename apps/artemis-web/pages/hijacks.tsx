@@ -334,6 +334,185 @@ const HijacksPage = (props) => {
                       </div>
                     </div>
                   </div>
+                  <div className="row">
+                    <div className="col-lg-12">
+                      Select Status:
+                      <button
+                        onClick={() => setStatus('Ongoing')}
+                        type="button"
+                        id="status_active_button"
+                        style={{ marginLeft: '5px' }}
+                        className={
+                          'btn btn-sm ' +
+                          ('Ongoing' === statusButton
+                            ? 'btn-danger'
+                            : 'btn-outline-danger')
+                        }
+                        title=""
+                        data-toggle="tooltip"
+                        data-placement="top"
+                        data-original-title='<p class="tooltip-custom-margin">Ongoing hijack events</br>(not ignored or resolved).</p>'
+                      >
+                        {genTooltip(
+                          'Ongoing',
+                          null,
+                          'Ongoing',
+                          'Ongoing hijack events</br>(not ignored or resolved).'
+                          // 'timefilter'
+                        )}
+                      </button>{' '}
+                      /
+                      <button
+                        onClick={() => setStatus('Dormant')}
+                        type="button"
+                        id="status_dormant_button"
+                        style={{ marginLeft: '5px' }}
+                        className={
+                          'btn btn-sm ' +
+                          ('Dormant' === statusButton
+                            ? 'btn-secondary'
+                            : 'btn-outline-secondary')
+                        }
+                        title=""
+                        data-toggle="tooltip"
+                        data-placement="top"
+                        data-original-title='<p class="tooltip-custom-margin">Dormant hijack events</br>(ongoing, but not updated within the last X hours).</p>'
+                      >
+                        {genTooltip(
+                          'Dormant',
+                          null,
+                          'Dormant',
+                          'Dormant hijack events</br>(ongoing, but not updated within the last X hours).'
+                          // 'timefilter'
+                        )}
+                      </button>{' '}
+                      /
+                      <button
+                        onClick={() => setStatus('Resolved')}
+                        type="button"
+                        id="status_resolved_button"
+                        style={{ marginLeft: '5px' }}
+                        className={
+                          'btn btn-sm ' +
+                          ('Resolved' === statusButton
+                            ? 'btn-success'
+                            : 'btn-outline-success')
+                        }
+                        title=""
+                        data-toggle="tooltip"
+                        data-placement="top"
+                        data-original-title='<p class="tooltip-custom-margin">Resolved hijack events</br>(marked by the user).</p>'
+                      >
+                        {genTooltip(
+                          'Resolved',
+                          null,
+                          'Resolved',
+                          'Resolved hijack events</br>(marked by the user).'
+                          // 'timefilter'
+                        )}
+                      </button>{' '}
+                      /
+                      <button
+                        onClick={() => setStatus('Ignored')}
+                        type="button"
+                        id="status_ignored_button"
+                        style={{ marginLeft: '5px' }}
+                        className={
+                          'btn btn-sm ' +
+                          ('Ignored' === statusButton
+                            ? 'btn-warning'
+                            : 'btn-outline-warning')
+                        }
+                        title=""
+                        data-toggle="tooltip"
+                        data-placement="top"
+                        data-original-title='<p class="tooltip-custom-margin">Ignored hijack events</br>(marked by the user).</p>'
+                      >
+                        {genTooltip(
+                          'Ignored',
+                          null,
+                          'Ignored',
+                          'Ignored hijack events</br>(marked by the user).'
+                          // 'timefilter'
+                        )}
+                      </button>{' '}
+                      /
+                      <button
+                        onClick={() => setStatus('Under Mitigation')}
+                        type="button"
+                        id="status_under_mitigation_button"
+                        style={{ marginLeft: '5px' }}
+                        className={
+                          'btn btn-sm ' +
+                          ('Under Mitigation' === statusButton
+                            ? 'btn-primary'
+                            : 'btn-outline-primary')
+                        }
+                        title=""
+                        data-toggle="tooltip"
+                        data-placement="top"
+                        data-original-title='<p class="tooltip-custom-margin">Hijack events that are currently under mitigation (triggered by the user)</br>Hijack events that are currently under mitigation</br>(triggered by the user).</p>'
+                      >
+                        {genTooltip(
+                          'Under Mitigation',
+                          null,
+                          'Under Mitigation',
+                          'Hijack events that are currently under mitigation</br>(triggered by the user).'
+                          // 'timefilter'
+                        )}
+                      </button>{' '}
+                      /
+                      <button
+                        onClick={() => setStatus('Withdrawn')}
+                        type="button"
+                        id="status_withdrawn_button"
+                        style={{ marginLeft: '5px' }}
+                        className={
+                          'btn btn-sm ' +
+                          ('Withdrawn' === statusButton
+                            ? 'btn-info'
+                            : 'btn-outline-info')
+                        }
+                        title=""
+                        data-toggle="tooltip"
+                        data-placement="top"
+                        data-original-title='<p class="tooltip-custom-margin">Withdrawn hijack events</br>(marked automatically).</p>'
+                      >
+                        {genTooltip(
+                          'Withdrawn',
+                          null,
+                          'Withdrawn',
+                          'Withdrawn hijack events</br>(marked automatically).'
+                          // 'timefilter'
+                        )}
+                      </button>{' '}
+                      /
+                      <button
+                        onClick={() => setStatus('Outdated')}
+                        type="button"
+                        id="status_outdated_button"
+                        style={{ marginLeft: '5px' }}
+                        className={
+                          'btn btn-sm ' +
+                          ('Outdated' === statusButton
+                            ? 'btn-dark'
+                            : 'btn-outline-dark')
+                        }
+                        title=""
+                        data-toggle="tooltip"
+                        data-placement="top"
+                        data-original-title='<p class="tooltip-custom-margin">Hijack events that match a configuration that is now deprecated</br>(marked by the user).</p>'
+                      >
+                        {genTooltip(
+                          'Outdated',
+                          null,
+                          'Outdated',
+                          'Hijack events that match a configuration that is now deprecated</br>(marked by the user).'
+                          // 'timefilter'
+                        )}
+                      </button>
+                    </div>
+                  </div>
                 </div>
                 <div className="card-body" style={{ textAlign: 'center' }}>
                   <HijackTableComponent
@@ -356,181 +535,6 @@ const HijacksPage = (props) => {
                   className="card-header"
                   style={{ backgroundColor: 'white' }}
                 >
-                  Select Status:
-                  <button
-                    onClick={() => setStatus('Ongoing')}
-                    type="button"
-                    id="status_active_button"
-                    style={{ marginLeft: '5px' }}
-                    className={
-                      'btn btn-sm ' +
-                      ('Ongoing' === statusButton
-                        ? 'btn-danger'
-                        : 'btn-outline-danger')
-                    }
-                    title=""
-                    data-toggle="tooltip"
-                    data-placement="top"
-                    data-original-title='<p class="tooltip-custom-margin">Ongoing hijack events</br>(not ignored or resolved).</p>'
-                  >
-                    {genTooltip(
-                      'Ongoing',
-                      null,
-                      'Ongoing',
-                      'Ongoing hijack events</br>(not ignored or resolved).'
-                      // 'timefilter'
-                    )}
-                  </button>{' '}
-                  /
-                  <button
-                    onClick={() => setStatus('Dormant')}
-                    type="button"
-                    id="status_dormant_button"
-                    style={{ marginLeft: '5px' }}
-                    className={
-                      'btn btn-sm ' +
-                      ('Dormant' === statusButton
-                        ? 'btn-secondary'
-                        : 'btn-outline-secondary')
-                    }
-                    title=""
-                    data-toggle="tooltip"
-                    data-placement="top"
-                    data-original-title='<p class="tooltip-custom-margin">Dormant hijack events</br>(ongoing, but not updated within the last X hours).</p>'
-                  >
-                    {genTooltip(
-                      'Dormant',
-                      null,
-                      'Dormant',
-                      'Dormant hijack events</br>(ongoing, but not updated within the last X hours).'
-                      // 'timefilter'
-                    )}
-                  </button>{' '}
-                  /
-                  <button
-                    onClick={() => setStatus('Resolved')}
-                    type="button"
-                    id="status_resolved_button"
-                    style={{ marginLeft: '5px' }}
-                    className={
-                      'btn btn-sm ' +
-                      ('Resolved' === statusButton
-                        ? 'btn-success'
-                        : 'btn-outline-success')
-                    }
-                    title=""
-                    data-toggle="tooltip"
-                    data-placement="top"
-                    data-original-title='<p class="tooltip-custom-margin">Resolved hijack events</br>(marked by the user).</p>'
-                  >
-                    {genTooltip(
-                      'Resolved',
-                      null,
-                      'Resolved',
-                      'Resolved hijack events</br>(marked by the user).'
-                      // 'timefilter'
-                    )}
-                  </button>{' '}
-                  /
-                  <button
-                    onClick={() => setStatus('Ignored')}
-                    type="button"
-                    id="status_ignored_button"
-                    style={{ marginLeft: '5px' }}
-                    className={
-                      'btn btn-sm ' +
-                      ('Ignored' === statusButton
-                        ? 'btn-warning'
-                        : 'btn-outline-warning')
-                    }
-                    title=""
-                    data-toggle="tooltip"
-                    data-placement="top"
-                    data-original-title='<p class="tooltip-custom-margin">Ignored hijack events</br>(marked by the user).</p>'
-                  >
-                    {genTooltip(
-                      'Ignored',
-                      null,
-                      'Ignored',
-                      'Ignored hijack events</br>(marked by the user).'
-                      // 'timefilter'
-                    )}
-                  </button>{' '}
-                  /
-                  <button
-                    onClick={() => setStatus('Under Mitigation')}
-                    type="button"
-                    id="status_under_mitigation_button"
-                    style={{ marginLeft: '5px' }}
-                    className={
-                      'btn btn-sm ' +
-                      ('Under Mitigation' === statusButton
-                        ? 'btn-primary'
-                        : 'btn-outline-primary')
-                    }
-                    title=""
-                    data-toggle="tooltip"
-                    data-placement="top"
-                    data-original-title='<p class="tooltip-custom-margin">Hijack events that are currently under mitigation (triggered by the user)</br>Hijack events that are currently under mitigation</br>(triggered by the user).</p>'
-                  >
-                    {genTooltip(
-                      'Under Mitigation',
-                      null,
-                      'Under Mitigation',
-                      'Hijack events that are currently under mitigation</br>(triggered by the user).'
-                      // 'timefilter'
-                    )}
-                  </button>{' '}
-                  /
-                  <button
-                    onClick={() => setStatus('Withdrawn')}
-                    type="button"
-                    id="status_withdrawn_button"
-                    style={{ marginLeft: '5px' }}
-                    className={
-                      'btn btn-sm ' +
-                      ('Withdrawn' === statusButton
-                        ? 'btn-info'
-                        : 'btn-outline-info')
-                    }
-                    title=""
-                    data-toggle="tooltip"
-                    data-placement="top"
-                    data-original-title='<p class="tooltip-custom-margin">Withdrawn hijack events</br>(marked automatically).</p>'
-                  >
-                    {genTooltip(
-                      'Withdrawn',
-                      null,
-                      'Withdrawn',
-                      'Withdrawn hijack events</br>(marked automatically).'
-                      // 'timefilter'
-                    )}
-                  </button>{' '}
-                  /
-                  <button
-                    onClick={() => setStatus('Outdated')}
-                    type="button"
-                    id="status_outdated_button"
-                    style={{ marginLeft: '5px' }}
-                    className={
-                      'btn btn-sm ' +
-                      ('Outdated' === statusButton
-                        ? 'btn-dark'
-                        : 'btn-outline-dark')
-                    }
-                    title=""
-                    data-toggle="tooltip"
-                    data-placement="top"
-                    data-original-title='<p class="tooltip-custom-margin">Hijack events that match a configuration that is now deprecated</br>(marked by the user).</p>'
-                  >
-                    {genTooltip(
-                      'Outdated',
-                      null,
-                      'Outdated',
-                      'Hijack events that match a configuration that is now deprecated</br>(marked by the user).'
-                      // 'timefilter'
-                    )}
-                  </button>
                   <span style={{ float: 'right' }}>
                     Times are shown in your local time zone{' '}
                     <b>GMT+2 (Europe/Athens).</b>
