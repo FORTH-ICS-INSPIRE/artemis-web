@@ -569,7 +569,7 @@ const OngoingHijackTableComponent = (props: any): ReactElement => {
               expandRow={getExpandRow(expandState)}
               filter={filterFactory()}
               onTableChange={handleTableChange}
-              filterPosition="bottom"
+              filterPosition="top"
               striped
               hover
               noDataIndication={() => {

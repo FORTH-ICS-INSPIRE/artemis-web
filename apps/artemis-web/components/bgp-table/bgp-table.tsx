@@ -756,7 +756,7 @@ const BGPTableComponent = (props) => {
               striped
               hover
               condensed
-              filterPosition="bottom"
+              filterPosition="top"
               onTableChange={handleTableChange}
               noDataIndication={() => <h3>No bgp updates.</h3>}
               {...toolkitprops.baseProps}
