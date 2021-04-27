@@ -132,7 +132,7 @@ const SystemConfigurationComponent = (props: any) => {
             </div>
             <div id="config" className="card-body">
               <div style={{ display: alertState }} id="config_alert_box">
-                <div className={"alert alert-dismissible " + fetchState ? "alert-success" : "alert-danger"}>
+                <div className="alert alert-dismissible alert-success">
                   <a
                     href="#"
                     className="close"
