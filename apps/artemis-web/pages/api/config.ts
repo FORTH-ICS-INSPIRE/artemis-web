@@ -25,9 +25,9 @@ const handler = nc()
       res.status(200);
       const json = await resp.json();
       if (json.success)
-        res.json({ status: 'Configuration file updated.' });
+        res.json({ success: true, status: 'Configuration file updated.' });
       else
-        res.json({ status: json.message });
+        res.json({ success: false, status: json.message });
     } else {
       res.status(500);
       res.json({ status: 'Error' });
