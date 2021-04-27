@@ -8,7 +8,7 @@ import React, { useState } from 'react';
 import AuthHOC from '../../components/401-hoc/401-hoc';
 import SystemModule from '../../components/system-module/system-module';
 import { useGraphQl } from '../../utils/hooks/use-graphql';
-import { setup } from 'apps/artemis-web/libs/csrf';
+import { setup } from '../../libs/csrf';
 
 const SystemPage = (props) => {
   if (shallMock()) {
