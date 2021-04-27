@@ -15,7 +15,7 @@ type stateType = {
   currentCommentRight: string;
 };
 
-const SystemConfigurationComponent = (props: any) => {
+const SystemConfigurationComponent = (props) => {
   const configRef = React.createRef<any>();
   const commentRef = React.createRef<any>();
   const [alertState, setAlertState] = useState('none');
@@ -23,7 +23,7 @@ const SystemConfigurationComponent = (props: any) => {
   const [configState, setConfigState] = useState('');
   const [commentState, setCommentState] = useState('');
   const [alertMessage, setAlertMessage] = useState('');
-  const [fetchState, setFetchState] = useState(true);
+  const [fetchState, setFetchState] = useState(false);
 
   const CONFIG_DATA = props.CONFIG_DATA;
 
@@ -57,9 +57,12 @@ const SystemConfigurationComponent = (props: any) => {
       if (res.status === 200) {
         const json = await res.json();
         setAlertState('block');
-        setFetchState(json.success);
+        if (json.success)
+          setFetchState(true);
+        else
+          setFetchState(false);
 
-        setAlertMessage(json.message);
+        setAlertMessage(json.status);
       }
     } else {
       const res = await fetch('/api/as_sets', {
@@ -132,7 +135,7 @@ const SystemConfigurationComponent = (props: any) => {
             </div>
             <div id="config" className="card-body">
               <div style={{ display: alertState }} id="config_alert_box">
-                <div className="alert alert-dismissible alert-success">
+                <div className={"alert alert-dismissible " + (fetchState ? "alert-success" : "alert-danger")}>
                   <a
                     href="#"
                     className="close"
