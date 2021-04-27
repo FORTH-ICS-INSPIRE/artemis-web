@@ -23,7 +23,11 @@ const handler = nc()
     });
     if (resp.status === 200) {
       res.status(200);
-      res.json({ status: 'Configuration file updated.' });
+      const json = await resp.json();
+      if (json.success)
+        res.json({ success: true, status: 'Configuration file updated.' });
+      else
+        res.json({ success: false, status: json.message });
     } else {
       res.status(500);
       res.json({ status: 'Error' });

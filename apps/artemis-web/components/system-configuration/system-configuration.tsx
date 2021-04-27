@@ -23,6 +23,8 @@ const SystemConfigurationComponent = (props) => {
   const [configState, setConfigState] = useState('');
   const [commentState, setCommentState] = useState('');
   const [alertMessage, setAlertMessage] = useState('');
+  const [fetchState, setFetchState] = useState(false);
+
   const CONFIG_DATA = props.CONFIG_DATA;
 
   useEffect(() => {
@@ -53,8 +55,14 @@ const SystemConfigurationComponent = (props) => {
       });
 
       if (res.status === 200) {
+        const json = await res.json();
         setAlertState('block');
-        setAlertMessage('Configuration file updated.');
+        if (json.success)
+          setFetchState(true);
+        else
+          setFetchState(false);
+
+        setAlertMessage(json.status);
       }
     } else {
       const res = await fetch('/api/as_sets', {
@@ -127,7 +135,7 @@ const SystemConfigurationComponent = (props) => {
             </div>
             <div id="config" className="card-body">
               <div style={{ display: alertState }} id="config_alert_box">
-                <div className="alert alert-success alert-dismissible">
+                <div className={"alert alert-dismissible " + (fetchState ? "alert-success" : "alert-danger")}>
                   <a
                     href="#"
                     className="close"
@@ -159,9 +167,9 @@ const SystemConfigurationComponent = (props) => {
                   Last Update:{' '}
                   {CONFIG_DATA
                     ? formatDate(
-                        new Date(CONFIG_DATA.view_configs[0].time_modified),
-                        2
-                      )
+                      new Date(CONFIG_DATA.view_configs[0].time_modified),
+                      2
+                    )
                     : 'Never'}
                 </span>
                 <span style={{ float: 'right' }}>
