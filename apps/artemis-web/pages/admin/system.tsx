@@ -36,11 +36,11 @@ const SystemPage = (props) => {
 
   const modules = processes
     ? processes.map((ps) => {
-        return [
-          ps['name'].charAt(0).toUpperCase() + ps['name'].slice(1),
-          ps['running'],
-        ];
-      })
+      return [
+        ps['name'].charAt(0).toUpperCase() + ps['name'].slice(1),
+        ps['running'],
+      ];
+    })
     : [];
 
   const states = {};
@@ -65,9 +65,11 @@ const SystemPage = (props) => {
 
   modules.forEach((module) => (states[module[0].toString()] = module[1]));
   const [state, setState] = useState(states);
-  const keys = Object.keys(state).filter((key) =>
+  let keys = Object.keys(state).filter((key) =>
     modulesList.includes(key.substring(0, key.indexOf('-')).toLowerCase())
   );
+  keys = [...new Set(keys)];
+
   const subModules = {};
   keys.forEach((key) => {
     const keyL = key.substring(0, key.indexOf('-')).toLowerCase();
