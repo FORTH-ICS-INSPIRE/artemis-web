@@ -309,7 +309,7 @@ export const autoLogout = () => {
   setInterval(function () {
     const timestamp = localStorage.getItem('login_timestamp');
     const diff = 0.001 * (new Date().getTime() - new Date(timestamp).getTime());
-    if (diff > parseInt(process.env.NEXT_PUBLIC_SESSION_TIMEOUT))
+    if (diff > parseInt(process.env.NEXT_PUBLIC_SESSION_TIMEOUT, 10))
       window.location.reload();
   }, 5000);
 };

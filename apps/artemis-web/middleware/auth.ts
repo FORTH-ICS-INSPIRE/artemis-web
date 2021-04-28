@@ -8,7 +8,7 @@ const auth = nc()
   .use(
     session({
       cookie: {
-        maxAge: parseInt(process.env.NEXT_PUBLIC_SESSION_TIMEOUT),
+        maxAge: parseInt(process.env.NEXT_PUBLIC_SESSION_TIMEOUT, 10),
         secure:
           process.env.NODE_ENV === 'production' &&
           process.env.TESTING === 'false',
