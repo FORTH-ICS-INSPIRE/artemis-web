@@ -319,7 +319,8 @@ export const autoLogout = (props: any): void => {
   let logoutTimeout;
 
   for (const i in events) {
-    window.addEventListener(events[i], resetTimeout);
+    if (events.hasOwnProperty(i))
+      window.addEventListener(events[i], resetTimeout);
   }
 
   setTimeout2();
@@ -368,7 +369,8 @@ export const autoLogout = (props: any): void => {
     clearTimeout();
 
     for (const i in events) {
-      window.removeEventListener(events[i], resetTimeout);
+      if (events.hasOwnProperty(i))
+        window.removeEventListener(events[i], resetTimeout);
     }
   }
 };
