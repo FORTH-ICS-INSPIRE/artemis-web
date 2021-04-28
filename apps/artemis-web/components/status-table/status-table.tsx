@@ -41,7 +41,9 @@ class StatusTable extends Component<StatsType, any> {
   render() {
     const STATS_DATA = this.props.data;
     const modulesSet = {};
-    STATS_DATA.view_processes.forEach((module) => {
+    const processes = [...new Set(STATS_DATA.view_processes)];
+
+    processes.forEach((module) => {
       const modName = module.name.substring(0, module.name.indexOf('-'));
       if (modName in modulesSet) {
         modulesSet[modName].push([
@@ -54,12 +56,12 @@ class StatusTable extends Component<StatsType, any> {
       }
     });
     const monitorModules = this.monitorModules;
-    let monitor = STATS_DATA.view_processes.filter((module) =>
+    let monitor = processes.filter((module) =>
       monitorModules.includes(
         module.name.substring(0, module.name.indexOf('-'))
       )
     );
-    let backend = STATS_DATA.view_processes.filter(
+    let backend = processes.filter(
       (module) =>
         !monitorModules.includes(
           module.name.substring(0, module.name.indexOf('-'))
@@ -120,6 +122,9 @@ class StatusTable extends Component<StatsType, any> {
         'ARTEMIS module responsible for observing async changes in the configuration file, triggering the reloading of ARTEMIS modules.',
     };
 
+    let backList = [];
+    let monitorList = [];
+
     return (
       <>
         <h5>Backend Microservices</h5>
@@ -134,18 +139,30 @@ class StatusTable extends Component<StatsType, any> {
           <tbody>
             {STATS_DATA && backend ? (
               backend.map((process, i) => {
-                return (
-                  <ModuleState
-                    key={i}
-                    process={process}
-                    modules={modulesSet}
-                    index={i}
-                    tooltip={
-                      tooltips[process.name.slice(0, process.name.indexOf('-'))]
-                    }
-                    date={this.state.date}
-                  ></ModuleState>
-                );
+                if (
+                  !backList.includes(
+                    process.name.slice(0, process.name.indexOf('-'))
+                  )
+                ) {
+                  backList.push(
+                    process.name.slice(0, process.name.indexOf('-'))
+                  );
+
+                  return (
+                    <ModuleState
+                      key={i}
+                      process={process}
+                      modules={modulesSet}
+                      index={i}
+                      tooltip={
+                        tooltips[
+                          process.name.slice(0, process.name.indexOf('-'))
+                        ]
+                      }
+                      date={this.state.date}
+                    ></ModuleState>
+                  );
+                }
               })
             ) : (
               <tr></tr>
@@ -165,18 +182,30 @@ class StatusTable extends Component<StatsType, any> {
           <tbody>
             {STATS_DATA && monitor ? (
               monitor.map((process, i) => {
-                return (
-                  <ModuleState
-                    key={i + '2'}
-                    process={process}
-                    modules={modulesSet}
-                    index={i + '2'}
-                    tooltip={
-                      tooltips[process.name.slice(0, process.name.indexOf('-'))]
-                    }
-                    date={this.state.date}
-                  ></ModuleState>
-                );
+                if (
+                  !monitorList.includes(
+                    process.name.slice(0, process.name.indexOf('-'))
+                  )
+                ) {
+                  monitorList.push(
+                    process.name.slice(0, process.name.indexOf('-'))
+                  );
+
+                  return (
+                    <ModuleState
+                      key={i + '2'}
+                      process={process}
+                      modules={modulesSet}
+                      index={i + '2'}
+                      tooltip={
+                        tooltips[
+                          process.name.slice(0, process.name.indexOf('-'))
+                        ]
+                      }
+                      date={this.state.date}
+                    ></ModuleState>
+                  );
+                }
               })
             ) : (
               <tr></tr>
