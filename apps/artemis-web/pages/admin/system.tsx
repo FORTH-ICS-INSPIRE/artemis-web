@@ -36,11 +36,11 @@ const SystemPage = (props) => {
 
   const modules = processes
     ? processes.map((ps) => {
-      return [
-        ps['name'].charAt(0).toUpperCase() + ps['name'].slice(1),
-        ps['running'],
-      ];
-    })
+        return [
+          ps['name'].charAt(0).toUpperCase() + ps['name'].slice(1),
+          ps['running'],
+        ];
+      })
     : [];
 
   const states = {};
@@ -68,7 +68,6 @@ const SystemPage = (props) => {
   let keys = Object.keys(state).filter((key) =>
     modulesList.includes(key.substring(0, key.indexOf('-')).toLowerCase())
   );
-  keys = [...new Set(keys)];
 
   const subModules = {};
   keys.forEach((key) => {
@@ -83,6 +82,7 @@ const SystemPage = (props) => {
   keys.sort();
 
   if (modules.length !== 0 && keys.length === 0) setState(states);
+  let moduleList = [];
 
   return (
     <>
@@ -109,17 +109,23 @@ const SystemPage = (props) => {
               <div className="col-lg-10">
                 <Grid container spacing={3}>
                   {keys.map((module, i) => {
-                    return (
-                      <SystemModule
-                        {...props}
-                        key={i}
-                        module={module}
-                        subModules={subModules}
-                        labels={modulesLabels}
-                        state={state}
-                        setState={setState}
-                      />
-                    );
+                    const key = module
+                      .substring(0, module.indexOf('-'))
+                      .toLowerCase();
+                    if (!moduleList.includes(key)) {
+                      moduleList.push(key);
+                      return (
+                        <SystemModule
+                          {...props}
+                          key={i}
+                          module={module}
+                          subModules={subModules}
+                          labels={modulesLabels}
+                          state={state}
+                          setState={setState}
+                        />
+                      );
+                    }
                   })}
                 </Grid>
               </div>
