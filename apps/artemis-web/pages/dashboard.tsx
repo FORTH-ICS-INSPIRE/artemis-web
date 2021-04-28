@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import React from 'react';
 import { useMedia } from 'react-media';
-import { toast, ToastContainer } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import AuthHOC from '../components/401-hoc/401-hoc';
 import ErrorBoundary from '../components/error-boundary/error-boundary';
@@ -12,17 +12,20 @@ import { setup } from '../libs/csrf';
 import { useGraphQl } from '../utils/hooks/use-graphql';
 import { autoLogout, GLOBAL_MEDIA_QUERIES, shallMock } from '../utils/token';
 
-const DashboardPage = (props) => {
+const DashboardPage = (props: any) => {
+
+  autoLogout(props);
+
   if (shallMock()) {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const { worker } = require('../utils/mock-sw/browser');
     worker.start();
   }
 
-  autoLogout();
+  // autoLogout();
 
   const user = props.user;
-  const notify = (message: React.ReactText) => toast(message);
+  // const notify = (message: React.ReactText) => toast(message);
 
   const STATS_RES: any = useGraphQl('stats', {
     isLive: true,

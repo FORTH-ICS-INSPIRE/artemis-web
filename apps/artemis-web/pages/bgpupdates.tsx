@@ -37,7 +37,7 @@ const BGPUpdates = (props) => {
     worker.start();
   }
 
-  autoLogout();
+  autoLogout(props);
 
   const classes = useStyles();
 

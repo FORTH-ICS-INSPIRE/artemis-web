@@ -22,7 +22,7 @@ const UserManagementPage = (props) => {
   const demoteRef = React.createRef<HTMLSelectElement>();
   const deleteRef = React.createRef<HTMLSelectElement>();
 
-  autoLogout();
+  autoLogout(props);
 
   const manageUser = async (e, action, userName) => {
     e.preventDefault();

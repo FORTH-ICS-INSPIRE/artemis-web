@@ -9,7 +9,7 @@ import { autoLogout } from '../utils/token';
 const PasswordChangePage = (props) => {
   const [user, loading] = useJWT();
 
-  autoLogout();
+  autoLogout(props);
 
   return (
     <>

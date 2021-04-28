@@ -36,7 +36,7 @@ const HijacksPage = (props) => {
     worker.start();
   }
 
-  autoLogout();
+  autoLogout(props);
 
   const [filterFrom, setFilterFrom] = useState(0);
   const [filterTo, setFilterTo] = useState(0);

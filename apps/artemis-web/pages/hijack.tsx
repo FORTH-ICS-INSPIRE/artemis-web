@@ -43,7 +43,7 @@ const ViewHijackPage = (props) => {
     worker.start();
   }
 
-  autoLogout();
+  autoLogout(props);
 
   const {
     isLive,

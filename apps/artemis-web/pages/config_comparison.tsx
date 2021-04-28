@@ -11,7 +11,7 @@ const ConfigComparisonPage = (props) => {
     const { worker } = require('../utils/mock-sw/browser');
     worker.start();
   }
-  autoLogout();
+  autoLogout(props);
 
   const user = props.user;
 
