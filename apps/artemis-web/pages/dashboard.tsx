@@ -10,7 +10,7 @@ import StatisticsTable from '../components/statistics-table/statistics-table';
 import StatusTable from '../components/status-table/status-table';
 import { setup } from '../libs/csrf';
 import { useGraphQl } from '../utils/hooks/use-graphql';
-import { GLOBAL_MEDIA_QUERIES, shallMock } from '../utils/token';
+import { autoLogout, GLOBAL_MEDIA_QUERIES, shallMock } from '../utils/token';
 
 const DashboardPage = (props) => {
   if (shallMock()) {
@@ -18,6 +18,8 @@ const DashboardPage = (props) => {
     const { worker } = require('../utils/mock-sw/browser');
     worker.start();
   }
+
+  autoLogout();
 
   const user = props.user;
   const notify = (message: React.ReactText) => toast(message);
@@ -85,8 +87,8 @@ const DashboardPage = (props) => {
                       (
                       {user &&
                         new Date(user.lastLogin).toLocaleDateString() +
-                          ' ' +
-                          new Date(user.lastLogin).toLocaleTimeString()}
+                        ' ' +
+                        new Date(user.lastLogin).toLocaleTimeString()}
                       )
                     </b>
                     . You are {user && user.role}.

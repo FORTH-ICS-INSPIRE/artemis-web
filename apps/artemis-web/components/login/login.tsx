@@ -36,6 +36,7 @@ const Login = (props) => {
     });
 
     if (res.status === 200) {
+      localStorage.setItem('login_timestamp', (new Date()).toString());
       const token = await res.json();
       if (token.user.role === 'pending') {
         router.push('/pending');

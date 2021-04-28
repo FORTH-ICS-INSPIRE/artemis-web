@@ -4,9 +4,12 @@ import AuthHOC from '../components/401-hoc/401-hoc';
 import PasswordChangeComponent from '../components/password-change/password-change';
 import { setup } from '../libs/csrf';
 import { useJWT } from '../utils/hooks/use-jwt';
+import { autoLogout } from '../utils/token';
 
 const PasswordChangePage = (props) => {
   const [user, loading] = useJWT();
+
+  autoLogout();
 
   return (
     <>

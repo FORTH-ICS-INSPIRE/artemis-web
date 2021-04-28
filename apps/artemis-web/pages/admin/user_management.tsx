@@ -5,7 +5,7 @@ import Head from 'next/head';
 import React, { useEffect, useState } from 'react';
 import AuthHOC from '../../components/401-hoc/401-hoc';
 import UserListComponent from '../../components/user-list/user-list';
-import { formatDate } from '../../utils/token';
+import { autoLogout, formatDate } from '../../utils/token';
 import { useStyles } from '../../utils/styles';
 import { setup } from '../../libs/csrf';
 
@@ -21,6 +21,8 @@ const UserManagementPage = (props) => {
   const promoteRef = React.createRef<HTMLSelectElement>();
   const demoteRef = React.createRef<HTMLSelectElement>();
   const deleteRef = React.createRef<HTMLSelectElement>();
+
+  autoLogout();
 
   const manageUser = async (e, action, userName) => {
     e.preventDefault();

@@ -20,6 +20,7 @@ import TooltipContext from '../context/tooltip-context';
 import { setup } from '../libs/csrf';
 import { AntSwitch, useStyles } from '../utils/styles';
 import {
+  autoLogout,
   genTooltip,
   getSimpleDates,
   GLOBAL_MEDIA_QUERIES,
@@ -35,6 +36,8 @@ const BGPUpdates = (props) => {
     const { worker } = require('../utils/mock-sw/browser');
     worker.start();
   }
+
+  autoLogout();
 
   const classes = useStyles();
 

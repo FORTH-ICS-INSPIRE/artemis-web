@@ -303,3 +303,13 @@ export const GLOBAL_MEDIA_QUERIES = {
   pc: '(min-width: 700px)',
   mobile: '(max-width: 700px)',
 };
+
+export const autoLogout = () => {
+
+  setInterval(function () {
+    const timestamp = localStorage.getItem('login_timestamp');
+    const diff = 0.001 * (new Date().getTime() - new Date(timestamp).getTime());
+    if (diff > parseInt(process.env.NEXT_PUBLIC_SESSION_TIMEOUT))
+      window.location.reload();
+  }, 5000);
+};

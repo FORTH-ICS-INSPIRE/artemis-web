@@ -2,8 +2,12 @@ import Head from 'next/head';
 import React from 'react';
 import AuthHOC from '../components/401-hoc/401-hoc';
 import { setup } from '../libs/csrf';
+import { autoLogout } from '../utils/token';
 
 const PendingPage = () => {
+
+  autoLogout();
+
   return (
     <>
       <Head>

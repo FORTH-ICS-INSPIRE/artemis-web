@@ -3,7 +3,7 @@ import React from 'react';
 import AuthHOC from '../components/401-hoc/401-hoc';
 import ConfigComparisonComponent from '../components/config-comparison/config-comparison';
 import { setup } from '../libs/csrf';
-import { shallMock } from '../utils/token';
+import { autoLogout, shallMock } from '../utils/token';
 
 const ConfigComparisonPage = (props) => {
   if (shallMock()) {
@@ -11,6 +11,8 @@ const ConfigComparisonPage = (props) => {
     const { worker } = require('../utils/mock-sw/browser');
     worker.start();
   }
+  autoLogout();
+
   const user = props.user;
 
   return (
