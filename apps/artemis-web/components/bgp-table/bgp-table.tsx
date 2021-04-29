@@ -34,6 +34,7 @@ import {
 } from '../../utils/token';
 import ErrorBoundary from '../error-boundary/error-boundary';
 import Tooltip from '../tooltip/tooltip';
+import ExportCSV from '../export-csv/export-csv';
 
 const getExpandRow = (expandState, tooltips, setTooltips, context) => {
   return {
@@ -481,7 +482,7 @@ function handleData(
 }
 
 const BGPTableComponent = (props) => {
-  const { setFilteredBgpData, filter, hijackKey, filterTo } = props;
+  const { setFilteredBgpData, filter, hijackKey, filterTo, _csrf } = props;
   const [bgpData, setBgpData] = useState([]);
   const context = React.useContext(TooltipContext);
   const [tooltips, setTooltips] = useState({});
@@ -584,11 +585,10 @@ const BGPTableComponent = (props) => {
             key={option.text}
             value={option.text}
             onClick={() => onSizePerPageChange(option.page)}
-            className={`btn ${
-              currSizePerPage === `${option.page}`
-                ? 'btn-secondary'
-                : 'btn-warning'
-            }`}
+            className={`btn ${currSizePerPage === `${option.page}`
+              ? 'btn-secondary'
+              : 'btn-warning'
+              }`}
           >
             {option.text}
           </option>
@@ -655,43 +655,6 @@ const BGPTableComponent = (props) => {
       },
     ], // A numeric array is also available. the purpose of above example is custom the text
   };
-  const MyExportCSV = (props) => {
-    const handleClick = async () => {
-      const res = await fetch('/api/download_tables', {
-        method: 'POST',
-        credentials: 'include',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ action: 'view_bgpupdates' }),
-      });
-      const x = window.open();
-      x.document.open();
-      x.document.write(
-        '<html><body><pre>' +
-          JSON.stringify(await res.json(), null, '\t') +
-          '</pre></body></html>'
-      );
-      x.document.close();
-    };
-
-    const classes = useStyles();
-
-    return (
-      <div>
-        <Button
-          // className="btn btn-success"
-          style={{ float: 'right', marginBottom: '10px' }}
-          variant="contained"
-          className={classes.button}
-          onClick={handleClick}
-        >
-          Download Table
-        </Button>
-      </div>
-    );
-  };
 
   const handleTableChange = (
     type,
@@ -736,9 +699,23 @@ const BGPTableComponent = (props) => {
 
         return (
           <>
-            <div className="header-filter">
-              <SizePerPageDropdownStandalone {...paginationProps} />
-              <MyExportCSV {...toolkitprops.csvProps}>Export CSV!!</MyExportCSV>
+            <div style={{ marginBottom: "10px" }} className="header-filter">
+              <div className="row">
+                <div className="col-lg-12">
+                  <ExportCSV action="view_bgpupdates" _csrf={_csrf} {...toolkitprops.csvProps}>Export CSV!!</ExportCSV>
+                </div>
+              </div>
+              <div className="row">
+                <div className="col-lg-12">
+                  <div style={{ float: "left" }}>
+                    <SizePerPageDropdownStandalone {...paginationProps} />
+                  </div>
+                  <div style={{ float: "right" }}>
+                    <PaginationTotalStandalone {...paginationProps} />
+                    <PaginationListStandalone {...paginationProps} />
+                  </div>
+                </div>
+              </div>
             </div>
             <BootstrapTable
               remote
@@ -762,9 +739,6 @@ const BGPTableComponent = (props) => {
               {...toolkitprops.baseProps}
               {...paginationTableProps}
             />
-
-            <PaginationTotalStandalone {...paginationProps} />
-            <PaginationListStandalone {...paginationProps} />
           </>
         );
       }}
