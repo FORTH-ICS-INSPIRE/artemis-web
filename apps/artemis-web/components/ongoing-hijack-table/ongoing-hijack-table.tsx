@@ -446,11 +446,10 @@ const OngoingHijackTableComponent = (props) => {
             key={i}
             value={option.text}
             onClick={() => onSizePerPageChange(option.page)}
-            className={`btn ${
-              currSizePerPage === `${option.page}`
-                ? 'btn-secondary'
-                : 'btn-warning'
-            }`}
+            className={`btn ${currSizePerPage === `${option.page}`
+              ? 'btn-secondary'
+              : 'btn-warning'
+              }`}
           >
             {option.text}
           </option>
@@ -559,7 +558,13 @@ const OngoingHijackTableComponent = (props) => {
         return (
           <>
             <div className="header-filter">
-              <SizePerPageDropdownStandalone {...paginationProps} />
+              <div style={{ float: "left" }}>
+                <SizePerPageDropdownStandalone {...paginationProps} />
+              </div>
+              <div style={{ float: "right" }}>
+                <PaginationTotalStandalone {...paginationProps} />
+                <PaginationListStandalone {...paginationProps} />
+              </div>
             </div>
             <BootstrapTable
               remote
@@ -586,8 +591,6 @@ const OngoingHijackTableComponent = (props) => {
               {...toolkitprops.baseProps}
               {...paginationTableProps}
             />
-            <PaginationTotalStandalone {...paginationProps} />
-            <PaginationListStandalone {...paginationProps} />
           </>
         );
       }}

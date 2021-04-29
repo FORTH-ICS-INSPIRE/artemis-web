@@ -31,6 +31,7 @@ import Tooltip from '../tooltip/tooltip';
 import ErrorBoundary from '../error-boundary/error-boundary';
 import { sendData } from '../../utils/fetch-data';
 import { useStyles } from '../../utils/styles';
+import ExportCSV from '../export-csv/export-csv';
 
 const getExactMatchFilter = (stateValue, fieldName) =>
   textFilter({
@@ -404,11 +405,10 @@ const HijackTableComponent = (props) => {
             key={option.text}
             value={option.text}
             onClick={() => onSizePerPageChange(option.page)}
-            className={`btn ${
-              currSizePerPage === `${option.page}`
-                ? 'btn-secondary'
-                : 'btn-warning'
-            }`}
+            className={`btn ${currSizePerPage === `${option.page}`
+              ? 'btn-secondary'
+              : 'btn-warning'
+              }`}
           >
             {option.text}
           </option>
@@ -471,42 +471,6 @@ const HijackTableComponent = (props) => {
     ], // A numeric array is also available. the purpose of above example is custom the text
   };
 
-  const MyExportCSV = (props) => {
-    const handleClick = async () => {
-      const res = await fetch('/api/download_tables', {
-        method: 'POST',
-        credentials: 'include',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ action: 'view_hijacks', _csrf: _csrf }),
-      });
-      const x = window.open();
-      x.document.open();
-      x.document.write(
-        '<html><body><pre>' +
-          JSON.stringify(await res.json(), null, '\t') +
-          '</pre></body></html>'
-      );
-      x.document.close();
-    };
-
-    const classes = useStyles();
-
-    return (
-      <div style={{ display: 'inline' }}>
-        <Button
-          style={{ float: 'right', marginBottom: '10px' }}
-          variant="contained"
-          className={classes.button}
-          onClick={handleClick}
-        >
-          Download Table
-        </Button>
-      </div>
-    );
-  };
 
   const HijackActions = (props) => {
     const data = props.data;
@@ -640,16 +604,30 @@ const HijackTableComponent = (props) => {
         return (
           <div>
             <div className="header-filter">
-              <SizePerPageDropdownStandalone {...paginationProps} />
-              <HijackActions
-                _csrf={_csrf}
-                data={hijackData}
-                hijackState={hijackState}
-                setHijackState={setHijackState}
-                selectState={selectState}
-                setSelectState={setSelectState}
-              />
-              <MyExportCSV {...toolkitprops.csvProps} />
+              <div className="row" style={{ marginBottom: "5px" }}>
+                <div className="col-lg-12">
+                  <ExportCSV action="view_hijacks" _csrf={_csrf} {...toolkitprops.csvProps}>Export CSV!!</ExportCSV>
+                  <HijackActions
+                    _csrf={_csrf}
+                    data={hijackData}
+                    hijackState={hijackState}
+                    setHijackState={setHijackState}
+                    selectState={selectState}
+                    setSelectState={setSelectState}
+                  />
+                </div>
+              </div>
+              <div className="row" style={{ marginBottom: "10px" }}>
+                <div className="col-lg-12">
+                  <div style={{ float: "left" }}>
+                    <SizePerPageDropdownStandalone {...paginationProps} />
+                  </div>
+                  <div style={{ float: "right" }}>
+                    <PaginationTotalStandalone {...paginationProps} />
+                    <PaginationListStandalone {...paginationProps} />
+                  </div>
+                </div>
+              </div>
             </div>
             <BootstrapTable
               remote
@@ -683,8 +661,6 @@ const HijackTableComponent = (props) => {
               {...toolkitprops.baseProps}
               {...paginationTableProps}
             />
-            <PaginationTotalStandalone {...paginationProps} />
-            <PaginationListStandalone {...paginationProps} />
           </div>
         );
       }}
