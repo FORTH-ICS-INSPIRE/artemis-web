@@ -29,6 +29,7 @@ import {
 const BGPUpdates = (props) => {
   const [isLive, setIsLive] = useState(true);
   const context = React.useContext(TooltipContext);
+  const _csrf = props._csrf;
 
   if (shallMock()) {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -294,6 +295,7 @@ const BGPUpdates = (props) => {
                     filter={filterFrom}
                     filterTo={filterTo}
                     isLive={isLive}
+                    _csrf={_csrf}
                     setFilteredBgpData={setFilteredBgpData}
                   />
                 </div>
