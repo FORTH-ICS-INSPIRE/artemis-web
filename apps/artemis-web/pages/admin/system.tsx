@@ -1,6 +1,6 @@
 import { Grid } from '@material-ui/core';
 import SystemConfigurationComponent from '../../components/system-configuration/system-configuration';
-import { shallMock } from '../../utils/token';
+import { autoLogout, shallMock } from '../../utils/token';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/material.css';
 import Head from 'next/head';
@@ -16,6 +16,8 @@ const SystemPage = (props) => {
   //   const { worker } = require('../../utils/mock-sw/browser');
   //   worker.start();
   // }
+
+  autoLogout(props);
 
   const user = props.user;
 

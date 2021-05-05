@@ -303,3 +303,74 @@ export const GLOBAL_MEDIA_QUERIES = {
   pc: '(min-width: 700px)',
   mobile: '(max-width: 700px)',
 };
+
+export const autoLogout = (props: any): void => {
+  const events = [
+    "load",
+    "mousemove",
+    "mousedown",
+    "click",
+    "scroll",
+    "keypress"
+  ];
+  const time = parseInt(process.env.NEXT_PUBLIC_INACTIVITY_TIMEOUT, 10);
+
+  let warnTimeout;
+  let logoutTimeout;
+
+  for (const i in events) {
+    if (events.hasOwnProperty(i))
+      window.addEventListener(events[i], resetTimeout);
+  }
+
+  setTimeout2();
+
+  const handleLogout = async () => {
+    await fetch('/api/auth/logout', {
+      method: 'DELETE',
+      credentials: 'include',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ _csrf: props._csrf }),
+    });
+
+    document.location.href = '/login';
+  };
+
+  function clearTimeout2() {
+    if (warnTimeout) clearTimeout(warnTimeout);
+
+    if (logoutTimeout) clearTimeout(logoutTimeout);
+  }
+
+  function setTimeout2() {
+    warnTimeout = setTimeout(warn, 1000 * time / 2);
+    logoutTimeout = setTimeout(logout, 1000 * time);
+  }
+
+  function resetTimeout() {
+    clearTimeout2();
+    setTimeout2();
+  }
+
+  function warn() {
+    alert(`You will be logged out automatically in ${time / 2} seconds.`);
+  }
+
+  function logout() {
+    // Send a logout request to the API
+    destroy();
+    handleLogout();
+  }
+
+  function destroy() {
+    clearTimeout();
+
+    for (const i in events) {
+      if (events.hasOwnProperty(i))
+        window.removeEventListener(events[i], resetTimeout);
+    }
+  }
+};

@@ -20,6 +20,7 @@ import TooltipContext from '../context/tooltip-context';
 import { setup } from '../libs/csrf';
 import { AntSwitch, useStyles } from '../utils/styles';
 import {
+  autoLogout,
   genTooltip,
   getSimpleDates,
   GLOBAL_MEDIA_QUERIES,
@@ -34,6 +35,8 @@ const HijacksPage = (props) => {
     const { worker } = require('../utils/mock-sw/browser');
     worker.start();
   }
+
+  autoLogout(props);
 
   const [filterFrom, setFilterFrom] = useState(0);
   const [filterTo, setFilterTo] = useState(0);
@@ -88,7 +91,7 @@ const HijacksPage = (props) => {
       {user && (
         <div
           className="container overview col-lg-12"
-          // style={{ paddingTop: '120px' }}
+        // style={{ paddingTop: '120px' }}
         >
           <div className="row">
             <div className="col-lg-1" />
