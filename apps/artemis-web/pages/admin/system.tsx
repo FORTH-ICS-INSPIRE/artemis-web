@@ -1,6 +1,6 @@
 import { Grid } from '@material-ui/core';
 import SystemConfigurationComponent from '../../components/system-configuration/system-configuration';
-import { shallMock } from '../../utils/token';
+import { autoLogout, shallMock } from '../../utils/token';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/material.css';
 import Head from 'next/head';
@@ -8,7 +8,7 @@ import React, { useState } from 'react';
 import AuthHOC from '../../components/401-hoc/401-hoc';
 import SystemModule from '../../components/system-module/system-module';
 import { useGraphQl } from '../../utils/hooks/use-graphql';
-import { setup } from 'apps/artemis-web/libs/csrf';
+import { setup } from '../../libs/csrf';
 
 const SystemPage = (props) => {
   if (shallMock()) {
@@ -16,6 +16,8 @@ const SystemPage = (props) => {
     const { worker } = require('../../utils/mock-sw/browser');
     worker.start();
   }
+
+  autoLogout(props);
 
   const user = props.user;
 
@@ -36,11 +38,11 @@ const SystemPage = (props) => {
 
   const modules = processes
     ? processes.map((ps) => {
-        return [
-          ps['name'].charAt(0).toUpperCase() + ps['name'].slice(1),
-          ps['running'],
-        ];
-      })
+      return [
+        ps['name'].charAt(0).toUpperCase() + ps['name'].slice(1),
+        ps['running'],
+      ];
+    })
     : [];
 
   const states = {};
