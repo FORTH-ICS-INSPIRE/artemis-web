@@ -1,11 +1,12 @@
 import { Button, FormControlLabel, FormGroup, Grid } from '@material-ui/core';
 import { AntSwitch, useStyles } from '../../utils/styles';
-import React from 'react';
-import Switch from 'react-ios-switch';
+import React, { useState } from 'react';
 import { useGraphQl } from '../../utils/hooks/use-graphql';
 
 const SystemModule = (props) => {
-  const { module, state, setState, labels, subModules } = props;
+  const { module, stateRT, labels, subModules } = props;
+  const [state, setState] = useState(stateRT);
+
   const key = module.substring(0, module.indexOf('-')).toLowerCase();
   let totalActive = 0;
   subModules[key].forEach((module) => (totalActive += module[1] ? 1 : 0));
@@ -32,7 +33,9 @@ const SystemModule = (props) => {
                 variant="contained"
                 style={{ marginTop: '9px', cursor: 'default' }}
                 className={
-                  state[module] ? classes.activeButton : classes.inactiveButton
+                  totalActive > 0
+                    ? classes.activeButton
+                    : classes.inactiveButton
                 }
               >
                 {
