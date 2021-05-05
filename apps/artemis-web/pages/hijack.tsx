@@ -29,6 +29,7 @@ import { useGraphQl } from '../utils/hooks/use-graphql';
 import { useHijack } from '../utils/hooks/use-hijack';
 import { AntSwitch } from '../utils/styles';
 import {
+  autoLogout,
   findStatus,
   GLOBAL_MEDIA_QUERIES,
   shallMock,
@@ -41,6 +42,9 @@ const ViewHijackPage = (props) => {
     const { worker } = require('../utils/mock-sw/browser');
     worker.start();
   }
+
+  autoLogout(props);
+
   const {
     isLive,
     setIsLive,
@@ -120,7 +124,7 @@ const ViewHijackPage = (props) => {
       {user && hijackExists && (
         <div
           className="container overview col-lg-12"
-          // style={{ paddingTop: '120px' }}
+        // style={{ paddingTop: '120px' }}
         >
           <div className="row">
             <div className="col-lg-1" />
