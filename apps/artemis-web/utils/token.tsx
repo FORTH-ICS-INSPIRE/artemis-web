@@ -293,8 +293,8 @@ export const exportHijack = async (hijack_key) => {
   x.document.open();
   x.document.write(
     '<html><body><pre>' +
-    JSON.stringify(await res.json(), null, '\t') +
-    '</pre></body></html>'
+      JSON.stringify(await res.json(), null, '\t') +
+      '</pre></body></html>'
   );
   x.document.close();
 };
@@ -306,12 +306,12 @@ export const GLOBAL_MEDIA_QUERIES = {
 
 export const autoLogout = (props: any): void => {
   const events = [
-    "load",
-    "mousemove",
-    "mousedown",
-    "click",
-    "scroll",
-    "keypress"
+    'load',
+    'mousemove',
+    'mousedown',
+    'click',
+    'scroll',
+    'keypress',
   ];
   const time = parseInt(process.env.NEXT_PUBLIC_INACTIVITY_TIMEOUT, 10);
 
@@ -319,7 +319,7 @@ export const autoLogout = (props: any): void => {
   let logoutTimeout;
 
   for (const i in events) {
-    if (events.hasOwnProperty(i))
+    if (Object.prototype.hasOwnProperty.call(events, i))
       window.addEventListener(events[i], resetTimeout);
   }
 
@@ -346,7 +346,7 @@ export const autoLogout = (props: any): void => {
   }
 
   function setTimeout2() {
-    warnTimeout = setTimeout(warn, 1000 * time / 2);
+    warnTimeout = setTimeout(warn, (1000 * time) / 2);
     logoutTimeout = setTimeout(logout, 1000 * time);
   }
 
@@ -369,7 +369,7 @@ export const autoLogout = (props: any): void => {
     clearTimeout();
 
     for (const i in events) {
-      if (events.hasOwnProperty(i))
+      if (Object.prototype.hasOwnProperty.call(events, i))
         window.removeEventListener(events[i], resetTimeout);
     }
   }

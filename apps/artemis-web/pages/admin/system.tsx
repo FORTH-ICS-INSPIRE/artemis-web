@@ -1,14 +1,14 @@
 import { Grid } from '@material-ui/core';
-import SystemConfigurationComponent from '../../components/system-configuration/system-configuration';
-import { autoLogout, shallMock } from '../../utils/token';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/material.css';
 import Head from 'next/head';
-import React, { useState } from 'react';
+import React from 'react';
 import AuthHOC from '../../components/401-hoc/401-hoc';
+import SystemConfigurationComponent from '../../components/system-configuration/system-configuration';
 import SystemModule from '../../components/system-module/system-module';
-import { useGraphQl } from '../../utils/hooks/use-graphql';
 import { setup } from '../../libs/csrf';
+import { useGraphQl } from '../../utils/hooks/use-graphql';
+import { autoLogout, shallMock } from '../../utils/token';
 
 const SystemPage = (props) => {
   if (shallMock()) {
@@ -27,6 +27,7 @@ const SystemPage = (props) => {
     hasColumnFilter: false,
   });
   const STATS_DATA: any = STATS_RES?.data;
+
   let CONFIG_DATA: any = useGraphQl('config', {
     isLive: true,
     hasDateFilter: false,
@@ -38,14 +39,14 @@ const SystemPage = (props) => {
 
   const modules = processes
     ? processes.map((ps) => {
-      return [
-        ps['name'].charAt(0).toUpperCase() + ps['name'].slice(1),
-        ps['running'],
-      ];
-    })
+        return [
+          ps['name'].charAt(0).toUpperCase() + ps['name'].slice(1),
+          ps['running'],
+        ];
+      })
     : [];
 
-  const states = {};
+  const modulesStateObj = {};
   const modulesList = [
     'riperistap',
     'bgpstreamlivetap',
@@ -65,24 +66,34 @@ const SystemPage = (props) => {
     mitigation: 'Mitigation',
   };
 
-  modules.forEach((module) => (states[module[0].toString()] = module[1]));
-  const [state, setState] = useState(states);
-  const keys = Object.keys(state).filter((key) =>
-    modulesList.includes(key.substring(0, key.indexOf('-')).toLowerCase())
+  modules.forEach(
+    (module) => (modulesStateObj[module[0].toString()] = module[1])
   );
+
+  const moduleNames = Object.keys(modulesStateObj).filter((moduleName) =>
+    modulesList.includes(
+      moduleName.substring(0, moduleName.indexOf('-')).toLowerCase()
+    )
+  );
+
   const subModules = {};
-  keys.forEach((key) => {
-    const keyL = key.substring(0, key.indexOf('-')).toLowerCase();
+  moduleNames.forEach((moduleName) => {
+    const keyL = moduleName.substring(0, moduleName.indexOf('-')).toLowerCase();
     if (keyL in subModules) {
-      subModules[keyL].push([key.toLowerCase(), state[key]]);
+      subModules[keyL].push([
+        moduleName.toLowerCase(),
+        modulesStateObj[moduleName],
+      ]);
     } else {
-      subModules[keyL] = [[key.toLowerCase(), state[key]]];
+      subModules[keyL] = [
+        [moduleName.toLowerCase(), modulesStateObj[moduleName]],
+      ];
     }
   });
 
-  keys.sort();
+  moduleNames.sort();
 
-  if (modules.length !== 0 && keys.length === 0) setState(states);
+  const moduleList = [];
 
   return (
     <>
@@ -90,7 +101,7 @@ const SystemPage = (props) => {
         <title>ARTEMIS - System</title>
       </Head>
       <div id="page-container">
-        {user && state && (
+        {user && modulesStateObj && (
           <div id="content-wrap" style={{ paddingBottom: '5rem' }}>
             <div className="row">
               <div className="col-lg-1" />
@@ -108,18 +119,23 @@ const SystemPage = (props) => {
               <div className="col-lg-1" />
               <div className="col-lg-10">
                 <Grid container spacing={3}>
-                  {keys.map((module, i) => {
-                    return (
-                      <SystemModule
-                        {...props}
-                        key={i}
-                        module={module}
-                        subModules={subModules}
-                        labels={modulesLabels}
-                        state={state}
-                        setState={setState}
-                      />
-                    );
+                  {moduleNames.map((module, i) => {
+                    const key = module
+                      .substring(0, module.indexOf('-'))
+                      .toLowerCase();
+                    if (!moduleList.includes(key)) {
+                      moduleList.push(key);
+                      return (
+                        <SystemModule
+                          {...props}
+                          key={i} // React requires a unique key value for each component rendered within a loop
+                          module={module}
+                          subModules={subModules}
+                          labels={modulesLabels}
+                          modulesStateObj={modulesStateObj}
+                        />
+                      );
+                    } else return <> </>;
                   })}
                 </Grid>
               </div>

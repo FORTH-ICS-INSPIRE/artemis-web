@@ -5,7 +5,6 @@ import { setup } from '../libs/csrf';
 import { autoLogout } from '../utils/token';
 
 const PendingPage = (props) => {
-
   autoLogout(props);
 
   return (

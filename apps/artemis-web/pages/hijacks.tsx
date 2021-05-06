@@ -91,7 +91,7 @@ const HijacksPage = (props) => {
       {user && (
         <div
           className="container overview col-lg-12"
-        // style={{ paddingTop: '120px' }}
+          // style={{ paddingTop: '120px' }}
         >
           <div className="row">
             <div className="col-lg-1" />
