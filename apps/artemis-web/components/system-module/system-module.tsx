@@ -4,8 +4,8 @@ import React, { useState } from 'react';
 import { useGraphQl } from '../../utils/hooks/use-graphql';
 
 const SystemModule = (props) => {
-  const { module, stateRT, labels, subModules } = props;
-  const [state, setState] = useState(stateRT);
+  const { module, modulesStateObj, labels, subModules } = props;
+  const [state, setState] = useState(modulesStateObj);
 
   const key = module.substring(0, module.indexOf('-')).toLowerCase();
   let totalActive = 0;

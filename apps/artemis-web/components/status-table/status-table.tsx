@@ -25,7 +25,7 @@ class StatusTable extends Component<StatsType, any> {
     ];
   }
 
-  componentDidMount() {
+  componentDidMount(): void {
     this._isMounted = true;
 
     setInterval(
@@ -34,7 +34,7 @@ class StatusTable extends Component<StatsType, any> {
     );
   }
 
-  componentWillUnmount() {
+  componentWillUnmount(): void {
     this._isMounted = false;
   }
 
@@ -122,8 +122,8 @@ class StatusTable extends Component<StatsType, any> {
         'ARTEMIS module responsible for observing async changes in the configuration file, triggering the reloading of ARTEMIS modules.',
     };
 
-    let backList = [];
-    let monitorList = [];
+    const backList = [];
+    const monitorList = [];
 
     return (
       <>
@@ -150,7 +150,7 @@ class StatusTable extends Component<StatsType, any> {
 
                   return (
                     <ModuleState
-                      key={i}
+                      key={i} // React requires a unique key value for each component rendered within a loop
                       process={process}
                       modules={modulesSet}
                       index={i}

@@ -1,21 +1,21 @@
 import { Grid } from '@material-ui/core';
-import SystemConfigurationComponent from '../../components/system-configuration/system-configuration';
-import { autoLogout, shallMock } from '../../utils/token';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/material.css';
 import Head from 'next/head';
-import React, { useState } from 'react';
+import React from 'react';
 import AuthHOC from '../../components/401-hoc/401-hoc';
+import SystemConfigurationComponent from '../../components/system-configuration/system-configuration';
 import SystemModule from '../../components/system-module/system-module';
-import { useGraphQl } from '../../utils/hooks/use-graphql';
 import { setup } from '../../libs/csrf';
+import { useGraphQl } from '../../utils/hooks/use-graphql';
+import { autoLogout, shallMock } from '../../utils/token';
 
 const SystemPage = (props) => {
-  // if (shallMock()) {
-  //   // eslint-disable-next-line @typescript-eslint/no-var-requires
-  //   const { worker } = require('../../utils/mock-sw/browser');
-  //   worker.start();
-  // }
+  if (shallMock()) {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const { worker } = require('../../utils/mock-sw/browser');
+    worker.start();
+  }
 
   autoLogout(props);
 
@@ -39,14 +39,14 @@ const SystemPage = (props) => {
 
   const modules = processes
     ? processes.map((ps) => {
-      return [
-        ps['name'].charAt(0).toUpperCase() + ps['name'].slice(1),
-        ps['running'],
-      ];
-    })
+        return [
+          ps['name'].charAt(0).toUpperCase() + ps['name'].slice(1),
+          ps['running'],
+        ];
+      })
     : [];
 
-  const states = {};
+  const modulesStateObj = {};
   const modulesList = [
     'riperistap',
     'bgpstreamlivetap',
@@ -64,30 +64,36 @@ const SystemPage = (props) => {
     exabgptap: 'ExaBGP Monitor',
     detection: 'Detection',
     mitigation: 'Mitigation',
-    database: 'Database',
   };
 
-  modules.forEach((module) => (states[module[0].toString()] = module[1]));
-  // const [state, setState] = useState(states);
-  let stateRT = states;
+  modules.forEach(
+    (module) => (modulesStateObj[module[0].toString()] = module[1])
+  );
 
-  let keys = Object.keys(stateRT).filter((key) =>
-    modulesList.includes(key.substring(0, key.indexOf('-')).toLowerCase())
+  const moduleNames = Object.keys(modulesStateObj).filter((moduleName) =>
+    modulesList.includes(
+      moduleName.substring(0, moduleName.indexOf('-')).toLowerCase()
+    )
   );
 
   const subModules = {};
-  keys.forEach((key) => {
-    const keyL = key.substring(0, key.indexOf('-')).toLowerCase();
+  moduleNames.forEach((moduleName) => {
+    const keyL = moduleName.substring(0, moduleName.indexOf('-')).toLowerCase();
     if (keyL in subModules) {
-      subModules[keyL].push([key.toLowerCase(), stateRT[key]]);
+      subModules[keyL].push([
+        moduleName.toLowerCase(),
+        modulesStateObj[moduleName],
+      ]);
     } else {
-      subModules[keyL] = [[key.toLowerCase(), stateRT[key]]];
+      subModules[keyL] = [
+        [moduleName.toLowerCase(), modulesStateObj[moduleName]],
+      ];
     }
   });
 
-  keys.sort();
+  moduleNames.sort();
 
-  let moduleList = [];
+  const moduleList = [];
 
   return (
     <>
@@ -95,7 +101,7 @@ const SystemPage = (props) => {
         <title>ARTEMIS - System</title>
       </Head>
       <div id="page-container">
-        {user && stateRT && (
+        {user && modulesStateObj && (
           <div id="content-wrap" style={{ paddingBottom: '5rem' }}>
             <div className="row">
               <div className="col-lg-1" />
@@ -113,7 +119,7 @@ const SystemPage = (props) => {
               <div className="col-lg-1" />
               <div className="col-lg-10">
                 <Grid container spacing={3}>
-                  {keys.map((module, i) => {
+                  {moduleNames.map((module, i) => {
                     const key = module
                       .substring(0, module.indexOf('-'))
                       .toLowerCase();
@@ -122,14 +128,14 @@ const SystemPage = (props) => {
                       return (
                         <SystemModule
                           {...props}
-                          key={i}
+                          key={i} // React requires a unique key value for each component rendered within a loop
                           module={module}
                           subModules={subModules}
                           labels={modulesLabels}
-                          stateRT={stateRT}
+                          modulesStateObj={modulesStateObj}
                         />
                       );
-                    }
+                    } else return <> </>;
                   })}
                 </Grid>
               </div>

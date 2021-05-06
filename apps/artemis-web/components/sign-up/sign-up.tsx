@@ -30,7 +30,7 @@ const SignUp = (props) => {
     });
 
     if (res.status === 200) {
-      localStorage.setItem('login_timestamp', (new Date()).toString());
+      localStorage.setItem('login_timestamp', new Date().toString());
       window.location.reload();
     } else {
       setErrorMsg(await res.text());
