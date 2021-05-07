@@ -31,13 +31,13 @@ const ExportCSV = (props) => {
     return (
         <div style={{ display: 'inline' }}>
             <Button
-                style={{ float: 'left', marginBottom: '10px' }}
+                style={{ float: 'left', marginBottom: '10px', width: "192px" }}
                 variant="contained"
                 className={classes.button}
                 onClick={handleClick}
             >
                 Download Table
-        </Button>
+            </Button>
         </div>
     );
 };
