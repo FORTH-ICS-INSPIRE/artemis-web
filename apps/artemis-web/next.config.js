@@ -2,6 +2,9 @@
 const { createSecureHeaders } = require('next-secure-headers');
 
 module.exports = {
+  future: {
+    webpack5: false
+  },
   poweredByHeader: false,
   i18n: { locales: ['en'], defaultLocale: 'en' },
   async headers() {
