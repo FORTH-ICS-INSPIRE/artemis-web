@@ -1,3 +1,7 @@
+$footer-bg: #f2f2f2
+$footer-border-color: #e4e4e4
+$button-color: #007bff
+
 .App
   text-align: center
 
@@ -7,12 +11,35 @@ p > img
 .react-bootstrap-table-page-btns-ul
   float: right
 
+.paper
+  display: flex
+  flex-direction: column
+  align-items: center
+  height: 2.5rem
+  padding-top: 8px
+
+.input
+  color: black
+  margin-top: 15px !important
+  margin-bottom: 15px !important
+  font-size: 1.75rem !important
+
+.material-button
+  background-color: #03a9f4 !important
+  color: black !important
+  margin: 24px 0px 16px !important,
+  color: 'white',
+  backgroundColor: '#007bff',
+    '&:hover, &:focus': {
+  backgroundColor: '#007bff',
+    },
+
 .footer
   position: relative
   width: 100%
   line-height: 46px
-  background-color: #f2f2f2
-  border-top: 1px solid #e4e4e4
+  background-color: $footer-bg
+  border-top: 1px solid $footer-border-color
   color: black
   padding-top: 15px
   padding-bottom: 15px
@@ -48,7 +75,7 @@ td
   > tbody > tr > td
     text-align: left !important
 
-  border: 1px solid #dee2e6
+    border: 1px solid #dee2e6
 
 .hv-center
   display: flex
@@ -70,9 +97,9 @@ td
   font-size: 0.7rem !important
 
 .selectedButton
-  border-color: #007bff !important
+  border-color: $button-color !important
   border-width: 4px
-  color: #007bff !important
+  color: $button-color !important
 
 .defaultButton
   border-color: #6c757d !important
@@ -116,8 +143,8 @@ html, body
   &:hover, &:focus
     background-color: #007bff !important
 
-  color: white !important
-  background-color: #007bff !important
+    color: white !important
+    background-color: #007bff !important
 
 main
   min-height: calc(87vh - 80px)
@@ -196,7 +223,7 @@ a:hover
       &:hover
         color: white
 
-  padding-bottom: 2rem
+        padding-bottom: 2rem
 
 .bm-menu-wrap
   width: 250px !important

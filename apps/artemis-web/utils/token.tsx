@@ -1,13 +1,8 @@
-import React from 'react';
+import React, { ReactElement } from 'react';
 import ReactTooltip from 'react-tooltip';
-import filterFactory, {
-  Comparator,
-  selectFilter,
-  textFilter,
-} from 'react-bootstrap-table2-filter';
-import { useMedia } from 'react-media';
+import { Comparator, textFilter } from 'react-bootstrap-table2-filter';
 
-export const getRandomString = (len): string => {
+export const getRandomString = (len: number): string => {
   const buf = [],
     chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789',
     charlen = chars.length;
@@ -19,18 +14,18 @@ export const getRandomString = (len): string => {
   return buf.join('');
 };
 
-const getRandomInt = (min, max): number => {
+const getRandomInt = (min: number, max: number): number => {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
-const appendLeadingZeroes = (n): string => {
+const appendLeadingZeroes = (n: number): string => {
   if (n <= 9) {
     return '0' + n;
   }
-  return n;
+  return n.toString();
 };
 
-export const formatDate = (date, incr = 0): string => {
+export const formatDate = (date: Date, incr = 0): string => {
   date.setHours(date.getHours() + incr);
 
   return (
@@ -48,8 +43,8 @@ export const formatDate = (date, incr = 0): string => {
   );
 };
 
-export const diffDate = (date1, date2): string => {
-  const ms = date2 - date1;
+export const diffDate = (date1: Date, date2: Date): string => {
+  const ms = date2.getTime() - date1.getTime();
   const days = Math.floor(ms / (24 * 60 * 60 * 1000));
   const daysms = ms % (24 * 60 * 60 * 1000);
   const hours = Math.floor(daysms / (60 * 60 * 1000));
@@ -60,14 +55,14 @@ export const diffDate = (date1, date2): string => {
   return days + 'D ' + hours + 'H ' + minutes + 'M ' + sec + 'S';
 };
 
-export const fromEntries = (xs: [string | number | symbol, any][]) =>
+export const fromEntries = (xs: [string | number | symbol, any][]): any =>
   xs.reduce((acc, [key, value]) => ({ ...acc, [key]: value }), {});
 
 export const genTooltip = (
-  column,
-  components,
-  label,
-  text,
+  column: any,
+  components: any,
+  label: string,
+  text: string,
   classname = null
 ): any => (
   <>
@@ -84,13 +79,11 @@ export const genTooltip = (
   </>
 );
 
-export const isObjectEmpty = (o): boolean => Object.keys(o).length === 0;
+export const isObjectEmpty = (o: any): boolean => Object.keys(o).length === 0;
 
 const isDevelopment = (): boolean => process.env.NODE_ENV === 'development';
 const isBrowser = (): boolean => typeof window !== 'undefined';
 export const shallMock = (): boolean => isDevelopment() && isBrowser();
-
-const isProduction = (): boolean => process.env.NODE_ENV === 'production';
 
 export const shallSubscribe = (isLive: boolean): boolean => isLive;
 
@@ -112,7 +105,7 @@ export const statuses = {
   Outdated: 'dark',
 };
 
-export const compareObjects = (obj1, obj2) => {
+export const compareObjects = (obj1: any, obj2: any): boolean => {
   if (obj1 === obj2) return true;
 
   if (
@@ -180,7 +173,7 @@ export const getSimpleDates = (): string[] => {
   return [timeBefore, timeNow];
 };
 
-export const findStatus = (row): string[] => {
+export const findStatus = (row: any): string[] => {
   const statuses = [];
 
   if (row.withdrawn) statuses.push('Withdrawn');
@@ -199,7 +192,7 @@ export const getStatusField = (status: string): string => {
   else return status.replace(' ', '_').toLowerCase();
 };
 
-export const getSortCaret = (order): any => {
+export const getSortCaret = (order: string): any => {
   const isDesc = !order || order === 'desc';
 
   return (
@@ -216,7 +209,7 @@ export const getSortCaret = (order): any => {
 export const getWithdrawn = (hijackDataState) =>
   hijackDataState ? hijackDataState.peers_withdrawn ?? [] : [];
 
-export const getSeen = (hijackDataState) =>
+export const getSeen = (hijackDataState: any): any =>
   hijackDataState ? hijackDataState.peers_seen ?? [] : [];
 
 export const isResolved = (hijackDataState): boolean =>
@@ -248,22 +241,25 @@ export const getTextFilter = (stateValue, fieldName) =>
     defaultValue: stateValue, // default filtering value
   });
 
-export const expandColumnComponent = ({ expanded, rowKey, expandable }) => {
+export const expandColumnComponent = ({
+  expanded,
+  rowKey,
+  expandable,
+}: any): ReactElement => {
   let content: JSX.Element = <></>;
 
   if (expandable) {
     content = expanded ? (
-      <img src="details_close.png" />
+      <img alt="" src="details_close.png" />
     ) : (
-      <img src="details_open.png" />
+      <img alt="" src="details_open.png" />
     );
-  } else {
-    content = <></>;
   }
+
   return <div> {content} </div>;
 };
 
-export const expandedColumnHeaderComponent = ({ isAnyExpands }) => {
+export const expandedColumnHeaderComponent = (): ReactElement<any, any> => {
   return (
     <div
       onClick={(e) => {
@@ -275,7 +271,7 @@ export const expandedColumnHeaderComponent = ({ isAnyExpands }) => {
   );
 };
 
-export const exportHijack = async (hijack_key) => {
+export const exportHijack = async (hijack_key: string): Promise<void> => {
   const res = await fetch('/api/download_tables', {
     method: 'POST',
     credentials: 'include',
@@ -315,8 +311,8 @@ export const autoLogout = (props: any): void => {
   ];
   const time = parseInt(process.env.NEXT_PUBLIC_INACTIVITY_TIMEOUT, 10);
 
-  let warnTimeout;
-  let logoutTimeout;
+  let warnTimeout: any;
+  let logoutTimeout: any;
 
   for (const i in events) {
     if (Object.prototype.hasOwnProperty.call(events, i))

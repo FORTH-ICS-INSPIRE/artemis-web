@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
+import { ReactElement } from 'react';
 import BootstrapTable from 'react-bootstrap-table-next';
 import filterFactory, {
-  Comparator,
   selectFilter,
   textFilter,
 } from 'react-bootstrap-table2-filter';
@@ -22,7 +22,6 @@ import {
   shallSubscribe,
   expandedColumnHeaderComponent,
   getExactMatchFilter,
-  getTextFilter,
   expandColumnComponent,
   genTooltip,
   compareObjects,
@@ -30,7 +29,7 @@ import {
 import ErrorBoundary from '../error-boundary/error-boundary';
 import Tooltip from '../tooltip/tooltip';
 
-const getExpandRow = (expandState) => {
+const getExpandRow = (expandState: any) => {
   return {
     showExpandColumn: true,
     expandByColumnOnly: true,
@@ -38,7 +37,7 @@ const getExpandRow = (expandState) => {
     expanded: expandState,
     expandColumnRenderer: expandColumnComponent,
     expandHeaderColumnRenderer: expandedColumnHeaderComponent,
-    renderer: (row) => {
+    renderer: (row: any) => {
       return (
         <table>
           <thead></thead>
@@ -361,14 +360,14 @@ function handleData(data, tooltips, setTooltips, context, offset) {
   return hijacks;
 }
 
-const OngoingHijackTableComponent = (props) => {
+const OngoingHijackTableComponent = (props: any): ReactElement => {
   const [hijackData, setHijackData] = useState([]);
   const context = React.useContext(TooltipContext);
   const [tooltips, setTooltips] = useState({});
   const [page, setPage] = useState(0);
   const [sizePerPage, setSizePerPage] = useState(10);
   const [columnFilter, setColumnFilter] = useState({});
-  const [expandState, setExpandState] = useState([]);
+  const expandState = [];
   const [limitState, setLimitState] = useState(10);
   const [offsetState, setOffsetState] = useState(0);
   const [sortState, setSortState] = useState('desc');
@@ -577,7 +576,12 @@ const OngoingHijackTableComponent = (props) => {
                 return (
                   <div>
                     <p>
-                      <img id="nodata" width="256" src="checkmark.png"></img>
+                      <img
+                        alt=""
+                        id="nodata"
+                        width="256"
+                        src="checkmark.png"
+                      ></img>
                     </p>
                     <h3>{'No hijack alerts! Go grab a beer!'}</h3>
                   </div>
