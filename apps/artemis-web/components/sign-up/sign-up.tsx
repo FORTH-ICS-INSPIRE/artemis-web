@@ -40,14 +40,14 @@ const SignUp = (props) => {
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="sm">
-        <div className="paper">
+        <div className={classes.paper}>
           <img
             width="150"
             src="./login.png"
             alt="avatar"
             className="img-responsive"
           />
-          <Typography className="input" component="h1" variant="h5">
+          <Typography className={classes.input} component="h1" variant="h5">
             Sign up
           </Typography>
           <form method="post" onSubmit={handleSubmit} className="login-form">

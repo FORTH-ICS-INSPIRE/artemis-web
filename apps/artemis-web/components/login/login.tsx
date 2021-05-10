@@ -53,14 +53,18 @@ const Login = (props) => {
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="sm">
-        <div className="paper">
+        <div className={props.classes.paper}>
           <img
             width="150"
             src="./login.png"
             alt="avatar"
             className="img-responsive"
           />
-          <Typography className="input" component="h1" variant="h5">
+          <Typography
+            className={props.classes.input}
+            component="h1"
+            variant="h5"
+          >
             Sign In
           </Typography>
           {errorMsg && <p className="error">{errorMsg}</p>}

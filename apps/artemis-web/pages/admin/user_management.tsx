@@ -6,6 +6,7 @@ import React, { useEffect, useState } from 'react';
 import AuthHOC from '../../components/401-hoc/401-hoc';
 import UserListComponent from '../../components/user-list/user-list';
 import { autoLogout, formatDate } from '../../utils/token';
+import { setup } from '../../libs/csrf';
 
 const UserManagementPage = (props) => {
   const user = props.user;
