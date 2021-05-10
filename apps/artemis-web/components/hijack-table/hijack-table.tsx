@@ -31,7 +31,7 @@ import Tooltip from '../tooltip/tooltip';
 import ErrorBoundary from '../error-boundary/error-boundary';
 import { sendData } from '../../utils/fetch-data';
 import { useStyles } from '../../utils/styles';
-import ExportCSV from '../export-csv/export-csv';
+import ExportJSON from '../export-json/export-json';
 
 const getExactMatchFilter = (stateValue, fieldName) =>
   textFilter({
@@ -606,7 +606,7 @@ const HijackTableComponent = (props) => {
             <div className="header-filter">
               <div className="row" style={{ marginBottom: "5px" }}>
                 <div className="col-lg-12">
-                  <ExportCSV action="view_hijacks" _csrf={_csrf} {...toolkitprops.csvProps}>Export CSV!!</ExportCSV>
+                  <ExportJSON action="view_hijacks" _csrf={_csrf} {...toolkitprops.csvProps}>Export CSV!!</ExportJSON>
                   <HijackActions
                     _csrf={_csrf}
                     data={hijackData}

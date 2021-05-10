@@ -2,7 +2,7 @@ import { useStyles } from "../../utils/styles";
 import React from "react";
 import { Button } from "@material-ui/core";
 
-const ExportCSV = (props) => {
+const ExportJSON = (props) => {
     const _csrf = props._csrf;
     const action = props.action;
 
@@ -42,4 +42,4 @@ const ExportCSV = (props) => {
     );
 };
 
-export default ExportCSV
+export default ExportJSON

@@ -34,7 +34,7 @@ import {
 } from '../../utils/token';
 import ErrorBoundary from '../error-boundary/error-boundary';
 import Tooltip from '../tooltip/tooltip';
-import ExportCSV from '../export-csv/export-csv';
+import ExportJSON from '../export-json/export-json';
 
 const getExpandRow = (expandState, tooltips, setTooltips, context) => {
   return {
@@ -702,7 +702,7 @@ const BGPTableComponent = (props) => {
             <div style={{ marginBottom: "10px" }} className="header-filter">
               <div className="row">
                 <div className="col-lg-12">
-                  <ExportCSV action="view_bgpupdates" _csrf={_csrf} {...toolkitprops.csvProps}>Export CSV!!</ExportCSV>
+                  <ExportJSON action="view_bgpupdates" _csrf={_csrf} {...toolkitprops.csvProps}>Export CSV!!</ExportJSON>
                 </div>
               </div>
               <div className="row">
