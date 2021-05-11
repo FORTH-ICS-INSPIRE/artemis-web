@@ -28,56 +28,56 @@ const createApolloClient = () => {
   const httpLink =
     typeof window !== 'undefined'
       ? createHttpLink({
-          uri: `https://${window.location.hostname}/api/graphql`,
-          useGETForQueries: false,
-        })
+        uri: `https://${window.location.hostname}/api/graphql`,
+        useGETForQueries: false,
+      })
       : null;
 
   const authLink =
     typeof window !== 'undefined'
       ? setContext(async (_, { headers }) => {
-          await requestToken();
-          return {
-            headers: {
-              ...headers,
-              authorization: accessToken ? `Bearer ${accessToken}` : '',
-            },
-          };
-        })
+        await requestToken();
+        return {
+          headers: {
+            ...headers,
+            authorization: accessToken ? `Bearer ${accessToken}` : '',
+          },
+        };
+      })
       : null;
 
   const wsLink =
     typeof window !== 'undefined'
       ? new WebSocketLink({
-          uri: `wss://${window.location.hostname}/api/graphql`,
-          options: {
-            reconnect: true,
-            lazy: true,
-            connectionParams: async () => {
-              await requestToken();
-              return {
-                headers: {
-                  authorization: `Bearer ${accessToken}`,
-                },
-              };
-            },
+        uri: `wss://${window.location.hostname}/api/graphql`,
+        options: {
+          reconnect: true,
+          lazy: true,
+          connectionParams: async () => {
+            await requestToken();
+            return {
+              headers: {
+                authorization: `Bearer ${accessToken}`,
+              },
+            };
           },
-        })
+        },
+      })
       : null;
 
   const splitLink =
     typeof window !== 'undefined'
       ? split(
-          ({ query }) => {
-            const definition = getMainDefinition(query);
-            return (
-              definition.kind === 'OperationDefinition' &&
-              definition.operation === 'subscription'
-            );
-          },
-          wsLink,
-          authLink.concat(httpLink)
-        )
+        ({ query }) => {
+          const definition = getMainDefinition(query);
+          return (
+            definition.kind === 'OperationDefinition' &&
+            definition.operation === 'subscription'
+          );
+        },
+        wsLink,
+        authLink.concat(httpLink)
+      )
       : null;
 
   return new ApolloClient({
@@ -176,15 +176,14 @@ export class QueryGenerator {
 
     return gql`
             ${this.operationType} getLiveTableCount {
-              count_data: ${
-                args.length
-                  ? 'search_bgpupdates_as_path_aggregate'
-                  : 'view_bgpupdates_aggregate'
-              } ${this.getWhereCondition(
-      this.options.hasDateFilter || this.options.hasColumnFilter,
-      'timestamp',
-      args
-    )}
+              count_data: ${args.length
+        ? 'search_bgpupdates_as_path_aggregate'
+        : 'view_bgpupdates_aggregate'
+      } ${this.getWhereCondition(
+        this.options.hasDateFilter || this.options.hasColumnFilter,
+        'timestamp',
+        args
+      )}
               {
                 aggregate {
                   count
@@ -197,11 +196,11 @@ export class QueryGenerator {
     return gql`
             ${this.operationType} getLiveTableCount {
               count_data: view_hijacks_aggregate${this.getWhereCondition(
-                true,
-                'time_last',
-                '',
-                'hijacks'
-              )}
+      true,
+      'time_last',
+      '',
+      'hijacks'
+    )}
               { aggregate { count } }
             }`;
   }
@@ -338,13 +337,11 @@ export class QueryGenerator {
       if (column === 'as_path2') args = ', as_paths: "{' + filterValue + '}"';
     }
 
-    return gql`${
-      this.operationType
-    } getLiveTableData${this.getQueryVars()} { view_bgpupdates: ${
-      args.length
+    return gql`${this.operationType
+      } getLiveTableData${this.getQueryVars()} { view_bgpupdates: ${args.length
         ? 'search_bgpupdates_by_as_path_and_hijack_key'
         : 'search_bgpupdates_by_hijack_key'
-    }(
+      }(
          order_by: {timestamp: ${this.options.sortOrder}}
          ${this.getConditionLimit()}
          ${this.getWhereCondition()}
@@ -363,10 +360,9 @@ export class QueryGenerator {
     }
     return gql`
     ${this.operationType} getLiveTableCount($key: String!) {
-      count_data: ${
-        args.length
-          ? 'search_bgpupdates_by_as_path_and_hijack_key_aggregate'
-          : 'search_bgpupdates_by_hijack_key_aggregate'
+      count_data: ${args.length
+        ? 'search_bgpupdates_by_as_path_and_hijack_key_aggregate'
+        : 'search_bgpupdates_by_hijack_key_aggregate'
       }(
         ${this.getWhereCondition()}
         args: {key: $key ${args}}) {

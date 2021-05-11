@@ -33,12 +33,23 @@ const appendLeadingZeroes = (n): string => {
 export const formatDate = (date, incr = 0): string => {
   date.setHours(date.getHours() + incr);
 
-  return (
-    date.getFullYear() +
+  const today = new Date()
+  const isToday = date.getDate() == today.getDate() &&
+    date.getMonth() == today.getMonth() &&
+    date.getFullYear() == today.getFullYear();
+
+  const isYesterday = date.getDate() == today.getDate() - 1 &&
+    date.getMonth() == today.getMonth() &&
+    date.getFullYear() == today.getFullYear();
+
+  const parsedDate = isToday ? "Today" : (isYesterday ? "Yesterday" : date.getFullYear() +
     '-' +
     (date.getMonth() + 1) +
     '-' +
-    date.getDate() +
+    date.getDate());
+
+  return (
+    parsedDate +
     ' ' +
     appendLeadingZeroes(date.getHours()) +
     ':' +
@@ -293,8 +304,8 @@ export const exportHijack = async (hijack_key) => {
   x.document.open();
   x.document.write(
     '<html><body><pre>' +
-      JSON.stringify(await res.json(), null, '\t') +
-      '</pre></body></html>'
+    JSON.stringify(await res.json(), null, '\t') +
+    '</pre></body></html>'
   );
   x.document.close();
 };
