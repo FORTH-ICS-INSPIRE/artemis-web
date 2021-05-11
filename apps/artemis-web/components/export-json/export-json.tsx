@@ -16,14 +16,10 @@ const ExportJSON = (props) => {
             },
             body: JSON.stringify({ action: action, _csrf: _csrf }),
         });
-        const x = window.open();
-        x.document.open();
-        x.document.write(
-            '<html><body><pre>' +
-            JSON.stringify(await res.json(), null, '\t') +
-            '</pre></body></html>'
-        );
-        x.document.close();
+        const something = window.open("data:text/json," + encodeURIComponent(await res.json()),
+            "_blank");
+        something.focus();
+
     };
 
     const classes = useStyles();
