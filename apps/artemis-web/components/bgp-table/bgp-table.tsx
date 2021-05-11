@@ -705,13 +705,12 @@ const BGPTableComponent = (props) => {
                   <ExportJSON action="view_bgpupdates" _csrf={_csrf} {...toolkitprops.csvProps}>Export CSV!!</ExportJSON>
                 </div>
               </div>
-              <div className="row">
+              <div className="row" style={{ marginTop: "10px" }}>
                 <div className="col-lg-12">
                   <div style={{ float: "left" }}>
                     <SizePerPageDropdownStandalone {...paginationProps} />
                   </div>
                   <div style={{ float: "right" }}>
-                    <PaginationTotalStandalone {...paginationProps} />
                     <PaginationListStandalone {...paginationProps} />
                   </div>
                 </div>
@@ -739,6 +738,16 @@ const BGPTableComponent = (props) => {
               {...toolkitprops.baseProps}
               {...paginationTableProps}
             />
+            <div className="row">
+              <div className="col-lg-12">
+                <div style={{ float: "right" }}>
+                  <PaginationListStandalone {...paginationProps} />
+                </div>
+                <div style={{ float: "left" }}>
+                  <PaginationTotalStandalone {...paginationProps} />
+                </div>
+              </div>
+            </div>
           </>
         );
       }}

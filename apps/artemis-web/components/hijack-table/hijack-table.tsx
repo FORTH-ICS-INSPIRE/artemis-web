@@ -623,7 +623,7 @@ const HijackTableComponent = (props) => {
                     <SizePerPageDropdownStandalone {...paginationProps} />
                   </div>
                   <div style={{ float: "right" }}>
-                    <PaginationTotalStandalone {...paginationProps} />
+                    {/* <PaginationTotalStandalone {...paginationProps} /> */}
                     <PaginationListStandalone {...paginationProps} />
                   </div>
                 </div>
@@ -661,6 +661,16 @@ const HijackTableComponent = (props) => {
               {...toolkitprops.baseProps}
               {...paginationTableProps}
             />
+            <div className="row">
+              <div className="col-lg-12">
+                <div style={{ float: "right" }}>
+                  <PaginationListStandalone {...paginationProps} />
+                </div>
+                <div style={{ float: "left" }}>
+                  <PaginationTotalStandalone {...paginationProps} />
+                </div>
+              </div>
+            </div>
           </div>
         );
       }}

@@ -28,7 +28,7 @@ const createApolloClient = () => {
   const httpLink =
     typeof window !== 'undefined'
       ? createHttpLink({
-        uri: `https://${window.location.hostname}/api/graphql`,
+        uri: `https://demo.artemis-pc.duckdns.org/api/graphql`,
         useGETForQueries: false,
       })
       : null;
@@ -49,7 +49,7 @@ const createApolloClient = () => {
   const wsLink =
     typeof window !== 'undefined'
       ? new WebSocketLink({
-        uri: `wss://${window.location.hostname}/api/graphql`,
+        uri: `wss://demo.artemis-pc.duckdns.org/api/graphql`,
         options: {
           reconnect: true,
           lazy: true,
