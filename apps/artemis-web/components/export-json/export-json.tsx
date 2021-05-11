@@ -16,10 +16,14 @@ const ExportJSON = (props) => {
             },
             body: JSON.stringify({ action: action, _csrf: _csrf }),
         });
-        const something = window.open("data:text/json," + encodeURIComponent(await res.json()),
-            "_blank");
-        something.focus();
-
+        function download(content, fileName, contentType) {
+            var a = document.createElement("a");
+            var file = new Blob([content], { type: contentType });
+            a.href = URL.createObjectURL(file);
+            a.download = fileName;
+            a.click();
+        }
+        download(await res.json(), 'data.json', 'text/json');
     };
 
     const classes = useStyles();
