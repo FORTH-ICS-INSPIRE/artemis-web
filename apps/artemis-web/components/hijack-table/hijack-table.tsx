@@ -341,8 +341,10 @@ const HijackTableComponent = (props) => {
     hasDateFilter: filter !== 0,
     dateRange: { dateTo: dateTo, dateFrom: dateFrom },
     hasStatusFilter: filterStatus ? filterStatus.length !== 0 : false,
-    statusFilter: filterStatus && filterStatus.length !== 0
-      ? `${getStatusField(filterStatus)}.eq.true` : '',
+    statusFilter:
+      filterStatus && filterStatus.length !== 0
+        ? `${getStatusField(filterStatus)}.eq.true`
+        : '',
   };
 
   const HIJACK_COUNT: any = useGraphQl('hijackCount', {
@@ -361,7 +363,6 @@ const HijackTableComponent = (props) => {
   const hijackCount = HIJACK_COUNT.data
     ? HIJACK_COUNT.data.count_data.aggregate.count
     : 0;
-
   useGraphQl('hijacks', {
     callback: (data) => {
       const processedData = handleData(
@@ -416,10 +417,11 @@ const HijackTableComponent = (props) => {
             key={option.text}
             value={option.text}
             onClick={() => onSizePerPageChange(option.page)}
-            className={`btn ${currSizePerPage === `${option.page}`
+            className={`btn ${
+              currSizePerPage === `${option.page}`
                 ? 'btn-secondary'
                 : 'btn-warning'
-              } `}
+            } `}
           >
             {option.text}
           </option>
@@ -562,8 +564,10 @@ const HijackTableComponent = (props) => {
     setPage(page);
     setSizePerPage(sizePerPage);
 
-    setOffsetState(currentIndex);
-    setLimitState(sizePerPage);
+    if (currentIndex && sizePerPage) {
+      setOffsetState(currentIndex);
+      setLimitState(sizePerPage);
+    }
     if (sortOrder) {
       setSortColumnState(sortField);
       setSortState(sortOrder);
