@@ -39,7 +39,7 @@ function getExportCondition(exportFilters, dateField = 'timestamp', type = '') {
   } else return '';
 }
 
-const ExportJSON = (props) => {
+const ExportJSON = (props: any): Promise<void> => {
   const _csrf = props._csrf;
   const action = props.action;
   const { exportFilters, dateField } = props;

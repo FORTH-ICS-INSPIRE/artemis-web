@@ -14,8 +14,8 @@ export const getRandomString = (len: number): string => {
   return buf.join('');
 };
 
-export const isNumeric = (str: any) => {
-  if (typeof str != 'string') return false; // we only process strings!
+export const isNumeric = (str: string): boolean => {
+  // if (typeof str != 'string') return false; // we only process strings!
   return !isNaN(parseFloat(str)); // ...and ensure strings of whitespace fail
 };
 
