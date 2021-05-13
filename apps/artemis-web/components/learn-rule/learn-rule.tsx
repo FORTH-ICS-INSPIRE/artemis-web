@@ -70,6 +70,7 @@ class LearnRuleComponent extends Component<
       type_: type,
       prefix: prefix,
       action: 'show',
+      _csrf: this._csrf,
     };
 
     const res = await fetch('/api/hijack', {
@@ -167,6 +168,7 @@ class LearnRuleComponent extends Component<
   render() {
     const { classes } = this.props;
 
+    console.log(this.state);
     return (
       <div className="row">
         <div className="card" style={{ width: '100%' }}>
@@ -224,7 +226,9 @@ class LearnRuleComponent extends Component<
             {!this.state.isConfigSuccess && (
               <div style={{ color: !this.state.success ? 'red' : 'green' }}>
                 {' '}
-                {this.state.configMessage.toUpperCase()}{' '}
+                {this.state.configMessage
+                  ? this.state.configMessage.toUpperCase()
+                  : ''}{' '}
               </div>
             )}
           </div>

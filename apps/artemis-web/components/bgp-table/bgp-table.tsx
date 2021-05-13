@@ -31,6 +31,7 @@ import {
   getExactMatchFilter,
   getTextFilter,
   compareObjects,
+  isNumeric,
 } from '../../utils/token';
 import ErrorBoundary from '../error-boundary/error-boundary';
 import Tooltip from '../tooltip/tooltip';
@@ -491,6 +492,15 @@ const BGPTableComponent = (props) => {
   const [columnFilter, setColumnFilter] = useState({});
   const dateFrom: string = getISODate(filter);
   const dateTo: string = getISODate(filterTo ?? 0);
+
+  const exportFilters = {
+    hasColumnFilter: !isObjectEmpty(columnFilter),
+    columnFilter: columnFilter,
+    hasDateFilter: filter !== 0,
+    dateRange: { dateTo: dateTo, dateFrom: dateFrom },
+    key: hijackKey,
+  };
+
   let bgpCount = 0;
 
   const BGP_COUNT: any = useGraphQl(hijackKey ? 'bgpCountByKey' : 'bgpCount', {
@@ -585,10 +595,11 @@ const BGPTableComponent = (props) => {
             key={option.text}
             value={option.text}
             onClick={() => onSizePerPageChange(option.page)}
-            className={`btn ${currSizePerPage === `${option.page}`
-              ? 'btn-secondary'
-              : 'btn-warning'
-              }`}
+            className={`btn ${
+              currSizePerPage === `${option.page}`
+                ? 'btn-secondary'
+                : 'btn-warning'
+            }`}
           >
             {option.text}
           </option>
@@ -669,10 +680,16 @@ const BGPTableComponent = (props) => {
     if (sortOrder) setSortState(sortOrder);
     if (filters) {
       const keys = Object.keys(filters);
-
       keys.forEach((key) => {
+        console.log(key);
         if (filters[key])
-          setStateValues({ ...stateValues, [key]: filters[key].filterVal });
+          setStateValues({
+            ...stateValues,
+            [key]:
+              isNumeric(filters[key].filterVal) || key === 'service'
+                ? filters[key].filterVal
+                : -1,
+          });
         else setStateValues({ ...stateValues, [key]: '' });
       });
 
@@ -699,18 +716,26 @@ const BGPTableComponent = (props) => {
 
         return (
           <>
-            <div style={{ marginBottom: "10px" }} className="header-filter">
+            <div style={{ marginBottom: '10px' }} className="header-filter">
               <div className="row">
                 <div className="col-lg-12">
-                  <ExportJSON action="view_bgpupdates" _csrf={_csrf} {...toolkitprops.csvProps}>Export CSV!!</ExportJSON>
+                  <ExportJSON
+                    action="view_bgpupdates"
+                    _csrf={_csrf}
+                    dateField={'timestamp'}
+                    exportFilters={exportFilters}
+                    {...toolkitprops.csvProps}
+                  >
+                    Export JSON!!
+                  </ExportJSON>
                 </div>
               </div>
-              <div className="row" style={{ marginTop: "10px" }}>
+              <div className="row" style={{ marginTop: '10px' }}>
                 <div className="col-lg-12">
-                  <div style={{ float: "left" }}>
+                  <div style={{ float: 'left' }}>
                     <SizePerPageDropdownStandalone {...paginationProps} />
                   </div>
-                  <div style={{ float: "right" }}>
+                  <div style={{ float: 'right' }}>
                     <PaginationListStandalone {...paginationProps} />
                   </div>
                 </div>
@@ -740,10 +765,10 @@ const BGPTableComponent = (props) => {
             />
             <div className="row">
               <div className="col-lg-12">
-                <div style={{ float: "right" }}>
+                <div style={{ float: 'right' }}>
                   <PaginationListStandalone {...paginationProps} />
                 </div>
-                <div style={{ float: "left" }}>
+                <div style={{ float: 'left' }}>
                   <PaginationTotalStandalone {...paginationProps} />
                 </div>
               </div>

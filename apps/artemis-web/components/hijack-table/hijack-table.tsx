@@ -24,6 +24,7 @@ import {
   getISODate,
   getSortCaret,
   getStatusField,
+  isNumeric,
   isObjectEmpty,
   shallSubscribe,
 } from '../../utils/token';
@@ -334,6 +335,15 @@ const HijackTableComponent = (props) => {
     type: '',
   });
 
+  const exportFilters = {
+    hasColumnFilter: !isObjectEmpty(columnFilter),
+    columnFilter: columnFilter,
+    hasDateFilter: filter !== 0,
+    dateRange: { dateTo: dateTo, dateFrom: dateFrom },
+    hasStatusFilter: filterStatus ? filterStatus.length !== 0 : false,
+    statusFilter: `${getStatusField(filterStatus)}.eq.true`,
+  };
+
   const HIJACK_COUNT: any = useGraphQl('hijackCount', {
     isLive: shallSubscribe(props.isLive),
     hasColumnFilter: !isObjectEmpty(columnFilter),
@@ -343,7 +353,7 @@ const HijackTableComponent = (props) => {
     hasStatusFilter: filterStatus ? filterStatus.length !== 0 : false,
     statusFilter:
       filterStatus && filterStatus.length !== 0
-        ? `{ ${getStatusField(filterStatus)} : {_eq: true } }`
+        ? `{ ${getStatusField(filterStatus)} : { _eq: true } }`
         : '',
   });
 
@@ -379,7 +389,7 @@ const HijackTableComponent = (props) => {
     hasStatusFilter: filterStatus ? filterStatus.length !== 0 : false,
     statusFilter:
       filterStatus && filterStatus.length !== 0
-        ? `{ ${getStatusField(filterStatus)} : {_eq: true } }`
+        ? `{ ${getStatusField(filterStatus)} : { _eq: true } } `
         : '',
   });
 
@@ -405,10 +415,11 @@ const HijackTableComponent = (props) => {
             key={option.text}
             value={option.text}
             onClick={() => onSizePerPageChange(option.page)}
-            className={`btn ${currSizePerPage === `${option.page}`
-              ? 'btn-secondary'
-              : 'btn-warning'
-              }`}
+            className={`btn ${
+              currSizePerPage === `${option.page}`
+                ? 'btn-secondary'
+                : 'btn-warning'
+            } `}
           >
             {option.text}
           </option>
@@ -470,7 +481,6 @@ const HijackTableComponent = (props) => {
       },
     ], // A numeric array is also available. the purpose of above example is custom the text
   };
-
 
   const HijackActions = (props) => {
     const data = props.data;
@@ -563,7 +573,13 @@ const HijackTableComponent = (props) => {
 
       keys.forEach((key) => {
         if (filters[key])
-          setStateValues({ ...stateValues, [key]: filters[key].filterVal });
+          setStateValues({
+            ...stateValues,
+            [key]:
+              isNumeric(filters[key].filterVal) || key === 'rpki_status'
+                ? filters[key].filterVal
+                : -1,
+          });
         else setStateValues({ ...stateValues, [key]: '' });
       });
 
@@ -604,9 +620,19 @@ const HijackTableComponent = (props) => {
         return (
           <div>
             <div className="header-filter">
-              <div className="row" style={{ marginBottom: "5px" }}>
+              <div className="row" style={{ marginBottom: '5px' }}>
                 <div className="col-lg-12">
-                  <ExportJSON action="view_hijacks" _csrf={_csrf} {...toolkitprops.csvProps}>Export CSV!!</ExportJSON>
+                  <ExportJSON
+                    action="view_hijacks"
+                    dateField={'time_last'}
+                    exportFilters={exportFilters}
+                    dateTo={dateTo}
+                    dateFrom={dateFrom}
+                    _csrf={_csrf}
+                    {...toolkitprops.csvProps}
+                  >
+                    Export JSON!!
+                  </ExportJSON>
                   <HijackActions
                     _csrf={_csrf}
                     data={hijackData}
@@ -617,12 +643,12 @@ const HijackTableComponent = (props) => {
                   />
                 </div>
               </div>
-              <div className="row" style={{ marginBottom: "10px" }}>
+              <div className="row" style={{ marginBottom: '10px' }}>
                 <div className="col-lg-12">
-                  <div style={{ float: "left" }}>
+                  <div style={{ float: 'left' }}>
                     <SizePerPageDropdownStandalone {...paginationProps} />
                   </div>
-                  <div style={{ float: "right" }}>
+                  <div style={{ float: 'right' }}>
                     {/* <PaginationTotalStandalone {...paginationProps} /> */}
                     <PaginationListStandalone {...paginationProps} />
                   </div>
@@ -663,10 +689,10 @@ const HijackTableComponent = (props) => {
             />
             <div className="row">
               <div className="col-lg-12">
-                <div style={{ float: "right" }}>
+                <div style={{ float: 'right' }}>
                   <PaginationListStandalone {...paginationProps} />
                 </div>
-                <div style={{ float: "left" }}>
+                <div style={{ float: 'left' }}>
                   <PaginationTotalStandalone {...paginationProps} />
                 </div>
               </div>

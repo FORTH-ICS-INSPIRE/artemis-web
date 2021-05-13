@@ -231,7 +231,7 @@ class HijackInfoComponent extends Component<any, any> {
                           mRef.current.value === 'hijack_action_ignore'
                             ? this.setOpenModalState(true)
                             : mRef.current.value === 'hijack_action_export'
-                            ? exportHijack(hijackKey)
+                            ? exportHijack(hijackKey, this.props._csrf)
                             : sendHijackData(e, {
                                 hijackKey: hijackKey,
                                 selectState: mRef.current.value,

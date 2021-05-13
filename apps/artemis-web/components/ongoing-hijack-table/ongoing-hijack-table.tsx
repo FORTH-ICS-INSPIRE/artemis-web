@@ -27,6 +27,7 @@ import {
   compareObjects,
 } from '../../utils/token';
 import ErrorBoundary from '../error-boundary/error-boundary';
+import ExportJSON from '../export-json/export-json';
 import Tooltip from '../tooltip/tooltip';
 
 const getExpandRow = (expandState: any) => {
@@ -418,6 +419,16 @@ const OngoingHijackTableComponent = (props: any): ReactElement => {
     statusFilter: '{ active : {_eq: true } }, { dormant : {_eq: false}}',
   });
 
+  const exportFilters = {
+    hasColumnFilter: !isObjectEmpty(columnFilter),
+    columnFilter: columnFilter,
+    hasDateFilter: false,
+    hasStatusFilter: true,
+    statusFilter: 'active.eq.true,dormant.eq.false',
+  };
+
+  const _csrf = props._csrf;
+
   const customTotal = (from, to, size) => (
     <span className="react-bootstrap-table-pagination-total">
       Showing {from} to {to} of {size} entries
@@ -445,10 +456,11 @@ const OngoingHijackTableComponent = (props: any): ReactElement => {
             key={i}
             value={option.text}
             onClick={() => onSizePerPageChange(option.page)}
-            className={`btn ${currSizePerPage === `${option.page}`
-              ? 'btn-secondary'
-              : 'btn-warning'
-              }`}
+            className={`btn ${
+              currSizePerPage === `${option.page}`
+                ? 'btn-secondary'
+                : 'btn-warning'
+            }`}
           >
             {option.text}
           </option>
@@ -556,13 +568,29 @@ const OngoingHijackTableComponent = (props: any): ReactElement => {
         paginationProps.dataSize = hijackCount;
         return (
           <>
-            <div className="header-filter">
-              <div style={{ float: "left" }}>
-                <SizePerPageDropdownStandalone {...paginationProps} />
+            <div style={{ marginBottom: '10px' }} className="header-filter">
+              <div className="row">
+                <div className="col-lg-12">
+                  <ExportJSON
+                    action="view_hijacks"
+                    dateField={'time_last'}
+                    exportFilters={exportFilters}
+                    _csrf={_csrf}
+                    {...toolkitprops.csvProps}
+                  >
+                    Export JSON!!
+                  </ExportJSON>
+                </div>
               </div>
-              <div style={{ float: "right" }}>
-                {/* <PaginationTotalStandalone {...paginationProps} /> */}
-                <PaginationListStandalone {...paginationProps} />
+              <div className="row" style={{ marginTop: '10px' }}>
+                <div className="col-lg-12">
+                  <div style={{ float: 'left' }}>
+                    <SizePerPageDropdownStandalone {...paginationProps} />
+                  </div>
+                  <div style={{ float: 'right' }}>
+                    <PaginationListStandalone {...paginationProps} />
+                  </div>
+                </div>
               </div>
             </div>
             <BootstrapTable
@@ -597,10 +625,10 @@ const OngoingHijackTableComponent = (props: any): ReactElement => {
             />
             <div className="row">
               <div className="col-lg-12">
-                <div style={{ float: "right" }}>
+                <div style={{ float: 'right' }}>
                   <PaginationListStandalone {...paginationProps} />
                 </div>
-                <div style={{ float: "left" }}>
+                <div style={{ float: 'left' }}>
                   <PaginationTotalStandalone {...paginationProps} />
                 </div>
               </div>
