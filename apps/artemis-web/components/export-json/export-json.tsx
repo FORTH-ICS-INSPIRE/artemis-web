@@ -1,6 +1,7 @@
 import { useStyles } from '../../utils/styles';
 import React from 'react';
 import { Button } from '@material-ui/core';
+import { ReactElement } from 'react';
 
 function getExportCondition(exportFilters, dateField = 'timestamp', type = '') {
   if (
@@ -39,7 +40,7 @@ function getExportCondition(exportFilters, dateField = 'timestamp', type = '') {
   } else return '';
 }
 
-const ExportJSON = (props: any): Promise<void> => {
+const ExportJSON = (props: any): ReactElement => {
   const _csrf = props._csrf;
   const action = props.action;
   const { exportFilters, dateField } = props;
