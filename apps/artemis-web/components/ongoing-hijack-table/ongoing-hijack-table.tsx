@@ -25,6 +25,7 @@ import {
   expandColumnComponent,
   genTooltip,
   compareObjects,
+  isNumeric,
 } from '../../utils/token';
 import ErrorBoundary from '../error-boundary/error-boundary';
 import ExportJSON from '../export-json/export-json';
@@ -533,8 +534,11 @@ const OngoingHijackTableComponent = (props: any): ReactElement => {
     setPage(page);
     setSizePerPage(sizePerPage);
 
-    setOffsetState(currentIndex);
-    setLimitState(sizePerPage);
+    if (currentIndex && sizePerPage) {
+      setOffsetState(currentIndex);
+      setLimitState(sizePerPage);
+    }
+
     if (sortOrder) {
       setSortColumnState(sortField);
       setSortState(sortOrder);
@@ -544,7 +548,12 @@ const OngoingHijackTableComponent = (props: any): ReactElement => {
 
       keys.forEach((key) => {
         if (filters[key])
-          setStateValues({ ...stateValues, [key]: filters[key].filterVal });
+          setStateValues({
+            ...stateValues,
+            [key]: isNumeric(filters[key].filterVal)
+              ? filters[key].filterVal
+              : -1,
+          });
         else setStateValues({ ...stateValues, [key]: '' });
       });
 
