@@ -47,8 +47,13 @@ export const formatDate = (date: Date, incr = 0): string => {
   const parsedDate = isToday
     ? 'Today'
     : isYesterday
+<<<<<<< HEAD
       ? 'Yesterday'
       : date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
+=======
+    ? 'Yesterday'
+    : date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
+>>>>>>> 3ea742c3169140b121367dc2c17106e1ccfccf75
 
   return (
     parsedDate +
