@@ -492,7 +492,7 @@ export class QueryGenerator {
   }
 }
 
-export const useApollo = (initialState): any => {
+export const useApollo = (initialState: any): any => {
   const store = useMemo(() => initializeApollo(initialState), [initialState]);
   return store;
 };

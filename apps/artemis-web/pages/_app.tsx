@@ -1,4 +1,4 @@
-import './styles.css';
+import './styles.sass';
 import React, { useState } from 'react';
 import { ApolloProvider } from '@apollo/client';
 import { useApollo } from '../libs/graphql';

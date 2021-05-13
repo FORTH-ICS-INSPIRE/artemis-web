@@ -20,13 +20,17 @@ function getAbuse(ASN: number) {
   ).then((response) => response.json());
 }
 
-export function fetchASNData(ASN: number) {
+export function fetchASNData(ASN: number): Promise<any> {
   if (!ASN) return;
 
   return Promise.all([getName(ASN), getCountry(ASN), getAbuse(ASN)]);
 }
 
-export const fetchTooltip = async (ASN, context, { setTooltip }) => {
+export const fetchTooltip = async (
+  ASN: string,
+  context: any,
+  { setTooltip }: any
+): Promise<void> => {
   if (context.tooltips[ASN]) {
     // setTooltips({ ...tooltips, [ASN]: context.tooltips[ASN] });
     setTooltip(context.tooltips[ASN]);
@@ -46,7 +50,10 @@ export const fetchTooltip = async (ASN, context, { setTooltip }) => {
   }
 };
 
-export const submitComment = async (e, { commentRef, hijackKey, _csrf }) => {
+export const submitComment = async (
+  e,
+  { commentRef, hijackKey, _csrf }
+): Promise<void> => {
   e.preventDefault();
   const editor: any = commentRef.current;
   const comment = editor.editor.innerText;
@@ -71,7 +78,7 @@ export const submitComment = async (e, { commentRef, hijackKey, _csrf }) => {
 
 export const sendData = async (
   e,
-  { hijackKeys, selectState, state = false, _csrf }
+  { hijackKeys, selectState, state = false, _csrf }: any
 ) => {
   e.preventDefault();
 

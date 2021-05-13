@@ -10,23 +10,8 @@ import {
   deepPurple,
   lightBlue,
   orange,
-  blue,
 } from '@material-ui/core/colors';
-import Switch, { SwitchClassKey, SwitchProps } from '@material-ui/core/Switch';
-
-import { purple } from '@material-ui/core/colors';
-import FormGroup from '@material-ui/core/FormGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
-
-interface Styles extends Partial<Record<SwitchClassKey, string>> {
-  focusVisible?: string;
-}
-
-interface Props extends SwitchProps {
-  classes: Styles;
-}
+import Switch from '@material-ui/core/Switch';
 
 const palletType = 'light';
 const darkState = false;
