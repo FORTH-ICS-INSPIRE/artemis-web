@@ -289,7 +289,7 @@ export const expandedColumnHeaderComponent = (): ReactElement<any, any> => {
   );
 };
 
-export const exportHijack = async (hijack_key, _csrf) => {
+export const exportHijack = async (hijack_key: string, _csrf: string): Promise<void> => {
   const res = await fetch('/api/download_tables', {
     method: 'POST',
     credentials: 'include',

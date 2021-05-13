@@ -7,9 +7,6 @@ module.exports = {
   },
   poweredByHeader: false,
   i18n: { locales: ['en'], defaultLocale: 'en' },
-  future: {
-    webpack5: false,
-  },
   async headers() {
     return [
       {

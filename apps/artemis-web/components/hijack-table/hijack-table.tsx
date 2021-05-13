@@ -1,4 +1,3 @@
-import { Button } from '@material-ui/core';
 import { useGraphQl } from '../../utils/hooks/use-graphql';
 import Link from 'next/link';
 import React, { useState } from 'react';
@@ -31,7 +30,6 @@ import {
 import Tooltip from '../tooltip/tooltip';
 import ErrorBoundary from '../error-boundary/error-boundary';
 import { sendData } from '../../utils/fetch-data';
-import { useStyles } from '../../utils/styles';
 import ExportJSON from '../export-json/export-json';
 
 const getExactMatchFilter = (stateValue, fieldName) =>
@@ -417,11 +415,10 @@ const HijackTableComponent = (props) => {
             key={option.text}
             value={option.text}
             onClick={() => onSizePerPageChange(option.page)}
-            className={`btn ${
-              currSizePerPage === `${option.page}`
+            className={`btn ${currSizePerPage === `${option.page}`
                 ? 'btn-secondary'
                 : 'btn-warning'
-            } `}
+              } `}
           >
             {option.text}
           </option>
