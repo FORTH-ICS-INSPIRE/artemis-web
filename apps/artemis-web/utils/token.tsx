@@ -35,25 +35,20 @@ export const formatDate = (date: Date, incr = 0): string => {
 
   const today = new Date();
   const isToday =
-    date.getDate() == today.getDate() &&
-    date.getMonth() == today.getMonth() &&
-    date.getFullYear() == today.getFullYear();
+    date.getDate() === today.getDate() &&
+    date.getMonth() === today.getMonth() &&
+    date.getFullYear() === today.getFullYear();
 
   const isYesterday =
-    date.getDate() == today.getDate() - 1 &&
-    date.getMonth() == today.getMonth() &&
-    date.getFullYear() == today.getFullYear();
+    date.getDate() === today.getDate() - 1 &&
+    date.getMonth() === today.getMonth() &&
+    date.getFullYear() === today.getFullYear();
 
   const parsedDate = isToday
     ? 'Today'
     : isYesterday
-<<<<<<< HEAD
       ? 'Yesterday'
       : date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
-=======
-    ? 'Yesterday'
-    : date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
->>>>>>> 3ea742c3169140b121367dc2c17106e1ccfccf75
 
   return (
     parsedDate +
