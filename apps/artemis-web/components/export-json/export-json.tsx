@@ -33,7 +33,7 @@ function getExportCondition(exportFilters, dateField = 'timestamp', type = '') {
       });
     }
     if (exportFilters.key)
-      condition = condition + `hijack_key.cs.{${exportFilters.key}},`
+      condition = condition + `hijack_key.cs.{${exportFilters.key}},`;
     if (exportFilters.hasStatusFilter) {
       condition = condition + `${exportFilters.statusFilter}`;
     }
@@ -48,7 +48,7 @@ const ExportJSON = (props: any): ReactElement => {
   const { exportFilters, dateField } = props;
   const conditions = getExportCondition(exportFilters, dateField);
 
-  console.log(conditions)
+  console.log(conditions);
 
   const handleClick = async () => {
     const res = await fetch('/api/download_tables', {

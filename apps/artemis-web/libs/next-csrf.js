@@ -2127,6 +2127,10 @@ var csrf = function (handler, _a) {
         newReqCsrfTokenSigned;
       var _a;
       return __generator(this, function (_b) {
+        const authHeader = req.get('x-artemis-api-key');
+        if (authHeader && authHeader === process.env.API_KEY)
+          return [2 /*return*/, handler(req, res)];
+
         try {
           tokenFromCookie = req.body._csrf;
           tokenFromCookieUnsigned = cookieSignature.unsign(

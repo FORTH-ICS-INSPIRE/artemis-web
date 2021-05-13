@@ -2,9 +2,7 @@
 import Link from 'next/link';
 import React, { useState } from 'react';
 import BootstrapTable from 'react-bootstrap-table-next';
-import filterFactory, {
-  selectFilter,
-} from 'react-bootstrap-table2-filter';
+import filterFactory, { selectFilter } from 'react-bootstrap-table2-filter';
 import paginationFactory, {
   PaginationListStandalone,
   PaginationProvider,
@@ -511,7 +509,7 @@ const BGPTableComponent = (props) => {
     key: hijackKey,
   });
 
-  console.log(_csrf)
+  console.log(_csrf);
 
   bgpCount =
     BGP_COUNT && BGP_COUNT.data ? BGP_COUNT.data.count_data.aggregate.count : 0;
@@ -593,10 +591,11 @@ const BGPTableComponent = (props) => {
             key={option.text}
             value={option.text}
             onClick={() => onSizePerPageChange(option.page)}
-            className={`btn ${currSizePerPage === `${option.page}`
-              ? 'btn-secondary'
-              : 'btn-warning'
-              }`}
+            className={`btn ${
+              currSizePerPage === `${option.page}`
+                ? 'btn-secondary'
+                : 'btn-warning'
+            }`}
           >
             {option.text}
           </option>
