@@ -48,8 +48,6 @@ const ExportJSON = (props: any): ReactElement => {
   const { exportFilters, dateField } = props;
   const conditions = getExportCondition(exportFilters, dateField);
 
-  console.log(conditions);
-
   const handleClick = async () => {
     const res = await fetch('/api/download_tables', {
       method: 'POST',

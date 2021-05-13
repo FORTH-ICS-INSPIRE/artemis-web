@@ -509,8 +509,6 @@ const BGPTableComponent = (props) => {
     key: hijackKey,
   });
 
-  console.log(_csrf);
-
   bgpCount =
     BGP_COUNT && BGP_COUNT.data ? BGP_COUNT.data.count_data.aggregate.count : 0;
 
@@ -671,16 +669,14 @@ const BGPTableComponent = (props) => {
     setPage(page);
     setSizePerPage(sizePerPage);
 
-    if (currentIndex && sizePerPage) {
-      setOffsetState(currentIndex);
-      setLimitState(sizePerPage);
-    }
+    if (currentIndex) setOffsetState(currentIndex);
+
+    if (sizePerPage) setLimitState(sizePerPage);
 
     if (sortOrder) setSortState(sortOrder);
     if (filters) {
       const keys = Object.keys(filters);
       keys.forEach((key) => {
-        console.log(key);
         if (filters[key])
           setStateValues({
             ...stateValues,
