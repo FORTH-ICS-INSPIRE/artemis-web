@@ -43,7 +43,7 @@ const ExportJSON = (props) => {
   const _csrf = props._csrf;
   const action = props.action;
   const { exportFilters, dateField } = props;
-  console.log(getExportCondition(exportFilters, dateField));
+
   const handleClick = async () => {
     const res = await fetch('/api/download_tables', {
       method: 'POST',
