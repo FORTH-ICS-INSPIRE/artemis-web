@@ -25,6 +25,7 @@ const handler = nc()
           }
         );
 
+
         res.cookie('remember_me', token, {
           path: '/',
           httpOnly: true,
