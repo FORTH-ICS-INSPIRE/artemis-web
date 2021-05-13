@@ -15,8 +15,7 @@ const handler = nc()
     const port: number = parseInt(process.env.API_PORT, 10);
 
     const resp = await fetch(
-      `http://${host}:${port}/${req.body.action}${
-        req.body.parameters ? '?and=' + req.body.parameters : ''
+      `http://${host}:${port}/${req.body.action}${req.body.parameters ? '?and=' + req.body.parameters : ''
       }`,
       {
         method: 'GET',
@@ -27,4 +26,4 @@ const handler = nc()
     res.json(await resp.json());
   });
 
-export default csrf(handler);
+export default handler;

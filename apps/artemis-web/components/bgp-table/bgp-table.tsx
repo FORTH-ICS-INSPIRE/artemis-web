@@ -511,6 +511,8 @@ const BGPTableComponent = (props) => {
     key: hijackKey,
   });
 
+  console.log(_csrf)
+
   bgpCount =
     BGP_COUNT && BGP_COUNT.data ? BGP_COUNT.data.count_data.aggregate.count : 0;
 
@@ -592,8 +594,8 @@ const BGPTableComponent = (props) => {
             value={option.text}
             onClick={() => onSizePerPageChange(option.page)}
             className={`btn ${currSizePerPage === `${option.page}`
-                ? 'btn-secondary'
-                : 'btn-warning'
+              ? 'btn-secondary'
+              : 'btn-warning'
               }`}
           >
             {option.text}
