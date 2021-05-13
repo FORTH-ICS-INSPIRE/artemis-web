@@ -341,7 +341,8 @@ const HijackTableComponent = (props) => {
     hasDateFilter: filter !== 0,
     dateRange: { dateTo: dateTo, dateFrom: dateFrom },
     hasStatusFilter: filterStatus ? filterStatus.length !== 0 : false,
-    statusFilter: `${getStatusField(filterStatus)}.eq.true`,
+    statusFilter: filterStatus && filterStatus.length !== 0
+      ? `${getStatusField(filterStatus)}.eq.true` : '',
   };
 
   const HIJACK_COUNT: any = useGraphQl('hijackCount', {
@@ -415,11 +416,10 @@ const HijackTableComponent = (props) => {
             key={option.text}
             value={option.text}
             onClick={() => onSizePerPageChange(option.page)}
-            className={`btn ${
-              currSizePerPage === `${option.page}`
+            className={`btn ${currSizePerPage === `${option.page}`
                 ? 'btn-secondary'
                 : 'btn-warning'
-            } `}
+              } `}
           >
             {option.text}
           </option>
