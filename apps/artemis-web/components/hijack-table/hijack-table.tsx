@@ -1,4 +1,3 @@
-import { Button } from '@material-ui/core';
 import { useGraphQl } from '../../utils/hooks/use-graphql';
 import Link from 'next/link';
 import React, { useState } from 'react';
@@ -24,13 +23,14 @@ import {
   getISODate,
   getSortCaret,
   getStatusField,
+  isNumeric,
   isObjectEmpty,
   shallSubscribe,
 } from '../../utils/token';
 import Tooltip from '../tooltip/tooltip';
 import ErrorBoundary from '../error-boundary/error-boundary';
 import { sendData } from '../../utils/fetch-data';
-import { useStyles } from '../../utils/styles';
+import ExportJSON from '../export-json/export-json';
 
 const getExactMatchFilter = (stateValue, fieldName) =>
   textFilter({
@@ -333,6 +333,18 @@ const HijackTableComponent = (props) => {
     type: '',
   });
 
+  const exportFilters = {
+    hasColumnFilter: !isObjectEmpty(columnFilter),
+    columnFilter: columnFilter,
+    hasDateFilter: filter !== 0,
+    dateRange: { dateTo: dateTo, dateFrom: dateFrom },
+    hasStatusFilter: filterStatus ? filterStatus.length !== 0 : false,
+    statusFilter:
+      filterStatus && filterStatus.length !== 0
+        ? `${getStatusField(filterStatus)}.eq.true`
+        : '',
+  };
+
   const HIJACK_COUNT: any = useGraphQl('hijackCount', {
     isLive: shallSubscribe(props.isLive),
     hasColumnFilter: !isObjectEmpty(columnFilter),
@@ -342,14 +354,13 @@ const HijackTableComponent = (props) => {
     hasStatusFilter: filterStatus ? filterStatus.length !== 0 : false,
     statusFilter:
       filterStatus && filterStatus.length !== 0
-        ? `{ ${getStatusField(filterStatus)} : {_eq: true } }`
+        ? `{ ${getStatusField(filterStatus)} : { _eq: true } }`
         : '',
   });
 
   const hijackCount = HIJACK_COUNT.data
     ? HIJACK_COUNT.data.count_data.aggregate.count
     : 0;
-
   useGraphQl('hijacks', {
     callback: (data) => {
       const processedData = handleData(
@@ -378,7 +389,7 @@ const HijackTableComponent = (props) => {
     hasStatusFilter: filterStatus ? filterStatus.length !== 0 : false,
     statusFilter:
       filterStatus && filterStatus.length !== 0
-        ? `{ ${getStatusField(filterStatus)} : {_eq: true } }`
+        ? `{ ${getStatusField(filterStatus)} : { _eq: true } } `
         : '',
   });
 
@@ -404,11 +415,10 @@ const HijackTableComponent = (props) => {
             key={option.text}
             value={option.text}
             onClick={() => onSizePerPageChange(option.page)}
-            className={`btn ${
-              currSizePerPage === `${option.page}`
+            className={`btn ${currSizePerPage === `${option.page}`
                 ? 'btn-secondary'
                 : 'btn-warning'
-            }`}
+              } `}
           >
             {option.text}
           </option>
@@ -469,43 +479,6 @@ const HijackTableComponent = (props) => {
         value: 100,
       },
     ], // A numeric array is also available. the purpose of above example is custom the text
-  };
-
-  const MyExportCSV = (props) => {
-    const handleClick = async () => {
-      const res = await fetch('/api/download_tables', {
-        method: 'POST',
-        credentials: 'include',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ action: 'view_hijacks', _csrf: _csrf }),
-      });
-      const x = window.open();
-      x.document.open();
-      x.document.write(
-        '<html><body><pre>' +
-          JSON.stringify(await res.json(), null, '\t') +
-          '</pre></body></html>'
-      );
-      x.document.close();
-    };
-
-    const classes = useStyles();
-
-    return (
-      <div style={{ display: 'inline' }}>
-        <Button
-          style={{ float: 'right', marginBottom: '10px' }}
-          variant="contained"
-          className={classes.button}
-          onClick={handleClick}
-        >
-          Download Table
-        </Button>
-      </div>
-    );
   };
 
   const HijackActions = (props) => {
@@ -588,8 +561,10 @@ const HijackTableComponent = (props) => {
     setPage(page);
     setSizePerPage(sizePerPage);
 
-    setOffsetState(currentIndex);
-    setLimitState(sizePerPage);
+    if (currentIndex && sizePerPage) {
+      setOffsetState(currentIndex);
+      setLimitState(sizePerPage);
+    }
     if (sortOrder) {
       setSortColumnState(sortField);
       setSortState(sortOrder);
@@ -599,7 +574,13 @@ const HijackTableComponent = (props) => {
 
       keys.forEach((key) => {
         if (filters[key])
-          setStateValues({ ...stateValues, [key]: filters[key].filterVal });
+          setStateValues({
+            ...stateValues,
+            [key]:
+              isNumeric(filters[key].filterVal) || key === 'rpki_status'
+                ? filters[key].filterVal
+                : -1,
+          });
         else setStateValues({ ...stateValues, [key]: '' });
       });
 
@@ -640,16 +621,40 @@ const HijackTableComponent = (props) => {
         return (
           <div>
             <div className="header-filter">
-              <SizePerPageDropdownStandalone {...paginationProps} />
-              <HijackActions
-                _csrf={_csrf}
-                data={hijackData}
-                hijackState={hijackState}
-                setHijackState={setHijackState}
-                selectState={selectState}
-                setSelectState={setSelectState}
-              />
-              <MyExportCSV {...toolkitprops.csvProps} />
+              <div className="row" style={{ marginBottom: '5px' }}>
+                <div className="col-lg-12">
+                  <ExportJSON
+                    action="view_hijacks"
+                    dateField={'time_last'}
+                    exportFilters={exportFilters}
+                    dateTo={dateTo}
+                    dateFrom={dateFrom}
+                    _csrf={_csrf}
+                    {...toolkitprops.csvProps}
+                  >
+                    Export JSON!!
+                  </ExportJSON>
+                  <HijackActions
+                    _csrf={_csrf}
+                    data={hijackData}
+                    hijackState={hijackState}
+                    setHijackState={setHijackState}
+                    selectState={selectState}
+                    setSelectState={setSelectState}
+                  />
+                </div>
+              </div>
+              <div className="row" style={{ marginBottom: '10px' }}>
+                <div className="col-lg-12">
+                  <div style={{ float: 'left' }}>
+                    <SizePerPageDropdownStandalone {...paginationProps} />
+                  </div>
+                  <div style={{ float: 'right' }}>
+                    {/* <PaginationTotalStandalone {...paginationProps} /> */}
+                    <PaginationListStandalone {...paginationProps} />
+                  </div>
+                </div>
+              </div>
             </div>
             <BootstrapTable
               remote
@@ -658,7 +663,7 @@ const HijackTableComponent = (props) => {
               data={hijackData}
               columns={getColumns(stateValues)}
               filter={filterFactory()}
-              filterPosition="bottom"
+              filterPosition="top"
               onTableChange={handleTableChange}
               striped
               condensed
@@ -683,8 +688,16 @@ const HijackTableComponent = (props) => {
               {...toolkitprops.baseProps}
               {...paginationTableProps}
             />
-            <PaginationTotalStandalone {...paginationProps} />
-            <PaginationListStandalone {...paginationProps} />
+            <div className="row">
+              <div className="col-lg-12">
+                <div style={{ float: 'right' }}>
+                  <PaginationListStandalone {...paginationProps} />
+                </div>
+                <div style={{ float: 'left' }}>
+                  <PaginationTotalStandalone {...paginationProps} />
+                </div>
+              </div>
+            </div>
           </div>
         );
       }}

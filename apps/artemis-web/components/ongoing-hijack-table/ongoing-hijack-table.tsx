@@ -25,8 +25,10 @@ import {
   expandColumnComponent,
   genTooltip,
   compareObjects,
+  isNumeric,
 } from '../../utils/token';
 import ErrorBoundary from '../error-boundary/error-boundary';
+import ExportJSON from '../export-json/export-json';
 import Tooltip from '../tooltip/tooltip';
 
 const getExpandRow = (expandState: any) => {
@@ -418,6 +420,16 @@ const OngoingHijackTableComponent = (props: any): ReactElement => {
     statusFilter: '{ active : {_eq: true } }, { dormant : {_eq: false}}',
   });
 
+  const exportFilters = {
+    hasColumnFilter: !isObjectEmpty(columnFilter),
+    columnFilter: columnFilter,
+    hasDateFilter: false,
+    hasStatusFilter: true,
+    statusFilter: 'active.eq.true,dormant.eq.false',
+  };
+
+  const _csrf = props._csrf;
+
   const customTotal = (from, to, size) => (
     <span className="react-bootstrap-table-pagination-total">
       Showing {from} to {to} of {size} entries
@@ -522,8 +534,11 @@ const OngoingHijackTableComponent = (props: any): ReactElement => {
     setPage(page);
     setSizePerPage(sizePerPage);
 
-    setOffsetState(currentIndex);
-    setLimitState(sizePerPage);
+    if (currentIndex && sizePerPage) {
+      setOffsetState(currentIndex);
+      setLimitState(sizePerPage);
+    }
+
     if (sortOrder) {
       setSortColumnState(sortField);
       setSortState(sortOrder);
@@ -533,7 +548,12 @@ const OngoingHijackTableComponent = (props: any): ReactElement => {
 
       keys.forEach((key) => {
         if (filters[key])
-          setStateValues({ ...stateValues, [key]: filters[key].filterVal });
+          setStateValues({
+            ...stateValues,
+            [key]: isNumeric(filters[key].filterVal)
+              ? filters[key].filterVal
+              : -1,
+          });
         else setStateValues({ ...stateValues, [key]: '' });
       });
 
@@ -557,8 +577,30 @@ const OngoingHijackTableComponent = (props: any): ReactElement => {
         paginationProps.dataSize = hijackCount;
         return (
           <>
-            <div className="header-filter">
-              <SizePerPageDropdownStandalone {...paginationProps} />
+            <div style={{ marginBottom: '10px' }} className="header-filter">
+              <div className="row">
+                <div className="col-lg-12">
+                  <ExportJSON
+                    action="view_hijacks"
+                    dateField={'time_last'}
+                    exportFilters={exportFilters}
+                    _csrf={_csrf}
+                    {...toolkitprops.csvProps}
+                  >
+                    Export JSON!!
+                  </ExportJSON>
+                </div>
+              </div>
+              <div className="row" style={{ marginTop: '10px' }}>
+                <div className="col-lg-12">
+                  <div style={{ float: 'left' }}>
+                    <SizePerPageDropdownStandalone {...paginationProps} />
+                  </div>
+                  <div style={{ float: 'right' }}>
+                    <PaginationListStandalone {...paginationProps} />
+                  </div>
+                </div>
+              </div>
             </div>
             <BootstrapTable
               remote
@@ -569,7 +611,7 @@ const OngoingHijackTableComponent = (props: any): ReactElement => {
               expandRow={getExpandRow(expandState)}
               filter={filterFactory()}
               onTableChange={handleTableChange}
-              filterPosition="bottom"
+              filterPosition="top"
               striped
               hover
               noDataIndication={() => {
@@ -590,8 +632,16 @@ const OngoingHijackTableComponent = (props: any): ReactElement => {
               {...toolkitprops.baseProps}
               {...paginationTableProps}
             />
-            <PaginationTotalStandalone {...paginationProps} />
-            <PaginationListStandalone {...paginationProps} />
+            <div className="row">
+              <div className="col-lg-12">
+                <div style={{ float: 'right' }}>
+                  <PaginationListStandalone {...paginationProps} />
+                </div>
+                <div style={{ float: 'left' }}>
+                  <PaginationTotalStandalone {...paginationProps} />
+                </div>
+              </div>
+            </div>
           </>
         );
       }}

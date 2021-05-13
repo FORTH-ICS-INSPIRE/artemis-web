@@ -76,6 +76,7 @@ const ViewHijackPage = (props) => {
   const hijackKey: string = router.query.key.toString() ?? '';
 
   const user = props.user;
+  const _csrf = props._csrf;
 
   useGraphQl('hijackByKey', {
     callback: (data) => {

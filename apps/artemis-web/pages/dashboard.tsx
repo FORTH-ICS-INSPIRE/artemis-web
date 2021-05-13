@@ -107,7 +107,7 @@ const DashboardPage = (props: any) => {
                   </div>
                   <div className="card-body" style={{ textAlign: 'center' }}>
                     {' '}
-                    <OngoingHijackTableComponent isLive={true} />
+                    <OngoingHijackTableComponent {...props} isLive={true} />
                   </div>
                 </div>
                 <span style={{ float: 'right', marginTop: '15px' }}>

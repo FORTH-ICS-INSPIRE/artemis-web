@@ -1,13 +1,9 @@
 // import { useSubscription } from '@apollo/client/react/hooks/useSubscription';
-import { Button } from '@material-ui/core';
-import { useStyles } from '../../utils/styles';
 import Link from 'next/link';
 import React, { useState } from 'react';
 import BootstrapTable from 'react-bootstrap-table-next';
 import filterFactory, {
-  Comparator,
   selectFilter,
-  textFilter,
 } from 'react-bootstrap-table2-filter';
 import paginationFactory, {
   PaginationListStandalone,
@@ -31,9 +27,11 @@ import {
   getExactMatchFilter,
   getTextFilter,
   compareObjects,
+  isNumeric,
 } from '../../utils/token';
 import ErrorBoundary from '../error-boundary/error-boundary';
 import Tooltip from '../tooltip/tooltip';
+import ExportJSON from '../export-json/export-json';
 
 const getExpandRow = (expandState, tooltips, setTooltips, context) => {
   return {
@@ -481,7 +479,7 @@ function handleData(
 }
 
 const BGPTableComponent = (props) => {
-  const { setFilteredBgpData, filter, hijackKey, filterTo } = props;
+  const { setFilteredBgpData, filter, hijackKey, filterTo, _csrf } = props;
   const [bgpData, setBgpData] = useState([]);
   const context = React.useContext(TooltipContext);
   const [tooltips, setTooltips] = useState({});
@@ -490,6 +488,15 @@ const BGPTableComponent = (props) => {
   const [columnFilter, setColumnFilter] = useState({});
   const dateFrom: string = getISODate(filter);
   const dateTo: string = getISODate(filterTo ?? 0);
+
+  const exportFilters = {
+    hasColumnFilter: !isObjectEmpty(columnFilter),
+    columnFilter: columnFilter,
+    hasDateFilter: filter !== 0,
+    dateRange: { dateTo: dateTo, dateFrom: dateFrom },
+    key: hijackKey,
+  };
+
   let bgpCount = 0;
 
   const BGP_COUNT: any = useGraphQl(hijackKey ? 'bgpCountByKey' : 'bgpCount', {
@@ -584,11 +591,10 @@ const BGPTableComponent = (props) => {
             key={option.text}
             value={option.text}
             onClick={() => onSizePerPageChange(option.page)}
-            className={`btn ${
-              currSizePerPage === `${option.page}`
+            className={`btn ${currSizePerPage === `${option.page}`
                 ? 'btn-secondary'
                 : 'btn-warning'
-            }`}
+              }`}
           >
             {option.text}
           </option>
@@ -655,43 +661,6 @@ const BGPTableComponent = (props) => {
       },
     ], // A numeric array is also available. the purpose of above example is custom the text
   };
-  const MyExportCSV = (props) => {
-    const handleClick = async () => {
-      const res = await fetch('/api/download_tables', {
-        method: 'POST',
-        credentials: 'include',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ action: 'view_bgpupdates' }),
-      });
-      const x = window.open();
-      x.document.open();
-      x.document.write(
-        '<html><body><pre>' +
-          JSON.stringify(await res.json(), null, '\t') +
-          '</pre></body></html>'
-      );
-      x.document.close();
-    };
-
-    const classes = useStyles();
-
-    return (
-      <div>
-        <Button
-          // className="btn btn-success"
-          style={{ float: 'right', marginBottom: '10px' }}
-          variant="contained"
-          className={classes.button}
-          onClick={handleClick}
-        >
-          Download Table
-        </Button>
-      </div>
-    );
-  };
 
   const handleTableChange = (
     type,
@@ -700,16 +669,25 @@ const BGPTableComponent = (props) => {
     const currentIndex = page * sizePerPage;
     setPage(page);
     setSizePerPage(sizePerPage);
-    setOffsetState(currentIndex);
-    setLimitState(sizePerPage);
+
+    if (currentIndex && sizePerPage) {
+      setOffsetState(currentIndex);
+      setLimitState(sizePerPage);
+    }
 
     if (sortOrder) setSortState(sortOrder);
     if (filters) {
       const keys = Object.keys(filters);
-
       keys.forEach((key) => {
+        console.log(key);
         if (filters[key])
-          setStateValues({ ...stateValues, [key]: filters[key].filterVal });
+          setStateValues({
+            ...stateValues,
+            [key]:
+              isNumeric(filters[key].filterVal) || key === 'service'
+                ? filters[key].filterVal
+                : -1,
+          });
         else setStateValues({ ...stateValues, [key]: '' });
       });
 
@@ -736,9 +714,30 @@ const BGPTableComponent = (props) => {
 
         return (
           <>
-            <div className="header-filter">
-              <SizePerPageDropdownStandalone {...paginationProps} />
-              <MyExportCSV {...toolkitprops.csvProps}>Export CSV!!</MyExportCSV>
+            <div style={{ marginBottom: '10px' }} className="header-filter">
+              <div className="row">
+                <div className="col-lg-12">
+                  <ExportJSON
+                    action="view_bgpupdates"
+                    _csrf={_csrf}
+                    dateField={'timestamp'}
+                    exportFilters={exportFilters}
+                    {...toolkitprops.csvProps}
+                  >
+                    Export JSON!!
+                  </ExportJSON>
+                </div>
+              </div>
+              <div className="row" style={{ marginTop: '10px' }}>
+                <div className="col-lg-12">
+                  <div style={{ float: 'left' }}>
+                    <SizePerPageDropdownStandalone {...paginationProps} />
+                  </div>
+                  <div style={{ float: 'right' }}>
+                    <PaginationListStandalone {...paginationProps} />
+                  </div>
+                </div>
+              </div>
             </div>
             <BootstrapTable
               remote
@@ -756,15 +755,22 @@ const BGPTableComponent = (props) => {
               striped
               hover
               condensed
-              filterPosition="bottom"
+              filterPosition="top"
               onTableChange={handleTableChange}
               noDataIndication={() => <h3>No bgp updates.</h3>}
               {...toolkitprops.baseProps}
               {...paginationTableProps}
             />
-
-            <PaginationTotalStandalone {...paginationProps} />
-            <PaginationListStandalone {...paginationProps} />
+            <div className="row">
+              <div className="col-lg-12">
+                <div style={{ float: 'right' }}>
+                  <PaginationListStandalone {...paginationProps} />
+                </div>
+                <div style={{ float: 'left' }}>
+                  <PaginationTotalStandalone {...paginationProps} />
+                </div>
+              </div>
+            </div>
           </>
         );
       }}
