@@ -89,8 +89,8 @@ const DashboardPage = (props: any) => {
                       (
                       {user &&
                         new Date(user.lastLogin).toLocaleDateString() +
-                        ' ' +
-                        new Date(user.lastLogin).toLocaleTimeString()}
+                          ' ' +
+                          new Date(user.lastLogin).toLocaleTimeString()}
                       )
                     </b>
                     . You are {user && user.role}.
@@ -107,7 +107,7 @@ const DashboardPage = (props: any) => {
                   </div>
                   <div className="card-body" style={{ textAlign: 'center' }}>
                     {' '}
-                    <OngoingHijackTableComponent isLive={true} />
+                    <OngoingHijackTableComponent {...props} isLive={true} />
                   </div>
                 </div>
                 <span style={{ float: 'right', marginTop: '15px' }}>

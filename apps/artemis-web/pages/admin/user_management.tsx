@@ -21,6 +21,7 @@ const UserManagementPage = (props) => {
   const promoteRef = React.createRef<HTMLSelectElement>();
   const demoteRef = React.createRef<HTMLSelectElement>();
   const deleteRef = React.createRef<HTMLSelectElement>();
+  const _csrf = props._csrf;
 
   autoLogout(props);
 
@@ -33,7 +34,11 @@ const UserManagementPage = (props) => {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ action: action, userName: userName }),
+      body: JSON.stringify({
+        action: action,
+        userName: userName,
+        _csrf: _csrf,
+      }),
     });
 
     if (res.status === 200) {

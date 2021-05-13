@@ -19,6 +19,11 @@ export const getRandomString = (len): string => {
   return buf.join('');
 };
 
+export const isNumeric = (str: any) => {
+  if (typeof str != 'string') return false; // we only process strings!
+  return !isNaN(parseFloat(str)); // ...and ensure strings of whitespace fail
+};
+
 const getRandomInt = (min, max): number => {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
@@ -33,20 +38,22 @@ const appendLeadingZeroes = (n): string => {
 export const formatDate = (date, incr = 0): string => {
   date.setHours(date.getHours() + incr);
 
-  const today = new Date()
-  const isToday = date.getDate() == today.getDate() &&
+  const today = new Date();
+  const isToday =
+    date.getDate() == today.getDate() &&
     date.getMonth() == today.getMonth() &&
     date.getFullYear() == today.getFullYear();
 
-  const isYesterday = date.getDate() == today.getDate() - 1 &&
+  const isYesterday =
+    date.getDate() == today.getDate() - 1 &&
     date.getMonth() == today.getMonth() &&
     date.getFullYear() == today.getFullYear();
 
-  const parsedDate = isToday ? "Today" : (isYesterday ? "Yesterday" : date.getFullYear() +
-    '-' +
-    (date.getMonth() + 1) +
-    '-' +
-    date.getDate());
+  const parsedDate = isToday
+    ? 'Today'
+    : isYesterday
+    ? 'Yesterday'
+    : date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
 
   return (
     parsedDate +
@@ -286,7 +293,7 @@ export const expandedColumnHeaderComponent = ({ isAnyExpands }) => {
   );
 };
 
-export const exportHijack = async (hijack_key) => {
+export const exportHijack = async (hijack_key, _csrf) => {
   const res = await fetch('/api/download_tables', {
     method: 'POST',
     credentials: 'include',
@@ -296,18 +303,21 @@ export const exportHijack = async (hijack_key) => {
     },
     body: JSON.stringify({
       action: 'view_hijacks',
+      _csrf: _csrf,
       parameters: '(key.eq.' + hijack_key + ')',
     }),
   });
 
-  const x = window.open();
-  x.document.open();
-  x.document.write(
-    '<html><body><pre>' +
-    JSON.stringify(await res.json(), null, '\t') +
-    '</pre></body></html>'
-  );
-  x.document.close();
+  function download(content, fileName, contentType) {
+    var a = document.createElement('a');
+    var file = new Blob([content], { type: contentType });
+    a.href = URL.createObjectURL(file);
+    a.download = fileName;
+    a.click();
+  }
+
+  const data = await res.json();
+  download(JSON.stringify(data), 'data.json', 'text/json');
 };
 
 export const GLOBAL_MEDIA_QUERIES = {
