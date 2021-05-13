@@ -1,13 +1,9 @@
 // import { useSubscription } from '@apollo/client/react/hooks/useSubscription';
-import { Button } from '@material-ui/core';
-import { useStyles } from '../../utils/styles';
 import Link from 'next/link';
 import React, { useState } from 'react';
 import BootstrapTable from 'react-bootstrap-table-next';
 import filterFactory, {
-  Comparator,
   selectFilter,
-  textFilter,
 } from 'react-bootstrap-table2-filter';
 import paginationFactory, {
   PaginationListStandalone,
@@ -595,11 +591,10 @@ const BGPTableComponent = (props) => {
             key={option.text}
             value={option.text}
             onClick={() => onSizePerPageChange(option.page)}
-            className={`btn ${
-              currSizePerPage === `${option.page}`
+            className={`btn ${currSizePerPage === `${option.page}`
                 ? 'btn-secondary'
                 : 'btn-warning'
-            }`}
+              }`}
           >
             {option.text}
           </option>
