@@ -103,9 +103,10 @@ class LearnRuleComponent extends Component<
       type_: type,
       prefix: prefix,
       action: 'approve',
+      _csrf: _csrf
     };
 
-    await fetch('/api/hijack', {
+    const hijack_resp = await fetch('/api/hijack', {
       method: 'POST',
       credentials: 'include',
       headers: {
@@ -124,10 +125,12 @@ class LearnRuleComponent extends Component<
       _csrf: _csrf,
     });
 
+    const hijack_resp_message = await hijack_resp.json();
+
     this.setState({
       isConfigSuccess: false,
-      success: true,
-      configMessage: 'Rule successfully installed!',
+      success: hijack_resp_message.success,
+      configMessage: hijack_resp_message.success ? 'Rule successfully installed!' : hijack_resp_message.configMessage,
     });
   }
 
@@ -168,7 +171,6 @@ class LearnRuleComponent extends Component<
   render() {
     const { classes } = this.props;
 
-    console.log(this.state);
     return (
       <div className="row">
         <div className="card" style={{ width: '100%' }}>
