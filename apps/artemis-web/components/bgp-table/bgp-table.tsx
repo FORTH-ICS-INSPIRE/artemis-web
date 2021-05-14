@@ -669,9 +669,12 @@ const BGPTableComponent = (props) => {
     setPage(page);
     setSizePerPage(sizePerPage);
 
-    if (currentIndex) setOffsetState(currentIndex);
+    console.log(currentIndex)
+    console.log(sizePerPage)
 
-    if (sizePerPage) setLimitState(sizePerPage);
+    setOffsetState(currentIndex);
+
+    setLimitState(sizePerPage);
 
     if (sortOrder) setSortState(sortOrder);
     if (filters) {

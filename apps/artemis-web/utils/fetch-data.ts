@@ -53,7 +53,7 @@ export const fetchTooltip = async (
 export const submitComment = async (
   e,
   { commentRef, hijackKey, _csrf }
-): Promise<void> => {
+): Promise<boolean> => {
   e.preventDefault();
   const editor: any = commentRef.current;
   const comment = editor.editor.innerText;
@@ -65,7 +65,7 @@ export const submitComment = async (
     _csrf: _csrf,
   };
 
-  await fetch('/api/hijack', {
+  const resp = await fetch('/api/hijack', {
     method: 'POST',
     credentials: 'include',
     headers: {
@@ -74,6 +74,8 @@ export const submitComment = async (
     },
     body: JSON.stringify(reqData),
   });
+
+  return (await resp.json()) === "Comment updated.";
 };
 
 export const sendData = async (

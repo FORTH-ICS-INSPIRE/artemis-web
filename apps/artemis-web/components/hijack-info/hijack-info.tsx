@@ -31,6 +31,7 @@ class HijackInfoComponent extends Component<any, any> {
       seenState: false,
       withdrawState: false,
       editComment: false,
+      commentSuccess: true,
     };
 
     this.isMobile = props.isMobile;
@@ -52,6 +53,7 @@ class HijackInfoComponent extends Component<any, any> {
     const hijackKey = this.hijackKey;
 
     const mRef = this.selectRef;
+    const setState = this.setState;
 
     return (
       <>
@@ -266,11 +268,11 @@ class HijackInfoComponent extends Component<any, any> {
                         } btn-md`}
                         onClick={(e) => {
                           if (this.state.editComment)
-                            submitComment(e, {
+                            setState({commentSuccess: submitComment(e, {
                               commentRef,
                               hijackKey,
                               _csrf: this.props._csrf,
-                            });
+                            })});
                           else commentRef.current.focus();
 
                           this.setState({
@@ -282,6 +284,7 @@ class HijackInfoComponent extends Component<any, any> {
                       </button>
                     </div>
                     <div className="card-body">
+                      <h1 style={{display: this.state.commentSuccess ? 'none' : 'block', color: 'red'}}> Config failed to update. </h1>
                       <Editor
                         ref={commentRef}
                         readOnly={!this.state.editComment}
