@@ -409,12 +409,14 @@ const HijackTableComponent = (props) => {
       <select
         style={{ width: '80px', marginLeft: '10px', marginRight: '10px' }}
         className="custom-select custom-select-sm form-control form-control-sm"
+        onChange={(event) =>
+          onSizePerPageChange(parseInt(event.target.value, 10))
+        }
       >
         {options.map((option) => (
           <option
             key={option.text}
             value={option.text}
-            onClick={() => onSizePerPageChange(option.page)}
             className={`btn ${
               currSizePerPage === `${option.page}`
                 ? 'btn-secondary'

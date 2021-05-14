@@ -103,7 +103,7 @@ class LearnRuleComponent extends Component<
       type_: type,
       prefix: prefix,
       action: 'approve',
-      _csrf: _csrf
+      _csrf: _csrf,
     };
 
     const hijack_resp = await fetch('/api/hijack', {
@@ -130,7 +130,9 @@ class LearnRuleComponent extends Component<
     this.setState({
       isConfigSuccess: false,
       success: hijack_resp_message.success,
-      configMessage: hijack_resp_message.success ? 'Rule successfully installed!' : hijack_resp_message.configMessage,
+      configMessage: hijack_resp_message.success
+        ? 'Rule successfully installed!'
+        : hijack_resp_message.configMessage,
     });
   }
 

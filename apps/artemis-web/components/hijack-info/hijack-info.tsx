@@ -268,11 +268,13 @@ class HijackInfoComponent extends Component<any, any> {
                         } btn-md`}
                         onClick={(e) => {
                           if (this.state.editComment)
-                            setState({commentSuccess: submitComment(e, {
-                              commentRef,
-                              hijackKey,
-                              _csrf: this.props._csrf,
-                            })});
+                            setState({
+                              commentSuccess: submitComment(e, {
+                                commentRef,
+                                hijackKey,
+                                _csrf: this.props._csrf,
+                              }),
+                            });
                           else commentRef.current.focus();
 
                           this.setState({
@@ -284,7 +286,15 @@ class HijackInfoComponent extends Component<any, any> {
                       </button>
                     </div>
                     <div className="card-body">
-                      <h1 style={{display: this.state.commentSuccess ? 'none' : 'block', color: 'red'}}> Config failed to update. </h1>
+                      <h1
+                        style={{
+                          display: this.state.commentSuccess ? 'none' : 'block',
+                          color: 'red',
+                        }}
+                      >
+                        {' '}
+                        Config failed to update.{' '}
+                      </h1>
                       <Editor
                         ref={commentRef}
                         readOnly={!this.state.editComment}

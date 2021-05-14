@@ -450,13 +450,15 @@ const OngoingHijackTableComponent = (props: any): ReactElement => {
       Show
       <select
         style={{ width: '80px', marginLeft: '10px', marginRight: '10px' }}
+        onChange={(event) =>
+          onSizePerPageChange(parseInt(event.target.value, 10))
+        }
         className="custom-select custom-select-sm form-control form-control-sm"
       >
         {options.map((option, i) => (
           <option
             key={i}
             value={option.text}
-            onClick={() => onSizePerPageChange(option.page)}
             className={`btn ${
               currSizePerPage === `${option.page}`
                 ? 'btn-secondary'

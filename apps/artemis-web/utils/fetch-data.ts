@@ -75,7 +75,7 @@ export const submitComment = async (
     body: JSON.stringify(reqData),
   });
 
-  return (await resp.json()) === "Comment updated.";
+  return (await resp.json()) === 'Comment updated.';
 };
 
 export const sendData = async (

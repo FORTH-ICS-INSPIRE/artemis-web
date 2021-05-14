@@ -579,16 +579,18 @@ const BGPTableComponent = (props) => {
     onSizePerPageChange,
   }) => (
     <div id="paging" className="btn-group" role="group">
-      Show
+      Shows
       <select
         style={{ width: '80px', marginLeft: '10px', marginRight: '10px' }}
+        onChange={(event) =>
+          onSizePerPageChange(parseInt(event.target.value, 10))
+        }
         className="custom-select custom-select-sm form-control form-control-sm"
       >
         {options.map((option) => (
           <option
             key={option.text}
             value={option.text}
-            onClick={() => onSizePerPageChange(option.page)}
             className={`btn ${
               currSizePerPage === `${option.page}`
                 ? 'btn-secondary'
@@ -668,9 +670,6 @@ const BGPTableComponent = (props) => {
     const currentIndex = page * sizePerPage;
     setPage(page);
     setSizePerPage(sizePerPage);
-
-    console.log(currentIndex)
-    console.log(sizePerPage)
 
     setOffsetState(currentIndex);
 
