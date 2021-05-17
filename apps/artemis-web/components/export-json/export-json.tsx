@@ -32,6 +32,8 @@ function getExportCondition(exportFilters, dateField = 'timestamp', type = '') {
             `${column}.eq.${filterValue.replace(/ -> |-> | -> |->/gi, '|')},`;
       });
     }
+    if (exportFilters.key)
+      condition = condition + `hijack_key.cs.{${exportFilters.key}},`;
     if (exportFilters.hasStatusFilter) {
       condition = condition + `${exportFilters.statusFilter}`;
     }
@@ -44,6 +46,7 @@ const ExportJSON = (props: any): ReactElement => {
   const _csrf = props._csrf;
   const action = props.action;
   const { exportFilters, dateField } = props;
+  const conditions = getExportCondition(exportFilters, dateField);
 
   const handleClick = async () => {
     const res = await fetch('/api/download_tables', {
@@ -56,7 +59,7 @@ const ExportJSON = (props: any): ReactElement => {
       body: JSON.stringify({
         action: action,
         _csrf: _csrf,
-        parameters: getExportCondition(exportFilters, dateField),
+        parameters: conditions && conditions.length > 2 ? conditions : null,
       }),
     });
     function download(content, fileName, contentType) {

@@ -2,9 +2,7 @@
 import Link from 'next/link';
 import React, { useState } from 'react';
 import BootstrapTable from 'react-bootstrap-table-next';
-import filterFactory, {
-  selectFilter,
-} from 'react-bootstrap-table2-filter';
+import filterFactory, { selectFilter } from 'react-bootstrap-table2-filter';
 import paginationFactory, {
   PaginationListStandalone,
   PaginationProvider,
@@ -581,20 +579,23 @@ const BGPTableComponent = (props) => {
     onSizePerPageChange,
   }) => (
     <div id="paging" className="btn-group" role="group">
-      Show
+      Shows
       <select
         style={{ width: '80px', marginLeft: '10px', marginRight: '10px' }}
+        onChange={(event) =>
+          onSizePerPageChange(parseInt(event.target.value, 10))
+        }
         className="custom-select custom-select-sm form-control form-control-sm"
       >
         {options.map((option) => (
           <option
             key={option.text}
             value={option.text}
-            onClick={() => onSizePerPageChange(option.page)}
-            className={`btn ${currSizePerPage === `${option.page}`
+            className={`btn ${
+              currSizePerPage === `${option.page}`
                 ? 'btn-secondary'
                 : 'btn-warning'
-              }`}
+            }`}
           >
             {option.text}
           </option>
@@ -670,16 +671,14 @@ const BGPTableComponent = (props) => {
     setPage(page);
     setSizePerPage(sizePerPage);
 
-    if (currentIndex && sizePerPage) {
-      setOffsetState(currentIndex);
-      setLimitState(sizePerPage);
-    }
+    setOffsetState(currentIndex);
+
+    setLimitState(sizePerPage);
 
     if (sortOrder) setSortState(sortOrder);
     if (filters) {
       const keys = Object.keys(filters);
       keys.forEach((key) => {
-        console.log(key);
         if (filters[key])
           setStateValues({
             ...stateValues,

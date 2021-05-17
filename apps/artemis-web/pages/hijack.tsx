@@ -220,6 +220,7 @@ const ViewHijackPage = (props) => {
                   </Dialog>
                   <BGPTableComponent
                     filter={0}
+                    _csrf={_csrf}
                     isLive={isLive}
                     setFilteredBgpData={setFilteredBgpData}
                     hijackKey={hijackKey}
