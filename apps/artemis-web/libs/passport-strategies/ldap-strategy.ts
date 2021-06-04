@@ -10,8 +10,9 @@ export const LdapStrategy = new Strategy({
     searchBase: process.env.LDAP_SEARCH_BASE,
     searchFilter: process.env.LDAP_SEARCH_FILTER,
     searchAttributes: process.env.LDAP_SEARCH_ATTRIBUTES?.split(','),
-    groupSearchFilter: '(member={{dn}})',
-    groupSearchBase: 'ou=people,dc=planetexpress,dc=com',
+    groupSearchBase: process.env.LDAP_GROUP_SEARCH_BASE,
+    groupSearchFilter: process.env.LDAP_GROUP_SEARCH_FILTER,
+    groupSearchAttributes: process.env.LDAP_GROUP_SEARCH_ATTRIBUTES
   },
   usernameField: 'email',
 });

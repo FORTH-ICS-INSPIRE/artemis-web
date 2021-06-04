@@ -23,7 +23,7 @@ export function extractLdapUser(req): any {
   let role = 'user';
 
   req.user._groups.forEach((group) => {
-    if (group.cn === process.env.LDAP_ADMIN_GROUP) {
+    if (process.env.LDAP_ADMIN_GROUP?.split(',').includes(group.cn)) {
       role = 'admin';
     }
   });
