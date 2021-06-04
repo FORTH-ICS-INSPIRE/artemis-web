@@ -21,7 +21,7 @@ describe('artemis-web', () => {
   it('[LDAP] admin logs out', () => {
     cy.visit('/dashboard');
     cy.get('#logout', { timeout: 2000 }).click({ force: true });
-    cy.wait(2000);
+    cy.waitFor('h1');
     cy.get('h1').should('have.text', 'Sign In');
   });
 
@@ -37,7 +37,7 @@ describe('artemis-web', () => {
   it('[LDAP] user logs out', () => {
     cy.visit('/dashboard');
     cy.get('#logout', { timeout: 2000 }).click({ force: true });
-    cy.wait(2000);
+    cy.waitFor('h1');
     cy.get('h1').should('have.text', 'Sign In');
   });
 });
