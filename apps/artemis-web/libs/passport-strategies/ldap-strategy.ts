@@ -12,7 +12,7 @@ export const LdapStrategy = new Strategy({
     searchAttributes: process.env.LDAP_SEARCH_ATTRIBUTES?.split(','),
     groupSearchBase: process.env.LDAP_GROUP_SEARCH_BASE,
     groupSearchFilter: process.env.LDAP_GROUP_SEARCH_FILTER,
-    groupSearchAttributes: process.env.LDAP_GROUP_SEARCH_ATTRIBUTES,
+    groupSearchAttributes: process.env.LDAP_GROUP_SEARCH_ATTRIBUTES?.split(','),
   },
   usernameField: 'email',
 });
