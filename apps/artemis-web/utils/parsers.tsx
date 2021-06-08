@@ -21,9 +21,13 @@ export function extractLdapUser(req): any {
 
   const mail = req.user[process.env.LDAP_EMAIL_FIELDNAME];
   let role = 'user';
+  const cnRegexp = /.*cn=(\S+),ou=.*/;
 
+  let groupCnMatch: any, groupCn: any;
   req.user._groups.forEach((group) => {
-    if (group.cn === process.env.LDAP_ADMIN_GROUP) {
+    groupCnMatch = group.dn?.match(cnRegexp);
+    groupCn = groupCnMatch[1];
+    if (process.env.LDAP_ADMIN_GROUP?.split(',').includes(groupCn)) {
       role = 'admin';
     }
   });
@@ -463,11 +467,11 @@ export async function extractHijackTooltips(hijack): Promise<any> {
   const tooltip1 =
     ASN_int_origin && ASN_int_origin.toString() !== '-'
       ? parseASNData(
-          ASN_int_origin,
-          name_origin,
-          countries_origin,
-          abuse_origin
-        )
+        ASN_int_origin,
+        name_origin,
+        countries_origin,
+        abuse_origin
+      )
       : '';
 
   const tooltip2 =
