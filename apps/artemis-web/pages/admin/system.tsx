@@ -19,7 +19,7 @@ const SystemPage = (props) => {
 
   useEffect(() => {
     autoLogout(props);
-  }, []);
+  }, [props]);
 
   const user = props.user;
 

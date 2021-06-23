@@ -45,7 +45,7 @@ const ViewHijackPage = (props) => {
 
   useEffect(() => {
     autoLogout(props);
-  }, []);
+  }, [props]);
 
   const {
     isLive,

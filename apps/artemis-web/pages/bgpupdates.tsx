@@ -40,7 +40,7 @@ const BGPUpdates = (props) => {
 
   useEffect(() => {
     autoLogout(props);
-  }, []);
+  }, [props]);
 
   const classes = useStyles();
 

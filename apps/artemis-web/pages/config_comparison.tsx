@@ -13,7 +13,7 @@ const ConfigComparisonPage = (props) => {
   }
   useEffect(() => {
     autoLogout(props);
-  }, []);
+  }, [props]);
 
   const user = props.user;
 

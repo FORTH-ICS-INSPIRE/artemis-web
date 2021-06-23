@@ -69,7 +69,7 @@ const UserManagementPage = (props) => {
         setErrorMsg((await res.json()).message);
       }
     })();
-  }, [user.email]);
+  }, [user.email, props]);
 
   return (
     <>

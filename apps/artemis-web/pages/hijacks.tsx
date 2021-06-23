@@ -38,7 +38,7 @@ const HijacksPage = (props) => {
 
   useEffect(() => {
     autoLogout(props);
-  }, []);
+  }, [props]);
 
   const [filterFrom, setFilterFrom] = useState(0);
   const [filterTo, setFilterTo] = useState(0);

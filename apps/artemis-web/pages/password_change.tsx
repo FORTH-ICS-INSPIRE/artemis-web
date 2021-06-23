@@ -11,7 +11,7 @@ const PasswordChangePage = (props) => {
 
   useEffect(() => {
     autoLogout(props);
-  }, []);
+  }, [props]);
 
   return (
     <>

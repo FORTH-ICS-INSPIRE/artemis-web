@@ -7,7 +7,7 @@ import { autoLogout } from '../utils/token';
 const PendingPage = (props) => {
   useEffect(() => {
     autoLogout(props);
-  }, []);
+  }, [props]);
 
   return (
     <>

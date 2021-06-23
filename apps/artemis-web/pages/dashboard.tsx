@@ -15,7 +15,7 @@ import { autoLogout, GLOBAL_MEDIA_QUERIES, shallMock } from '../utils/token';
 const DashboardPage = (props: any) => {
   useEffect(() => {
     autoLogout(props);
-  }, []);
+  }, [props]);
 
   if (shallMock()) {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
