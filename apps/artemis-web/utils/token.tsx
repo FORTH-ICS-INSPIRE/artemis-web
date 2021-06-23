@@ -373,7 +373,7 @@ export const autoLogout = (props: any): void => {
   }
 
   function warn() {
-    alert(`You will be logged out automatically in ${time / 2} seconds.`);
+    window.confirm(`You will be logged out automatically in ${time / 2} seconds.`);
   }
 
   function logout() {
