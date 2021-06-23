@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import React from 'react';
+import React, { useEffect } from 'react';
 import AuthHOC from '../components/401-hoc/401-hoc';
 import ConfigComparisonComponent from '../components/config-comparison/config-comparison';
 import { setup } from '../libs/csrf';
@@ -11,7 +11,9 @@ const ConfigComparisonPage = (props) => {
     const { worker } = require('../utils/mock-sw/browser');
     worker.start();
   }
-  autoLogout(props);
+  useEffect(() => {
+    autoLogout(props);
+  }, []);
 
   const user = props.user;
 

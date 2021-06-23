@@ -2,7 +2,7 @@ import { Grid } from '@material-ui/core';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/material.css';
 import Head from 'next/head';
-import React from 'react';
+import React, { useEffect } from 'react';
 import AuthHOC from '../../components/401-hoc/401-hoc';
 import SystemConfigurationComponent from '../../components/system-configuration/system-configuration';
 import SystemModule from '../../components/system-module/system-module';
@@ -17,7 +17,9 @@ const SystemPage = (props) => {
     worker.start();
   }
 
-  autoLogout(props);
+  useEffect(() => {
+    autoLogout(props);
+  }, []);
 
   const user = props.user;
 
@@ -39,11 +41,11 @@ const SystemPage = (props) => {
 
   const modules = processes
     ? processes.map((ps) => {
-        return [
-          ps['name'].charAt(0).toUpperCase() + ps['name'].slice(1),
-          ps['running'],
-        ];
-      })
+      return [
+        ps['name'].charAt(0).toUpperCase() + ps['name'].slice(1),
+        ps['running'],
+      ];
+    })
     : [];
 
   const modulesStateObj = {};

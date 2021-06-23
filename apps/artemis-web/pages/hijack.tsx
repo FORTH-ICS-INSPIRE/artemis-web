@@ -15,7 +15,7 @@ import 'draft-js/dist/Draft.css';
 import DefaultErrorPage from 'next/error';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useMedia } from 'react-media';
 import 'react-toastify/dist/ReactToastify.css';
 import AuthHOC from '../components/401-hoc/401-hoc';
@@ -43,7 +43,9 @@ const ViewHijackPage = (props) => {
     worker.start();
   }
 
-  autoLogout(props);
+  useEffect(() => {
+    autoLogout(props);
+  }, []);
 
   const {
     isLive,
@@ -125,7 +127,7 @@ const ViewHijackPage = (props) => {
       {user && hijackExists && (
         <div
           className="container overview col-lg-12"
-          // style={{ paddingTop: '120px' }}
+        // style={{ paddingTop: '120px' }}
         >
           <div className="row">
             <div className="col-lg-1" />

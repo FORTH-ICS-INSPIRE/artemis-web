@@ -7,7 +7,7 @@ import {
 } from '@material-ui/core';
 import Head from 'next/head';
 import Link from 'next/link';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useMedia } from 'react-media';
 import { RangePicker } from 'react-minimal-datetime-range';
 import 'react-minimal-datetime-range/lib/react-minimal-datetime-range.min.css';
@@ -36,7 +36,9 @@ const HijacksPage = (props) => {
     worker.start();
   }
 
-  autoLogout(props);
+  useEffect(() => {
+    autoLogout(props);
+  }, []);
 
   const [filterFrom, setFilterFrom] = useState(0);
   const [filterTo, setFilterTo] = useState(0);
@@ -91,7 +93,7 @@ const HijacksPage = (props) => {
       {user && (
         <div
           className="container overview col-lg-12"
-          // style={{ paddingTop: '120px' }}
+        // style={{ paddingTop: '120px' }}
         >
           <div className="row">
             <div className="col-lg-1" />

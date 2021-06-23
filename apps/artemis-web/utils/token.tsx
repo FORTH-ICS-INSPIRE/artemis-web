@@ -330,7 +330,7 @@ export const autoLogout = (props: any): void => {
     'scroll',
     'keypress',
   ];
-  const time = parseInt(process.env.NEXT_PUBLIC_INACTIVITY_TIMEOUT, 10);
+  const time = 10 //parseInt(process.env.NEXT_PUBLIC_INACTIVITY_TIMEOUT, 10);
 
   let warnTimeout: any;
   let logoutTimeout: any;
@@ -373,7 +373,7 @@ export const autoLogout = (props: any): void => {
   }
 
   function warn() {
-    window.confirm(`You will be logged out automatically in ${time / 2} seconds.`);
+    alert(`You will be logged out automatically in ${time / 2} seconds.`);
   }
 
   function logout() {

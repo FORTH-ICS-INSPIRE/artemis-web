@@ -22,8 +22,6 @@ const UserManagementPage = (props) => {
   const deleteRef = React.createRef<HTMLSelectElement>();
   const _csrf = props._csrf;
 
-  autoLogout(props);
-
   const manageUser = async (e, action, userName) => {
     e.preventDefault();
 
@@ -48,6 +46,7 @@ const UserManagementPage = (props) => {
   };
 
   useEffect(() => {
+    autoLogout(props);
     (async () => {
       const res = await fetch('/api/userlist', {
         method: 'GET',
