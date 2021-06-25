@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import React, { useState } from 'react';
 import { ReactElement } from 'react';
 import BootstrapTable from 'react-bootstrap-table-next';
@@ -313,6 +314,18 @@ const getColumns = (stateValues) => [
       ),
     text: 'Ack',
   },
+  {
+    dataField: 'more',
+    headerTitle: false,
+    headerFormatter: (column, colIndex, components) =>
+      genTooltip(
+        column,
+        components,
+        'more_title',
+        'Further information related to the hijack.'
+      ),
+    text: 'More',
+  },
 ];
 
 function handleData(data, tooltips, setTooltips, context, offset) {
@@ -349,6 +362,7 @@ function handleData(data, tooltips, setTooltips, context, offset) {
         ) : (
           <img alt="" src="./unhadled.png" />
         ),
+        more: <Link href={`/hijack?key=${row.key}`}>View</Link>,
       };
     });
   } else {
@@ -459,11 +473,10 @@ const OngoingHijackTableComponent = (props: any): ReactElement => {
           <option
             key={i}
             value={option.text}
-            className={`btn ${
-              currSizePerPage === `${option.page}`
-                ? 'btn-secondary'
-                : 'btn-warning'
-            }`}
+            className={`btn ${currSizePerPage === `${option.page}`
+              ? 'btn-secondary'
+              : 'btn-warning'
+              }`}
           >
             {option.text}
           </option>
@@ -609,7 +622,7 @@ const OngoingHijackTableComponent = (props: any): ReactElement => {
               keyField="id"
               data={hijackData}
               columns={getColumns(stateValues)}
-              expandRow={getExpandRow(expandState)}
+              // expandRow={getExpandRow(expandState)}
               filter={filterFactory()}
               onTableChange={handleTableChange}
               filterPosition="top"

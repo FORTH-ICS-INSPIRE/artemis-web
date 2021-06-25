@@ -1,5 +1,6 @@
+import { FormControlLabel, FormGroup } from '@material-ui/core';
 import Head from 'next/head';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useMedia } from 'react-media';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -10,6 +11,7 @@ import StatisticsTable from '../components/statistics-table/statistics-table';
 import StatusTable from '../components/status-table/status-table';
 import { setup } from '../libs/csrf';
 import { useGraphQl } from '../utils/hooks/use-graphql';
+import { AntSwitch } from '../utils/styles';
 import { autoLogout, GLOBAL_MEDIA_QUERIES, shallMock } from '../utils/token';
 
 const DashboardPage = (props: any) => {
@@ -23,7 +25,7 @@ const DashboardPage = (props: any) => {
     worker.start();
   }
 
-  // autoLogout();
+  const [isLive, setIsLive] = useState(true);
 
   const user = props.user;
   // const notify = (message: React.ReactText) => toast(message);
@@ -59,22 +61,27 @@ const DashboardPage = (props: any) => {
                   <div className="col-lg-8">
                     <h1 style={{ color: 'black' }}>Dashboard</h1>{' '}
                   </div>
-                  {/* <div className="col-lg-1">
-                    {process.env.NODE_ENV === 'development' && (
-                      <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={() => {
-                          // if (hijacks.length) {
-                          notify(`Example notification !`);
-                          // }
-                        }}
-                      >
-                        {' '}
-                        NOTIFY ME!
-                      </Button>
-                    )}
-                  </div> */}
+                  {matches.pc && (
+                    <div className="col-lg-2">
+                      <h2 style={{ color: 'black' }}>Live Update:</h2>{' '}
+                    </div>
+                  )}
+                  <div className="col-lg-1">
+                    <FormGroup>
+                      <FormControlLabel
+                        control={
+                          <AntSwitch
+                            onChange={() => {
+                              setIsLive(!isLive);
+                            }}
+                            size="medium"
+                            checked={isLive}
+                          />
+                        }
+                        label=""
+                      />
+                    </FormGroup>
+                  </div>
                 </div>
                 <hr style={{ backgroundColor: 'white' }} />
               </div>
@@ -109,7 +116,7 @@ const DashboardPage = (props: any) => {
                   </div>
                   <div className="card-body" style={{ textAlign: 'center' }}>
                     {' '}
-                    <OngoingHijackTableComponent {...props} isLive={true} />
+                    <OngoingHijackTableComponent {...props} isLive={isLive} />
                   </div>
                 </div>
                 <span style={{ float: 'right', marginTop: '15px' }}>
