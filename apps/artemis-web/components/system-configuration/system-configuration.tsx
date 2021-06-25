@@ -172,11 +172,9 @@ const SystemConfigurationComponent = (props) => {
                     )
                     : 'Never'}
                 </span>
-                <span style={{ float: 'right' }}>
-                  Times are shown in your local time zone GMT
-                  {new Date().getTimezoneOffset() < 0 ? '+' : ''}
-                  {-(new Date().getTimezoneOffset() / 60)} (
-                  {Intl.DateTimeFormat().resolvedOptions().timeZone}).
+                <span style={{ float: 'right', marginTop: '15px' }}>
+                  Times are shown in your local time zone{' '}
+                  <b>GMT{new Date().getTimezoneOffset() > 0 ? '-' : '+'}{Math.abs(new Date().getTimezoneOffset() / 60)} ({Intl.DateTimeFormat().resolvedOptions().timeZone}).</b>
                 </span>
               </div>
             </div>

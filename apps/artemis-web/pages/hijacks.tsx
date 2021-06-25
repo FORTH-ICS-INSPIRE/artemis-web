@@ -540,9 +540,9 @@ const HijacksPage = (props) => {
                   className="card-header"
                   style={{ backgroundColor: 'white' }}
                 >
-                  <span style={{ float: 'right' }}>
+                  <span style={{ float: 'right', marginTop: '15px' }}>
                     Times are shown in your local time zone{' '}
-                    <b>GMT+2 (Europe/Athens).</b>
+                    <b>GMT{new Date().getTimezoneOffset() > 0 ? '-' : '+'}{Math.abs(new Date().getTimezoneOffset() / 60)} ({Intl.DateTimeFormat().resolvedOptions().timeZone}).</b>
                   </span>
                 </div>
               </div>
