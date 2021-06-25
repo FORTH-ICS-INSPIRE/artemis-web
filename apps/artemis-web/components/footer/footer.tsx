@@ -9,6 +9,7 @@ type MyProps = {
     footer: string;
     link: string;
   };
+  system_version: string;
 };
 
 class FooterComponent extends React.Component<MyProps> {
