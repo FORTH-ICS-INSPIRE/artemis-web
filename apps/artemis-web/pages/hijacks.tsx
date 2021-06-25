@@ -91,7 +91,7 @@ const HijacksPage = (props) => {
       {user && (
         <div
           className="container overview col-lg-12"
-          // style={{ paddingTop: '120px' }}
+        // style={{ paddingTop: '120px' }}
         >
           <div className="row">
             <div className="col-lg-1" />
@@ -538,9 +538,9 @@ const HijacksPage = (props) => {
                   className="card-header"
                   style={{ backgroundColor: 'white' }}
                 >
-                  <span style={{ float: 'right' }}>
+                  <span style={{ float: 'right', marginTop: '15px' }}>
                     Times are shown in your local time zone{' '}
-                    <b>GMT+2 (Europe/Athens).</b>
+                    <b>GMT{new Date().getTimezoneOffset() > 0 ? '-' : '+'}{Math.abs(new Date().getTimezoneOffset() / 60)} ({Intl.DateTimeFormat().resolvedOptions().timeZone}).</b>
                   </span>
                 </div>
               </div>
