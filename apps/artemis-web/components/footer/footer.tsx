@@ -13,7 +13,7 @@ type MyProps = {
 
 class FooterComponent extends React.Component<MyProps> {
   render() {
-    const { classes } = this.props;
+    const { classes, system_version } = this.props;
     const { root, footer, link } = classes;
 
     return (
@@ -22,7 +22,7 @@ class FooterComponent extends React.Component<MyProps> {
           style={{ marginLeft: '0px', paddingLeft: '8.333333%' }}
           maxWidth="lg"
         >
-          ARTEMIS v.'{process.env.NEXT_PUBLIC_SYSTEM_VERSION}@
+          ARTEMIS v.'{system_version}@
           {process.env.NEXT_PUBLIC_REVISION || 'HEAD'}'
           {/* <Copyright _class={link} /> */}
         </Container>
@@ -31,9 +31,10 @@ class FooterComponent extends React.Component<MyProps> {
   }
 }
 
-const Footer = () => {
+const Footer = (props) => {
+  const system_version = props.system_version;
   const classes = useFooterStyles();
-  return <FooterComponent classes={classes} />;
+  return <FooterComponent system_version={system_version} classes={classes} />;
 };
 
 export default Footer;

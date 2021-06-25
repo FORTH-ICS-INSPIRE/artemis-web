@@ -31,7 +31,7 @@ export default class Layout extends React.Component<any> {
         <div className="layout">
           <Header {...props} />
           <div className="main-container">{children}</div>
-          <Footer />
+          <Footer system_version={this.props.system_version}/>
         </div>
       </>
     );
