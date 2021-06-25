@@ -7,7 +7,7 @@ import {
   Switch,
 } from '@material-ui/core';
 import Head from 'next/head';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useMedia } from 'react-media';
 import { RangePicker } from 'react-minimal-datetime-range';
 import 'react-minimal-datetime-range/lib/react-minimal-datetime-range.min.css';
@@ -38,7 +38,9 @@ const BGPUpdates = (props) => {
     worker.start();
   }
 
-  autoLogout(props);
+  useEffect(() => {
+    autoLogout(props);
+  }, [props]);
 
   const classes = useStyles();
 

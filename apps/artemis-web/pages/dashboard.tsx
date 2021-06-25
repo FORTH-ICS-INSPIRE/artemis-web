@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useMedia } from 'react-media';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -13,7 +13,9 @@ import { useGraphQl } from '../utils/hooks/use-graphql';
 import { autoLogout, GLOBAL_MEDIA_QUERIES, shallMock } from '../utils/token';
 
 const DashboardPage = (props: any) => {
-  autoLogout(props);
+  useEffect(() => {
+    autoLogout(props);
+  }, [props]);
 
   if (shallMock()) {
     // eslint-disable-next-line @typescript-eslint/no-var-requires

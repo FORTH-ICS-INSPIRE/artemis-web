@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import React from 'react';
+import React, { useEffect } from 'react';
 import AuthHOC from '../components/401-hoc/401-hoc';
 import PasswordChangeComponent from '../components/password-change/password-change';
 import { setup } from '../libs/csrf';
@@ -9,7 +9,9 @@ import { autoLogout } from '../utils/token';
 const PasswordChangePage = (props) => {
   const [user, loading] = useJWT();
 
-  autoLogout(props);
+  useEffect(() => {
+    autoLogout(props);
+  }, [props]);
 
   return (
     <>
