@@ -26,8 +26,45 @@ services:
     container_name: artemis_web
     networks:
       - proxy-net
-    env_file:
-      - .env
+    environment:
+      HASURA_SECRET: "@rt3m1s."
+      JWT_SECRET: "44fe431cdc896ccab691ad0599f4e0a12690ce1ededebe57b825823bc6b4d24f"
+      DEFAULT_EMAIL: "admin@admin.com"
+      DEFAULT_PASS: "admin1234"
+      MONGODB_USER: "admin"
+      MONGODB_PASS: "pass"
+      MONGODB_HOST: "mongodb"
+      MONGODB_PORT: 27017
+      MONGODB_NAME: "artemis-web"
+      LDAP_ENABLED: "true"
+      LDAP_HOST: "ldap"
+      LDAP_PORT: 10389
+      LDAP_PROTOCOL: "ldap"
+      LDAP_BIND_DN: "cn=admin,dc=planetexpress,dc=com"
+      LDAP_BIND_SECRET: "GoodNewsEveryone"
+      LDAP_SEARCH_BASE: "ou=people,dc=planetexpress,dc=com"
+      LDAP_SEARCH_FILTER: "(mail={{username}})"
+      LDAP_SEARCH_ATTRIBUTES: "mail,uid"
+      LDAP_GROUP_SEARCH_BASE: "ou=people,dc=planetexpress,dc=com"
+      LDAP_GROUP_SEARCH_FILTER: "(member={{dn}})"
+      LDAP_GROUP_SEARCH_ATTRIBUTES: "mail,uid"
+      LDAP_EMAIL_FIELDNAME: "mail"
+      LDAP_ADMIN_GROUP: "admin_staff"
+      CONFIG_HOST: "configuration"
+      CONFIG_PORT: 3000
+      API_HOST: "postgrest"
+      API_PORT: "3000"
+      DATABASE_HOST: "database"
+      RABBITMQ_USER: "guest"
+      RABBITMQ_PASS: "guest"
+      RABBITMQ_HOST: "rabbitmq"
+      RABBITMQ_PORT: 5672
+      CSRF_SECRET: "P*3NGEEaJV3yUGDJA9428EQRg!ad"
+      NEXT_PUBLIC_SYSTEM_VERSION: "latest"
+      TESTING: "false"
+      SESSION_TIMEOUT: 1800
+      NEXT_PUBLIC_INACTIVITY_TIMEOUT: 900
+      API_KEY: "29870959469dc320ff80c02dcccaf0a62394459e22e6acfdce7cf40f94281d85"
     ports:
       - 4200:4200
     depends_on:
@@ -39,8 +76,8 @@ services:
     networks:
       - proxy-net
     environment:
-      MONGO_INITDB_ROOT_USERNAME: ${MONGODB_USER}
-      MONGO_INITDB_ROOT_PASSWORD: ${MONGODB_PASS}
+      MONGO_INITDB_ROOT_USERNAME: "admin"
+      MONGO_INITDB_ROOT_PASSWORD: "pass"
     volumes:
       - ./mongo-data:/data/db
   ldap:
