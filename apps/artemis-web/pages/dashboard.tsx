@@ -89,8 +89,8 @@ const DashboardPage = (props: any) => {
                       (
                       {user &&
                         new Date(user.lastLogin).toLocaleDateString() +
-                          ' ' +
-                          new Date(user.lastLogin).toLocaleTimeString()}
+                        ' ' +
+                        new Date(user.lastLogin).toLocaleTimeString()}
                       )
                     </b>
                     . You are {user && user.role}.
@@ -112,7 +112,7 @@ const DashboardPage = (props: any) => {
                 </div>
                 <span style={{ float: 'right', marginTop: '15px' }}>
                   Times are shown in your local time zone{' '}
-                  <b>GMT+2 (Europe/Athens).</b>
+                  <b>GMT{new Date().getTimezoneOffset() > 0 ? '-' : '+'}{Math.abs(new Date().getTimezoneOffset() / 60)} ({Intl.DateTimeFormat().resolvedOptions().timeZone}).</b>
                 </span>
               </div>
               {!matches.pc && (

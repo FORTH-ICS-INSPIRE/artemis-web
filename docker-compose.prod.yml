@@ -33,7 +33,7 @@ services:
     depends_on:
       - mongodb
   mongodb:
-    image: mongo:latest
+    image: mongo:4.4.6-bionic
     container_name: mongodb
     restart: always
     networks:
