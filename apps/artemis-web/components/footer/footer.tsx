@@ -32,7 +32,7 @@ class FooterComponent extends React.Component<MyProps> {
   }
 }
 
-const Footer = (props: any): unknown => {
+const Footer = (props: any): any => {
   const system_version = props.system_version;
   const classes = useFooterStyles();
   return <FooterComponent system_version={system_version} classes={classes} />;
