@@ -13,7 +13,6 @@ import paginationFactory, {
   SizePerPageDropdownStandalone,
 } from 'react-bootstrap-table2-paginator';
 import ToolkitProvider from 'react-bootstrap-table2-toolkit';
-import ReactTooltip from 'react-tooltip';
 import TooltipContext from '../../context/tooltip-context';
 import { useGraphQl } from '../../utils/hooks/use-graphql';
 import {
