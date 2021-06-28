@@ -289,7 +289,7 @@ function extractHijackInfoLeft(
       ),
     ],
     Config: [
-      formatDate(new Date(hijack.timestamp_of_config), 2),
+      formatDate(new Date(hijack.timestamp_of_config), Math.abs(new Date().getTimezoneOffset() / 60)),
       genTooltip(
         'Config:',
         null,
@@ -321,7 +321,7 @@ function extractHijackInfoRight(hijack) {
       ),
     ],
     'Time Detected': [
-      formatDate(new Date(hijack.time_detected), 2),
+      formatDate(new Date(hijack.time_detected), Math.abs(new Date().getTimezoneOffset() / 60)),
       genTooltip(
         'Time Detected:',
         null,
@@ -330,7 +330,7 @@ function extractHijackInfoRight(hijack) {
       ),
     ],
     'Last Update': [
-      hijack.time_last ? formatDate(new Date(hijack.time_last), 2) : 'Never',
+      hijack.time_last ? formatDate(new Date(hijack.time_last), Math.abs(new Date().getTimezoneOffset() / 60)) : 'Never',
       genTooltip(
         'Last Update:',
         null,
@@ -339,7 +339,7 @@ function extractHijackInfoRight(hijack) {
       ),
     ],
     'Time Ended': [
-      hijack.time_ended ? formatDate(new Date(hijack.time_ended), 2) : 'Never',
+      hijack.time_ended ? formatDate(new Date(hijack.time_ended), Math.abs(new Date().getTimezoneOffset() / 60)) : 'Never',
       genTooltip(
         'Time Ended:',
         null,

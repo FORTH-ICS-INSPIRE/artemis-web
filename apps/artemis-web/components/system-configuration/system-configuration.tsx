@@ -168,7 +168,7 @@ const SystemConfigurationComponent = (props) => {
                   {CONFIG_DATA
                     ? formatDate(
                       new Date(CONFIG_DATA.view_configs[0].time_modified),
-                      2
+                      Math.abs(new Date().getTimezoneOffset() / 60)
                     )
                     : 'Never'}
                 </span>

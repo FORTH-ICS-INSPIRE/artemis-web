@@ -450,7 +450,7 @@ function handleData(
   bgp = bgp.map((row, i) =>
     fromEntries(
       Object.entries(row).map(([key, value]: [string, any]) => {
-        if (key === 'timestamp') return [key, formatDate(new Date(value), 3)];
+        if (key === 'timestamp') return [key, formatDate(new Date(value), Math.abs(new Date().getTimezoneOffset() / 60))];
         else if (key === 'service') return [key, value.replace(/\|/g, ' -> ')];
         else if (key === 'as_path') return [key, value];
         else if (key === 'handled')
@@ -591,11 +591,10 @@ const BGPTableComponent = (props) => {
           <option
             key={option.text}
             value={option.text}
-            className={`btn ${
-              currSizePerPage === `${option.page}`
-                ? 'btn-secondary'
-                : 'btn-warning'
-            }`}
+            className={`btn ${currSizePerPage === `${option.page}`
+              ? 'btn-secondary'
+              : 'btn-warning'
+              }`}
           >
             {option.text}
           </option>
