@@ -20,10 +20,12 @@ class HijackInfoComponent extends Component<any, any> {
   commentRef: any;
   isMobile: any;
   selectRef: any;
+  user: any;
 
   constructor(props) {
     super(props);
     this.classes = props.classes;
+    this.user = props.user;
     this.setOpenModalState = props.setOpenModalState;
     this.hijackKey = props.hijackKey;
 
@@ -175,7 +177,7 @@ class HijackInfoComponent extends Component<any, any> {
             </div>
           </div>
 
-          {!this.isMobile && (
+          {!this.isMobile && this.user.role === 'admin' && (
             <div className="col-lg-3">
               <div className="row" style={{ marginBottom: '15px' }}>
                 <div className="col-lg-12">
@@ -233,8 +235,8 @@ class HijackInfoComponent extends Component<any, any> {
                           mRef.current.value === 'hijack_action_ignore'
                             ? this.setOpenModalState(true)
                             : mRef.current.value === 'hijack_action_export'
-                            ? exportHijack(hijackKey, this.props._csrf)
-                            : sendHijackData(e, {
+                              ? exportHijack(hijackKey, this.props._csrf)
+                              : sendHijackData(e, {
                                 hijackKey: hijackKey,
                                 selectState: mRef.current.value,
                                 prefix: this.props.hijackDataState.prefix,
@@ -263,9 +265,8 @@ class HijackInfoComponent extends Component<any, any> {
                         style={{ marginRight: '5px', float: 'right' }}
                         id="edit_comment"
                         type="button"
-                        className={`btn btn-${
-                          !this.state.editComment ? 'primary' : 'secondary'
-                        } btn-md`}
+                        className={`btn btn-${!this.state.editComment ? 'primary' : 'secondary'
+                          } btn-md`}
                         onClick={(e) => {
                           if (this.state.editComment)
                             setState({

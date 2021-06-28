@@ -1,4 +1,5 @@
 import { parseASNData } from './parsers';
+import { toast } from 'react-toastify';
 
 function getName(ASN: number) {
   return fetch(
@@ -9,14 +10,14 @@ function getName(ASN: number) {
 function getCountry(ASN: number) {
   return fetch(
     'https://stat.ripe.net/data/maxmind-geo-lite-announced-by-as/data.json?resource=AS' +
-      ASN
+    ASN
   ).then((response) => response.json());
 }
 
 function getAbuse(ASN: number) {
   return fetch(
     'https://stat.ripe.net/data/abuse-contact-finder/data.json?resource=AS' +
-      ASN
+    ASN
   ).then((response) => response.json());
 }
 
@@ -143,6 +144,10 @@ export const sendHijackData = async (
     },
     body: JSON.stringify(reqData),
   });
+
+  if (res.status === 401) {
+    toast("You do not have permission for this action!");
+  }
 
   if (res.status === 200 && selectState === 'hijack_action_delete')
     window.location.replace('/hijacks');
