@@ -58,7 +58,7 @@ const UserManagementPage = (props) => {
           (cUser) => cUser.email !== user.email
         );
         list = list.map((user) => {
-          user.lastLogin = formatDate(new Date(user.lastLogin), 2);
+          user.lastLogin = formatDate(new Date(user.lastLogin), Math.abs(new Date().getTimezoneOffset() / 60));
           return user;
         });
         setUserList(list);
@@ -299,5 +299,5 @@ const UserManagementPage = (props) => {
 export default AuthHOC(UserManagementPage, ['admin']);
 
 export const getServerSideProps = setup(async (req, res, csrftoken) => {
-  return { props: { _csrf: csrftoken,  _inactivity_timeout: process.env.INACTIVITY_TIMEOUT, system_version: process.env.SYSTEM_VERSION } };
+  return { props: { _csrf: csrftoken, _inactivity_timeout: process.env.INACTIVITY_TIMEOUT, system_version: process.env.SYSTEM_VERSION } };
 });
