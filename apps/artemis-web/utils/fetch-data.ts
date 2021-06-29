@@ -145,7 +145,7 @@ export const sendHijackData = async (
     body: JSON.stringify(reqData),
   });
 
-  if (res.status === 401) {
+  if (res.status === 403) {
     toast("You do not have permission for this action!");
   }
 
