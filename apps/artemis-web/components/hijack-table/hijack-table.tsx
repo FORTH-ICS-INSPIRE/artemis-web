@@ -418,8 +418,8 @@ const HijackTableComponent = (props) => {
             key={option.text}
             value={option.text}
             className={`btn ${currSizePerPage === `${option.page}`
-              ? 'btn-secondary'
-              : 'btn-warning'
+                ? 'btn-secondary'
+                : 'btn-warning'
               } `}
           >
             {option.text}
