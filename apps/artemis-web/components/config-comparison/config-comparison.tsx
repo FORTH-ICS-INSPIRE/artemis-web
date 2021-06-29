@@ -129,7 +129,7 @@ class ConfigComparisonComponent extends Component<unknown, stateType> {
                     {this.state.configs.map((config, i) => {
                       return (
                         <option value={i} key={i}>
-                          {formatDate(new Date(config.time_modified), 2)}
+                          {formatDate(new Date(config.time_modified), Math.abs(new Date().getTimezoneOffset() / 60))}
                         </option>
                       );
                     })}
@@ -147,7 +147,7 @@ class ConfigComparisonComponent extends Component<unknown, stateType> {
                     {this.state.configs.map((config, i) => {
                       return (
                         <option value={i} key={i}>
-                          {formatDate(new Date(config.time_modified), 2)}
+                          {formatDate(new Date(config.time_modified), Math.abs(new Date().getTimezoneOffset() / 60))}
                         </option>
                       );
                     })}
