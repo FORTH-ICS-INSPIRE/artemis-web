@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import React, { useState } from 'react';
 import { ReactElement } from 'react';
 import BootstrapTable from 'react-bootstrap-table-next';
@@ -12,7 +13,6 @@ import paginationFactory, {
   SizePerPageDropdownStandalone,
 } from 'react-bootstrap-table2-paginator';
 import ToolkitProvider from 'react-bootstrap-table2-toolkit';
-import ReactTooltip from 'react-tooltip';
 import TooltipContext from '../../context/tooltip-context';
 import { useGraphQl } from '../../utils/hooks/use-graphql';
 import {
@@ -20,9 +20,7 @@ import {
   getSortCaret,
   isObjectEmpty,
   shallSubscribe,
-  expandedColumnHeaderComponent,
   getExactMatchFilter,
-  expandColumnComponent,
   genTooltip,
   compareObjects,
   isNumeric,
@@ -30,133 +28,6 @@ import {
 import ErrorBoundary from '../error-boundary/error-boundary';
 import ExportJSON from '../export-json/export-json';
 import Tooltip from '../tooltip/tooltip';
-
-const getExpandRow = (expandState: any) => {
-  return {
-    showExpandColumn: true,
-    expandByColumnOnly: true,
-    expandColumnPosition: 'right',
-    expanded: expandState,
-    expandColumnRenderer: expandColumnComponent,
-    expandHeaderColumnRenderer: expandedColumnHeaderComponent,
-    renderer: (row: any) => {
-      return (
-        <table>
-          <thead></thead>
-          <tbody>
-            <tr>
-              <td>
-                <b>
-                  <div data-tip data-for={'hprefix_exp'}>
-                    {<span>{'Hijacked Prefix'}</span>}
-                  </div>
-                  <ReactTooltip html={true} id={'hprefix_exp'}>
-                    {'The IPv4/IPv6 prefix that was hijacked.'}
-                  </ReactTooltip>
-                </b>
-              </td>
-              <td>{row.prefix.toString()}</td>
-            </tr>
-            <tr>
-              <td>
-                <b>
-                  <div data-tip data-for={'mprefix_exp'}>
-                    {<span>{'Hijacked Prefix'}</span>}
-                  </div>
-                  <ReactTooltip html={true} id={'mprefix_exp'}>
-                    {
-                      'The configured IPv4/IPv6 prefix that matched the hijacked prefix.'
-                    }
-                  </ReactTooltip>
-                </b>
-              </td>
-              <td>{row.configured_prefix.toString()}</td>
-            </tr>
-            <tr>
-              <td>
-                <b>
-                  <div data-tip data-for={'type_exp'}>
-                    {<span>{'Type'}</span>}
-                  </div>
-                  <ReactTooltip html={true} id={'type_exp'}>
-                    {
-                      'The type of the hijack in 4 dimensions: prefix|path|data plane|policy.'
-                    }
-                  </ReactTooltip>
-                </b>
-              </td>
-              <td>{row.type}</td>
-            </tr>
-            <tr>
-              <td>
-                <b>
-                  <div data-tip data-for={'rpki_exp'}>
-                    {<span>{'RPKI'}</span>}
-                  </div>
-                  <ReactTooltip html={true} id={'rpki_exp'}>
-                    {'The RPKI status of the hijacked prefix.'}
-                  </ReactTooltip>
-                </b>
-              </td>
-              <td>{row.rpki_status.toString()}</td>
-            </tr>
-            <tr>
-              <td>
-                <b>
-                  <div data-tip data-for={'seen_exp'}>
-                    {<span>{'# Peers Seen'}</span>}
-                  </div>
-                  <ReactTooltip html={true} id={'seen_exp'}>
-                    {
-                      'Number of peers/monitors (i.e., ASNs)<br>that have seen hijack updates.'
-                    }
-                  </ReactTooltip>
-                </b>
-              </td>
-              <td>{row.num_peers_seen.toString()}</td>
-            </tr>
-            <tr>
-              <td>
-                <b>
-                  <div data-tip data-for={'inf_exp'}>
-                    {<span>{'# ASes Infected'}</span>}
-                  </div>
-                  <ReactTooltip html={true} id={'inf_exp'}>
-                    {
-                      'Number of infected ASes that seem to<br>route traffic towards the hijacker AS.<br>Note that this is an experimental field.'
-                    }
-                  </ReactTooltip>
-                </b>
-              </td>
-              <td>{row.num_asns_inf.toString()}</td>
-            </tr>
-            <tr>
-              <td>
-                <b>
-                  <div data-tip data-for={'ack_exp'}>
-                    {<span>{'ACK'}</span>}
-                  </div>
-                  <ReactTooltip html={true} id={'ack_exp'}>
-                    {
-                      'Whether the user has acknowledged/confirmed the hijack as a true positive.<br>If the resolve|mitigate buttons are pressed this<br>is automatically set to True (default value: False).'
-                    }
-                  </ReactTooltip>
-                </b>
-              </td>
-              <td>
-                {row.resolved || row.under_mitigation ? (
-                  <img alt="" src="./handled.png" />
-                ) : (
-                  <img alt="" src="./unhadled.png" />
-                )}
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      );
-    },
-  };
-};
 
 const getColumns = (stateValues) => [
   {
@@ -313,6 +184,18 @@ const getColumns = (stateValues) => [
       ),
     text: 'Ack',
   },
+  {
+    dataField: 'more',
+    headerTitle: false,
+    headerFormatter: (column, colIndex, components) =>
+      genTooltip(
+        column,
+        components,
+        'more_title',
+        'Further information related to the hijack.'
+      ),
+    text: 'More',
+  },
 ];
 
 function handleData(data, tooltips, setTooltips, context, offset) {
@@ -323,8 +206,8 @@ function handleData(data, tooltips, setTooltips, context, offset) {
     hijacks = HIJACK_DATA.map((row, i) => {
       return {
         id: i,
-        time_last: formatDate(new Date(row.time_last), 3),
-        time_detected: formatDate(new Date(row.time_detected), 3),
+        time_last: formatDate(new Date(row.time_last), Math.abs(new Date().getTimezoneOffset() / 60)),
+        time_detected: formatDate(new Date(row.time_detected), Math.abs(new Date().getTimezoneOffset() / 60)),
         prefix: row.prefix,
         configured_prefix: row.configured_prefix,
         type: row.type,
@@ -349,6 +232,7 @@ function handleData(data, tooltips, setTooltips, context, offset) {
         ) : (
           <img alt="" src="./unhadled.png" />
         ),
+        more: <Link href={`/hijack?key=${row.key}`}>View</Link>,
       };
     });
   } else {
@@ -369,7 +253,6 @@ const OngoingHijackTableComponent = (props: any): ReactElement => {
   const [page, setPage] = useState(0);
   const [sizePerPage, setSizePerPage] = useState(10);
   const [columnFilter, setColumnFilter] = useState({});
-  const expandState = [];
   const [limitState, setLimitState] = useState(10);
   const [offsetState, setOffsetState] = useState(0);
   const [sortState, setSortState] = useState('desc');
@@ -459,11 +342,10 @@ const OngoingHijackTableComponent = (props: any): ReactElement => {
           <option
             key={i}
             value={option.text}
-            className={`btn ${
-              currSizePerPage === `${option.page}`
+            className={`btn ${currSizePerPage === `${option.page}`
                 ? 'btn-secondary'
                 : 'btn-warning'
-            }`}
+              }`}
           >
             {option.text}
           </option>
@@ -609,7 +491,7 @@ const OngoingHijackTableComponent = (props: any): ReactElement => {
               keyField="id"
               data={hijackData}
               columns={getColumns(stateValues)}
-              expandRow={getExpandRow(expandState)}
+              // expandRow={getExpandRow(expandState)}
               filter={filterFactory()}
               onTableChange={handleTableChange}
               filterPosition="top"

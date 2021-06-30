@@ -179,9 +179,9 @@ function handleData(dataplaneData, tooltips, setTooltips, context) {
     fromEntries(
       Object.entries(row).map(([key, value]: [string, any]) => {
         if (key === 'msm_start_time')
-          return [key, formatDate(new Date(value), 2)];
+          return [key, formatDate(new Date(value), Math.abs(new Date().getTimezoneOffset() / 60))];
         else if (key === 'msm_stop_time')
-          return [key, formatDate(new Date(value), 2)];
+          return [key, formatDate(new Date(value), Math.abs(new Date().getTimezoneOffset() / 60))];
         else return [key, value];
       })
     )
@@ -270,11 +270,10 @@ const DataplaneTableComponent = (props) => {
             key={option.text}
             value={option.text}
             onClick={() => onSizePerPageChange(option.page)}
-            className={`btn ${
-              currSizePerPage === `${option.page}`
+            className={`btn ${currSizePerPage === `${option.page}`
                 ? 'btn-secondary'
                 : 'btn-warning'
-            }`}
+              }`}
           >
             {option.text}
           </option>
@@ -356,8 +355,8 @@ const DataplaneTableComponent = (props) => {
       x.document.open();
       x.document.write(
         '<html><body><pre>' +
-          JSON.stringify(await res.json(), null, '\t') +
-          '</pre></body></html>'
+        JSON.stringify(await res.json(), null, '\t') +
+        '</pre></body></html>'
       );
       x.document.close();
     };

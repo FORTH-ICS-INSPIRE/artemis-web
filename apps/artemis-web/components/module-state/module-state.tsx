@@ -92,7 +92,7 @@ class ModuleState extends Component<any, any> {
                   )}
                 </td>
                 <td key={index + '_' + i + '3'}>
-                  {module[1] && formatDate(new Date(module[2]))}
+                  {module[1] && formatDate(new Date(module[2]), Math.abs(new Date().getTimezoneOffset() / 60))}
                 </td>
               </tr>
             )
