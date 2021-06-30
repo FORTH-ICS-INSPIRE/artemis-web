@@ -184,7 +184,7 @@ class HijackInfoComponent extends Component<any, any> {
                   <div className="card">
                     <div className="card-header">Hijack Actions</div>
                     <div className="card-body">
-                      {this.user.role === 'admin' ?
+                      {this.user && this.user.role === 'admin' ?
                         (
                           <select
                             ref={this.selectRef}
