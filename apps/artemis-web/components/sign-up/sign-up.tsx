@@ -38,80 +38,103 @@ const SignUp = (props) => {
   };
 
   return (
-    <ThemeProvider theme={theme}>
-      <Container component="main" maxWidth="sm">
-        <div className={classes.paper}>
-          <img
-            width="150"
-            src="./login.png"
-            alt="avatar"
-            className="img-responsive"
-          />
-          <Typography className={classes.input} component="h1" variant="h5">
-            Sign up
-          </Typography>
-          <form method="post" onSubmit={handleSubmit} className="login-form">
-            {errorMsg ? <p style={{ color: 'red' }}>{errorMsg}</p> : null}
-            <input name="emailVerified" type="hidden" defaultValue={'true'} />
-            <input name="stype" type="hidden" defaultValue="signup" />
-            <Grid container spacing={2}>
-              <Grid item xs={12} sm={12}>
-                <TextField
-                  autoComplete="uname"
-                  name="name"
-                  variant="outlined"
-                  required
-                  fullWidth
-                  id="username"
-                  label="Username"
-                  autoFocus
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  variant="outlined"
-                  required
-                  fullWidth
-                  id="email"
-                  label="Email Address"
-                  name="email"
-                  autoComplete="email"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  variant="outlined"
-                  required
-                  fullWidth
-                  name="password"
-                  label="Password"
-                  type="password"
-                  id="password"
-                  autoComplete="current-password"
-                />
-              </Grid>
-            </Grid>
+    <div className="container mx-auto px-4 h-full">
+      <div className="flex content-center items-center justify-center h-full">
+        <div className="w-full lg:w-6/12 px-4">
+          <div className="sm:mx-auto sm:w-full sm:max-w-md mb-8 mt-16">
+            <img
+              className="mx-auto h-12 w-auto"
+              src="./aletter.png"
+              alt="Workflow"
+            />
+            <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">Create your account</h2>
+          </div>
+          <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-gray-200 py-8 px-4 shadow sm:rounded-lg sm:px-10">
 
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              color="primary"
-              className={classes.submit}
-            >
-              Sign Up
-            </Button>
-            <Grid container justify="flex-end">
-              <Grid item>
-                <Link href="/login" variant="body2">
-                  Already have an account? Login
-                </Link>
-              </Grid>
-            </Grid>
-          </form>
+
+            <div className="flex-auto px-4 lg:px-10 py-10 pt-10 space-y-6">
+              <form>
+
+                <div className="relative w-full mb-3">
+                  <label
+                    className="block uppercase text-gray-700 text-xs font-bold mb-2"
+                  >
+                    Username
+                  </label>
+                  <input
+                    type="text"
+                    autoComplete="username"
+                    className="appearance-none block w-full px-3 py-3 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    placeholder="Username"
+                    style={{ transition: "all .15s ease" }}
+                  />
+                </div>
+
+                <div className="relative w-full mb-3">
+                  <label
+                    className="block uppercase text-gray-700 text-xs font-bold mb-2"
+                    htmlFor="grid-password"
+                  >
+                    Email
+                  </label>
+                  <input
+                    type="email"
+                    autoComplete="email"
+                    className="appearance-none block w-full px-3 py-3 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    placeholder="Email"
+                    style={{ transition: "all .15s ease" }}
+                  />
+                </div>
+
+                <div className="relative w-full mb-3">
+                  <label
+                    className="block uppercase text-gray-700 text-xs font-bold mb-2"
+                    htmlFor="grid-password"
+                  >
+                    Password
+                  </label>
+                  <input
+                    type="password"
+                    className="border-0 px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full"
+                    placeholder="Password"
+                    style={{ transition: "all .15s ease" }}
+                  />
+                </div>
+
+                <div className="text-center mt-12">
+                  <button
+                    className="hover:bg-logo-mandy border border-transparent rounded-md shadow-sm bg-logo-crimson text-white active:bg-gray-700 text-sm font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 w-full"
+                    type="button"
+                    style={{ transition: "all .15s ease" }}
+                  >
+                    Sign up
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+          <div className="flex flex-wrap mt-6">
+            <div className="w-1/2">
+              {/* <a
+                href="#pablo"
+                onClick={e => e.preventDefault()}
+                className="text-gray-300"
+              >
+                <small>Forgot password?</small>
+              </a> */}
+            </div>
+            <div className="w-1/2 text-right">
+              <a
+                href="/login"
+                className="text-gray-500 hover:text-logo-crimson"
+              >
+                <small>Already have an account? Login</small>
+              </a>
+            </div>
+          </div>
         </div>
-      </Container>
-    </ThemeProvider>
+      </div>
+    </div >
   );
 };
 

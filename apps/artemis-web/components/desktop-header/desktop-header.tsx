@@ -38,7 +38,7 @@ const DesktopHeader = (props) => {
 
   const getItemClass = (path1, path2 = '+-"') =>
     window.location.pathname.includes(path1) ||
-    window.location.pathname.includes(path2)
+      window.location.pathname.includes(path2)
       ? 'nav-item visited'
       : 'nav-item';
 

@@ -51,101 +51,122 @@ const Login = (props) => {
   }
 
   return (
-    <ThemeProvider theme={theme}>
-      <Container component="main" maxWidth="sm">
-        <div className={props.classes.paper}>
-          <img
-            width="150"
-            src="./login.png"
-            alt="avatar"
-            className="img-responsive"
-          />
-          <Typography
-            className={props.classes.input}
-            component="h1"
-            variant="h5"
-          >
-            Sign In
-          </Typography>
-          {errorMsg && <p className="error">{errorMsg}</p>}
-          <form method="post" className="login-form">
-            <input name="stype" type="hidden" defaultValue="login" />
-            <TextField
-              variant="outlined"
-              margin="normal"
-              required
-              fullWidth
-              id="email"
-              color="primary"
-              label="Email Address"
-              name="email"
-              autoComplete="email"
-              autoFocus
-              onChange={(e) =>
-                setFormData({ ...formData, email: e.target.value })
-              }
+    <div className="container mx-auto px-4 h-full">
+      <div className="flex content-center items-center justify-center h-full">
+        <div className="w-full lg:w-6/12 px-4">
+          <div className="sm:mx-auto sm:w-full sm:max-w-md mb-8 mt-16">
+            <img
+              className="mx-auto h-12 w-auto"
+              src="./aletter.png"
+              alt="Workflow"
             />
-            <TextField
-              variant="outlined"
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="Password"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-              onChange={(e) =>
-                setFormData({ ...formData, password: e.target.value })
-              }
-            />
-            <FormControlLabel
-              className={props.classes.input}
-              control={
-                <Checkbox
-                  value="remember"
-                  name="remember"
-                  color="primary"
-                  onChange={(e) =>
-                    setFormData({ ...formData, rememberMe: e.target.checked })
-                  }
-                />
-              }
-              label="Remember me"
-            />
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              color="primary"
-              className={props.classes.submit}
-              onClick={(e) => onClick(e, '/api/auth/login/credentials')}
-            >
-              Login
-            </Button>
-            <Button
-              fullWidth
-              variant="contained"
-              color="primary"
-              id="ldap_login"
-              className={props.classes.submit}
-              onClick={(e) => onClick(e, '/api/auth/login/ldap')}
-            >
-              Login with LDAP
-            </Button>
-            <Grid container>
-              <Grid style={{ textAlign: 'left' }} item xs></Grid>
-              <Grid item>
-                <Link color="primary" href="/signup" variant="body2">
-                  Dont have an account? Sign Up
-                </Link>
-              </Grid>
-            </Grid>
-          </form>
+            <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">Login to your account</h2>
+          </div>
+          <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-gray-200 py-8 px-4 shadow sm:rounded-lg sm:px-10">
+
+
+            <div className="flex-auto px-4 lg:px-10 py-10 pt-10 space-y-6">
+              <form>
+                <div className="relative w-full mb-3">
+                  <label
+                    className="block uppercase text-gray-700 text-xs font-bold mb-2"
+                    htmlFor="grid-password"
+                  >
+                    Email
+                  </label>
+                  <input
+                    type="email"
+                    autoComplete="email"
+                    className="appearance-none block w-full px-3 py-3 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    placeholder="Email"
+                    style={{ transition: "all .15s ease" }}
+                  />
+                </div>
+
+                <div className="relative w-full mb-3">
+                  <label
+                    className="block uppercase text-gray-700 text-xs font-bold mb-2"
+                    htmlFor="grid-password"
+                  >
+                    Password
+                  </label>
+                  <input
+                    type="password"
+                    className="border-0 px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full"
+                    placeholder="Password"
+                    style={{ transition: "all .15s ease" }}
+                  />
+                </div>
+                <div>
+                  <label className="inline-flex items-center cursor-pointer">
+                    <input
+                      id="customCheckLogin"
+                      type="checkbox"
+                      className="form-checkbox border-0 rounded text-gray-800 ml-1 w-5 h-5"
+                      style={{ transition: "all .15s ease" }}
+                    />
+                    <span className="ml-2 text-sm font-semibold text-gray-700">
+                      Remember me
+                    </span>
+                  </label>
+                </div>
+
+                <div className="text-center mt-6">
+                  <button
+                    className="hover:bg-logo-mandy border border-transparent rounded-md shadow-sm bg-logo-crimson text-white active:bg-gray-700 text-sm font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 w-full"
+                    type="button"
+                    style={{ transition: "all .15s ease" }}
+                  >
+                    Sign In
+                  </button>
+
+                  <div className="text-gray-500 text-center mb-3 mt-6 font-bold">
+                    <div className="relative">
+                      <div className="absolute inset-0 flex items-center">
+                        <div className="w-full border-t border-gray-300" />
+                      </div>
+                      <div className="relative flex justify-center text-sm">
+                        <span className="px-2 bg-gray-200 text-gray-500">Or login with</span>
+                      </div>
+                    </div>
+
+                    <button
+                      className="mt-6 hover:bg-logo-mandy bg-logo-crimson text-white active:bg-gray-700 text-sm font-bold uppercase px-6 py-3 border border-transparent rounded-md shadow-sm rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 w-full"
+                      type="button"
+                      style={{ transition: "all .15s ease" }}
+                    >
+                      LDAP Login
+                    </button>
+                  </div>
+
+                </div>
+              </form>
+            </div>
+          </div>
+          <div className="flex flex-wrap mt-6">
+            <div className="w-1/2">
+              {/* <a
+                href="#pablo"
+                onClick={e => e.preventDefault()}
+                className="text-gray-300"
+              >
+                <small>Forgot password?</small>
+              </a> */}
+            </div>
+            <div className="w-1/2 text-right">
+              <a
+                href="/signup"
+                className="text-gray-500 hover:text-logo-crimson"
+              >
+                <small>Dont have an account? Sign Up</small>
+              </a>
+            </div>
+          </div>
         </div>
-      </Container>
-    </ThemeProvider>
+      </div>
+    </div >
   );
+
 };
 
 const LoginComponent = (props) => {
