@@ -4,6 +4,7 @@ import { ApolloProvider } from '@apollo/client';
 import { useApollo } from '../libs/graphql';
 import Layout from '../components/layout/layout';
 import TooltipContext from '../context/tooltip-context';
+import 'tailwindcss/tailwind.css';
 
 const useStateWithLocalStorage = (localStorageKey) => {
   const [value, setValue] = useState(
