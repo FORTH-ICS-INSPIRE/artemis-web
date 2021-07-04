@@ -38,21 +38,23 @@ const SignUp = (props) => {
   };
 
   return (
-    <div className="container mx-auto px-4 h-full">
+    <div className="container mx-auto px-4 h-full pt-48">
       <div className="flex content-center items-center justify-center h-full">
         <div className="w-full lg:w-6/12 px-4">
-          <div className="sm:mx-auto sm:w-full sm:max-w-md mb-8 mt-16">
+          {/* <div className="sm:mx-auto sm:w-full sm:max-w-md mb-8 mt-16">
             <img
               className="mx-auto h-12 w-auto"
               src="./aletter.png"
               alt="Workflow"
             />
             <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">Create your account</h2>
-          </div>
+          </div> */}
           <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-gray-200 py-8 px-4 shadow sm:rounded-lg sm:px-10">
 
 
-            <div className="flex-auto px-4 lg:px-10 py-10 pt-10 space-y-6">
+            <div className="flex-auto px-4 lg:px-10 space-y-6">
+              <h2 className="text-center text-3xl font-extrabold text-gray-900">Get Started</h2>
+
               <form>
 
                 <div className="relative w-full mb-3">
@@ -108,6 +110,9 @@ const SignUp = (props) => {
                     style={{ transition: "all .15s ease" }}
                   >
                     Sign up
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 inline-block ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                    </svg>
                   </button>
                 </div>
               </form>

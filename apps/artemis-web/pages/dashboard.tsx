@@ -1,205 +1,24 @@
-import { FormControlLabel, FormGroup } from '@material-ui/core';
-import Head from 'next/head';
-import React, { useEffect, useState } from 'react';
-import { useMedia } from 'react-media';
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import AuthHOC from '../components/401-hoc/401-hoc';
-import ErrorBoundary from '../components/error-boundary/error-boundary';
-import OngoingHijackTableComponent from '../components/ongoing-hijack-table/ongoing-hijack-table';
-import StatisticsTable from '../components/statistics-table/statistics-table';
-import StatusTable from '../components/status-table/status-table';
-import { setup } from '../libs/csrf';
-import { useGraphQl } from '../utils/hooks/use-graphql';
-import { AntSwitch } from '../utils/styles';
-import { autoLogout, GLOBAL_MEDIA_QUERIES, shallMock } from '../utils/token';
-
-const DashboardPage = (props: any) => {
-  useEffect(() => {
-    autoLogout(props);
-  }, [props]);
-
-  if (shallMock()) {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const { worker } = require('../utils/mock-sw/browser');
-    worker.start();
-  }
-
-  const [isLive, setIsLive] = useState(true);
-
-  const user = props.user;
-  // const notify = (message: React.ReactText) => toast(message);
-
-  const STATS_RES: any = useGraphQl('stats', {
-    isLive: true,
-    hasDateFilter: false,
-    hasColumnFilter: false,
-  });
-  const STATS_DATA = STATS_RES.data;
-
-  const INDEX_RES: any = useGraphQl('indexStats', {
-    isLive: true,
-    hasDateFilter: false,
-    hasColumnFilter: false,
-  });
-  const INDEX_DATA = INDEX_RES.data;
-
-  const matches = useMedia({ queries: GLOBAL_MEDIA_QUERIES });
-
+import React, { useState } from "react";
+export default function Dashboard() {
+  const [show, setShow] = useState(false);
+  const [product, setProduct] = useState(false);
+  const [deliverables, setDeliverables] = useState(false);
+  const [profile, setProfile] = useState(false);
   return (
     <>
-      <Head>
-        <title>ARTEMIS - Dashboard</title>
-      </Head>
-      <div id="page-container">
-        {user && (
-          <div id="content-wrap" style={{ paddingBottom: '5rem' }}>
-            <div className="row">
-              <div className="col-lg-1" />
-              <div className="col-lg-10">
-                <div className="row">
-                  <div className="col-lg-8">
-                    <h1 style={{ color: 'black' }}>Dashboard</h1>{' '}
-                  </div>
-                  {matches.pc && (
-                    <div className="col-lg-2">
-                      <h2 style={{ color: 'black' }}>Live Update:</h2>{' '}
-                    </div>
-                  )}
-                  <div className="col-lg-1">
-                    <FormGroup>
-                      <FormControlLabel
-                        control={
-                          <AntSwitch
-                            onChange={() => {
-                              setIsLive(!isLive);
-                            }}
-                            size="medium"
-                            checked={isLive}
-                          />
-                        }
-                        label=""
-                      />
-                    </FormGroup>
-                  </div>
-                </div>
-                <hr style={{ backgroundColor: 'white' }} />
-              </div>
+      <div className="absolute bg-gray-200 w-full h-full">
+        {/* Page title ends */}
+        <div className="container mx-auto px-6">
+          {/* Remove class [ h-64 ] when adding a card block */}
+          {/* Remove class [ border-dashed border-2 border-gray-300 ] to remove dotted border */}
+          <div className="max-w-7xl px-8 py-4 mx-auto bg-white rounded-lg shadow-md dark:bg-gray-800">
+            <div className="mt-2">
+              <a className="text-2xl font-bold text-gray-700 dark:text-white hover:text-gray-600 dark:hover:text-gray-200 hover:underline">Activity</a>
+              <p className="mt-2 text-gray-600 dark:text-gray-300">Welcome back guest@guest.com, your last login was at (7/3/2021 6:36:16 PM). You are user.</p>
             </div>
-            <div className="row">
-              <div className="col-lg-1" />
-              <div className="col-lg-10">
-                <div className="card">
-                  <div className="card-header">Activity</div>
-                  <div className="card-body">
-                    Welcome back <b>{user && user.email}</b>, your last login
-                    was at{' '}
-                    <b>
-                      (
-                      {user &&
-                        new Date(user.lastLogin).toLocaleDateString() +
-                        ' ' +
-                        new Date(user.lastLogin).toLocaleTimeString()}
-                      )
-                    </b>
-                    . You are {user && user.role}.
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="row" style={{ marginTop: '20px' }}>
-              <div className="col-lg-1" />
-              <div className={!matches.pc ? 'col-lg-6' : 'col-lg-10'}>
-                <div className="card">
-                  <div className="card-header">
-                    Ongoing, Non-Dormant Hijacks{' '}
-                  </div>
-                  <div className="card-body" style={{ textAlign: 'center' }}>
-                    {' '}
-                    <OngoingHijackTableComponent {...props} isLive={isLive} />
-                  </div>
-                </div>
-                <span style={{ float: 'right', marginTop: '15px' }}>
-                  Times are shown in your local time zone{' '}
-                  <b>GMT{new Date().getTimezoneOffset() > 0 ? '-' : '+'}{Math.abs(new Date().getTimezoneOffset() / 60)} ({Intl.DateTimeFormat().resolvedOptions().timeZone}).</b>
-                </span>
-              </div>
-              {!matches.pc && (
-                <div className="col-lg-4">
-                  <div className="card">
-                    <div className="card-header"> System Status </div>
-                    <div className="card-body" style={{ textAlign: 'center' }}>
-                      <ErrorBoundary
-                        containsData={STATS_DATA}
-                        noDataMessage={'No modules found.'}
-                        errorImage={true}
-                        customError={STATS_RES.error}
-                      >
-                        <StatusTable data={STATS_DATA} />
-                      </ErrorBoundary>
-                    </div>
-                  </div>
-                  <div className="card" style={{ marginTop: '20px' }}>
-                    <div className="card-header"> Statistics </div>
-                    <div className="card-body" style={{ textAlign: 'center' }}>
-                      <ErrorBoundary
-                        containsData={INDEX_DATA}
-                        noDataMessage={'No statistics found.'}
-                        customError={INDEX_RES.error}
-                        errorImage={true}
-                      >
-                        <StatisticsTable data={INDEX_DATA} />
-                      </ErrorBoundary>
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
-            {matches.pc && (
-              <div className="row" style={{ marginTop: '20px' }}>
-                <div className="col-lg-1" />
-                <div className="col-lg-5">
-                  <div className="card">
-                    <div className="card-header"> System Status </div>
-                    <div className="card-body" style={{ textAlign: 'center' }}>
-                      <ErrorBoundary
-                        containsData={STATS_DATA}
-                        noDataMessage={'No modules found.'}
-                        errorImage={true}
-                        customError={STATS_RES.error}
-                      >
-                        <StatusTable data={STATS_DATA} />
-                      </ErrorBoundary>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-lg-5">
-                  <div className="card">
-                    <div className="card-header"> Statistics </div>
-                    <div className="card-body" style={{ textAlign: 'center' }}>
-                      <ErrorBoundary
-                        containsData={INDEX_DATA}
-                        noDataMessage={'No statistics found.'}
-                        customError={INDEX_RES.error}
-                        errorImage={true}
-                      >
-                        <StatisticsTable data={INDEX_DATA} />
-                      </ErrorBoundary>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-            <ToastContainer />
           </div>
-        )}
+        </div>
       </div>
     </>
   );
-};
-
-export default AuthHOC(DashboardPage, ['admin', 'user']);
-
-export const getServerSideProps = setup(async (req, res, csrftoken) => {
-  return { props: { _csrf: csrftoken,  _inactivity_timeout: process.env.INACTIVITY_TIMEOUT, system_version: process.env.SYSTEM_VERSION } };
-});
+}
