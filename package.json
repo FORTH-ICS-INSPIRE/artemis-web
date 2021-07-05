@@ -37,6 +37,7 @@
     "@types/jsonwebtoken": "^8.5.0",
     "@types/mongodb": "^3.5.34",
     "@types/react-bootstrap-table-next": "^4.0.3",
+    "@windmill/react-ui": "^0.6.0",
     "amqp-ts": "^1.8.0",
     "argon2": "^0.27.0",
     "chance": "^1.1.7",

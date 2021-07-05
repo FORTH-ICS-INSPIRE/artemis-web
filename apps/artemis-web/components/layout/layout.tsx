@@ -2,6 +2,7 @@ import React from 'react';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import Footer from '../footer/footer';
+import Sidebar from '../sidebar/sidebar';
 
 export default class Layout extends React.Component<any> {
   render() {
@@ -29,8 +30,15 @@ export default class Layout extends React.Component<any> {
           ></script>
         </Head>
         <div className="layout">
-          <Header {...props} />
-          <div className="main-container mb-0">{children}</div>
+          {/* <Header {...props} /> */}
+          <div
+            className={`flex h-screen bg-gray-50 dark:bg-gray-900 ${isSidebarOpen && 'overflow-hidden'}`}
+          >
+            <Sidebar />
+            <div className="flex flex-col flex-1 w-full">
+              <div className="main-container mb-0">{children}</div>
+            </div>
+          </div>
           <Footer system_version={this.props.system_version} />
         </div>
       </>
