@@ -6,6 +6,7 @@ export function useJWT() {
   const jwt = data ? parseJwt(data) : null;
   const user = jwt ? jwt.user : null;
   const loading = status !== 'fetched';
+
   return [user, loading];
 }
 

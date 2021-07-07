@@ -1,15 +1,21 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import Footer from '../footer/footer';
-import Sidebar from '../sidebar/sidebar';
+import Sidebar from '../Sidebar/sidebar';
 
 export default class Layout extends React.Component<any> {
+  constructor(props) {
+    super(props);
+    this.state = { path: 'login' };
+  }
+
   render() {
-    const { children } = this.props;
+    const { children, componentName } = this.props;
     const props = this.props;
     // const Footer = dynamic(() => import('../footer/footer'));
-    const Header = dynamic(() => import('../header/header'));
+    const Header = dynamic(() => import('../header/header-small'));
+    const isSidebarOpen = false;
 
     return (
       <>
@@ -34,9 +40,10 @@ export default class Layout extends React.Component<any> {
           <div
             className={`flex h-screen bg-gray-50 dark:bg-gray-900 ${isSidebarOpen && 'overflow-hidden'}`}
           >
-            <Sidebar />
+            {!(['LoginPage', 'SignupPage'].includes(componentName)) && <Sidebar />}
             <div className="flex flex-col flex-1 w-full">
-              <div className="main-container mb-0">{children}</div>
+              {!(['LoginPage', 'SignupPage'].includes(componentName)) && <Header />}
+              <div className="main-container mb-0 mt-0">{children}</div>
             </div>
           </div>
           <Footer system_version={this.props.system_version} />

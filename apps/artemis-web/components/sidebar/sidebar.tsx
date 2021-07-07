@@ -2,13 +2,14 @@ import React from 'react'
 import { useContext } from 'react'
 
 import { Transition, Backdrop } from '@windmill/react-ui';
+import SidebarContent from './sidebar-content';
 
 
 function Sidebar() {
   return (
     <>
       <aside className="z-30 flex-shrink-0 hidden w-64 overflow-y-auto bg-white dark:bg-gray-800 lg:block">
-        {/* <SidebarContent /> */}
+        <SidebarContent />
       </aside>
 
       <Transition show={false}>

@@ -31,7 +31,7 @@ function MyApp({ Component, pageProps }) {
 
   return (
     <ApolloProvider client={client}>
-      <Layout {...pageProps}>
+      <Layout {...pageProps} componentName={Component.name}>
         <TooltipContext.Provider
           value={{ tooltips: tooltips, setTooltips: setTooltips }}
         >

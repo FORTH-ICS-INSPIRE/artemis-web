@@ -51,7 +51,7 @@ const Login = (props) => {
   }
 
   return (
-    <div className="container mx-auto px-4 h-full pt-48">
+    <div className="container mx-auto px-4 h-full pt-24">
       <div className="flex content-center items-center justify-center h-full">
         <div className="w-full lg:w-6/12 px-4">
           {/* <div className="sm:mx-auto sm:w-full sm:max-w-md mb-8 mt-16">
@@ -61,7 +61,7 @@ const Login = (props) => {
               alt="Workflow"
             />
           </div> */}
-          <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-gray-200 py-8 px-4 shadow sm:rounded-lg sm:px-10">
+          <div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded-3xl py-8 px-4 shadow sm:px-10">
 
 
             <div className="flex-auto px-4 lg:px-10 space-y-6">
@@ -140,7 +140,7 @@ const Login = (props) => {
                         <div className="w-full border-t border-gray-300" />
                       </div>
                       <div className="relative flex justify-center text-sm">
-                        <span className="px-2 bg-gray-200 text-gray-500">OR</span>
+                        <span className="px-2 bg-white text-gray-500">OR</span>
                       </div>
                     </div>
 
