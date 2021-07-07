@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import Footer from '../footer/footer';
-import Sidebar from '../Sidebar/sidebar';
+import Sidebar from '../sidebar/sidebar';
 
 export default class Layout extends React.Component<any> {
   constructor(props) {
