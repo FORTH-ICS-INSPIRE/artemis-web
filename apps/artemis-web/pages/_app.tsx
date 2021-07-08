@@ -5,6 +5,8 @@ import { useApollo } from '../libs/graphql';
 import Layout from '../components/layout/layout';
 import TooltipContext from '../context/tooltip-context';
 import 'tailwindcss/tailwind.css';
+import { SidebarProvider } from '../context/sidebar-context';
+import { Windmill } from '@windmill/react-ui';
 
 const useStateWithLocalStorage = (localStorageKey) => {
   const [value, setValue] = useState(
@@ -31,13 +33,17 @@ function MyApp({ Component, pageProps }) {
 
   return (
     <ApolloProvider client={client}>
-      <Layout {...pageProps} componentName={Component.name}>
-        <TooltipContext.Provider
-          value={{ tooltips: tooltips, setTooltips: setTooltips }}
-        >
-          <Component {...pageProps} />
-        </TooltipContext.Provider>
-      </Layout>
+      <SidebarProvider>
+        <Windmill usePreferences>
+          <Layout {...pageProps} componentName={Component.name}>
+            <TooltipContext.Provider
+              value={{ tooltips: tooltips, setTooltips: setTooltips }}
+            >
+              <Component {...pageProps} />
+            </TooltipContext.Provider>
+          </Layout>
+        </Windmill>
+      </SidebarProvider>
     </ApolloProvider>
   );
 }

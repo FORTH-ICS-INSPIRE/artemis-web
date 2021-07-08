@@ -1,7 +1,6 @@
 import React, { useContext, useState } from 'react'
 import { SidebarContext } from '../../context/sidebar-context'
 import {
-    SearchIcon,
     MoonIcon,
     SunIcon,
     BellIcon,
@@ -15,7 +14,7 @@ import { Avatar, Badge, Input, Dropdown, DropdownItem, WindmillContext } from '@
 function Header() {
     const { mode, toggleMode } = useContext(WindmillContext)
     const { toggleSidebar } = useContext(SidebarContext)
-
+    console.log(mode)
     const [isNotificationsMenuOpen, setIsNotificationsMenuOpen] = useState(false)
     const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false)
 
@@ -28,7 +27,7 @@ function Header() {
     }
 
     return (
-        <header className="z-40 py-4 bg-white shadow-bottom dark:bg-gray-800">
+        <header className="z-40 my-2 py-4 bg-gray-100 shadow-bottom mx-4 rounded-2xl dark:bg-gray-600">
             <div className="container flex items-center justify-between h-full px-6 mx-auto text-purple-600 dark:text-purple-300">
                 {/* <!-- Mobile hamburger --> */}
                 <button

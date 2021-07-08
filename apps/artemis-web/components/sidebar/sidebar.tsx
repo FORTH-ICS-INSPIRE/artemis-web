@@ -8,7 +8,7 @@ import SidebarContent from './sidebar-content';
 function Sidebar() {
   return (
     <>
-      <aside className="z-30 flex-shrink-0 hidden w-64 overflow-y-auto bg-white dark:bg-gray-800 lg:block">
+      <aside className="z-30 mt-2 rounded-t-2xl relative flex-shrink-0 hidden w-64 overflow-y-auto bg-gray-100 dark:bg-gray-600 lg:block">
         <SidebarContent />
       </aside>
 

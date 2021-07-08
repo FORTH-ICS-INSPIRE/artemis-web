@@ -50,11 +50,10 @@ const navigation = [
 class FooterComponent extends React.Component<MyProps> {
   render() {
     const { classes, system_version } = this.props;
-    const { root, footer, link } = classes;
 
     return (
-      <footer className="bg-gray-50 border-t border-gray pt-8">
-        <div className="max-w-7xl mx-auto pb-10 pt-2 px-4 sm:px-6 md:flex md:items-center md:justify-between lg:px-8">
+      <footer className="bg-gray-100 dark:bg-gray-600 border-t border-gray pt-8">
+        <div className="max-w-7xl mx-auto pb-5 px-4 sm:px-6 md:flex md:items-center md:justify-between lg:px-8">
           <div className="flex justify-center space-x-6 md:order-2">
             {navigation.map((item) => (
               <a key={item.name} href={item.href} className="text-gray-400 hover:text-gray-500">

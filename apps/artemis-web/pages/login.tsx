@@ -22,7 +22,7 @@ const LoginPage = (props) => {
       <Head>
         <title>ARTEMIS - Login</title>
       </Head>
-      <div id="login-container" className='bg-gray-50'>
+      <div id="login-container" className='bg-gray-50 dark:bg-gray-800'>
         {!user && (
           <div id="content-wrap">
             <LoginComponent {...props} />
