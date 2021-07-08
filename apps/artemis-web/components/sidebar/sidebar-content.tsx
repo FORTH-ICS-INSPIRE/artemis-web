@@ -31,9 +31,9 @@ function SidebarContent() {
             name: 'BGP Updates',
         },
         {
-            path: '/app/cards',
+            path: '/hijacks',
             icon: 'CardsIcon',
-            name: 'Cards',
+            name: 'Hijacks',
         },
         {
             path: '/app/charts',

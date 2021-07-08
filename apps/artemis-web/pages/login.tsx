@@ -16,7 +16,6 @@ const LoginPage = (props) => {
       router.push('/dashboard');
     }
   }
-  // const LoginComponent = dynamic(() => import('../components/login/login'));
 
   return (
     <>

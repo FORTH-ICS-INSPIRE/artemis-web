@@ -4,7 +4,7 @@
   "license": "MIT",
   "scripts": {
     "nx": "nx",
-    "start": "nx serve --port 5200",
+    "start": "nx serve --port 4200",
     "start:debug": "cd apps/artemis-web && NODE_OPTIONS='--inspect' next dev -p 4200",
     "build": "nx build",
     "test": "nx test",

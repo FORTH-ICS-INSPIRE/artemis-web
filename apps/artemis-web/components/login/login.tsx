@@ -109,7 +109,7 @@ const Login = (props) => {
                     <input
                       id="customCheckLogin"
                       type="checkbox"
-                      className="form-checkbox border-0 rounded text-gray-800 ml-1 w-5 h-5"
+                      className="form-checkbox h-5 w-5 text-logo-crimson"
                       style={{ transition: "all .15s ease" }}
                       onChange={(e) =>
                         setFormData({ ...formData, rememberMe: e.target.checked })
