@@ -73,18 +73,10 @@ const ExportJSON = (props: any): ReactElement => {
     download(JSON.stringify(data), 'data.json', 'text/json');
   };
 
-  const classes = useStyles();
-
   return (
     <div style={{ display: 'inline' }}>
-      <Button
-        style={{ float: 'left', marginBottom: '10px', width: '192px' }}
-        variant="contained"
-        className={classes.button}
-        onClick={handleClick}
-      >
-        Download Table
-      </Button>
+      <button onClick={handleClick} className="align-bottom inline-flex items-center justify-center cursor-pointer leading-5 transition-colors duration-150 font-medium focus:outline-none px-5 py-3 rounded-lg text-white bg-logo-mandy border border-transparent active:bg-purple-600 hover:bg-logo-crimson focus:shadow-outline-purple" type="button">Download Table</button>
+
     </div>
   );
 };

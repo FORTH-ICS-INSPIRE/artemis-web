@@ -14,7 +14,6 @@ const handler = nc()
   .post(
     passport.authenticate('local'),
     (req: NextApiRequestExtended, res: NextApiResponseExtended, next) => {
-      console.log(req.user);
       if (req.body.rememberMe && req.user) {
         const token = getRandomString(64);
         req.db.collection('users').updateOne(

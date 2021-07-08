@@ -10,7 +10,7 @@ import { extractUser } from '../../../utils/parsers';
 
 const handler = nc()
   .use(auth)
-  .post((req: NextApiRequestExtended, res: NextApiResponseExtended) => {
+  .get((req: NextApiRequestExtended, res: NextApiResponseExtended) => {
     if (!req.user) res.send({});
     else {
       const userObj = extractUser(req);

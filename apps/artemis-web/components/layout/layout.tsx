@@ -40,13 +40,13 @@ export default class Layout extends React.Component<any> {
           <div
             className={`flex h-screen bg-gray-50 dark:bg-gray-900 ${isSidebarOpen && 'overflow-hidden'}`}
           >
-            {!(['LoginPage', 'SignupPage'].includes(componentName)) && <Sidebar />}
+            {!(['LoginPage', 'SignupPage', 'HomePage'].includes(componentName)) && <Sidebar />}
             <div className="flex flex-col flex-1 w-full">
-              {!(['LoginPage', 'SignupPage'].includes(componentName)) && <Header />}
-              <div className="main-container mb-0 mt-0">{children}</div>
+              {!(['LoginPage', 'SignupPage', 'HomePage'].includes(componentName)) && <Header />}
+              <div style={{ overflow: 'scroll' }} className="bg-gray-100 main-container mb-0 mt-0">{children}</div>
+              <Footer system_version={this.props.system_version} />
             </div>
           </div>
-          <Footer system_version={this.props.system_version} />
         </div>
       </>
     );
