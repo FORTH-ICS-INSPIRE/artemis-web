@@ -40,7 +40,7 @@ const Layout = (props: any) => {
           {!(['LoginPage', 'SignupPage', 'HomePage'].includes(componentName)) && <Sidebar />}
           <div className="flex flex-col flex-1 w-full">
             {!(['LoginPage', 'SignupPage', 'HomePage'].includes(componentName)) && <Header />}
-            < div style={{ overflow: 'scroll' }} className="bg-gray-100 dark:bg-gray-900 main-container mb-0 mt-0">{children}</div>
+            < div style={{ overflow: 'scroll' }} className="bg-gray-50 dark:bg-gray-800 main-container mb-0 mt-0">{children}</div>
             <Footer system_version={props.system_version} />
           </div>
         </div>
