@@ -1,17 +1,6 @@
-import {
-  Button,
-  Checkbox,
-  Container,
-  FormControlLabel,
-  Grid,
-  Link,
-  TextField,
-  Typography,
-} from '@material-ui/core';
-import { ThemeProvider } from '@material-ui/core/styles';
-import { theme, useStyles } from '../../utils/styles';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
+import { useStyles } from '../../utils/styles';
 
 const Login = (props) => {
   const [errorMsg, setErrorMsg] = useState('');
@@ -54,16 +43,7 @@ const Login = (props) => {
     <div className="container mx-auto px-4 h-full pt-24">
       <div className="flex content-center items-center justify-center h-full">
         <div className="w-full lg:w-6/12 px-4">
-          {/* <div className="sm:mx-auto sm:w-full sm:max-w-md mb-8 mt-16">
-            <img
-              className="mx-auto h-12 w-auto"
-              src="./aletter.png"
-              alt="Workflow"
-            />
-          </div> */}
-          <div className="relative flex flex-col min-w-0 break-words bg-gray-100 dark:bg-gray-600 w-full mb-6 shadow-lg rounded-3xl py-8 px-4 shadow sm:px-10">
-
-
+          <div className="relative flex flex-col min-w-0 break-words bg-gray-100 dark:bg-gray-600 w-full mb-6 shadow-lg rounded-3xl py-8 px-4 sm:px-10">
             <div className="flex-auto px-4 lg:px-10 space-y-6">
               <h2 className="text-center text-3xl mb-16 font-extrabold text-gray-900 dark:text-gray-50">Login To Your Account</h2>
               {errorMsg && <p className="error">{errorMsg}</p>}
@@ -156,13 +136,6 @@ const Login = (props) => {
           </div>
           <div className="flex flex-wrap mt-6">
             <div className="w-1/2">
-              {/* <a
-                href="#pablo"
-                onClick={e => e.preventDefault()}
-                className="text-gray-300"
-              >
-                <small>Forgot password?</small>
-              </a> */}
             </div>
             <div className="w-1/2 text-right">
               <a
@@ -177,7 +150,6 @@ const Login = (props) => {
       </div>
     </div >
   );
-
 };
 
 const LoginComponent = (props) => {
