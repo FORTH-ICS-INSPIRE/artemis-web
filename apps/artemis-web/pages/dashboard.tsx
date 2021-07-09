@@ -1,4 +1,5 @@
 import { Card, CardBody } from "@windmill/react-ui";
+import Head from "next/head";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
@@ -83,52 +84,57 @@ const DashboardPage = (props: any) => {
   const INDEX_DATA = INDEX_RES.data;
 
   return (
-    <div className="absolute w-full h-full">
-      {/* Page title ends */}
-      <div className="w-3/4 mx-auto mx-auto px-6">
-        <h1 className="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">Dashboard</h1>
+    <>
+      <Head>
+        <title>ARTEMIS - Dashboard</title>
+      </Head>
+      <div className="absolute w-full h-full">
+        {/* Page title ends */}
+        <div className="w-3/4 mx-auto px-6">
+          <h1 className="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">Dashboard</h1>
 
-        <WelcomeBanner user={user}></WelcomeBanner>
+          <WelcomeBanner user={user}></WelcomeBanner>
 
-        <h2 className="mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300">Ongoing, Non-Dormant Hijacks</h2>
-        <Card className="mb-8 shadow-md">
-          <CardBody>
-            <OngoingHijackTableComponent {...props} isLive={isLive} />
-          </CardBody>
-        </Card>
-
-        <div className="w-1/2 pr-8 float-left">
-          <h2 className="mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300">System Status</h2>
+          <h2 className="mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300">Ongoing, Non-Dormant Hijacks</h2>
           <Card className="mb-8 shadow-md">
             <CardBody>
-              <ErrorBoundary
-                containsData={STATS_DATA}
-                noDataMessage={'No modules found.'}
-                errorImage={true}
-                customError={STATS_RES.error}
-              >
-                <StatusTable data={STATS_DATA} />
-              </ErrorBoundary>
+              <OngoingHijackTableComponent {...props} isLive={isLive} />
             </CardBody>
           </Card>
-        </div>
-        <div className="w-1/2 pl-8 float-right">
-          <h2 className="mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300">Statistics</h2>
-          <Card className="mb-8 shadow-md">
-            <CardBody>
-              <ErrorBoundary
-                containsData={INDEX_DATA}
-                noDataMessage={'No statistics found.'}
-                customError={INDEX_RES.error}
-                errorImage={true}
-              >
-                <StatisticsTable data={INDEX_DATA} />
-              </ErrorBoundary>
-            </CardBody>
-          </Card>
+
+          <div className="w-1/2 pr-8 float-left">
+            <h2 className="mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300">System Status</h2>
+            <Card className="mb-8 shadow-md">
+              <CardBody>
+                <ErrorBoundary
+                  containsData={STATS_DATA}
+                  noDataMessage={'No modules found.'}
+                  errorImage={true}
+                  customError={STATS_RES.error}
+                >
+                  <StatusTable data={STATS_DATA} />
+                </ErrorBoundary>
+              </CardBody>
+            </Card>
+          </div>
+          <div className="w-1/2 pl-8 float-right">
+            <h2 className="mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300">Statistics</h2>
+            <Card className="mb-8 shadow-md">
+              <CardBody>
+                <ErrorBoundary
+                  containsData={INDEX_DATA}
+                  noDataMessage={'No statistics found.'}
+                  customError={INDEX_RES.error}
+                  errorImage={true}
+                >
+                  <StatisticsTable data={INDEX_DATA} />
+                </ErrorBoundary>
+              </CardBody>
+            </Card>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
 

@@ -76,11 +76,7 @@ const ExportJSON = (props: any): ReactElement => {
   return (
     <div style={{ display: 'inline' }}>
 
-      <button onClick={handleClick} type="button" className="py-2 px-4  bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-500 focus:ring-offset-indigo-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg ">
-        Valider
-      </button>
-
-      {/* <button onClick={handleClick} className="float-left align-bottom inline-flex items-center justify-center cursor-pointer leading-5 transition-colors duration-150 font-medium focus:outline-none px-5 py-3 rounded-lg text-white bg-logo-mandy border border-transparent active:bg-purple-600 hover:bg-logo-crimson focus:shadow-outline-purple" type="button">Download Table</button> */}
+      <button onClick={handleClick} className="text-center text-base  shadow-md  focus:ring-2 focus:ring-offset-2  rounded-xl float-left align-bottom inline-flex items-center justify-center cursor-pointer leading-5 transition-colors duration-150 font-medium focus:outline-none px-5 py-3 text-white bg-logo-crimson border border-transparent hover:bg-logo-mandy" type="button">Download Table</button>
 
     </div>
   );

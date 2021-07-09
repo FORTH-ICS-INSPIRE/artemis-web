@@ -6,6 +6,7 @@ import {
   Paper,
   Switch,
 } from '@material-ui/core';
+import { Card, CardBody } from '@windmill/react-ui';
 import Head from 'next/head';
 import React, { useEffect, useState } from 'react';
 import { useMedia } from 'react-media';
@@ -79,22 +80,15 @@ const BGPUpdates = (props) => {
         <title>ARTEMIS - BGP Updates</title>
       </Head>
       {user && (
-        <div className="container overview col-lg-12">
-          <div className="row">
-            <div className="col-lg-1" />
-            <div className="col-lg-10">
-              <div className="row">
-                <div className="col-lg-9" style={{ color: 'white' }}>
-                  <h1 style={{ color: 'black' }}>BGP Updates</h1>
-                </div>
-                {/* <div className="col-lg-1"></div> */}
-                {matches.pc && (
-                  <div className="col-lg-2">
-                    <h2 style={{ color: 'black' }}>Live Update:</h2>{' '}
-                  </div>
-                )}
-                <div className="col-lg-1">
-                  <FormGroup>
+        <div className="absolute w-full h-full">
+          {/* Page title ends */}
+          <div className="w-3/4 mx-auto px-6">
+            <h1 className="my-6 inline-block w-full text-2xl font-semibold text-gray-700 dark:text-gray-200">
+              <div className="w-1/2 float-left">BGP Updates</div>
+
+              {matches.pc && (
+                <div className="w-1/2 inline-block float-right">
+                  <FormGroup className="float-right ml-8 relative -top-3">
                     <FormControlLabel
                       control={
                         <AntSwitch
@@ -108,146 +102,139 @@ const BGPUpdates = (props) => {
                       label=""
                     />
                   </FormGroup>
+                  <h2 className="float-right" style={{ color: 'black' }}>Live Update:</h2>{' '}
                 </div>
-              </div>
-              <hr style={{ backgroundColor: 'white' }} />
-            </div>
-          </div>
-          <div className="row" style={{ marginTop: '20px' }}>
-            <div className="col-lg-1" />
-            <div className="col-lg-10">
-              <div className="card">
-                <div
-                  className="card-header"
-                  style={{ backgroundColor: 'white' }}
-                >
-                  <div className="row">
-                    <div className="col-lg-12">
-                      <Button
-                        className={
-                          0 === filterButton
-                            ? 'selectedButton'
-                            : 'defaultButton'
-                        }
-                        style={{ marginRight: '5px' }}
-                        variant="outlined"
-                        color="primary"
-                        onClick={() => {
-                          setFilterButton(0);
-                          setFilterFrom(0);
-                          setFilterTo(0);
-                          setSelectState('select');
-                          setDistinctValues([]);
-                        }}
-                      >
-                        {genTooltip(
-                          'All',
-                          null,
-                          'All',
-                          'The time window for seeing BGP updates or hijack events.',
-                          'timefilter'
-                        )}
-                      </Button>
-                      <Button
-                        className={
-                          1 === filterButton
-                            ? 'selectedButton'
-                            : 'defaultButton'
-                        }
-                        style={{ marginRight: '5px' }}
-                        variant="outlined"
-                        color="primary"
-                        onClick={() => {
-                          setFilterButton(1);
-                          setFilterFrom(1);
-                          setFilterTo(0);
-                          setSelectState('select');
-                          setDistinctValues([]);
-                        }}
-                      >
-                        {genTooltip(
-                          'Past 1h',
-                          null,
-                          'Past 1h',
-                          'The time window for seeing BGP updates or hijack events.',
-                          'timefilter'
-                        )}
-                      </Button>
-                      <Button
-                        className={
-                          2 === filterButton
-                            ? 'selectedButton'
-                            : 'defaultButton'
-                        }
-                        style={{ marginRight: '5px' }}
-                        variant="outlined"
-                        color="primary"
-                        onClick={() => {
-                          setFilterButton(2);
-                          setFilterFrom(24);
-                          setFilterTo(0);
-                          setSelectState('select');
-                          setDistinctValues([]);
-                        }}
-                      >
-                        {genTooltip(
-                          'Past 24h',
-                          null,
-                          'Past 24h',
-                          'The time window for seeing BGP updates or hijack events.',
-                          'timefilter'
-                        )}
-                      </Button>
-                      <Button
-                        className={
-                          3 === filterButton
-                            ? 'selectedButton'
-                            : 'defaultButton'
-                        }
-                        style={{ marginRight: '5px' }}
-                        variant="outlined"
-                        color="primary"
-                        onClick={() => {
-                          setFilterButton(3);
-                          setFilterFrom(48);
-                          setFilterTo(0);
-                          setSelectState('select');
-                          setDistinctValues([]);
-                        }}
-                      >
-                        {genTooltip(
-                          'Past 48h',
-                          null,
-                          'Past 48h',
-                          'The time window for seeing BGP updates or hijack events.',
-                          'timefilter'
-                        )}
-                      </Button>
-                      <Button
-                        className={
-                          4 === filterButton
-                            ? 'selectedButton'
-                            : 'defaultButton'
-                        }
-                        style={{ marginRight: '5px' }}
-                        variant="outlined"
-                        color="primary"
-                        onClick={() => {
-                          setFilterButton(4);
-                          setSelectState('select');
-                          setDistinctValues([]);
-                        }}
-                      >
-                        {genTooltip(
-                          'Custom',
-                          null,
-                          'Custom',
-                          'The time window for seeing BGP updates or hijack events.',
-                          'timefilter'
-                        )}
-                      </Button>
-                    </div>
-                  </div>
+              )}
+            </h1>
+
+            {/* <h2 className="mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300">Ongoing, Non-Dormant Hijacks</h2> */}
+            <Card className="mb-8 shadow-md">
+              <CardBody>
+                <div className="w-full mb-12">
+                  <Button
+                    className={
+                      0 === filterButton
+                        ? 'selectedButton'
+                        : 'defaultButton'
+                    }
+                    style={{ marginRight: '5px' }}
+                    variant="outlined"
+                    color="primary"
+                    onClick={() => {
+                      setFilterButton(0);
+                      setFilterFrom(0);
+                      setFilterTo(0);
+                      setSelectState('select');
+                      setDistinctValues([]);
+                    }}
+                  >
+                    {genTooltip(
+                      'All',
+                      null,
+                      'All',
+                      'The time window for seeing BGP updates or hijack events.',
+                      'timefilter'
+                    )}
+                  </Button>
+                  <Button
+                    className={
+                      1 === filterButton
+                        ? 'selectedButton'
+                        : 'defaultButton'
+                    }
+                    style={{ marginRight: '5px' }}
+                    variant="outlined"
+                    color="primary"
+                    onClick={() => {
+                      setFilterButton(1);
+                      setFilterFrom(1);
+                      setFilterTo(0);
+                      setSelectState('select');
+                      setDistinctValues([]);
+                    }}
+                  >
+                    {genTooltip(
+                      'Past 1h',
+                      null,
+                      'Past 1h',
+                      'The time window for seeing BGP updates or hijack events.',
+                      'timefilter'
+                    )}
+                  </Button>
+                  <Button
+                    className={
+                      2 === filterButton
+                        ? 'selectedButton'
+                        : 'defaultButton'
+                    }
+                    style={{ marginRight: '5px' }}
+                    variant="outlined"
+                    color="primary"
+                    onClick={() => {
+                      setFilterButton(2);
+                      setFilterFrom(24);
+                      setFilterTo(0);
+                      setSelectState('select');
+                      setDistinctValues([]);
+                    }}
+                  >
+                    {genTooltip(
+                      'Past 24h',
+                      null,
+                      'Past 24h',
+                      'The time window for seeing BGP updates or hijack events.',
+                      'timefilter'
+                    )}
+                  </Button>
+                  <Button
+                    className={
+                      3 === filterButton
+                        ? 'selectedButton'
+                        : 'defaultButton'
+                    }
+                    style={{ marginRight: '5px' }}
+                    variant="outlined"
+                    color="primary"
+                    onClick={() => {
+                      setFilterButton(3);
+                      setFilterFrom(48);
+                      setFilterTo(0);
+                      setSelectState('select');
+                      setDistinctValues([]);
+                    }}
+                  >
+                    {genTooltip(
+                      'Past 48h',
+                      null,
+                      'Past 48h',
+                      'The time window for seeing BGP updates or hijack events.',
+                      'timefilter'
+                    )}
+                  </Button>
+                  <Button
+                    className={
+                      4 === filterButton
+                        ? 'selectedButton'
+                        : 'defaultButton'
+                    }
+                    style={{ marginRight: '5px' }}
+                    variant="outlined"
+                    color="primary"
+                    onClick={() => {
+                      setFilterButton(4);
+                      setSelectState('select');
+                      setDistinctValues([]);
+                    }}
+                  >
+                    {genTooltip(
+                      'Custom',
+                      null,
+                      'Custom',
+                      'The time window for seeing BGP updates or hijack events.',
+                      'timefilter'
+                    )}
+                  </Button>
+
                   <div className="row">
                     <div className="col-lg-12">
                       <RangePicker
@@ -295,44 +282,37 @@ const BGPUpdates = (props) => {
                     </div>
                   </div>
                 </div>
-                <div className="card-body" style={{ textAlign: 'center' }}>
-                  <BGPTableComponent
-                    filter={filterFrom}
-                    filterTo={filterTo}
-                    isLive={isLive}
-                    _csrf={_csrf}
-                    setFilteredBgpData={setFilteredBgpData}
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="row" style={{ marginTop: '20px' }}>
-            <div className="col-lg-1" />
-            <div className="col-lg-10">
-              <h1>Additional actions</h1>
-              <div className="card">
-                <div className="card-header"> View distinct values </div>
-                <div className="card-body">
-                  <div className="col-lg-3">
-                    <select
-                      className="form-control"
-                      id="distinct_values_selection"
-                      value={selectState}
-                      onChange={onChangeValue.bind(this)}
-                    >
-                      <option value="select">Select</option>
-                      <option value="prefix">Prefix</option>
-                      <option value="matched_prefix">Matched Prefix</option>
-                      <option value="origin_as">Origin AS</option>
-                      <option value="peer_asn">Peer AS</option>
-                      <option value="service">Service</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-              <div className="card">
-                <div className="card-header">
+                <BGPTableComponent
+                  filter={filterFrom}
+                  filterTo={filterTo}
+                  isLive={isLive}
+                  _csrf={_csrf}
+                  setFilteredBgpData={setFilteredBgpData}
+                />
+              </CardBody>
+            </Card>
+
+            <div className="w-full pr-8 float-left">
+              <h2 className="mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300">Additional actions</h2>
+              <Card className="mb-3 shadow-md">
+                <CardBody>
+                  <select
+                    className="form-control w-1/4"
+                    id="distinct_values_selection"
+                    value={selectState}
+                    onChange={onChangeValue.bind(this)}
+                  >
+                    <option value="select">Select</option>
+                    <option value="prefix">Prefix</option>
+                    <option value="matched_prefix">Matched Prefix</option>
+                    <option value="origin_as">Origin AS</option>
+                    <option value="peer_asn">Peer AS</option>
+                    <option value="service">Service</option>
+                  </select>
+                </CardBody>
+              </Card>
+              <Card>
+                <CardBody className="card-header">
                   <Grid container spacing={3}>
                     {distinctValues.map((value, i) => {
                       if (value !== undefined) {
@@ -361,11 +341,10 @@ const BGPUpdates = (props) => {
                       } else return <> </>;
                     })}
                   </Grid>
-                </div>
-              </div>
+                </CardBody>
+              </Card>
             </div>
           </div>
-          <ToastContainer />
         </div>
       )}
     </>
@@ -375,5 +354,5 @@ const BGPUpdates = (props) => {
 export default NotAuthHOC(BGPUpdates, ['admin', 'user']);
 
 export const getServerSideProps = setup(async (req, res, csrftoken) => {
-  return { props: { _csrf: csrftoken,  _inactivity_timeout: process.env.INACTIVITY_TIMEOUT, system_version: process.env.SYSTEM_VERSION } };
+  return { props: { _csrf: csrftoken, _inactivity_timeout: process.env.INACTIVITY_TIMEOUT, system_version: process.env.SYSTEM_VERSION } };
 });
