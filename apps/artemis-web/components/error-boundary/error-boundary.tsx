@@ -26,19 +26,20 @@ class ErrorBoundary extends Component<PropsType, unknown> {
   render() {
     if (this.state.hasError) {
       return (
-        <div>
+        <div className="text-center">
           <p>
-            <img alt="" width="256" src="error.png"></img>
+            <img alt="" className="inline-block" width="256" src="error.png"></img>
           </p>
           <h3>{this.state.errorMessage}</h3>
         </div>
       );
     } else if (!this.props.containsData) {
       return (
-        <div>
+        <div className="text-center">
           <p>
             <img
               alt=""
+              className="inline-block"
               src={this.props.errorImage ? 'error.png' : 'checkmark.png'}
             ></img>
           </p>

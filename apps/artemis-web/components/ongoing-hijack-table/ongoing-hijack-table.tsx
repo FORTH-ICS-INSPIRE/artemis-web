@@ -343,8 +343,8 @@ const OngoingHijackTableComponent = (props: any): ReactElement => {
             key={i}
             value={option.text}
             className={`btn ${currSizePerPage === `${option.page}`
-                ? 'btn-secondary'
-                : 'btn-warning'
+              ? 'btn-secondary'
+              : 'btn-warning'
               }`}
           >
             {option.text}
@@ -505,6 +505,7 @@ const OngoingHijackTableComponent = (props: any): ReactElement => {
                         alt=""
                         id="nodata"
                         width="256"
+                        className="inline-block"
                         src="checkmark.png"
                       ></img>
                     </p>
