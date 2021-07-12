@@ -13,20 +13,20 @@ import React, { useState } from 'react';
 const SignUp = (props) => {
   const { classes } = props;
   const [errorMsg, setErrorMsg] = useState('');
+  const [formData, setFormData] = useState({
+    email: '',
+    password: '',
+    rememberMe: false,
+    name: ''
+  });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const body = {
-      email: e.currentTarget.email.value,
-      name: e.currentTarget.name.value,
-      password: e.currentTarget.password.value,
-      _csrf: props._csrf,
-    };
 
     const res = await fetch('/api/auth/signup', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body),
+      body: JSON.stringify({ ...formData, _csrf: props._csrf }),
     });
 
     if (res.status === 200) {
@@ -65,7 +65,7 @@ const SignUp = (props) => {
                   </span>
                   <input type="text" id="signup-username"
                     onChange={(e) =>
-                      setFormData({ ...formData, username: e.target.value })
+                      setFormData({ ...formData, name: e.target.value })
                     } className=" rounded-r-lg flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent" placeholder="Your username" />
                 </div>
 
@@ -103,7 +103,7 @@ const SignUp = (props) => {
                     className="py-3 px-4  hover:bg-logo-mandy bg-logo-crimson focus:ring-purple-500 focus:ring-offset-purple-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg"
                     type="submit"
                     style={{ transition: "all .15s ease" }}
-                    onClick={(e) => onClick(e, '/api/auth/login/credentials')}
+                    onClick={handleSubmit}
                   >
                     Sign Up
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 inline-block ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
