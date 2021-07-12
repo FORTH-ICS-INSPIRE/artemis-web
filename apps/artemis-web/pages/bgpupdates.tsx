@@ -3,8 +3,7 @@ import {
   FormControlLabel,
   FormGroup,
   Grid,
-  Paper,
-  Switch,
+  Paper
 } from '@material-ui/core';
 import { Card, CardBody } from '@windmill/react-ui';
 import Head from 'next/head';
@@ -12,7 +11,6 @@ import React, { useEffect, useState } from 'react';
 import { useMedia } from 'react-media';
 import { RangePicker } from 'react-minimal-datetime-range';
 import 'react-minimal-datetime-range/lib/react-minimal-datetime-range.min.css';
-import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import NotAuthHOC from '../components/401-hoc/401-hoc';
 import BGPTableComponent from '../components/bgp-table/bgp-table';
@@ -25,7 +23,7 @@ import {
   genTooltip,
   getSimpleDates,
   GLOBAL_MEDIA_QUERIES,
-  shallMock,
+  shallMock
 } from '../utils/token';
 
 const BGPUpdates = (props) => {
@@ -108,7 +106,7 @@ const BGPUpdates = (props) => {
             </h1>
 
             {/* <h2 className="mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300">Ongoing, Non-Dormant Hijacks</h2> */}
-            <Card className="mb-8 shadow-md">
+            <Card className="mb-8 shadow-md bg-gray-600 dark:bg-gray-50">
               <CardBody>
                 <div className="w-full mb-12">
                   <Button

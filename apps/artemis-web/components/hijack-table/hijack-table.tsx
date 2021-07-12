@@ -418,8 +418,8 @@ const HijackTableComponent = (props) => {
             key={option.text}
             value={option.text}
             className={`btn ${currSizePerPage === `${option.page}`
-                ? 'btn-secondary'
-                : 'btn-warning'
+              ? 'btn-secondary'
+              : 'btn-warning'
               } `}
           >
             {option.text}
@@ -489,21 +489,12 @@ const HijackTableComponent = (props) => {
 
     return (
       <>
-        <button
-          onClick={() => setHijackState(data)}
-          style={{ marginRight: '5px' }}
-          id="select_page"
-          type="button"
-          className="btn btn-primary btn-sm"
-        >
-          Select Page
-        </button>
+        <button id="select_page" onClick={() => setHijackState(data)} className="ml-1 text-center text-base  shadow-md  focus:ring-2 focus:ring-offset-2 float-left align-bottom inline-flex items-center justify-center cursor-pointer leading-5 transition-colors duration-150 font-medium focus:outline-none px-2 py-2 text-white bg-blue-600 border border-transparent hover:bg-blue-400" type="button">Select Page</button>
         <span
-          style={{ marginRight: '5px' }}
-          className="btn-group-toggle"
+          className="btn-group-toggle ml-2 mr-2"
           data-toggle="buttons"
         >
-          <label className="btn btn-secondary active btn-sm">
+          <label className="btn btn-secondary active btn-sm py-2">
             <input type="checkbox" autoComplete="off" /> Selected Hijacks{' '}
             <b id="selected_hijacks_num">{hijackState.length}</b>
           </label>
@@ -528,29 +519,17 @@ const HijackTableComponent = (props) => {
           </option>
           <option value="hijack_action_delete">Delete Hijack</option>
         </select>
-        <button
-          onClick={(e) =>
-            sendData(e, {
-              hijackKeys: hijackState.map((hijack) => hijack.key),
-              selectState: selectState,
-              _csrf: props._csrf,
-            })
-          }
-          style={{ marginRight: '5px' }}
-          id="apply_selected"
-          type="button"
-          className="btn btn-primary btn-sm"
-        >
-          Apply
-        </button>
-        <button
-          onClick={() => setHijackState([])}
-          id="clear_all_selected"
-          type="button"
-          className="btn btn-danger btn-sm"
-        >
-          Clear
-        </button>
+        <button id="apply_selected" onClick={(e) =>
+          sendData(e, {
+            hijackKeys: hijackState.map((hijack) => hijack.key),
+            selectState: selectState,
+            _csrf: props._csrf,
+          })
+        }
+          className="ml-1 text-center text-base  shadow-md  focus:ring-2 focus:ring-offset-2  align-bottom inline-flex items-center justify-center cursor-pointer leading-5 transition-colors duration-150 font-medium focus:outline-none px-2 py-2 text-white bg-blue-600 border border-transparent hover:bg-blue-400" type="button">Apply</button>
+
+        <button id="clear_all_selected" onClick={(e) => setHijackState([])}
+          className="ml-1 text-center text-base  shadow-md  focus:ring-2 focus:ring-offset-2  align-bottom inline-flex items-center justify-center cursor-pointer leading-5 transition-colors duration-150 font-medium focus:outline-none px-2 py-2 text-white bg-logo-crimson border border-transparent hover:bg-logo-mandy" type="button">Clear</button>
       </>
     );
   };
@@ -623,27 +602,31 @@ const HijackTableComponent = (props) => {
         return (
           <div>
             <div className="header-filter">
-              <div className="row" style={{ marginBottom: '5px' }}>
+              <div className="row mb-8">
                 <div className="col-lg-12">
-                  <ExportJSON
-                    action="view_hijacks"
-                    dateField={'time_last'}
-                    exportFilters={exportFilters}
-                    dateTo={dateTo}
-                    dateFrom={dateFrom}
-                    _csrf={_csrf}
-                    {...toolkitprops.csvProps}
-                  >
-                    Export JSON!!
-                  </ExportJSON>
-                  <HijackActions
-                    _csrf={_csrf}
-                    data={hijackData}
-                    hijackState={hijackState}
-                    setHijackState={setHijackState}
-                    selectState={selectState}
-                    setSelectState={setSelectState}
-                  />
+                  <div className="w-1/3">
+                    <ExportJSON
+                      action="view_hijacks"
+                      dateField={'time_last'}
+                      exportFilters={exportFilters}
+                      dateTo={dateTo}
+                      dateFrom={dateFrom}
+                      _csrf={_csrf}
+                      {...toolkitprops.csvProps}
+                    >
+                      Export JSON!!
+                    </ExportJSON>
+                  </div>
+                  <div className='w-2/3 float-right'>
+                    <HijackActions
+                      _csrf={_csrf}
+                      data={hijackData}
+                      hijackState={hijackState}
+                      setHijackState={setHijackState}
+                      selectState={selectState}
+                      setSelectState={setSelectState}
+                    />
+                  </div>
                 </div>
               </div>
               <div className="row" style={{ marginBottom: '10px' }}>
@@ -680,6 +663,7 @@ const HijackTableComponent = (props) => {
                         alt=""
                         id="nodata"
                         width="256"
+                        className="inline-block"
                         src="checkmark.png"
                       ></img>
                     </p>
