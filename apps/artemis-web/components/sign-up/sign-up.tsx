@@ -54,7 +54,7 @@ const SignUp = (props) => {
 
             <div className="flex-auto px-4 lg:px-10 space-y-6">
               <h2 className="mb-16 text-center text-3xl font-extrabold text-gray-900">Create Your Account</h2>
-
+              {errorMsg && <p className="error">{errorMsg}</p>}
               <form>
 
                 <div className="flex relative w-full mb-3 ">

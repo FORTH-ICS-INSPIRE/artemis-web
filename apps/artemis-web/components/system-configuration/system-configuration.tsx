@@ -6,6 +6,7 @@ import { Controlled as CodeMirror } from 'react-codemirror2';
 import { formatDate } from '../../utils/token';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/3024-day.css';
+import { Card, CardBody } from '@windmill/react-ui';
 
 type stateType = {
   configs: any[];
@@ -88,7 +89,127 @@ const SystemConfigurationComponent = (props) => {
 
   return (
     <>
-      <div style={{ marginTop: '20px' }} className="row">
+      <div className="w-full float-left">
+        <h2 className="row mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300">
+          <div className="float-left w-5/6 mt-6 ml-4">Current Configuration</div>
+          <div className="float-right">
+            {editState ? (
+              <>
+                <Button
+                  onClick={(e) => onClick(e, 'save')}
+                  style={{ float: 'right' }}
+                  variant="contained"
+                  className={classes.inactiveButton}
+                >
+                  Save
+                </Button>
+                <Button
+                  onClick={() => setEditState(!editState)}
+                  style={{ float: 'right', marginRight: '5px' }}
+                  variant="contained"
+                  className={classes.cancelButton}
+                >
+                  cancel
+                </Button>{' '}
+              </>
+            ) : (
+              <Button
+                onClick={() => setEditState(!editState)}
+                style={{ float: 'right' }}
+                variant="contained"
+                className="material-button"
+              >
+                Edit
+              </Button>
+            )}
+            <Button
+              onClick={(e) => onClick(e, 'load')}
+              // style={{ float: 'right', marginRight: '10px' }}
+              variant="contained"
+              className="material-button"
+            >
+              Load AS-SETs
+            </Button>
+          </div>
+        </h2>
+
+        <Card>
+          <CardBody>
+            <div style={{ display: alertState }} id="config_alert_box">
+              <div className={"alert alert-dismissible " + (fetchState ? "alert-success" : "alert-danger")}>
+                <a
+                  href="#"
+                  className="close"
+                  data-dismiss="alert"
+                  aria-label="close"
+                >
+                  ×
+                </a>
+                {alertMessage}
+              </div>
+            </div>
+            <CodeMirror
+              ref={configRef}
+              value={configState}
+              options={{
+                mode: 'yaml',
+                styleActiveLine: true,
+                foldGutter: true,
+                gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter'],
+                theme: '3024-day',
+                lineNumbers: true,
+              }}
+              onBeforeChange={(editor, data, value) => {
+                if (editState) setConfigState(value);
+              }}
+            />
+            <div style={{ marginTop: '4px' }}>
+              <span style={{ float: 'left' }}>
+                Last Update:{' '}
+                {CONFIG_DATA
+                  ? formatDate(
+                    new Date(CONFIG_DATA.view_configs[0].time_modified),
+                    Math.abs(new Date().getTimezoneOffset() / 60)
+                  )
+                  : 'Never'}
+              </span>
+              <span style={{ float: 'right', marginTop: '15px' }}>
+                Times are shown in your local time zone{' '}
+                <b>GMT{new Date().getTimezoneOffset() > 0 ? '-' : '+'}{Math.abs(new Date().getTimezoneOffset() / 60)} ({Intl.DateTimeFormat().resolvedOptions().timeZone}).</b>
+              </span>
+            </div>
+          </CardBody>
+        </Card>
+
+        <div className="w-full mt-4 float-left">
+          <h2 className="mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300">Comment for config</h2>
+          <Card className="mb-3 shadow-md">
+            <CardBody>
+              <CodeMirror
+                ref={commentRef}
+                value={commentState}
+                options={{
+                  mode: 'text',
+                  styleActiveLine: true,
+                  foldGutter: true,
+                  gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter'],
+                  theme: '3024-day',
+                  lineNumbers: true,
+                }}
+                onBeforeChange={(editor, data, value) => {
+                  if (editState) setCommentState(value);
+                }}
+              />
+            </CardBody>
+          </Card>
+
+        </div>
+
+      </div>
+
+
+
+      {/* <div style={{ marginTop: '20px' }} className="row">
         <div className="col-lg-1" />
         <div className="col-lg-10">
           <div className="card">
@@ -206,6 +327,7 @@ const SystemConfigurationComponent = (props) => {
           </div>
         </div>
       </div>
+     */}
     </>
   );
 };

@@ -19,8 +19,8 @@ function SidebarContent() {
       setPath(window.location.pathname);
   }, []);
 
-  const visitedClasses = "w-full font-thin uppercase text-blue-500 flex items-center p-4 mb-2  transition-colors duration-200 justify-start bg-gradient-to-r from-white to-blue-100 border-r-4 border-blue-500 dark:from-gray-700 dark:to-gray-800 border-r-4 border-blue-500";
-  const notVistedClasses = "w-full font-thin uppercase text-gray-500 dark:text-gray-200 flex items-center p-4 my-2 transition-colors duration-200 justify-start hover:text-blue-500";
+  const visitedClasses = "w-full font-thin uppercase text-logo-crimson flex items-center p-4 mb-2  transition-colors duration-200 justify-start bg-gradient-to-r hover:text-logo-mandy from-white to-gray-500 border-r-4 border-logo-crimson dark:from-gray-700 dark:to-gray-800 border-r-4 border-logo-crimson";
+  const notVistedClasses = "w-full font-thin uppercase text-gray-500 dark:text-gray-200  flex items-center p-4 my-2 transition-colors duration-200 justify-start hover:text-logo-crimson";
 
   return (
     <div className="bg-gray-100 ml-4 h-full rounded-2xl dark:bg-gray-600">
@@ -58,6 +58,34 @@ function SidebarContent() {
             </span>
             <span className="mx-4 text-sm font-normal">
               HIJACKS
+            </span>
+          </a>
+          <div className="w-full mt-24 font-thin uppercase text-gray-500 dark:text-gray-200 flex items-center p-4 mb-2  transition-colors duration-200 justify-start bg-gradient-to-r hover:text-logo-mandy  dark:from-gray-700 dark:to-gray-800 border-b-2 border-t-2 border-logo-crimson">
+            <hr />
+            <span className="mx-4 text-sm font-normal">
+              ADMIN
+            </span>
+            <hr />
+          </div>
+          <a className={path.includes('system') ? visitedClasses : notVistedClasses} href="/admin/system">
+            <span className="text-left">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+            </span>
+            <span className="mx-4 text-sm font-normal">
+              SYSTEM
+            </span>
+          </a>
+          <a className={path.includes('user_management') ? visitedClasses : notVistedClasses} href="/admin/user_management">
+            <span className="text-left">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+              </svg>
+            </span>
+            <span className="mx-4 text-sm font-normal">
+              User Management
             </span>
           </a>
         </div>

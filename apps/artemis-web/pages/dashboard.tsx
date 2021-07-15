@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import AuthHOC from "../components/401-hoc/401-hoc";
 import ErrorBoundary from "../components/error-boundary/error-boundary";
+import Footer from "../components/footer/footer";
 import OngoingHijackTableComponent from "../components/ongoing-hijack-table/ongoing-hijack-table";
 import StatisticsTable from "../components/statistics-table/statistics-table";
 import StatusTable from "../components/status-table/status-table";
@@ -88,7 +89,7 @@ const DashboardPage = (props: any) => {
       <Head>
         <title>ARTEMIS - Dashboard</title>
       </Head>
-      <div className="absolute w-full h-full">
+      <div className="relative w-full h-full">
         {/* Page title ends */}
         <div className="w-3/4 mx-auto px-6">
           <h1 className="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">Dashboard</h1>

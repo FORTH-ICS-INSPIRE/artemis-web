@@ -23,51 +23,55 @@ const SystemModule = (props) => {
 
   return (
     <Grid item xs={3}>
-      <div className="card">
-        <div className="card-header"> {labels[key]} </div>
-        <div className="card-body">
-          <div className="row">
-            <div className="col-lg-1" />
-            <div className="col-lg-6">
-              <Button
-                variant="contained"
-                style={{ marginTop: '9px', cursor: 'default' }}
-                className={
-                  totalActive > 0
-                    ? classes.activeButton
-                    : classes.inactiveButton
-                }
-              >
-                {
-                  <span>
-                    Active{' '}
-                    <span className="badge badge-light">
-                      {totalActive}/{totalModules}
-                    </span>
-                  </span>
-                }
-              </Button>
-            </div>
-            <div className="col-lg-4">
-              <FormGroup>
-                <FormControlLabel
-                  control={
-                    <AntSwitch
-                      checked={state[module]}
-                      onChange={() => {
-                        setState((prevState) => ({
-                          ...prevState,
-                          [module]: !state[module],
-                        }));
-                      }}
-                      name="checkedB"
-                    />
+      <div className="">
+        <div className="shadow-lg px-4 py-6 w-full bg-white dark:bg-gray-700 relative">
+          <p className="text-xl text-gray-700 dark:text-white font-bold">
+            {labels[key]}
+          </p>
+          <p className="text-gray-400 text-sm mt-4">
+            <div className="row">
+              <div className="col-lg-1" />
+              <div className="col-lg-6">
+                <Button
+                  variant="contained"
+                  style={{ marginTop: '9px', cursor: 'default' }}
+                  className={
+                    totalActive > 0
+                      ? classes.activeButton
+                      : classes.inactiveButton
                   }
-                  label=""
-                />
-              </FormGroup>
+                >
+                  {
+                    <span>
+                      Active{' '}
+                      <span className="badge badge-light">
+                        {totalActive}/{totalModules}
+                      </span>
+                    </span>
+                  }
+                </Button>
+              </div>
+              <div className="col-lg-4">
+                <FormGroup>
+                  <FormControlLabel
+                    control={
+                      <AntSwitch
+                        checked={state[module]}
+                        onChange={() => {
+                          setState((prevState) => ({
+                            ...prevState,
+                            [module]: !state[module],
+                          }));
+                        }}
+                        name="checkedB"
+                      />
+                    }
+                    label=""
+                  />
+                </FormGroup>
+              </div>
             </div>
-          </div>
+          </p>
         </div>
       </div>
     </Grid>

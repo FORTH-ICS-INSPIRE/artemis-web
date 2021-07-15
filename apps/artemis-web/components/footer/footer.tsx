@@ -52,8 +52,8 @@ class FooterComponent extends React.Component<MyProps> {
     const { classes, system_version } = this.props;
 
     return (
-      <footer className="bg-gray-100 dark:bg-gray-600 border-t border-gray pt-8">
-        <div className="max-w-7xl mx-auto pb-5 px-4 sm:px-6 md:flex md:items-center md:justify-between lg:px-8">
+      <footer className="relative top-10 mx-auto float-right w-full  z-40 my-2 py-4 bg-gray-100 shadow-bottom rounded-2xl dark:bg-gray-600 pt-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 md:flex md:items-center md:justify-between lg:px-8">
           <div className="flex justify-center space-x-6 md:order-2">
             {navigation.map((item) => (
               <a key={item.name} href={item.href} className="text-gray-400 hover:text-gray-500">

@@ -10,7 +10,6 @@ import {
   Switch,
 } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
-import { Card, CardBody } from '@windmill/react-ui';
 import { ContentState, EditorState } from 'draft-js';
 import 'draft-js/dist/Draft.css';
 import DefaultErrorPage from 'next/error';
@@ -126,27 +125,38 @@ const ViewHijackPage = (props) => {
         <title>ARTEMIS - Hijack</title>
       </Head>
       {user && hijackExists && (
-        <div className="absolute w-full h-full">
-          {/* Page title ends */}
-          <div className="w-3/4 mx-auto px-6">
-            <h1 className="my-6 inline-block w-full text-2xl font-semibold text-gray-700 dark:text-gray-200">
-              <div className="w-1/2 float-left">Hijack<small id="hijack_status">
-                {findStatus(hijackDataState).map((status, i) => (
-                  <span
-                    key={i}
-                    style={{ marginLeft: '10px' }}
-                    className={
-                      'badge badge-pill badge-' + statuses[status]
-                    }
-                  >
-                    {status}
-                  </span>
-                ))}
-              </small></div>
-
-              {matches.pc && (
-                <div className="w-1/2 inline-block float-right">
-                  <FormGroup className="float-right ml-8 relative -top-3">
+        <div
+          className="container overview col-lg-12"
+        // style={{ paddingTop: '120px' }}
+        >
+          <div className="row">
+            <div className="col-lg-1" />
+            <div className="col-lg-10">
+              <div className="row">
+                <div className="col-lg-9" style={{ color: 'black' }}>
+                  <div className="w-1/2 float-left">Hijacks<small id="hijack_status">
+                    {findStatus(hijackDataState).map((status, i) => (
+                      <span
+                        key={i}
+                        style={{ marginLeft: '10px' }}
+                        className={
+                          'badge badge-pill badge-' + statuses[status]
+                        }
+                      >
+                        {status}
+                      </span>
+                    ))}
+                  </small>
+                  </div>
+                </div>
+                {/* <div className="col-lg-1"></div> */}
+                {matches.pc && (
+                  <div className="col-lg-2">
+                    <h2 style={{ color: 'black' }}> Live Update: </h2>{' '}
+                  </div>
+                )}
+                <div className="col-lg-1">
+                  <FormGroup>
                     <FormControlLabel
                       control={
                         <AntSwitch
@@ -160,34 +170,30 @@ const ViewHijackPage = (props) => {
                       label=""
                     />
                   </FormGroup>
-                  <h2 className="float-right dark:text-gray-50 text-gray-700">Live Update:</h2>{' '}
                 </div>
-              )}
-            </h1>
-
-            {/* <h2 className="mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300">Ongoing, Non-Dormant Hijacks</h2> */}
-            <Card className="mb-8 shadow-md">
-              <CardBody>
-                <HijackInfoComponent
-                  {...props}
-                  hijackDataState={hijackDataState}
-                  isMobile={matches.mobile}
-                  tooltips={tooltips}
-                  setTooltips={setTooltips}
-                  context={context}
-                  classes={classes}
-                  setOpenModalState={setOpenModalState}
-                  hijackKey={hijackKey}
-                  editorState={editorState}
-                  setEditorState={setEditorState}
-                />
-              </CardBody>
-            </Card>
-
-            <div className="w-full pr-8 float-left">
-              <h2 className="mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300">Related BGP Updates</h2>
-              <Card>
-                <CardBody className="card-header">
+              </div>
+              <hr style={{ backgroundColor: 'white' }} />
+            </div>
+          </div>
+          <HijackInfoComponent
+            {...props}
+            hijackDataState={hijackDataState}
+            isMobile={matches.mobile}
+            tooltips={tooltips}
+            setTooltips={setTooltips}
+            context={context}
+            classes={classes}
+            setOpenModalState={setOpenModalState}
+            hijackKey={hijackKey}
+            editorState={editorState}
+            setEditorState={setEditorState}
+          />
+          <div className="row" style={{ marginTop: '20px' }}>
+            <div className="col-lg-1" />
+            <div className="col-lg-10">
+              <div className="card">
+                <div className="card-header">Related BGP Updates</div>
+                <div className="card-body" style={{ textAlign: 'center' }}>
                   <Dialog
                     aria-labelledby="customized-dialog-title"
                     open={openModalState}
@@ -220,28 +226,34 @@ const ViewHijackPage = (props) => {
                     hijackKey={hijackKey}
                     skippedCols={['as_path', 'hijack_key']}
                   />
-                </CardBody>
-              </Card>
-
-              <h2 className="mb-4 mt-4 text-lg font-semibold text-gray-600 dark:text-gray-300">Additional actions</h2>
-              <Card className="mb-3 shadow-md">
-                <CardBody>
-                  <select
-                    className="form-control"
-                    id="distinct_values_selection"
-                    value={selectState}
-                    onChange={onChangeValue.bind(this)}
-                  >
-                    <option value="select">Select</option>
-                    <option value="origin_as">Origin AS</option>
-                    <option value="peer_asn">Peer AS</option>
-                    <option value="service">Service</option>
-                  </select>
-                </CardBody>
-              </Card>
-              <Card>
-                <CardBody className="card-header">
-                  <Grid>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="row" style={{ marginTop: '20px' }}>
+            <div className="col-lg-1" />
+            <div className="col-lg-10">
+              <div className="card">
+                <div className="card-header"> View distinct values </div>
+                <div className="card-body">
+                  <div className="col-lg-3">
+                    <select
+                      className="form-control"
+                      id="distinct_values_selection"
+                      value={selectState}
+                      onChange={onChangeValue.bind(this)}
+                    >
+                      <option value="select">Select</option>
+                      <option value="origin_as">Origin AS</option>
+                      <option value="peer_asn">Peer AS</option>
+                      <option value="service">Service</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div className="card">
+                <div className="card-header">
+                  <Grid container spacing={3}>
                     {filteredBgpData &&
                       distinctValues.map((value, i) => {
                         if (value !== undefined) {
@@ -274,21 +286,29 @@ const ViewHijackPage = (props) => {
                         } else return <> </>;
                       })}
                   </Grid>
-                </CardBody>
-              </Card>
+                </div>
+              </div>
             </div>
-          </div >
-        </div >
-      )
-      }
-      {
-        user && !hijackExists && (
-          <DefaultErrorPage
-            statusCode={404}
-            title={'This hijack does not exist'}
-          />
-        )
-      }
+          </div>
+          {/* <div className="row" style={{ marginTop: '20px' }}>
+            <div className="col-lg-1" />
+            <div className="col-lg-10">
+              <div className="card">
+                <div className="card-header">Dataplane View</div>
+                <div className="card-body" style={{ textAlign: 'center' }}>
+                  <DataplaneTableComponent hijackKey={hijackKey} />
+                </div>
+              </div>
+            </div>
+          </div> */}
+        </div>
+      )}
+      {user && !hijackExists && (
+        <DefaultErrorPage
+          statusCode={404}
+          title={'This hijack does not exist'}
+        />
+      )}
     </>
   );
 };

@@ -18,6 +18,10 @@ p > img
   height: 2.5rem
   padding-top: 8px
 
+.dropdownItem:hover
+  background-color: rgba(244,245,247) !important
+
+
 .input
   color: black
   margin-top: 15px !important
@@ -66,6 +70,9 @@ p > img
 td
   text-align: center
 
+.CodeMirror
+  height: 500px !important /* remove label height above mirror in my case */
+
 #modules
   > tbody > tr > td
     text-align: left !important
@@ -78,7 +85,7 @@ td
   align-items: center
 
 .__react_component_tooltip
-  background-color: #014379 !important
+  background-color: #ec1e26 !important
   opacity: 1 !important
   max-width: 500px !important
   padding: 20px !important
@@ -151,8 +158,7 @@ main
 .main-container
   position: relative
   margin-top: 80px
-  margin-bottom: 80px
-  min-height: calc(87vh - 20px)
+  min-height: 100vh
 
   > .container
     padding-top: 40px

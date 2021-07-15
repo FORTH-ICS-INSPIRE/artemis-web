@@ -78,7 +78,7 @@ const BGPUpdates = (props) => {
         <title>ARTEMIS - BGP Updates</title>
       </Head>
       {user && (
-        <div className="absolute w-full h-full">
+        <div className="relative w-full h-full mb-12">
           {/* Page title ends */}
           <div className="w-3/4 mx-auto px-6">
             <h1 className="my-6 inline-block w-full text-2xl font-semibold text-gray-700 dark:text-gray-200">
@@ -100,7 +100,7 @@ const BGPUpdates = (props) => {
                       label=""
                     />
                   </FormGroup>
-                  <h2 className="float-right" style={{ color: 'black' }}>Live Update:</h2>{' '}
+                  <h2 className="text-gray-700 dark:text-gray-200 float-right">Live Update:</h2>{' '}
                 </div>
               )}
             </h1>

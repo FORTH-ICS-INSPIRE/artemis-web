@@ -1,4 +1,5 @@
 import { Grid } from '@material-ui/core';
+import { Card, CardBody } from '@windmill/react-ui';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/material.css';
 import Head from 'next/head';
@@ -102,52 +103,41 @@ const SystemPage = (props) => {
       <Head>
         <title>ARTEMIS - System</title>
       </Head>
-      <div id="page-container">
-        {user && modulesStateObj && (
-          <div id="content-wrap" style={{ paddingBottom: '5rem' }}>
-            <div className="row">
-              <div className="col-lg-1" />
-              <div className="col-lg-10">
-                <div className="row">
-                  <div className="col-lg-8">
-                    <h1 style={{ color: 'black' }}>System</h1>{' '}
-                  </div>
-                  <div className="col-lg-1"></div>
-                </div>
-                <hr style={{ backgroundColor: 'white' }} />
-              </div>
-            </div>
-            <div className="row">
-              <div className="col-lg-1" />
-              <div className="col-lg-10">
-                <Grid container spacing={3}>
-                  {moduleNames.map((module, i) => {
-                    const key = module
-                      .substring(0, module.indexOf('-'))
-                      .toLowerCase();
-                    if (!moduleList.includes(key)) {
-                      moduleList.push(key);
-                      return (
-                        <SystemModule
-                          {...props}
-                          key={i} // React requires a unique key value for each component rendered within a loop
-                          module={module}
-                          subModules={subModules}
-                          labels={modulesLabels}
-                          modulesStateObj={modulesStateObj}
-                        />
-                      );
-                    } else return <> </>;
-                  })}
-                </Grid>
-              </div>
-            </div>
-            <SystemConfigurationComponent
-              {...props}
-              CONFIG_DATA={CONFIG_DATA}
-            />
-          </div>
-        )}
+      <div className="relative w-full h-full">
+        {/* Page title ends */}
+        <div className="w-3/4 mx-auto px-6">
+          <h1 className="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">System</h1>
+
+          <Card className="mb-8 shadow-md">
+            <CardBody>
+              <Grid container spacing={3}>
+                {moduleNames.map((module, i) => {
+                  const key = module
+                    .substring(0, module.indexOf('-'))
+                    .toLowerCase();
+                  if (!moduleList.includes(key)) {
+                    moduleList.push(key);
+                    return (
+                      <SystemModule
+                        {...props}
+                        key={i} // React requires a unique key value for each component rendered within a loop
+                        module={module}
+                        subModules={subModules}
+                        labels={modulesLabels}
+                        modulesStateObj={modulesStateObj}
+                      />
+                    );
+                  } else return <> </>;
+                })}
+              </Grid>
+            </CardBody>
+          </Card>
+
+          <SystemConfigurationComponent
+            {...props}
+            CONFIG_DATA={CONFIG_DATA}
+          />
+        </div>
       </div>
     </>
   );
@@ -156,5 +146,5 @@ const SystemPage = (props) => {
 export default AuthHOC(SystemPage, ['admin']);
 
 export const getServerSideProps = setup(async (req, res, csrftoken) => {
-  return { props: { _csrf: csrftoken,  _inactivity_timeout: process.env.INACTIVITY_TIMEOUT, system_version: process.env.SYSTEM_VERSION } };
+  return { props: { _csrf: csrftoken, _inactivity_timeout: process.env.INACTIVITY_TIMEOUT, system_version: process.env.SYSTEM_VERSION } };
 });

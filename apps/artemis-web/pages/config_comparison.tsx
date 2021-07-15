@@ -1,3 +1,4 @@
+import { Card, CardBody } from '@windmill/react-ui';
 import Head from 'next/head';
 import React, { useEffect } from 'react';
 import AuthHOC from '../components/401-hoc/401-hoc';
@@ -23,27 +24,22 @@ const ConfigComparisonPage = (props) => {
         <title>ARTEMIS - Configuration Comparison</title>
       </Head>
       <div id="page-container">
-        {user && (
-          <div id="content-wrap" style={{ paddingBottom: '5rem' }}>
-            <div className="row">
-              <div className="col-lg-1" />
-              <div className="col-lg-10">
-                <div className="row">
-                  <div className="col-lg-8">
-                    <h1 style={{ color: 'black' }}>Configuration Comparison</h1>{' '}
-                  </div>
-                </div>
-                <hr style={{ backgroundColor: 'white' }} />
-              </div>
-            </div>
-            <div className="row">
-              <div className="col-lg-1"></div>
-              <div className="col-lg-10">
+        {/* {user && ( */}
+        <div className="relative w-full h-full mb-12">
+          {/* Page title ends */}
+          <div className="w-3/4 mx-auto px-6">
+            <h1 className="my-6 inline-block w-full text-2xl font-semibold text-gray-700 dark:text-gray-200">
+              <div className="w-1/2 float-left">Configuration Comparison</div>
+            </h1>
+
+            {/* <h2 className="mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300">Ongoing, Non-Dormant Hijacks</h2> */}
+            <Card className="mb-8 shadow-md bg-gray-600 dark:bg-gray-50">
+              <CardBody>
                 <ConfigComparisonComponent />
-              </div>
-            </div>
+              </CardBody>
+            </Card>
           </div>
-        )}
+        </div>
       </div>
     </>
   );
@@ -52,5 +48,5 @@ const ConfigComparisonPage = (props) => {
 export default AuthHOC(ConfigComparisonPage, ['admin', 'user']);
 
 export const getServerSideProps = setup(async (req, res, csrftoken) => {
-  return { props: { _csrf: csrftoken,  _inactivity_timeout: process.env.INACTIVITY_TIMEOUT, system_version: process.env.SYSTEM_VERSION } };
+  return { props: { _csrf: csrftoken, _inactivity_timeout: process.env.INACTIVITY_TIMEOUT, system_version: process.env.SYSTEM_VERSION } };
 });

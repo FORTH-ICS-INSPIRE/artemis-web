@@ -7,6 +7,7 @@ import AuthHOC from '../../components/401-hoc/401-hoc';
 import UserListComponent from '../../components/user-list/user-list';
 import { autoLogout, formatDate } from '../../utils/token';
 import { setup } from '../../libs/csrf';
+import { Card, CardBody } from '@windmill/react-ui';
 
 const UserManagementPage = (props) => {
   const user = props.user;
@@ -76,7 +77,144 @@ const UserManagementPage = (props) => {
       <Head>
         <title>ARTEMIS - User Management</title>
       </Head>
-      <div id="page-container">
+
+      <div className="relative w-full h-full">
+        {/* Page title ends */}
+        <div className="w-3/4 mx-auto px-6">
+          <h1 className="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">User Management</h1>
+          <div className="space-x-12">
+            <Card className="mb-8 shadow-md w-1/5 inline-block">
+              <CardBody>
+                Select pending user to approve:
+                <select
+                  ref={
+                    approvalRef as React.RefObject<HTMLSelectElement>
+                  }
+                  className="form-control mt-2"
+                  id="distinct_values_selection"
+                >
+                  {pendingList.map((user, i) => (
+                    <option key={`1${i}`}>{user.name}</option>
+                  ))}
+                </select>
+
+                <Button
+                  onClick={(e) =>
+                    manageUser(e, 'approval', approvalRef.current.value)
+                  }
+                  id="approval"
+                  variant="contained"
+                  className="material-button" // color="primary"
+                >
+                  Approve User
+                </Button>
+              </CardBody>
+            </Card>
+
+            <Card className="mb-8 shadow-md w-1/5 inline-block">
+              <CardBody>
+                Select user to give admin privileges:
+                <select
+                  ref={promoteRef as React.RefObject<HTMLSelectElement>}
+                  className="form-control mt-2"
+                  id="distinct_values_selection"
+                >
+                  {normalList.map((user, i) => (
+                    <option key={`2${i}`}>{user.name}</option>
+                  ))}
+                </select>
+
+                <Button
+                  onClick={(e) =>
+                    manageUser(e, 'promote', promoteRef.current.value)
+                  }
+                  id="promote"
+                  variant="contained"
+                  className="material-button"
+                >
+                  Promote to Admin
+                </Button>
+              </CardBody>
+            </Card>
+
+            <Card className="mb-8 shadow-md w-1/5 inline-block">
+              <CardBody>
+                Select user to remove admin privileges:
+                <select
+                  ref={demoteRef as React.RefObject<HTMLSelectElement>}
+                  className="form-control mt-2"
+                  id="distinct_values_selection"
+                >
+                  {adminList.map((user, i) => (
+                    <option key={`3${i}`}>{user.name}</option>
+                  ))}
+                </select>
+
+                <Button
+                  onClick={(e) =>
+                    manageUser(e, 'demote', demoteRef.current.value)
+                  }
+                  id="demote"
+                  variant="contained"
+                  className="material-button"
+                >
+                  Demote to User
+                </Button>
+              </CardBody>
+            </Card>
+
+            <Card className="mb-8 shadow-md w-1/5 inline-block">
+              <CardBody>
+                Select user to delete:
+                <select
+                  ref={deleteRef as React.RefObject<HTMLSelectElement>}
+                  className="form-control mt-2"
+                  id="distinct_values_selection"
+                >
+                  {userList.map((user, i) => (
+                    <option key={`4${i}`}>{user.name}</option>
+                  ))}
+                </select>
+
+                <Button
+                  onClick={(e) =>
+                    manageUser(e, 'delete', deleteRef.current.value)
+                  }
+                  id="delete"
+                  variant="contained"
+                  className="material-button"
+                >
+                  Delete User
+                </Button>
+              </CardBody>
+            </Card>
+          </div>
+          <div className="space-x-24">
+            <Card className="mb-8 shadow-md w-2/5 inline-block pt-20">
+              <CardBody>
+                <UsersPasswordComponent
+                  data={userList}
+                  {...props}
+                ></UsersPasswordComponent>
+              </CardBody>
+            </Card>
+            <Card className="mb-8 shadow-md w-2/5 inline-block pt-2">
+              <CardBody>
+                <UserCreationComponent
+                  data={userList}
+                  {...props}
+                ></UserCreationComponent>
+              </CardBody>
+            </Card>
+          </div>
+          <Card className="mb-8 shadow-md w-full inline-block">
+            <CardBody>
+              <UserListComponent {...props} data={userList} />
+            </CardBody>
+          </Card>
+        </div>
+      </div>
+      {/* <div id="page-container">
         {user && (
           <div id="content-wrap" style={{ paddingBottom: '5rem' }}>
             {errorMsg && <p className="error">{errorMsg}</p>}
@@ -291,7 +429,7 @@ const UserManagementPage = (props) => {
             </div>
           </div>
         )}
-      </div>
+      </div> */}
     </>
   );
 };
