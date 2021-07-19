@@ -37,7 +37,7 @@ import {
 } from '../utils/token';
 
 const ViewHijackPage = (props) => {
-  if (shallMock()) {
+  if (shallMock(props.isTesting)) {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const { worker } = require('../utils/mock-sw/browser');
     worker.start();
@@ -96,7 +96,7 @@ const ViewHijackPage = (props) => {
         );
       }
     },
-    isLive: true,
+    isLive: !shallMock(props.isTesting),
     key: hijackKey,
     sortOrder: 'desc',
     sortColumn: 'time_last',
@@ -318,5 +318,5 @@ const ViewHijackPage = (props) => {
 export default AuthHOC(ViewHijackPage, ['admin', 'user']);
 
 export const getServerSideProps = setup(async (req, res, csrftoken) => {
-  return { props: { _csrf: csrftoken,  _inactivity_timeout: process.env.INACTIVITY_TIMEOUT, system_version: process.env.SYSTEM_VERSION } };
+  return { props: { _csrf: csrftoken, isTesting: process.env.TESTING === 'true', _inactivity_timeout: process.env.INACTIVITY_TIMEOUT, system_version: process.env.SYSTEM_VERSION } };
 });

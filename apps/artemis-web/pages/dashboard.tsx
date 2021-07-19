@@ -19,26 +19,26 @@ const DashboardPage = (props: any) => {
     autoLogout(props);
   }, [props]);
 
-  if (shallMock()) {
+  if (shallMock(props.isTesting)) {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const { worker } = require('../utils/mock-sw/browser');
     worker.start();
   }
 
-  const [isLive, setIsLive] = useState(true);
+  const [isLive, setIsLive] = useState(!shallMock(props.isTesting));
 
   const user = props.user;
   // const notify = (message: React.ReactText) => toast(message);
 
   const STATS_RES: any = useGraphQl('stats', {
-    isLive: true,
+    isLive: isLive,
     hasDateFilter: false,
     hasColumnFilter: false,
   });
   const STATS_DATA = STATS_RES.data;
 
   const INDEX_RES: any = useGraphQl('indexStats', {
-    isLive: true,
+    isLive: isLive,
     hasDateFilter: false,
     hasColumnFilter: false,
   });
@@ -201,5 +201,5 @@ const DashboardPage = (props: any) => {
 export default AuthHOC(DashboardPage, ['admin', 'user']);
 
 export const getServerSideProps = setup(async (req, res, csrftoken) => {
-  return { props: { _csrf: csrftoken,  _inactivity_timeout: process.env.INACTIVITY_TIMEOUT, system_version: process.env.SYSTEM_VERSION } };
+  return { props: { _csrf: csrftoken, isTesting: process.env.TESTING === 'true',  _inactivity_timeout: process.env.INACTIVITY_TIMEOUT, system_version: process.env.SYSTEM_VERSION } };
 });

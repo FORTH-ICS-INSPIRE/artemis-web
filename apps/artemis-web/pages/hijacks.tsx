@@ -28,13 +28,14 @@ import {
 } from '../utils/token';
 
 const HijacksPage = (props) => {
-  const [isLive, setIsLive] = useState(true);
 
-  if (shallMock()) {
+  if (shallMock(props.isTesting)) {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const { worker } = require('../utils/mock-sw/browser');
     worker.start();
   }
+
+  const [isLive, setIsLive] = useState(!shallMock(props.isTesting));
 
   useEffect(() => {
     autoLogout(props);
@@ -612,5 +613,5 @@ const HijacksPage = (props) => {
 export default AuthHOC(HijacksPage, ['admin', 'user']);
 
 export const getServerSideProps = setup(async (req, res, csrftoken) => {
-  return { props: { _csrf: csrftoken,  _inactivity_timeout: process.env.INACTIVITY_TIMEOUT, system_version: process.env.SYSTEM_VERSION } };
+  return { props: { _csrf: csrftoken, isTesting: process.env.TESTING === 'true',  _inactivity_timeout: process.env.INACTIVITY_TIMEOUT, system_version: process.env.SYSTEM_VERSION } };
 });

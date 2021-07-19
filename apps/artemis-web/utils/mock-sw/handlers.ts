@@ -4,61 +4,34 @@ export const handlers = [
   graphql.query('getStats', (req, res, ctx) => {
     return res(
       ctx.data({
-        view_processes: [
-          {
-            name: 'detection',
-            running: false,
-            loading: false,
-            timestamp: '2020-08-04T13:41:01.2861',
-            __typename: 'view_processes',
-          },
-          {
-            name: 'mitigation',
-            running: false,
-            loading: false,
-            timestamp: '2020-03-04T13:54:10.2861',
-            __typename: 'view_processes',
-          },
-          {
-            name: 'monitor',
-            running: false,
-            loading: false,
-            timestamp: '2020-01-04T13:44:28.29838',
-            __typename: 'view_processes',
-          },
-          {
-            name: 'configuration',
-            running: true,
-            loading: false,
-            timestamp: '2020-05-04T13:44:18.626747',
-            __typename: 'view_processes',
-          },
-          {
-            name: 'clock',
-            running: true,
-            loading: false,
-            timestamp: '2020-02-04T13:42:08.658648',
-            __typename: 'view_processes',
-          },
-          {
-            name: 'observer',
-            running: true,
-            loading: false,
-            timestamp: '2019-11-04T13:03:02.658943',
-            __typename: 'view_processes',
-          },
-          {
-            name: 'database',
-            running: true,
-            loading: false,
-            timestamp: '2019-12-04T13:44:19.725199',
-            __typename: 'view_processes',
-          },
-        ],
-      })
+        "view_processes":[
+          {"name":"autostarter-1","running":true,"loading":false,"timestamp":"2021-07-19T08:54:19.429356","__typename":"view_processes"},
+          {"name":"detection-1","running":false,"loading":false,"timestamp":"2021-07-19T08:54:19.71384","__typename":"view_processes"},
+          {"name":"mitigation-1","running":false,"loading":false,"timestamp":"2021-07-19T08:54:19.739314","__typename":"view_processes"},
+          {"name":"riperistap-1","running":false,"loading":false,"timestamp":"2021-07-19T08:54:19.763432","__typename":"view_processes"},
+          {"name":"bgpstreamlivetap-1","running":false,"loading":false,"timestamp":"2021-07-19T08:54:19.797569","__typename":"view_processes"},
+          {"name":"bgpstreamkafkatap-1","running":false,"loading":false,"timestamp":"2021-07-19T08:54:19.83662","__typename":"view_processes"},
+          {"name":"bgpstreamhisttap-1","running":false,"loading":false,"timestamp":"2021-07-19T08:54:19.854802","__typename":"view_processes"},
+          {"name":"exabgptap-1","running":false,"loading":false,"timestamp":"2021-07-19T08:54:19.871316","__typename":"view_processes"},
+          {"name":"configuration-1","running":true,"loading":false,"timestamp":"2021-07-19T08:54:24.896025","__typename":"view_processes"},
+          {"name":"database-1","running":true,"loading":false,"timestamp":"2021-07-19T08:54:24.904762","__typename":"view_processes"},
+          {"name":"notifier-1","running":true,"loading":false,"timestamp":"2021-07-19T08:54:24.913665","__typename":"view_processes"},
+          {"name":"fileobserver-1","running":true,"loading":false,"timestamp":"2021-07-19T08:54:24.921728","__typename":"view_processes"},
+          {"name":"prefixtree-1","running":true,"loading":false,"timestamp":"2021-07-19T08:54:24.929948","__typename":"view_processes"},
+          {"name":"autoignore-1","running":true,"loading":false,"timestamp":"2021-07-19T08:54:24.939837","__typename":"view_processes"}]})
     );
   }),
-  graphql.query('hijacks', (req, res, ctx) => {
+  graphql.query('getIndexAllStats', (req, res, ctx) => {
+    return res(
+      ctx.data({
+        "view_index_all_stats": [
+          {"monitored_prefixes":3,"configured_prefixes":5,"monitor_peers":0,"total_bgp_updates":0,
+          "total_unhandled_updates":0,"total_hijacks":0,"ignored_hijacks":0,"resolved_hijacks":0,"withdrawn_hijacks":0,
+          "mitigation_hijacks":0,"ongoing_hijacks":0,"dormant_hijacks":0,"acknowledged_hijacks":0,"outdated_hijacks":0,
+          "__typename":"view_index_all_stats"
+        }
+      ]}))}),
+      graphql.query('hijacks', (req, res, ctx) => {
     return res(
       ctx.data({
         view_hijacks: [

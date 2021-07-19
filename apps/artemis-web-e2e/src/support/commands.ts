@@ -8,6 +8,7 @@
 // https://on.cypress.io/custom-commands
 // ***********************************************
 // eslint-disable-next-line @typescript-eslint/no-namespace
+import 'cypress-plugin-snapshots/commands';
 declare namespace Cypress {
   interface Chainable<Subject> {
     typeLogin(user: any): void;
@@ -18,7 +19,8 @@ declare namespace Cypress {
     typeChangePass(user: any): void;
   }
 }
-//
+
+
 // -- This is a parent command --
 Cypress.Commands.add('typeLogin', (user) => {
   cy.get('body').then(($body) => {
