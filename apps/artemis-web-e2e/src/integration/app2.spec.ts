@@ -16,7 +16,7 @@ describe('artemis-web', () => {
     cy.visit('/admin/system');
     cy.waitFor('h1');
     cy.get('h1').should('have.text', 'System');
-    cy.wait(1000);
+    cy.wait(2000);
     cy.get('.card-body').its('length').should('eq', 9)
   });
 
