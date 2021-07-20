@@ -140,15 +140,6 @@ const handler = nc()
           },
         };
         break;
-      case 'seen':
-        obj = {
-          action: action,
-          routing_key: 'seen',
-          exchangeName: 'hijack-update',
-          priority: 2,
-          payload: { key: hijack_key, state: state },
-        };
-        break;
       default:
         res.status(401);
         return;
