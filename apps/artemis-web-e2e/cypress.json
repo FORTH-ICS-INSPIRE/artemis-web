@@ -12,5 +12,8 @@
   "ignoreTestFiles": [
     "**/__snapshots__/*",
     "**/__image_snapshots__/*"
-  ]
+  ],
+  "env": {
+    "API_KEY": "29870959469dc320ff80c02dcccaf0a62394459e22e6acfdce7cf40f94281d85"
+  }
 }
