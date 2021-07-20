@@ -135,15 +135,28 @@ export const sendHijackData = async (
     _csrf: _csrf,
   };
 
-  const res = await fetch('/api/rmq_action', {
-    method: 'POST',
-    credentials: 'include',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(reqData),
-  });
+  let res;
+
+  if (map[selectState] === 'seen')
+    res = await fetch('/api/rmq_action', {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(reqData),
+    });
+  else
+    res = await fetch('/api/rmq_admin_action', {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(reqData),
+    });
 
   if (res.status === 403 || res.status === 401) {
     toast("You do not have permission for this action!");
