@@ -243,6 +243,15 @@ class HijackInfoComponent extends Component<any, any> {
                             className="form-control form-control-sm-auto"
                             id="action_selection"
                           >
+                            {!isSeen(this.props.hijackDataState) ? (
+                              <option value="hijack_action_acknowledge">
+                                Mark as Acknowledged
+                              </option>
+                            ) : (
+                              <option value="hijack_action_acknowledge_not">
+                                Mark as Not Acknowledged
+                              </option>
+                            )}
                             <option value="hijack_action_export">
                               Export Hijack
                             </option>

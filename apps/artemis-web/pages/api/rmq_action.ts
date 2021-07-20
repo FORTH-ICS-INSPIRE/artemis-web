@@ -67,7 +67,7 @@ const sendRMQAction = async (obj) => {
 
 const handler = nc()
   .use(auth)
-  .use(authorization(['admin']))
+  .use(authorization(['admin', 'user']))
   .post(async (req: NextApiRequestExtended, res: NextApiResponseExtended) => {
     let obj = {};
     const {
