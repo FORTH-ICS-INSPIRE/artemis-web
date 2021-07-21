@@ -102,6 +102,10 @@ export const sendData = async (
     body: JSON.stringify(reqData),
   });
 
+  if (res.status === 403 || res.status === 401) {
+    toast("You do not have permission for this action!");
+  }
+
   if (res.status === 200) window.location.reload();
 };
 
