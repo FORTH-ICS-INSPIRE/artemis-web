@@ -76,6 +76,10 @@ export const submitComment = async (
     body: JSON.stringify(reqData),
   });
 
+  if (resp.status === 403 || resp.status === 401) {
+    toast("You do not have permission for this action!");
+  }
+
   return (await resp.json()) === 'Comment updated.';
 };
 
