@@ -58,6 +58,8 @@ class HijackInfoComponent extends Component<any, any> {
 
     const asn = hijackInfoLeft["Hijacker AS:"][0].props.asn;
     const prefix = hijackInfoLeft["Prefix"][0];
+    let event_id = "";
+
     (async () => {
       const resp = await fetch(`https://api.grip.caida.org/v1/json/events?event_type=all&asns=${asn}&pfxs=${prefix}`, {
         method: 'GET',
@@ -68,9 +70,10 @@ class HijackInfoComponent extends Component<any, any> {
       });
 
       const json = await resp.json();
-      if (json.recordsTotal === 0)
+      if (json.recordsTotal > 0) {
+        event_id = json.data[0]["id"];
         this.setState({ gripState: true });
-
+      }
     })();
 
     return (
@@ -336,6 +339,7 @@ class HijackInfoComponent extends Component<any, any> {
                         type="button"
                         className={`btn btn-primary
                           } btn-lg`}
+                        onClick={() => window.open(`https://grip-dev.caida.org/events/${'all'}/${event_id}`, "_blank")}
                       >
                         GRIP event
                       </button>
