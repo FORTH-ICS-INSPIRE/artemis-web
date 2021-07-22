@@ -32,6 +32,7 @@ class HijackInfoComponent extends Component<any, any> {
       withdrawState: false,
       editComment: false,
       commentSuccess: true,
+      gripState: false,
     };
 
     this.isMobile = props.isMobile;
@@ -54,6 +55,23 @@ class HijackInfoComponent extends Component<any, any> {
 
     const mRef = this.selectRef;
     const setState = this.setState;
+
+    const asn = hijackInfoLeft["Hijacker AS:"][0].props.asn;
+    const prefix = hijackInfoLeft["Prefix"][0];
+    (async () => {
+      const resp = await fetch(`https://api.grip.caida.org/v1/json/events?event_type=all&asns=${asn}&pfxs=${prefix}`, {
+        method: 'GET',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+      });
+
+      const json = await resp.json();
+      if (json.recordsTotal === 0)
+        this.setState({ gripState: true });
+
+    })();
 
     return (
       <>
@@ -233,8 +251,8 @@ class HijackInfoComponent extends Component<any, any> {
                           mRef.current.value === 'hijack_action_ignore'
                             ? this.setOpenModalState(true)
                             : mRef.current.value === 'hijack_action_export'
-                            ? exportHijack(hijackKey, this.props._csrf)
-                            : sendHijackData(e, {
+                              ? exportHijack(hijackKey, this.props._csrf)
+                              : sendHijackData(e, {
                                 hijackKey: hijackKey,
                                 selectState: mRef.current.value,
                                 prefix: this.props.hijackDataState.prefix,
@@ -263,9 +281,8 @@ class HijackInfoComponent extends Component<any, any> {
                         style={{ marginRight: '5px', float: 'right' }}
                         id="edit_comment"
                         type="button"
-                        className={`btn btn-${
-                          !this.state.editComment ? 'primary' : 'secondary'
-                        } btn-md`}
+                        className={`btn btn-${!this.state.editComment ? 'primary' : 'secondary'
+                          } btn-md`}
                         onClick={(e) => {
                           if (this.state.editComment)
                             setState({
@@ -301,6 +318,27 @@ class HijackInfoComponent extends Component<any, any> {
                         editorState={this.props.editorState}
                         onChange={this.props.setEditorState}
                       />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="row">
+                <div className="col-lg-12">
+                  <div className="card" style={{ marginTop: '12px', visibility: this.state.gripState ? "visible" : "hidden" }}>
+                    <div className="card-header">
+                      CAIDA GRIP{' '}
+                    </div>
+                    <div className="card-body">
+                      <button
+                        style={{ marginRight: '5px', marginTop: '5px', float: 'left' }}
+                        id="edit_comment"
+                        type="button"
+                        className={`btn btn-primary
+                          } btn-lg`}
+                      >
+                        GRIP event
+                      </button>
                     </div>
                   </div>
                 </div>
