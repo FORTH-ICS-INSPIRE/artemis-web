@@ -488,6 +488,8 @@ const HijackTableComponent = (props) => {
     const data = props.data;
     const { hijackState, setHijackState, selectState, setSelectState } = props;
 
+    const selectRef = React.createRef<HTMLSelectElement>();
+
     return (
       <>
         <button
@@ -512,6 +514,7 @@ const HijackTableComponent = (props) => {
         {user && user.role === 'admin' ?
           (<select
             onChange={(e) => setSelectState(e.target.value)}
+            ref={selectRef}
             style={{
               width: '200px',
               display: 'inline-block',
@@ -532,6 +535,7 @@ const HijackTableComponent = (props) => {
           </select>)
           :
           (<select
+            ref={selectRef}
             onChange={(e) => setSelectState(e.target.value)}
             style={{
               width: '200px',
@@ -550,12 +554,14 @@ const HijackTableComponent = (props) => {
           </select>)
         }
         <button
-          onClick={(e) =>
+          onClick={(e) => {
+            console.log(selectRef.current.value);
             sendData(e, {
               hijackKeys: hijackState.map((hijack) => hijack.key),
-              selectState: selectState,
+              selectState: selectRef.current.value,
               _csrf: props._csrf,
-            })
+            });
+          }
           }
           style={{ marginRight: '5px' }}
           id="apply_selected"
