@@ -20,6 +20,8 @@ class HijackInfoComponent extends Component<any, any> {
   commentRef: any;
   isMobile: any;
   selectRef: any;
+  hijackInfoRight: any;
+  hijackInfoLeft: any;
 
   constructor(props) {
     super(props);
@@ -27,18 +29,51 @@ class HijackInfoComponent extends Component<any, any> {
     this.setOpenModalState = props.setOpenModalState;
     this.hijackKey = props.hijackKey;
 
+    const [hijackInfoLeft, hijackInfoRight] = extractHijackInfos(
+      this.props.hijackDataState,
+      {
+        tooltips: this.props.tooltips,
+        setTooltips: this.props.setTooltips,
+        context: this.props.context,
+      }
+    );
+
+    this.hijackInfoLeft = hijackInfoLeft;
+    this.hijackInfoRight = hijackInfoRight;
+
     this.state = {
       seenState: false,
       withdrawState: false,
       editComment: false,
       commentSuccess: true,
       gripState: false,
+      event_id : ""
     };
 
     this.isMobile = props.isMobile;
 
     this.commentRef = React.createRef();
     this.selectRef = React.createRef();
+
+  }
+
+  async componentDidMount() {
+
+    const asn = this.hijackInfoLeft["Hijacker AS:"][0].props.asn;
+    const prefix = this.hijackInfoLeft["Prefix"][0];
+
+    const resp = await fetch(`https://api.grip.caida.org/v1/json/events?event_type=all&asns=${asn}&pfxs=${prefix}`, {
+        method: 'GET',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+      });
+
+      const json = await resp.json();
+      if (json.recordsTotal > 0) {
+        this.setState({ gripState: true, event_id: json.data[0]["id"] });
+      }
   }
 
   render() {
@@ -55,26 +90,7 @@ class HijackInfoComponent extends Component<any, any> {
 
     const mRef = this.selectRef;
     const setState = this.setState;
-
-    const asn = hijackInfoLeft["Hijacker AS:"][0].props.asn;
-    const prefix = hijackInfoLeft["Prefix"][0];
-    let event_id = "";
-
-    (async () => {
-      const resp = await fetch(`https://api.grip.caida.org/v1/json/events?event_type=all&asns=${asn}&pfxs=${prefix}`, {
-        method: 'GET',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-      });
-
-      const json = await resp.json();
-      if (json.recordsTotal > 0) {
-        event_id = json.data[0]["id"];
-        this.setState({ gripState: true });
-      }
-    })();
+    const event_id = this.state.event_id;
 
     return (
       <>
