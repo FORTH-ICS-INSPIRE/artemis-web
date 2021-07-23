@@ -1,4 +1,5 @@
 import { parseASNData } from './parsers';
+import { toast } from 'react-toastify';
 
 function getName(ASN: number) {
   return fetch(
@@ -9,14 +10,14 @@ function getName(ASN: number) {
 function getCountry(ASN: number) {
   return fetch(
     'https://stat.ripe.net/data/maxmind-geo-lite-announced-by-as/data.json?resource=AS' +
-      ASN
+    ASN
   ).then((response) => response.json());
 }
 
 function getAbuse(ASN: number) {
   return fetch(
     'https://stat.ripe.net/data/abuse-contact-finder/data.json?resource=AS' +
-      ASN
+    ASN
   ).then((response) => response.json());
 }
 
@@ -75,6 +76,10 @@ export const submitComment = async (
     body: JSON.stringify(reqData),
   });
 
+  if (resp.status === 403 || resp.status === 401) {
+    toast("You do not have permission for this action!");
+  }
+
   return (await resp.json()) === 'Comment updated.';
 };
 
@@ -100,6 +105,10 @@ export const sendData = async (
     },
     body: JSON.stringify(reqData),
   });
+
+  if (res.status === 403 || res.status === 401) {
+    toast("You do not have permission for this action!");
+  }
 
   if (res.status === 200) window.location.reload();
 };
@@ -134,15 +143,32 @@ export const sendHijackData = async (
     _csrf: _csrf,
   };
 
-  const res = await fetch('/api/rmq_action', {
-    method: 'POST',
-    credentials: 'include',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(reqData),
-  });
+  let res;
+
+  if (map[selectState] === 'seen')
+    res = await fetch('/api/rmq_action', {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(reqData),
+    });
+  else
+    res = await fetch('/api/rmq_admin_action', {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(reqData),
+    });
+
+  if (res.status === 403 || res.status === 401) {
+    toast("You do not have permission for this action!");
+  }
 
   if (res.status === 200 && selectState === 'hijack_action_delete')
     window.location.replace('/hijacks');

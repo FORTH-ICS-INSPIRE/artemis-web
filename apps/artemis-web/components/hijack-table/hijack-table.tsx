@@ -332,6 +332,7 @@ const HijackTableComponent = (props) => {
     rpki_status: '',
     type: '',
   });
+  const user = props.user;
 
   const exportFilters = {
     hasColumnFilter: !isObjectEmpty(columnFilter),
@@ -418,8 +419,8 @@ const HijackTableComponent = (props) => {
             key={option.text}
             value={option.text}
             className={`btn ${currSizePerPage === `${option.page}`
-                ? 'btn-secondary'
-                : 'btn-warning'
+              ? 'btn-secondary'
+              : 'btn-warning'
               } `}
           >
             {option.text}
@@ -487,6 +488,8 @@ const HijackTableComponent = (props) => {
     const data = props.data;
     const { hijackState, setHijackState, selectState, setSelectState } = props;
 
+    const selectRef = React.createRef<HTMLSelectElement>();
+
     return (
       <>
         <button
@@ -508,33 +511,57 @@ const HijackTableComponent = (props) => {
             <b id="selected_hijacks_num">{hijackState.length}</b>
           </label>
         </span>
-        <select
-          onChange={(e) => setSelectState(e.target.value)}
-          style={{
-            width: '200px',
-            display: 'inline-block',
-            marginRight: '5px',
-          }}
-          className="form-control form-control-sm-auto"
-          id="action_selection"
-        >
-          <option value="hijack_action_resolve">Mark as Resolved</option>
-          <option value="hijack_action_ignore">Mark as Ignored</option>
-          <option value="hijack_action_acknowledge">
-            Mark as Acknowledged
-          </option>
-          <option value="hijack_action_acknowledge_not">
-            Mark as Not Acknowledged
-          </option>
-          <option value="hijack_action_delete">Delete Hijack</option>
-        </select>
+        {user && user.role === 'admin' ?
+          (<select
+            onChange={(e) => setSelectState(e.target.value)}
+            ref={selectRef}
+            style={{
+              width: '200px',
+              display: 'inline-block',
+              marginRight: '5px',
+            }}
+            className="form-control form-control-sm-auto"
+            id="action_selection"
+          >
+            <option value="hijack_action_resolve">Mark as Resolved</option>
+            <option value="hijack_action_ignore">Mark as Ignored</option>
+            <option value="hijack_action_acknowledge">
+              Mark as Acknowledged
+            </option>
+            <option value="hijack_action_acknowledge_not">
+              Mark as Not Acknowledged
+            </option>
+            <option value="hijack_action_delete">Delete Hijack</option>
+          </select>)
+          :
+          (<select
+            ref={selectRef}
+            onChange={(e) => setSelectState(e.target.value)}
+            style={{
+              width: '200px',
+              display: 'inline-block',
+              marginRight: '5px',
+            }}
+            className="form-control form-control-sm-auto"
+            id="action_selection"
+          >
+            <option value="hijack_action_acknowledge">
+              Mark as Acknowledged
+            </option>
+            <option value="hijack_action_acknowledge_not">
+              Mark as Not Acknowledged
+            </option>
+          </select>)
+        }
         <button
-          onClick={(e) =>
+          onClick={(e) => {
+            console.log(selectRef.current.value);
             sendData(e, {
               hijackKeys: hijackState.map((hijack) => hijack.key),
-              selectState: selectState,
+              selectState: selectRef.current.value,
               _csrf: props._csrf,
-            })
+            });
+          }
           }
           style={{ marginRight: '5px' }}
           id="apply_selected"
@@ -638,6 +665,7 @@ const HijackTableComponent = (props) => {
                   </ExportJSON>
                   <HijackActions
                     _csrf={_csrf}
+                    user={props.user}
                     data={hijackData}
                     hijackState={hijackState}
                     setHijackState={setHijackState}

@@ -22,10 +22,12 @@ class HijackInfoComponent extends Component<any, any> {
   selectRef: any;
   hijackInfoRight: any;
   hijackInfoLeft: any;
+  user: any;
 
   constructor(props) {
     super(props);
     this.classes = props.classes;
+    this.user = props.user;
     this.setOpenModalState = props.setOpenModalState;
     this.hijackKey = props.hijackKey;
 
@@ -219,52 +221,79 @@ class HijackInfoComponent extends Component<any, any> {
                   <div className="card">
                     <div className="card-header">Hijack Actions</div>
                     <div className="card-body">
-                      <select
-                        ref={this.selectRef}
-                        style={{
-                          width: '200px',
-                          display: 'inline-block',
-                          marginRight: '15px',
-                        }}
-                        className="form-control form-control-sm-auto"
-                        id="action_selection"
-                      >
-                        {!isResolved(this.props.hijackDataState) &&
-                          !isIgnored(this.props.hijackDataState) && (
-                            <>
-                              <option value="hijack_action_resolve">
-                                Mark as Resolved
+                      {this.user && this.user.role === 'admin' ?
+                        (
+                          <select
+                            ref={this.selectRef}
+                            style={{
+                              width: '200px',
+                              display: 'inline-block',
+                              marginRight: '15px',
+                            }}
+                            className="form-control form-control-sm-auto"
+                            id="action_selection"
+                          >
+                            {!isSeen(this.props.hijackDataState) ? (
+                              <option value="hijack_action_acknowledge">
+                                Mark as Acknowledged
                               </option>
-                              <option value="hijack_action_ignore">
-                                Mark as Ignored
+                            ) : (
+                              <option value="hijack_action_acknowledge_not">
+                                Mark as Not Acknowledged
                               </option>
-                            </>
-                          )}
-                        {!isUnderMitigation(this.props.hijackDataState) ? (
-                          <option value="hijack_action_mitigate">
-                            Mitigate Hijack
-                          </option>
+                            )}
+                            {!isResolved(this.props.hijackDataState) &&
+                              !isIgnored(this.props.hijackDataState) && (
+                                <>
+                                  <option value="hijack_action_resolve">
+                                    Mark as Resolved
+                                  </option>
+                                  <option value="hijack_action_ignore">
+                                    Mark as Ignored
+                                  </option>
+                                </>
+                              )}
+                            {!isUnderMitigation(this.props.hijackDataState) ? (
+                              <option value="hijack_action_mitigate">
+                                Mitigate Hijack
+                              </option>
+                            ) : (
+                              <option value="hijack_action_unmitigate">
+                                Un-mitigate Hijack
+                              </option>
+                            )}
+                            <option value="hijack_action_delete">
+                              Delete Hijack
+                            </option>
+                            <option value="hijack_action_export">
+                              Export Hijack
+                            </option>
+                          </select>
                         ) : (
-                          <option value="hijack_action_unmitigate">
-                            Un-mitigate Hijack
-                          </option>
+                          <select
+                            ref={this.selectRef}
+                            style={{
+                              width: '200px',
+                              display: 'inline-block',
+                              marginRight: '15px',
+                            }}
+                            className="form-control form-control-sm-auto"
+                            id="action_selection"
+                          >
+                            {!isSeen(this.props.hijackDataState) ? (
+                              <option value="hijack_action_acknowledge">
+                                Mark as Acknowledged
+                              </option>
+                            ) : (
+                              <option value="hijack_action_acknowledge_not">
+                                Mark as Not Acknowledged
+                              </option>
+                            )}
+                            <option value="hijack_action_export">
+                              Export Hijack
+                            </option>
+                          </select>
                         )}
-                        {!isSeen(this.props.hijackDataState) ? (
-                          <option value="hijack_action_acknowledge">
-                            Mark as Acknowledged
-                          </option>
-                        ) : (
-                          <option value="hijack_action_acknowledge_not">
-                            Mark as Not Acknowledged
-                          </option>
-                        )}
-                        <option value="hijack_action_delete">
-                          Delete Hijack
-                        </option>
-                        <option value="hijack_action_export">
-                          Export Hijack
-                        </option>
-                      </select>
                       <button
                         onClick={(e) =>
                           mRef.current.value === 'hijack_action_ignore'
