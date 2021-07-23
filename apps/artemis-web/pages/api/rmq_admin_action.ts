@@ -67,7 +67,7 @@ const sendRMQAction = async (obj) => {
 
 const handler = nc()
   .use(auth)
-  .use(authorization(['admin', 'user']))
+  .use(authorization(['admin']))
   .post(async (req: NextApiRequestExtended, res: NextApiResponseExtended) => {
     let obj = {};
     const {
@@ -80,13 +80,64 @@ const handler = nc()
     } = req.body;
 
     switch (action) {
-      case 'seen':
+      case 'mitigate':
         obj = {
           action: action,
-          routing_key: 'seen',
+          routing_key: 'mitigate',
+          exchangeName: 'mitigation',
+          priority: 2,
+          payload: { key: hijack_key, prefix: prefix },
+        };
+        break;
+      case 'unmitigate':
+        obj = {
+          action: action,
+          routing_key: 'unmitigate',
+          exchangeName: 'mitigation',
+          priority: 2,
+          payload: { key: hijack_key, prefix: prefix },
+        };
+        break;
+      case 'resolve':
+        obj = {
+          action: action,
+          routing_key: 'resolve',
           exchangeName: 'hijack-update',
           priority: 2,
-          payload: { key: hijack_key, state: state },
+          payload: {
+            key: hijack_key,
+            prefix: prefix,
+            type: hijack_type,
+            hijack_as: parseInt(hijack_as, 10),
+          },
+        };
+        break;
+      case 'ignore':
+        obj = {
+          action: action,
+          routing_key: 'ignore',
+          exchangeName: 'hijack-update',
+          priority: 2,
+          payload: {
+            key: hijack_key,
+            prefix: prefix,
+            type: hijack_type,
+            hijack_as: parseInt(hijack_as, 10),
+          },
+        };
+        break;
+      case 'delete':
+        obj = {
+          action: action,
+          routing_key: 'delete',
+          exchangeName: 'hijack-update',
+          priority: 2,
+          payload: {
+            key: hijack_key,
+            prefix: prefix,
+            type: hijack_type,
+            hijack_as: parseInt(hijack_as, 10),
+          },
         };
         break;
       default:

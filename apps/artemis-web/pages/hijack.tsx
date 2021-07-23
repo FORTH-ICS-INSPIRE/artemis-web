@@ -9,6 +9,9 @@ import {
   Paper,
   Switch,
 } from '@material-ui/core';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 import CloseIcon from '@material-ui/icons/Close';
 import { ContentState, EditorState } from 'draft-js';
 import 'draft-js/dist/Draft.css';
@@ -291,6 +294,7 @@ const ViewHijackPage = (props) => {
                 </div>
               </div>
             </div>
+            <ToastContainer />
           </div>
           {/* <div className="row" style={{ marginTop: '20px' }}>
             <div className="col-lg-1" />
@@ -318,5 +322,5 @@ const ViewHijackPage = (props) => {
 export default AuthHOC(ViewHijackPage, ['admin', 'user']);
 
 export const getServerSideProps = setup(async (req, res, csrftoken) => {
-  return { props: { _csrf: csrftoken,  _inactivity_timeout: process.env.INACTIVITY_TIMEOUT, system_version: process.env.SYSTEM_VERSION } };
+  return { props: { _csrf: csrftoken, _inactivity_timeout: process.env.INACTIVITY_TIMEOUT, system_version: process.env.SYSTEM_VERSION } };
 });
