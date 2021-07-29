@@ -1,0 +1,2085 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`HijackInfoComponent should render successfully 1`] = `
+<div>
+  <div
+    class="row"
+    style="margin-top: 20px;"
+  >
+    <div
+      class="col-lg-1"
+    />
+    <div
+      class="col-lg-7"
+    >
+      <div
+        class="card"
+      >
+        <div
+          class="card-header"
+        >
+          Hijack Information
+          <span
+            class="badge badge-acknowledged float-right badge-danger"
+            id="hijack_acknowledged_badge"
+          >
+            Not Acknowledged
+          </span>
+        </div>
+        <div
+          class="card-body"
+        >
+          <div
+            class="row"
+          >
+            <div
+              class="col-lg-6"
+            >
+              <div
+                class="row"
+              >
+                <div
+                  class="col-lg-4"
+                  style="font-weight: bold;"
+                >
+                  <div
+                    currentitem="false"
+                    data-for="hijack_title_info"
+                    data-tip="true"
+                  >
+                    <span>
+                      Hijacker AS:
+                       
+                      
+                    </span>
+                  </div>
+                  <div
+                    class="__react_component_tooltip td4465c96-e4a2-463d-8122-8f54395cc19c place-top type-dark"
+                    data-id="tooltip"
+                    id="hijack_title_info"
+                  >
+                    <style>
+                      
+  	.td4465c96-e4a2-463d-8122-8f54395cc19c {
+	    color: #fff;
+	    background: #222;
+	    border: 1px solid transparent;
+  	}
+
+  	.td4465c96-e4a2-463d-8122-8f54395cc19c.place-top {
+        margin-top: -10px;
+    }
+    .td4465c96-e4a2-463d-8122-8f54395cc19c.place-top::before {
+        border-top: 8px solid transparent;
+    }
+    .td4465c96-e4a2-463d-8122-8f54395cc19c.place-top::after {
+        border-left: 8px solid transparent;
+        border-right: 8px solid transparent;
+        bottom: -6px;
+        left: 50%;
+        margin-left: -8px;
+        border-top-color: #222;
+        border-top-style: solid;
+        border-top-width: 6px;
+    }
+
+    .td4465c96-e4a2-463d-8122-8f54395cc19c.place-bottom {
+        margin-top: 10px;
+    }
+    .td4465c96-e4a2-463d-8122-8f54395cc19c.place-bottom::before {
+        border-bottom: 8px solid transparent;
+    }
+    .td4465c96-e4a2-463d-8122-8f54395cc19c.place-bottom::after {
+        border-left: 8px solid transparent;
+        border-right: 8px solid transparent;
+        top: -6px;
+        left: 50%;
+        margin-left: -8px;
+        border-bottom-color: #222;
+        border-bottom-style: solid;
+        border-bottom-width: 6px;
+    }
+
+    .td4465c96-e4a2-463d-8122-8f54395cc19c.place-left {
+        margin-left: -10px;
+    }
+    .td4465c96-e4a2-463d-8122-8f54395cc19c.place-left::before {
+        border-left: 8px solid transparent;
+    }
+    .td4465c96-e4a2-463d-8122-8f54395cc19c.place-left::after {
+        border-top: 5px solid transparent;
+        border-bottom: 5px solid transparent;
+        right: -6px;
+        top: 50%;
+        margin-top: -4px;
+        border-left-color: #222;
+        border-left-style: solid;
+        border-left-width: 6px;
+    }
+
+    .td4465c96-e4a2-463d-8122-8f54395cc19c.place-right {
+        margin-left: 10px;
+    }
+    .td4465c96-e4a2-463d-8122-8f54395cc19c.place-right::before {
+        border-right: 8px solid transparent;
+    }
+    .td4465c96-e4a2-463d-8122-8f54395cc19c.place-right::after {
+        border-top: 5px solid transparent;
+        border-bottom: 5px solid transparent;
+        left: -6px;
+        top: 50%;
+        margin-top: -4px;
+        border-right-color: #222;
+        border-right-style: solid;
+        border-right-width: 6px;
+    }
+  
+                    </style>
+                    The AS that is potentially responsible for the hijack.&lt;/br&gt;Note that this is an experimental field.
+                  </div>
+                </div>
+                <div
+                  class="col-lg-8"
+                >
+                  <div
+                    currentitem="false"
+                    data-for="hijack_as"
+                    data-tip="true"
+                  >
+                    <input
+                      class="form-control"
+                      id="info_type"
+                      readonly=""
+                      type="text"
+                      value=""
+                    />
+                  </div>
+                  <div
+                    class="__react_component_tooltip t82213fad-378d-4dff-b381-20a23d36ca60 place-top type-dark"
+                    data-id="tooltip"
+                    id="hijack_as"
+                  >
+                    <style>
+                      
+  	.t82213fad-378d-4dff-b381-20a23d36ca60 {
+	    color: #fff;
+	    background: #222;
+	    border: 1px solid transparent;
+  	}
+
+  	.t82213fad-378d-4dff-b381-20a23d36ca60.place-top {
+        margin-top: -10px;
+    }
+    .t82213fad-378d-4dff-b381-20a23d36ca60.place-top::before {
+        border-top: 8px solid transparent;
+    }
+    .t82213fad-378d-4dff-b381-20a23d36ca60.place-top::after {
+        border-left: 8px solid transparent;
+        border-right: 8px solid transparent;
+        bottom: -6px;
+        left: 50%;
+        margin-left: -8px;
+        border-top-color: #222;
+        border-top-style: solid;
+        border-top-width: 6px;
+    }
+
+    .t82213fad-378d-4dff-b381-20a23d36ca60.place-bottom {
+        margin-top: 10px;
+    }
+    .t82213fad-378d-4dff-b381-20a23d36ca60.place-bottom::before {
+        border-bottom: 8px solid transparent;
+    }
+    .t82213fad-378d-4dff-b381-20a23d36ca60.place-bottom::after {
+        border-left: 8px solid transparent;
+        border-right: 8px solid transparent;
+        top: -6px;
+        left: 50%;
+        margin-left: -8px;
+        border-bottom-color: #222;
+        border-bottom-style: solid;
+        border-bottom-width: 6px;
+    }
+
+    .t82213fad-378d-4dff-b381-20a23d36ca60.place-left {
+        margin-left: -10px;
+    }
+    .t82213fad-378d-4dff-b381-20a23d36ca60.place-left::before {
+        border-left: 8px solid transparent;
+    }
+    .t82213fad-378d-4dff-b381-20a23d36ca60.place-left::after {
+        border-top: 5px solid transparent;
+        border-bottom: 5px solid transparent;
+        right: -6px;
+        top: 50%;
+        margin-top: -4px;
+        border-left-color: #222;
+        border-left-style: solid;
+        border-left-width: 6px;
+    }
+
+    .t82213fad-378d-4dff-b381-20a23d36ca60.place-right {
+        margin-left: 10px;
+    }
+    .t82213fad-378d-4dff-b381-20a23d36ca60.place-right::before {
+        border-right: 8px solid transparent;
+    }
+    .t82213fad-378d-4dff-b381-20a23d36ca60.place-right::after {
+        border-top: 5px solid transparent;
+        border-bottom: 5px solid transparent;
+        left: -6px;
+        top: 50%;
+        margin-top: -4px;
+        border-right-color: #222;
+        border-right-style: solid;
+        border-right-width: 6px;
+    }
+  
+                    </style>
+                    Loading...
+                  </div>
+                </div>
+              </div>
+              <div
+                class="row"
+              >
+                <div
+                  class="col-lg-4"
+                  style="font-weight: bold;"
+                >
+                  <div
+                    currentitem="false"
+                    data-for="type_title_info"
+                    data-tip="true"
+                  >
+                    <span>
+                      Type:
+                       
+                      
+                    </span>
+                  </div>
+                  <div
+                    class="__react_component_tooltip td054f4bf-3a9b-4df6-9815-630f6483addf place-top type-dark"
+                    data-id="tooltip"
+                    id="type_title_info"
+                  >
+                    <style>
+                      
+  	.td054f4bf-3a9b-4df6-9815-630f6483addf {
+	    color: #fff;
+	    background: #222;
+	    border: 1px solid transparent;
+  	}
+
+  	.td054f4bf-3a9b-4df6-9815-630f6483addf.place-top {
+        margin-top: -10px;
+    }
+    .td054f4bf-3a9b-4df6-9815-630f6483addf.place-top::before {
+        border-top: 8px solid transparent;
+    }
+    .td054f4bf-3a9b-4df6-9815-630f6483addf.place-top::after {
+        border-left: 8px solid transparent;
+        border-right: 8px solid transparent;
+        bottom: -6px;
+        left: 50%;
+        margin-left: -8px;
+        border-top-color: #222;
+        border-top-style: solid;
+        border-top-width: 6px;
+    }
+
+    .td054f4bf-3a9b-4df6-9815-630f6483addf.place-bottom {
+        margin-top: 10px;
+    }
+    .td054f4bf-3a9b-4df6-9815-630f6483addf.place-bottom::before {
+        border-bottom: 8px solid transparent;
+    }
+    .td054f4bf-3a9b-4df6-9815-630f6483addf.place-bottom::after {
+        border-left: 8px solid transparent;
+        border-right: 8px solid transparent;
+        top: -6px;
+        left: 50%;
+        margin-left: -8px;
+        border-bottom-color: #222;
+        border-bottom-style: solid;
+        border-bottom-width: 6px;
+    }
+
+    .td054f4bf-3a9b-4df6-9815-630f6483addf.place-left {
+        margin-left: -10px;
+    }
+    .td054f4bf-3a9b-4df6-9815-630f6483addf.place-left::before {
+        border-left: 8px solid transparent;
+    }
+    .td054f4bf-3a9b-4df6-9815-630f6483addf.place-left::after {
+        border-top: 5px solid transparent;
+        border-bottom: 5px solid transparent;
+        right: -6px;
+        top: 50%;
+        margin-top: -4px;
+        border-left-color: #222;
+        border-left-style: solid;
+        border-left-width: 6px;
+    }
+
+    .td054f4bf-3a9b-4df6-9815-630f6483addf.place-right {
+        margin-left: 10px;
+    }
+    .td054f4bf-3a9b-4df6-9815-630f6483addf.place-right::before {
+        border-right: 8px solid transparent;
+    }
+    .td054f4bf-3a9b-4df6-9815-630f6483addf.place-right::after {
+        border-top: 5px solid transparent;
+        border-bottom: 5px solid transparent;
+        left: -6px;
+        top: 50%;
+        margin-top: -4px;
+        border-right-color: #222;
+        border-right-style: solid;
+        border-right-width: 6px;
+    }
+  
+                    </style>
+                    The type of the hijack in 4 dimensions: prefix|path|data plane|policy&lt;ul&gt;
+      &lt;li&gt;[Prefix] "S" → Sub-prefix hijack&lt;/li&gt;
+      &lt;li&gt;[Prefix] "E" → Exact-prefix hijack&lt;/li&gt;
+      &lt;li&gt;[Prefix] "Q" → Squatting hijack&lt;/li&gt;
+      &lt;li&gt;[Path] "0" → Type-0 hijack&lt;/li&gt;
+      &lt;li&gt;[Path] "1" → Type-1 hijack&lt;/li&gt;
+      &lt;li&gt;[Path] "P" → Type-P hijack&lt;/li&gt;
+      &lt;li&gt;[Path] "-" → Type-N or Type-U hijack (N/A)&lt;/li&gt;
+      &lt;li&gt;[Data plane] "-" → Blackholing, Imposture or MitM hijack (N/A)&lt;/li&gt;
+      &lt;li&gt;[Policy] "L" → Route Leak due to no-export policy violation&lt;/li&gt;
+      &lt;li&gt;[Policy] "-" → Other policy violation (N/A)&lt;/li&gt;&lt;/ul&gt;
+                  </div>
+                </div>
+                <div
+                  class="col-lg-8"
+                >
+                  <input
+                    class="form-control"
+                    id="info_type"
+                    readonly=""
+                    type="text"
+                    value=""
+                  />
+                </div>
+              </div>
+              <div
+                class="row"
+              >
+                <div
+                  class="col-lg-4"
+                  style="font-weight: bold;"
+                >
+                  <div
+                    currentitem="false"
+                    data-for="peers_title_info"
+                    data-tip="true"
+                  >
+                    <span>
+                      # Peers Seen:
+                       
+                      
+                    </span>
+                  </div>
+                  <div
+                    class="__react_component_tooltip t0eba52b4-647e-43b2-9c3a-f99240d5fe3e place-top type-dark"
+                    data-id="tooltip"
+                    id="peers_title_info"
+                  >
+                    <style>
+                      
+  	.t0eba52b4-647e-43b2-9c3a-f99240d5fe3e {
+	    color: #fff;
+	    background: #222;
+	    border: 1px solid transparent;
+  	}
+
+  	.t0eba52b4-647e-43b2-9c3a-f99240d5fe3e.place-top {
+        margin-top: -10px;
+    }
+    .t0eba52b4-647e-43b2-9c3a-f99240d5fe3e.place-top::before {
+        border-top: 8px solid transparent;
+    }
+    .t0eba52b4-647e-43b2-9c3a-f99240d5fe3e.place-top::after {
+        border-left: 8px solid transparent;
+        border-right: 8px solid transparent;
+        bottom: -6px;
+        left: 50%;
+        margin-left: -8px;
+        border-top-color: #222;
+        border-top-style: solid;
+        border-top-width: 6px;
+    }
+
+    .t0eba52b4-647e-43b2-9c3a-f99240d5fe3e.place-bottom {
+        margin-top: 10px;
+    }
+    .t0eba52b4-647e-43b2-9c3a-f99240d5fe3e.place-bottom::before {
+        border-bottom: 8px solid transparent;
+    }
+    .t0eba52b4-647e-43b2-9c3a-f99240d5fe3e.place-bottom::after {
+        border-left: 8px solid transparent;
+        border-right: 8px solid transparent;
+        top: -6px;
+        left: 50%;
+        margin-left: -8px;
+        border-bottom-color: #222;
+        border-bottom-style: solid;
+        border-bottom-width: 6px;
+    }
+
+    .t0eba52b4-647e-43b2-9c3a-f99240d5fe3e.place-left {
+        margin-left: -10px;
+    }
+    .t0eba52b4-647e-43b2-9c3a-f99240d5fe3e.place-left::before {
+        border-left: 8px solid transparent;
+    }
+    .t0eba52b4-647e-43b2-9c3a-f99240d5fe3e.place-left::after {
+        border-top: 5px solid transparent;
+        border-bottom: 5px solid transparent;
+        right: -6px;
+        top: 50%;
+        margin-top: -4px;
+        border-left-color: #222;
+        border-left-style: solid;
+        border-left-width: 6px;
+    }
+
+    .t0eba52b4-647e-43b2-9c3a-f99240d5fe3e.place-right {
+        margin-left: 10px;
+    }
+    .t0eba52b4-647e-43b2-9c3a-f99240d5fe3e.place-right::before {
+        border-right: 8px solid transparent;
+    }
+    .t0eba52b4-647e-43b2-9c3a-f99240d5fe3e.place-right::after {
+        border-top: 5px solid transparent;
+        border-bottom: 5px solid transparent;
+        left: -6px;
+        top: 50%;
+        margin-top: -4px;
+        border-right-color: #222;
+        border-right-style: solid;
+        border-right-width: 6px;
+    }
+  
+                    </style>
+                    Number of peers/monitors (i.e., ASNs)&lt;/br&gt;that have seen hijack updates.
+                  </div>
+                </div>
+                <div
+                  class="col-lg-8"
+                >
+                  <input
+                    class="form-control"
+                    id="info_type"
+                    readonly=""
+                    type="text"
+                    value=""
+                  />
+                </div>
+              </div>
+              <div
+                class="row"
+              >
+                <div
+                  class="col-lg-4"
+                  style="font-weight: bold;"
+                >
+                  <div
+                    currentitem="false"
+                    data-for="infected_title_info"
+                    data-tip="true"
+                  >
+                    <span>
+                      # ASes Infected:
+                       
+                      
+                    </span>
+                  </div>
+                  <div
+                    class="__react_component_tooltip t5891c2f4-ca6b-4e34-9d9a-60733a7d4c1c place-top type-dark"
+                    data-id="tooltip"
+                    id="infected_title_info"
+                  >
+                    <style>
+                      
+  	.t5891c2f4-ca6b-4e34-9d9a-60733a7d4c1c {
+	    color: #fff;
+	    background: #222;
+	    border: 1px solid transparent;
+  	}
+
+  	.t5891c2f4-ca6b-4e34-9d9a-60733a7d4c1c.place-top {
+        margin-top: -10px;
+    }
+    .t5891c2f4-ca6b-4e34-9d9a-60733a7d4c1c.place-top::before {
+        border-top: 8px solid transparent;
+    }
+    .t5891c2f4-ca6b-4e34-9d9a-60733a7d4c1c.place-top::after {
+        border-left: 8px solid transparent;
+        border-right: 8px solid transparent;
+        bottom: -6px;
+        left: 50%;
+        margin-left: -8px;
+        border-top-color: #222;
+        border-top-style: solid;
+        border-top-width: 6px;
+    }
+
+    .t5891c2f4-ca6b-4e34-9d9a-60733a7d4c1c.place-bottom {
+        margin-top: 10px;
+    }
+    .t5891c2f4-ca6b-4e34-9d9a-60733a7d4c1c.place-bottom::before {
+        border-bottom: 8px solid transparent;
+    }
+    .t5891c2f4-ca6b-4e34-9d9a-60733a7d4c1c.place-bottom::after {
+        border-left: 8px solid transparent;
+        border-right: 8px solid transparent;
+        top: -6px;
+        left: 50%;
+        margin-left: -8px;
+        border-bottom-color: #222;
+        border-bottom-style: solid;
+        border-bottom-width: 6px;
+    }
+
+    .t5891c2f4-ca6b-4e34-9d9a-60733a7d4c1c.place-left {
+        margin-left: -10px;
+    }
+    .t5891c2f4-ca6b-4e34-9d9a-60733a7d4c1c.place-left::before {
+        border-left: 8px solid transparent;
+    }
+    .t5891c2f4-ca6b-4e34-9d9a-60733a7d4c1c.place-left::after {
+        border-top: 5px solid transparent;
+        border-bottom: 5px solid transparent;
+        right: -6px;
+        top: 50%;
+        margin-top: -4px;
+        border-left-color: #222;
+        border-left-style: solid;
+        border-left-width: 6px;
+    }
+
+    .t5891c2f4-ca6b-4e34-9d9a-60733a7d4c1c.place-right {
+        margin-left: 10px;
+    }
+    .t5891c2f4-ca6b-4e34-9d9a-60733a7d4c1c.place-right::before {
+        border-right: 8px solid transparent;
+    }
+    .t5891c2f4-ca6b-4e34-9d9a-60733a7d4c1c.place-right::after {
+        border-top: 5px solid transparent;
+        border-bottom: 5px solid transparent;
+        left: -6px;
+        top: 50%;
+        margin-top: -4px;
+        border-right-color: #222;
+        border-right-style: solid;
+        border-right-width: 6px;
+    }
+  
+                    </style>
+                    Number of infected ASes that seem to&lt;/br&gt;route traffic towards the hijacker AS.&lt;/br&gt;Note that this is an experimental field.
+                  </div>
+                </div>
+                <div
+                  class="col-lg-8"
+                >
+                  <input
+                    class="form-control"
+                    id="info_type"
+                    readonly=""
+                    type="text"
+                    value=""
+                  />
+                </div>
+              </div>
+              <div
+                class="row"
+              >
+                <div
+                  class="col-lg-4"
+                  style="font-weight: bold;"
+                >
+                  <div
+                    currentitem="false"
+                    data-for="prefix_title_info"
+                    data-tip="true"
+                  >
+                    <span>
+                      Prefix:
+                       
+                      
+                    </span>
+                  </div>
+                  <div
+                    class="__react_component_tooltip tc1e944d0-2726-4093-b292-3fa8ff666358 place-top type-dark"
+                    data-id="tooltip"
+                    id="prefix_title_info"
+                  >
+                    <style>
+                      
+  	.tc1e944d0-2726-4093-b292-3fa8ff666358 {
+	    color: #fff;
+	    background: #222;
+	    border: 1px solid transparent;
+  	}
+
+  	.tc1e944d0-2726-4093-b292-3fa8ff666358.place-top {
+        margin-top: -10px;
+    }
+    .tc1e944d0-2726-4093-b292-3fa8ff666358.place-top::before {
+        border-top: 8px solid transparent;
+    }
+    .tc1e944d0-2726-4093-b292-3fa8ff666358.place-top::after {
+        border-left: 8px solid transparent;
+        border-right: 8px solid transparent;
+        bottom: -6px;
+        left: 50%;
+        margin-left: -8px;
+        border-top-color: #222;
+        border-top-style: solid;
+        border-top-width: 6px;
+    }
+
+    .tc1e944d0-2726-4093-b292-3fa8ff666358.place-bottom {
+        margin-top: 10px;
+    }
+    .tc1e944d0-2726-4093-b292-3fa8ff666358.place-bottom::before {
+        border-bottom: 8px solid transparent;
+    }
+    .tc1e944d0-2726-4093-b292-3fa8ff666358.place-bottom::after {
+        border-left: 8px solid transparent;
+        border-right: 8px solid transparent;
+        top: -6px;
+        left: 50%;
+        margin-left: -8px;
+        border-bottom-color: #222;
+        border-bottom-style: solid;
+        border-bottom-width: 6px;
+    }
+
+    .tc1e944d0-2726-4093-b292-3fa8ff666358.place-left {
+        margin-left: -10px;
+    }
+    .tc1e944d0-2726-4093-b292-3fa8ff666358.place-left::before {
+        border-left: 8px solid transparent;
+    }
+    .tc1e944d0-2726-4093-b292-3fa8ff666358.place-left::after {
+        border-top: 5px solid transparent;
+        border-bottom: 5px solid transparent;
+        right: -6px;
+        top: 50%;
+        margin-top: -4px;
+        border-left-color: #222;
+        border-left-style: solid;
+        border-left-width: 6px;
+    }
+
+    .tc1e944d0-2726-4093-b292-3fa8ff666358.place-right {
+        margin-left: 10px;
+    }
+    .tc1e944d0-2726-4093-b292-3fa8ff666358.place-right::before {
+        border-right: 8px solid transparent;
+    }
+    .tc1e944d0-2726-4093-b292-3fa8ff666358.place-right::after {
+        border-top: 5px solid transparent;
+        border-bottom: 5px solid transparent;
+        left: -6px;
+        top: 50%;
+        margin-top: -4px;
+        border-right-color: #222;
+        border-right-style: solid;
+        border-right-width: 6px;
+    }
+  
+                    </style>
+                    The IPv4/IPv6 prefix related to the BGP update.
+                  </div>
+                </div>
+                <div
+                  class="col-lg-8"
+                >
+                  <input
+                    class="form-control"
+                    id="info_type"
+                    readonly=""
+                    type="text"
+                    value=""
+                  />
+                </div>
+              </div>
+              <div
+                class="row"
+              >
+                <div
+                  class="col-lg-4"
+                  style="font-weight: bold;"
+                >
+                  <div
+                    currentitem="false"
+                    data-for="matched_title_info"
+                    data-tip="true"
+                  >
+                    <span>
+                      Matched:
+                       
+                      
+                    </span>
+                  </div>
+                  <div
+                    class="__react_component_tooltip t362cc01b-00a7-4891-96d5-ee0edef71238 place-top type-dark"
+                    data-id="tooltip"
+                    id="matched_title_info"
+                  >
+                    <style>
+                      
+  	.t362cc01b-00a7-4891-96d5-ee0edef71238 {
+	    color: #fff;
+	    background: #222;
+	    border: 1px solid transparent;
+  	}
+
+  	.t362cc01b-00a7-4891-96d5-ee0edef71238.place-top {
+        margin-top: -10px;
+    }
+    .t362cc01b-00a7-4891-96d5-ee0edef71238.place-top::before {
+        border-top: 8px solid transparent;
+    }
+    .t362cc01b-00a7-4891-96d5-ee0edef71238.place-top::after {
+        border-left: 8px solid transparent;
+        border-right: 8px solid transparent;
+        bottom: -6px;
+        left: 50%;
+        margin-left: -8px;
+        border-top-color: #222;
+        border-top-style: solid;
+        border-top-width: 6px;
+    }
+
+    .t362cc01b-00a7-4891-96d5-ee0edef71238.place-bottom {
+        margin-top: 10px;
+    }
+    .t362cc01b-00a7-4891-96d5-ee0edef71238.place-bottom::before {
+        border-bottom: 8px solid transparent;
+    }
+    .t362cc01b-00a7-4891-96d5-ee0edef71238.place-bottom::after {
+        border-left: 8px solid transparent;
+        border-right: 8px solid transparent;
+        top: -6px;
+        left: 50%;
+        margin-left: -8px;
+        border-bottom-color: #222;
+        border-bottom-style: solid;
+        border-bottom-width: 6px;
+    }
+
+    .t362cc01b-00a7-4891-96d5-ee0edef71238.place-left {
+        margin-left: -10px;
+    }
+    .t362cc01b-00a7-4891-96d5-ee0edef71238.place-left::before {
+        border-left: 8px solid transparent;
+    }
+    .t362cc01b-00a7-4891-96d5-ee0edef71238.place-left::after {
+        border-top: 5px solid transparent;
+        border-bottom: 5px solid transparent;
+        right: -6px;
+        top: 50%;
+        margin-top: -4px;
+        border-left-color: #222;
+        border-left-style: solid;
+        border-left-width: 6px;
+    }
+
+    .t362cc01b-00a7-4891-96d5-ee0edef71238.place-right {
+        margin-left: 10px;
+    }
+    .t362cc01b-00a7-4891-96d5-ee0edef71238.place-right::before {
+        border-right: 8px solid transparent;
+    }
+    .t362cc01b-00a7-4891-96d5-ee0edef71238.place-right::after {
+        border-top: 5px solid transparent;
+        border-bottom: 5px solid transparent;
+        left: -6px;
+        top: 50%;
+        margin-top: -4px;
+        border-right-color: #222;
+        border-right-style: solid;
+        border-right-width: 6px;
+    }
+  
+                    </style>
+                    The prefix that was matched in the configuration (note: this might differ from the actually hijacked prefix in the case of a sub-prefix hijack).
+                  </div>
+                </div>
+                <div
+                  class="col-lg-8"
+                >
+                  <input
+                    class="form-control"
+                    id="info_type"
+                    readonly=""
+                    type="text"
+                    value=""
+                  />
+                </div>
+              </div>
+              <div
+                class="row"
+              >
+                <div
+                  class="col-lg-4"
+                  style="font-weight: bold;"
+                >
+                  <div
+                    currentitem="false"
+                    data-for="config_title_info"
+                    data-tip="true"
+                  >
+                    <span>
+                      Config:
+                       
+                      
+                    </span>
+                  </div>
+                  <div
+                    class="__react_component_tooltip tae6d4d2d-59b9-4f8e-831a-2ad59709e893 place-top type-dark"
+                    data-id="tooltip"
+                    id="config_title_info"
+                  >
+                    <style>
+                      
+  	.tae6d4d2d-59b9-4f8e-831a-2ad59709e893 {
+	    color: #fff;
+	    background: #222;
+	    border: 1px solid transparent;
+  	}
+
+  	.tae6d4d2d-59b9-4f8e-831a-2ad59709e893.place-top {
+        margin-top: -10px;
+    }
+    .tae6d4d2d-59b9-4f8e-831a-2ad59709e893.place-top::before {
+        border-top: 8px solid transparent;
+    }
+    .tae6d4d2d-59b9-4f8e-831a-2ad59709e893.place-top::after {
+        border-left: 8px solid transparent;
+        border-right: 8px solid transparent;
+        bottom: -6px;
+        left: 50%;
+        margin-left: -8px;
+        border-top-color: #222;
+        border-top-style: solid;
+        border-top-width: 6px;
+    }
+
+    .tae6d4d2d-59b9-4f8e-831a-2ad59709e893.place-bottom {
+        margin-top: 10px;
+    }
+    .tae6d4d2d-59b9-4f8e-831a-2ad59709e893.place-bottom::before {
+        border-bottom: 8px solid transparent;
+    }
+    .tae6d4d2d-59b9-4f8e-831a-2ad59709e893.place-bottom::after {
+        border-left: 8px solid transparent;
+        border-right: 8px solid transparent;
+        top: -6px;
+        left: 50%;
+        margin-left: -8px;
+        border-bottom-color: #222;
+        border-bottom-style: solid;
+        border-bottom-width: 6px;
+    }
+
+    .tae6d4d2d-59b9-4f8e-831a-2ad59709e893.place-left {
+        margin-left: -10px;
+    }
+    .tae6d4d2d-59b9-4f8e-831a-2ad59709e893.place-left::before {
+        border-left: 8px solid transparent;
+    }
+    .tae6d4d2d-59b9-4f8e-831a-2ad59709e893.place-left::after {
+        border-top: 5px solid transparent;
+        border-bottom: 5px solid transparent;
+        right: -6px;
+        top: 50%;
+        margin-top: -4px;
+        border-left-color: #222;
+        border-left-style: solid;
+        border-left-width: 6px;
+    }
+
+    .tae6d4d2d-59b9-4f8e-831a-2ad59709e893.place-right {
+        margin-left: 10px;
+    }
+    .tae6d4d2d-59b9-4f8e-831a-2ad59709e893.place-right::before {
+        border-right: 8px solid transparent;
+    }
+    .tae6d4d2d-59b9-4f8e-831a-2ad59709e893.place-right::after {
+        border-top: 5px solid transparent;
+        border-bottom: 5px solid transparent;
+        left: -6px;
+        top: 50%;
+        margin-top: -4px;
+        border-right-color: #222;
+        border-right-style: solid;
+        border-right-width: 6px;
+    }
+  
+                    </style>
+                    The timestamp (i.e., unique ID) of the configuration based on which this hijack event was triggered.
+                  </div>
+                </div>
+                <div
+                  class="col-lg-8"
+                >
+                  <input
+                    class="form-control"
+                    id="info_type"
+                    readonly=""
+                    type="text"
+                    value="NaN-NaN-NaN NaN:NaN:NaN"
+                  />
+                </div>
+              </div>
+              <div
+                class="row"
+              >
+                <div
+                  class="col-lg-4"
+                  style="font-weight: bold;"
+                >
+                  <div
+                    currentitem="false"
+                    data-for="key_title_info"
+                    data-tip="true"
+                  >
+                    <span>
+                      Key:
+                       
+                      
+                    </span>
+                  </div>
+                  <div
+                    class="__react_component_tooltip tca98bf16-33d0-46e9-9c40-992c65d5a8ac place-top type-dark"
+                    data-id="tooltip"
+                    id="key_title_info"
+                  >
+                    <style>
+                      
+  	.tca98bf16-33d0-46e9-9c40-992c65d5a8ac {
+	    color: #fff;
+	    background: #222;
+	    border: 1px solid transparent;
+  	}
+
+  	.tca98bf16-33d0-46e9-9c40-992c65d5a8ac.place-top {
+        margin-top: -10px;
+    }
+    .tca98bf16-33d0-46e9-9c40-992c65d5a8ac.place-top::before {
+        border-top: 8px solid transparent;
+    }
+    .tca98bf16-33d0-46e9-9c40-992c65d5a8ac.place-top::after {
+        border-left: 8px solid transparent;
+        border-right: 8px solid transparent;
+        bottom: -6px;
+        left: 50%;
+        margin-left: -8px;
+        border-top-color: #222;
+        border-top-style: solid;
+        border-top-width: 6px;
+    }
+
+    .tca98bf16-33d0-46e9-9c40-992c65d5a8ac.place-bottom {
+        margin-top: 10px;
+    }
+    .tca98bf16-33d0-46e9-9c40-992c65d5a8ac.place-bottom::before {
+        border-bottom: 8px solid transparent;
+    }
+    .tca98bf16-33d0-46e9-9c40-992c65d5a8ac.place-bottom::after {
+        border-left: 8px solid transparent;
+        border-right: 8px solid transparent;
+        top: -6px;
+        left: 50%;
+        margin-left: -8px;
+        border-bottom-color: #222;
+        border-bottom-style: solid;
+        border-bottom-width: 6px;
+    }
+
+    .tca98bf16-33d0-46e9-9c40-992c65d5a8ac.place-left {
+        margin-left: -10px;
+    }
+    .tca98bf16-33d0-46e9-9c40-992c65d5a8ac.place-left::before {
+        border-left: 8px solid transparent;
+    }
+    .tca98bf16-33d0-46e9-9c40-992c65d5a8ac.place-left::after {
+        border-top: 5px solid transparent;
+        border-bottom: 5px solid transparent;
+        right: -6px;
+        top: 50%;
+        margin-top: -4px;
+        border-left-color: #222;
+        border-left-style: solid;
+        border-left-width: 6px;
+    }
+
+    .tca98bf16-33d0-46e9-9c40-992c65d5a8ac.place-right {
+        margin-left: 10px;
+    }
+    .tca98bf16-33d0-46e9-9c40-992c65d5a8ac.place-right::before {
+        border-right: 8px solid transparent;
+    }
+    .tca98bf16-33d0-46e9-9c40-992c65d5a8ac.place-right::after {
+        border-top: 5px solid transparent;
+        border-bottom: 5px solid transparent;
+        left: -6px;
+        top: 50%;
+        margin-top: -4px;
+        border-right-color: #222;
+        border-right-style: solid;
+        border-right-width: 6px;
+    }
+  
+                    </style>
+                    The unique key of a hijack event.
+                  </div>
+                </div>
+                <div
+                  class="col-lg-8"
+                >
+                  <input
+                    class="form-control"
+                    id="info_type"
+                    readonly=""
+                    type="text"
+                    value=""
+                  />
+                </div>
+              </div>
+            </div>
+            <div
+              class="col-lg-6"
+            >
+              <div
+                class="row"
+              >
+                <div
+                  class="col-lg-4"
+                  style="font-weight: bold;"
+                >
+                  <div
+                    currentitem="false"
+                    data-for="timestart_title_info"
+                    data-tip="true"
+                  >
+                    <span>
+                      Time Started:
+                       
+                      
+                    </span>
+                  </div>
+                  <div
+                    class="__react_component_tooltip t370f5d45-2c2e-42d2-ba62-42cf3aff2490 place-top type-dark"
+                    data-id="tooltip"
+                    id="timestart_title_info"
+                  >
+                    <style>
+                      
+  	.t370f5d45-2c2e-42d2-ba62-42cf3aff2490 {
+	    color: #fff;
+	    background: #222;
+	    border: 1px solid transparent;
+  	}
+
+  	.t370f5d45-2c2e-42d2-ba62-42cf3aff2490.place-top {
+        margin-top: -10px;
+    }
+    .t370f5d45-2c2e-42d2-ba62-42cf3aff2490.place-top::before {
+        border-top: 8px solid transparent;
+    }
+    .t370f5d45-2c2e-42d2-ba62-42cf3aff2490.place-top::after {
+        border-left: 8px solid transparent;
+        border-right: 8px solid transparent;
+        bottom: -6px;
+        left: 50%;
+        margin-left: -8px;
+        border-top-color: #222;
+        border-top-style: solid;
+        border-top-width: 6px;
+    }
+
+    .t370f5d45-2c2e-42d2-ba62-42cf3aff2490.place-bottom {
+        margin-top: 10px;
+    }
+    .t370f5d45-2c2e-42d2-ba62-42cf3aff2490.place-bottom::before {
+        border-bottom: 8px solid transparent;
+    }
+    .t370f5d45-2c2e-42d2-ba62-42cf3aff2490.place-bottom::after {
+        border-left: 8px solid transparent;
+        border-right: 8px solid transparent;
+        top: -6px;
+        left: 50%;
+        margin-left: -8px;
+        border-bottom-color: #222;
+        border-bottom-style: solid;
+        border-bottom-width: 6px;
+    }
+
+    .t370f5d45-2c2e-42d2-ba62-42cf3aff2490.place-left {
+        margin-left: -10px;
+    }
+    .t370f5d45-2c2e-42d2-ba62-42cf3aff2490.place-left::before {
+        border-left: 8px solid transparent;
+    }
+    .t370f5d45-2c2e-42d2-ba62-42cf3aff2490.place-left::after {
+        border-top: 5px solid transparent;
+        border-bottom: 5px solid transparent;
+        right: -6px;
+        top: 50%;
+        margin-top: -4px;
+        border-left-color: #222;
+        border-left-style: solid;
+        border-left-width: 6px;
+    }
+
+    .t370f5d45-2c2e-42d2-ba62-42cf3aff2490.place-right {
+        margin-left: 10px;
+    }
+    .t370f5d45-2c2e-42d2-ba62-42cf3aff2490.place-right::before {
+        border-right: 8px solid transparent;
+    }
+    .t370f5d45-2c2e-42d2-ba62-42cf3aff2490.place-right::after {
+        border-top: 5px solid transparent;
+        border-bottom: 5px solid transparent;
+        left: -6px;
+        top: 50%;
+        margin-top: -4px;
+        border-right-color: #222;
+        border-right-style: solid;
+        border-right-width: 6px;
+    }
+  
+                    </style>
+                    The timestamp of the oldest known (to the system) BGP update that is related to the hijack.
+                  </div>
+                </div>
+                <div
+                  class="col-lg-8"
+                >
+                  <input
+                    class="form-control"
+                    id="info_type"
+                    readonly=""
+                    type="text"
+                    value="NaN-NaN-NaN NaN:NaN:NaN"
+                  />
+                </div>
+              </div>
+              <div
+                class="row"
+              >
+                <div
+                  class="col-lg-4"
+                  style="font-weight: bold;"
+                >
+                  <div
+                    currentitem="false"
+                    data-for="timedetect_title_info"
+                    data-tip="true"
+                  >
+                    <span>
+                      Time Detected:
+                       
+                      
+                    </span>
+                  </div>
+                  <div
+                    class="__react_component_tooltip te9bca260-3533-48a2-b3c0-c5307b0ad429 place-top type-dark"
+                    data-id="tooltip"
+                    id="timedetect_title_info"
+                  >
+                    <style>
+                      
+  	.te9bca260-3533-48a2-b3c0-c5307b0ad429 {
+	    color: #fff;
+	    background: #222;
+	    border: 1px solid transparent;
+  	}
+
+  	.te9bca260-3533-48a2-b3c0-c5307b0ad429.place-top {
+        margin-top: -10px;
+    }
+    .te9bca260-3533-48a2-b3c0-c5307b0ad429.place-top::before {
+        border-top: 8px solid transparent;
+    }
+    .te9bca260-3533-48a2-b3c0-c5307b0ad429.place-top::after {
+        border-left: 8px solid transparent;
+        border-right: 8px solid transparent;
+        bottom: -6px;
+        left: 50%;
+        margin-left: -8px;
+        border-top-color: #222;
+        border-top-style: solid;
+        border-top-width: 6px;
+    }
+
+    .te9bca260-3533-48a2-b3c0-c5307b0ad429.place-bottom {
+        margin-top: 10px;
+    }
+    .te9bca260-3533-48a2-b3c0-c5307b0ad429.place-bottom::before {
+        border-bottom: 8px solid transparent;
+    }
+    .te9bca260-3533-48a2-b3c0-c5307b0ad429.place-bottom::after {
+        border-left: 8px solid transparent;
+        border-right: 8px solid transparent;
+        top: -6px;
+        left: 50%;
+        margin-left: -8px;
+        border-bottom-color: #222;
+        border-bottom-style: solid;
+        border-bottom-width: 6px;
+    }
+
+    .te9bca260-3533-48a2-b3c0-c5307b0ad429.place-left {
+        margin-left: -10px;
+    }
+    .te9bca260-3533-48a2-b3c0-c5307b0ad429.place-left::before {
+        border-left: 8px solid transparent;
+    }
+    .te9bca260-3533-48a2-b3c0-c5307b0ad429.place-left::after {
+        border-top: 5px solid transparent;
+        border-bottom: 5px solid transparent;
+        right: -6px;
+        top: 50%;
+        margin-top: -4px;
+        border-left-color: #222;
+        border-left-style: solid;
+        border-left-width: 6px;
+    }
+
+    .te9bca260-3533-48a2-b3c0-c5307b0ad429.place-right {
+        margin-left: 10px;
+    }
+    .te9bca260-3533-48a2-b3c0-c5307b0ad429.place-right::before {
+        border-right: 8px solid transparent;
+    }
+    .te9bca260-3533-48a2-b3c0-c5307b0ad429.place-right::after {
+        border-top: 5px solid transparent;
+        border-bottom: 5px solid transparent;
+        left: -6px;
+        top: 50%;
+        margin-top: -4px;
+        border-right-color: #222;
+        border-right-style: solid;
+        border-right-width: 6px;
+    }
+  
+                    </style>
+                    The time when a hijack event was first detected by the system.
+                  </div>
+                </div>
+                <div
+                  class="col-lg-8"
+                >
+                  <input
+                    class="form-control"
+                    id="info_type"
+                    readonly=""
+                    type="text"
+                    value="NaN-NaN-NaN NaN:NaN:NaN"
+                  />
+                </div>
+              </div>
+              <div
+                class="row"
+              >
+                <div
+                  class="col-lg-4"
+                  style="font-weight: bold;"
+                >
+                  <div
+                    currentitem="false"
+                    data-for="lastupdate_title_info"
+                    data-tip="true"
+                  >
+                    <span>
+                      Last Update:
+                       
+                      
+                    </span>
+                  </div>
+                  <div
+                    class="__react_component_tooltip t1190cea2-b152-4db5-b5a8-2fc918747642 place-top type-dark"
+                    data-id="tooltip"
+                    id="lastupdate_title_info"
+                  >
+                    <style>
+                      
+  	.t1190cea2-b152-4db5-b5a8-2fc918747642 {
+	    color: #fff;
+	    background: #222;
+	    border: 1px solid transparent;
+  	}
+
+  	.t1190cea2-b152-4db5-b5a8-2fc918747642.place-top {
+        margin-top: -10px;
+    }
+    .t1190cea2-b152-4db5-b5a8-2fc918747642.place-top::before {
+        border-top: 8px solid transparent;
+    }
+    .t1190cea2-b152-4db5-b5a8-2fc918747642.place-top::after {
+        border-left: 8px solid transparent;
+        border-right: 8px solid transparent;
+        bottom: -6px;
+        left: 50%;
+        margin-left: -8px;
+        border-top-color: #222;
+        border-top-style: solid;
+        border-top-width: 6px;
+    }
+
+    .t1190cea2-b152-4db5-b5a8-2fc918747642.place-bottom {
+        margin-top: 10px;
+    }
+    .t1190cea2-b152-4db5-b5a8-2fc918747642.place-bottom::before {
+        border-bottom: 8px solid transparent;
+    }
+    .t1190cea2-b152-4db5-b5a8-2fc918747642.place-bottom::after {
+        border-left: 8px solid transparent;
+        border-right: 8px solid transparent;
+        top: -6px;
+        left: 50%;
+        margin-left: -8px;
+        border-bottom-color: #222;
+        border-bottom-style: solid;
+        border-bottom-width: 6px;
+    }
+
+    .t1190cea2-b152-4db5-b5a8-2fc918747642.place-left {
+        margin-left: -10px;
+    }
+    .t1190cea2-b152-4db5-b5a8-2fc918747642.place-left::before {
+        border-left: 8px solid transparent;
+    }
+    .t1190cea2-b152-4db5-b5a8-2fc918747642.place-left::after {
+        border-top: 5px solid transparent;
+        border-bottom: 5px solid transparent;
+        right: -6px;
+        top: 50%;
+        margin-top: -4px;
+        border-left-color: #222;
+        border-left-style: solid;
+        border-left-width: 6px;
+    }
+
+    .t1190cea2-b152-4db5-b5a8-2fc918747642.place-right {
+        margin-left: 10px;
+    }
+    .t1190cea2-b152-4db5-b5a8-2fc918747642.place-right::before {
+        border-right: 8px solid transparent;
+    }
+    .t1190cea2-b152-4db5-b5a8-2fc918747642.place-right::after {
+        border-top: 5px solid transparent;
+        border-bottom: 5px solid transparent;
+        left: -6px;
+        top: 50%;
+        margin-top: -4px;
+        border-right-color: #222;
+        border-right-style: solid;
+        border-right-width: 6px;
+    }
+  
+                    </style>
+                    The timestamp of the newest known (to the system) BGP update that is related to the hijack.
+                  </div>
+                </div>
+                <div
+                  class="col-lg-8"
+                >
+                  <input
+                    class="form-control"
+                    id="info_type"
+                    readonly=""
+                    type="text"
+                    value="Never"
+                  />
+                </div>
+              </div>
+              <div
+                class="row"
+              >
+                <div
+                  class="col-lg-4"
+                  style="font-weight: bold;"
+                >
+                  <div
+                    currentitem="false"
+                    data-for="timeended_title_info"
+                    data-tip="true"
+                  >
+                    <span>
+                      Time Ended:
+                       
+                      
+                    </span>
+                  </div>
+                  <div
+                    class="__react_component_tooltip tbc9a40ea-09fa-4969-aa33-824d187f0425 place-top type-dark"
+                    data-id="tooltip"
+                    id="timeended_title_info"
+                  >
+                    <style>
+                      
+  	.tbc9a40ea-09fa-4969-aa33-824d187f0425 {
+	    color: #fff;
+	    background: #222;
+	    border: 1px solid transparent;
+  	}
+
+  	.tbc9a40ea-09fa-4969-aa33-824d187f0425.place-top {
+        margin-top: -10px;
+    }
+    .tbc9a40ea-09fa-4969-aa33-824d187f0425.place-top::before {
+        border-top: 8px solid transparent;
+    }
+    .tbc9a40ea-09fa-4969-aa33-824d187f0425.place-top::after {
+        border-left: 8px solid transparent;
+        border-right: 8px solid transparent;
+        bottom: -6px;
+        left: 50%;
+        margin-left: -8px;
+        border-top-color: #222;
+        border-top-style: solid;
+        border-top-width: 6px;
+    }
+
+    .tbc9a40ea-09fa-4969-aa33-824d187f0425.place-bottom {
+        margin-top: 10px;
+    }
+    .tbc9a40ea-09fa-4969-aa33-824d187f0425.place-bottom::before {
+        border-bottom: 8px solid transparent;
+    }
+    .tbc9a40ea-09fa-4969-aa33-824d187f0425.place-bottom::after {
+        border-left: 8px solid transparent;
+        border-right: 8px solid transparent;
+        top: -6px;
+        left: 50%;
+        margin-left: -8px;
+        border-bottom-color: #222;
+        border-bottom-style: solid;
+        border-bottom-width: 6px;
+    }
+
+    .tbc9a40ea-09fa-4969-aa33-824d187f0425.place-left {
+        margin-left: -10px;
+    }
+    .tbc9a40ea-09fa-4969-aa33-824d187f0425.place-left::before {
+        border-left: 8px solid transparent;
+    }
+    .tbc9a40ea-09fa-4969-aa33-824d187f0425.place-left::after {
+        border-top: 5px solid transparent;
+        border-bottom: 5px solid transparent;
+        right: -6px;
+        top: 50%;
+        margin-top: -4px;
+        border-left-color: #222;
+        border-left-style: solid;
+        border-left-width: 6px;
+    }
+
+    .tbc9a40ea-09fa-4969-aa33-824d187f0425.place-right {
+        margin-left: 10px;
+    }
+    .tbc9a40ea-09fa-4969-aa33-824d187f0425.place-right::before {
+        border-right: 8px solid transparent;
+    }
+    .tbc9a40ea-09fa-4969-aa33-824d187f0425.place-right::after {
+        border-top: 5px solid transparent;
+        border-bottom: 5px solid transparent;
+        left: -6px;
+        top: 50%;
+        margin-top: -4px;
+        border-right-color: #222;
+        border-right-style: solid;
+        border-right-width: 6px;
+    }
+  
+                    </style>
+                    The timestamp when the hijack was ended. It can be set in the following ways:
+      &lt;ul&gt;&lt;li&gt;Manually, when the user presses the “resolved” button.&lt;/li&gt;
+      &lt;li&gt;Automatically, when a hijack is completely withdrawn (all monitors that saw hijack updates for a certain prefix have seen the respective withdrawals).&lt;/li&gt;&lt;/ul&gt;
+                  </div>
+                </div>
+                <div
+                  class="col-lg-8"
+                >
+                  <input
+                    class="form-control"
+                    id="info_type"
+                    readonly=""
+                    type="text"
+                    value="Never"
+                  />
+                </div>
+              </div>
+              <div
+                class="row"
+              >
+                <div
+                  class="col-lg-4"
+                  style="font-weight: bold;"
+                >
+                  <div
+                    currentitem="false"
+                    data-for="mitigationstarted_title_info"
+                    data-tip="true"
+                  >
+                    <span>
+                      Mitigation Started:
+                       
+                      
+                    </span>
+                  </div>
+                  <div
+                    class="__react_component_tooltip t94c29b6a-aa59-4312-960d-c97388edc66c place-top type-dark"
+                    data-id="tooltip"
+                    id="mitigationstarted_title_info"
+                  >
+                    <style>
+                      
+  	.t94c29b6a-aa59-4312-960d-c97388edc66c {
+	    color: #fff;
+	    background: #222;
+	    border: 1px solid transparent;
+  	}
+
+  	.t94c29b6a-aa59-4312-960d-c97388edc66c.place-top {
+        margin-top: -10px;
+    }
+    .t94c29b6a-aa59-4312-960d-c97388edc66c.place-top::before {
+        border-top: 8px solid transparent;
+    }
+    .t94c29b6a-aa59-4312-960d-c97388edc66c.place-top::after {
+        border-left: 8px solid transparent;
+        border-right: 8px solid transparent;
+        bottom: -6px;
+        left: 50%;
+        margin-left: -8px;
+        border-top-color: #222;
+        border-top-style: solid;
+        border-top-width: 6px;
+    }
+
+    .t94c29b6a-aa59-4312-960d-c97388edc66c.place-bottom {
+        margin-top: 10px;
+    }
+    .t94c29b6a-aa59-4312-960d-c97388edc66c.place-bottom::before {
+        border-bottom: 8px solid transparent;
+    }
+    .t94c29b6a-aa59-4312-960d-c97388edc66c.place-bottom::after {
+        border-left: 8px solid transparent;
+        border-right: 8px solid transparent;
+        top: -6px;
+        left: 50%;
+        margin-left: -8px;
+        border-bottom-color: #222;
+        border-bottom-style: solid;
+        border-bottom-width: 6px;
+    }
+
+    .t94c29b6a-aa59-4312-960d-c97388edc66c.place-left {
+        margin-left: -10px;
+    }
+    .t94c29b6a-aa59-4312-960d-c97388edc66c.place-left::before {
+        border-left: 8px solid transparent;
+    }
+    .t94c29b6a-aa59-4312-960d-c97388edc66c.place-left::after {
+        border-top: 5px solid transparent;
+        border-bottom: 5px solid transparent;
+        right: -6px;
+        top: 50%;
+        margin-top: -4px;
+        border-left-color: #222;
+        border-left-style: solid;
+        border-left-width: 6px;
+    }
+
+    .t94c29b6a-aa59-4312-960d-c97388edc66c.place-right {
+        margin-left: 10px;
+    }
+    .t94c29b6a-aa59-4312-960d-c97388edc66c.place-right::before {
+        border-right: 8px solid transparent;
+    }
+    .t94c29b6a-aa59-4312-960d-c97388edc66c.place-right::after {
+        border-top: 5px solid transparent;
+        border-bottom: 5px solid transparent;
+        left: -6px;
+        top: 50%;
+        margin-top: -4px;
+        border-right-color: #222;
+        border-right-style: solid;
+        border-right-width: 6px;
+    }
+  
+                    </style>
+                    The timestamp when the mitigation was triggered by the user (“mitigate” button).
+                  </div>
+                </div>
+                <div
+                  class="col-lg-8"
+                >
+                  <input
+                    class="form-control"
+                    id="info_type"
+                    readonly=""
+                    type="text"
+                    value="Never"
+                  />
+                </div>
+              </div>
+              <div
+                class="row"
+              >
+                <div
+                  class="col-lg-4"
+                  style="font-weight: bold;"
+                >
+                  <div
+                    currentitem="false"
+                    data-for="communityannotation_title_info"
+                    data-tip="true"
+                  >
+                    <span>
+                      Community Annotation:
+                       
+                      
+                    </span>
+                  </div>
+                  <div
+                    class="__react_component_tooltip tda4d42cf-6297-4f76-9e5d-2c6a6be95611 place-top type-dark"
+                    data-id="tooltip"
+                    id="communityannotation_title_info"
+                  >
+                    <style>
+                      
+  	.tda4d42cf-6297-4f76-9e5d-2c6a6be95611 {
+	    color: #fff;
+	    background: #222;
+	    border: 1px solid transparent;
+  	}
+
+  	.tda4d42cf-6297-4f76-9e5d-2c6a6be95611.place-top {
+        margin-top: -10px;
+    }
+    .tda4d42cf-6297-4f76-9e5d-2c6a6be95611.place-top::before {
+        border-top: 8px solid transparent;
+    }
+    .tda4d42cf-6297-4f76-9e5d-2c6a6be95611.place-top::after {
+        border-left: 8px solid transparent;
+        border-right: 8px solid transparent;
+        bottom: -6px;
+        left: 50%;
+        margin-left: -8px;
+        border-top-color: #222;
+        border-top-style: solid;
+        border-top-width: 6px;
+    }
+
+    .tda4d42cf-6297-4f76-9e5d-2c6a6be95611.place-bottom {
+        margin-top: 10px;
+    }
+    .tda4d42cf-6297-4f76-9e5d-2c6a6be95611.place-bottom::before {
+        border-bottom: 8px solid transparent;
+    }
+    .tda4d42cf-6297-4f76-9e5d-2c6a6be95611.place-bottom::after {
+        border-left: 8px solid transparent;
+        border-right: 8px solid transparent;
+        top: -6px;
+        left: 50%;
+        margin-left: -8px;
+        border-bottom-color: #222;
+        border-bottom-style: solid;
+        border-bottom-width: 6px;
+    }
+
+    .tda4d42cf-6297-4f76-9e5d-2c6a6be95611.place-left {
+        margin-left: -10px;
+    }
+    .tda4d42cf-6297-4f76-9e5d-2c6a6be95611.place-left::before {
+        border-left: 8px solid transparent;
+    }
+    .tda4d42cf-6297-4f76-9e5d-2c6a6be95611.place-left::after {
+        border-top: 5px solid transparent;
+        border-bottom: 5px solid transparent;
+        right: -6px;
+        top: 50%;
+        margin-top: -4px;
+        border-left-color: #222;
+        border-left-style: solid;
+        border-left-width: 6px;
+    }
+
+    .tda4d42cf-6297-4f76-9e5d-2c6a6be95611.place-right {
+        margin-left: 10px;
+    }
+    .tda4d42cf-6297-4f76-9e5d-2c6a6be95611.place-right::before {
+        border-right: 8px solid transparent;
+    }
+    .tda4d42cf-6297-4f76-9e5d-2c6a6be95611.place-right::after {
+        border-top: 5px solid transparent;
+        border-bottom: 5px solid transparent;
+        left: -6px;
+        top: 50%;
+        margin-top: -4px;
+        border-right-color: #222;
+        border-right-style: solid;
+        border-right-width: 6px;
+    }
+  
+                    </style>
+                    The user-defined annotation of the hijack according to the communities of hijacked BGP updates.
+                  </div>
+                </div>
+                <div
+                  class="col-lg-8"
+                >
+                  <input
+                    class="form-control"
+                    id="info_type"
+                    readonly=""
+                    type="text"
+                    value=""
+                  />
+                </div>
+              </div>
+              <div
+                class="row"
+              >
+                <div
+                  class="col-lg-4"
+                  style="font-weight: bold;"
+                >
+                  <div
+                    currentitem="false"
+                    data-for="rpkistatus_title_info"
+                    data-tip="true"
+                  >
+                    <span>
+                      RPKI Status:
+                       
+                      
+                    </span>
+                  </div>
+                  <div
+                    class="__react_component_tooltip tdca43fe1-e141-475e-bf99-f769dd70876b place-top type-dark"
+                    data-id="tooltip"
+                    id="rpkistatus_title_info"
+                  >
+                    <style>
+                      
+  	.tdca43fe1-e141-475e-bf99-f769dd70876b {
+	    color: #fff;
+	    background: #222;
+	    border: 1px solid transparent;
+  	}
+
+  	.tdca43fe1-e141-475e-bf99-f769dd70876b.place-top {
+        margin-top: -10px;
+    }
+    .tdca43fe1-e141-475e-bf99-f769dd70876b.place-top::before {
+        border-top: 8px solid transparent;
+    }
+    .tdca43fe1-e141-475e-bf99-f769dd70876b.place-top::after {
+        border-left: 8px solid transparent;
+        border-right: 8px solid transparent;
+        bottom: -6px;
+        left: 50%;
+        margin-left: -8px;
+        border-top-color: #222;
+        border-top-style: solid;
+        border-top-width: 6px;
+    }
+
+    .tdca43fe1-e141-475e-bf99-f769dd70876b.place-bottom {
+        margin-top: 10px;
+    }
+    .tdca43fe1-e141-475e-bf99-f769dd70876b.place-bottom::before {
+        border-bottom: 8px solid transparent;
+    }
+    .tdca43fe1-e141-475e-bf99-f769dd70876b.place-bottom::after {
+        border-left: 8px solid transparent;
+        border-right: 8px solid transparent;
+        top: -6px;
+        left: 50%;
+        margin-left: -8px;
+        border-bottom-color: #222;
+        border-bottom-style: solid;
+        border-bottom-width: 6px;
+    }
+
+    .tdca43fe1-e141-475e-bf99-f769dd70876b.place-left {
+        margin-left: -10px;
+    }
+    .tdca43fe1-e141-475e-bf99-f769dd70876b.place-left::before {
+        border-left: 8px solid transparent;
+    }
+    .tdca43fe1-e141-475e-bf99-f769dd70876b.place-left::after {
+        border-top: 5px solid transparent;
+        border-bottom: 5px solid transparent;
+        right: -6px;
+        top: 50%;
+        margin-top: -4px;
+        border-left-color: #222;
+        border-left-style: solid;
+        border-left-width: 6px;
+    }
+
+    .tdca43fe1-e141-475e-bf99-f769dd70876b.place-right {
+        margin-left: 10px;
+    }
+    .tdca43fe1-e141-475e-bf99-f769dd70876b.place-right::before {
+        border-right: 8px solid transparent;
+    }
+    .tdca43fe1-e141-475e-bf99-f769dd70876b.place-right::after {
+        border-top: 5px solid transparent;
+        border-bottom: 5px solid transparent;
+        left: -6px;
+        top: 50%;
+        margin-top: -4px;
+        border-right-color: #222;
+        border-right-style: solid;
+        border-right-width: 6px;
+    }
+  
+                    </style>
+                    The RPKI status of the hijacked prefix.&lt;ul&gt;
+      &lt;li&gt;"NA" → Non Applicable&lt;/li&gt;
+      &lt;li&gt;"VD" → Valid&lt;/li&gt;
+      &lt;li&gt;"IA" → Invalid ASN&lt;/li&gt;
+      &lt;li&gt;"IL" → Invalid Prefix Length&lt;/li&gt;
+      &lt;li&gt;"IU" → Invalid Unknown&lt;/li&gt;
+      &lt;li&gt;"NF" → Not found&lt;/li&gt;&lt;/ul&gt;
+                  </div>
+                </div>
+                <div
+                  class="col-lg-8"
+                >
+                  <input
+                    class="form-control"
+                    id="info_type"
+                    readonly=""
+                    type="text"
+                    value=""
+                  />
+                </div>
+              </div>
+              <div
+                class="row"
+              >
+                <div
+                  class="col-lg-4"
+                  style="font-weight: bold;"
+                >
+                  <span>
+                    <br />
+                    Display Peers Seen Hijack
+                  </span>
+                </div>
+                <div
+                  class="col-lg-8"
+                />
+              </div>
+              <div
+                class="row"
+                style="margin-top: 20px;"
+              >
+                <div
+                  class="col-lg-5"
+                >
+                  <button
+                    aria-controls="seenHijackUpdate"
+                    aria-expanded="false"
+                    class="btn btn-primary btn-md"
+                    data-target="#seenHijackUpdate"
+                    data-toggle="collapse"
+                    type="button"
+                  >
+                    BGP Announcement
+                  </button>
+                </div>
+                <div
+                  class="col-lg-5 offset-lg-1"
+                >
+                  <button
+                    aria-controls="seenHijackWithdraw"
+                    aria-expanded="false"
+                    class="btn btn-primary btn-md"
+                    data-target="#seenHijackWithdraw"
+                    data-toggle="collapse"
+                    type="button"
+                  >
+                    BGP Withdrawal
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="col-lg-3"
+    >
+      <div
+        class="row"
+        style="margin-bottom: 15px;"
+      >
+        <div
+          class="col-lg-12"
+        >
+          <div
+            class="card"
+          >
+            <div
+              class="card-header"
+            >
+              Hijack Actions
+            </div>
+            <div
+              class="card-body"
+            >
+              <select
+                class="form-control form-control-sm-auto"
+                id="action_selection"
+                style="width: 200px; display: inline-block; margin-right: 15px;"
+              >
+                <option
+                  value="hijack_action_acknowledge"
+                >
+                  Mark as Acknowledged
+                </option>
+                <option
+                  value="hijack_action_export"
+                >
+                  Export Hijack
+                </option>
+              </select>
+              <button
+                class="btn btn-primary btn-md"
+                id="apply_selected"
+                style="margin-right: 5px;"
+                type="button"
+              >
+                Apply
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="row"
+      >
+        <div
+          class="col-lg-12"
+        >
+          <div
+            class="card"
+          >
+            <div
+              class="card-header"
+            >
+              Comments
+               
+              <button
+                class="btn btn-primary btn-md"
+                id="edit_comment"
+                style="margin-right: 5px; float: right;"
+                type="button"
+              >
+                Edit
+              </button>
+            </div>
+            <div
+              class="card-body"
+            >
+              <h1
+                style="display: none; color: red;"
+              >
+                 
+                Config failed to update.
+                 
+              </h1>
+              <div
+                class="DraftEditor-root"
+              >
+                <div
+                  class="DraftEditor-editorContainer"
+                >
+                  <div
+                    class="public-DraftEditor-content"
+                    contenteditable="false"
+                    spellcheck="false"
+                    style="outline: none; user-select: text; white-space: pre-wrap; word-wrap: break-word;"
+                  >
+                    <div
+                      data-contents="true"
+                    >
+                      <div
+                        class=""
+                        data-block="true"
+                        data-editor="a845d"
+                        data-offset-key="dd9ld-0-0"
+                      >
+                        <div
+                          class="public-DraftStyleDefault-block public-DraftStyleDefault-ltr"
+                          data-offset-key="dd9ld-0-0"
+                        >
+                          <span
+                            data-offset-key="dd9ld-0-0"
+                          >
+                            <br
+                              data-text="true"
+                            />
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    class="row"
+  >
+    <div
+      class="col-lg-1"
+    />
+    <div
+      class="col-lg-10"
+    >
+      <div
+        class="card"
+      >
+        <div
+          class="card-body"
+        >
+          <div
+            class="row"
+          >
+            <div
+              class="col-lg-6"
+            />
+            <div
+              class="col-lg-6"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
