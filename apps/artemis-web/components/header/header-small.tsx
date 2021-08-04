@@ -13,7 +13,9 @@ import { Avatar, Badge, Input, Dropdown, DropdownItem, WindmillContext } from '@
 
 function Header(props) {
   const { mode, toggleMode } = useContext(WindmillContext)
-  const { toggleSidebar } = useContext(SidebarContext)
+  const sidecontext: any = useContext(SidebarContext);
+  const toggleSidebar: any = sidecontext.toggleSidebar;
+
   const handleLogout = async () => {
     await fetch('/api/auth/logout', {
       method: 'DELETE',

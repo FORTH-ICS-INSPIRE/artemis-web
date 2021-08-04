@@ -22,7 +22,7 @@ function useStorageTheme(key) {
     const userPreference =
         !!window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
 
-    const [theme, setTheme] = useState(
+    const [theme, setTheme]: [any, any] = useState(
         // use stored theme; fallback to user preference
         localStorage.getItem(key) || userPreference
     )
@@ -54,7 +54,7 @@ export const ThemeProvider = ({ children }) => {
         else setTheme('light')
     }
 
-    const value = useMemo(
+    const value: any = useMemo(
         () => ({
             theme,
             toggleTheme,

@@ -15,7 +15,7 @@ export const SidebarProvider = ({ children }) => {
         setIsSidebarOpen(false)
     }
 
-    const value = useMemo(
+    const value: any = useMemo(
         () => ({
             isSidebarOpen,
             toggleSidebar,
