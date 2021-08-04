@@ -31,6 +31,7 @@ function MyApp({ Component, pageProps }) {
   }
   /* eslint-enable react-hooks/rules-of-hooks */
 
+
   return (
     <ApolloProvider client={client}>
       <SidebarProvider>

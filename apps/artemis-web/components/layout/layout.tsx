@@ -7,12 +7,11 @@ import { WindmillContext } from '@windmill/react-ui';
 
 const Layout = (props: any) => {
 
-  const { children, componentName } = props;
+  const { children, component } = props;
   // const Footer = dynamic(() => import('../footer/footer'));
   const Header = dynamic(() => import('../header/header-small'));
   const isSidebarOpen = false;
   const { mode, toggleMode } = useContext(WindmillContext)
-
 
   return (
     <>
@@ -37,10 +36,11 @@ const Layout = (props: any) => {
         <div
           className={`flex h-screen bg-gray-50 dark:bg-gray-800 ${isSidebarOpen && 'overflow-hidden'}`}
         >
-          {!(['LoginPage', 'SignupPage', 'HomePage'].includes(componentName)) && <Sidebar />}
+          {!(['LoginPage', 'SignupPage', 'HomePage'].includes(component)) && <Sidebar />}
           <div className="flex flex-col flex-1 w-full">
             < div style={{ overflowY: 'scroll' }} className="bg-gray-50 dark:bg-gray-800 main-container mb-18 mt-0">
-              {!(['LoginPage', 'SignupPage', 'HomePage'].includes(componentName)) && <Header />}
+              {!(['LoginPage', 'SignupPage', 'HomePage'].includes(component)) && <Header />}
+
 
               {children}
               <Footer system_version={props.system_version} />
