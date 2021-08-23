@@ -1,7 +1,6 @@
-import { act, render, screen } from '@testing-library/react';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import { ContentState, EditorState } from 'draft-js';
-import Enzyme,{ shallow } from 'enzyme';
+import Enzyme, { shallow } from 'enzyme';
 import { enableFetchMocks } from 'jest-fetch-mock';
 import React from 'react';
 import HijackInfoComponent from './hijack-info';
@@ -49,18 +48,15 @@ describe('HijackInfoComponent', () => {
       },
       tooltips: {},
     };
-    const promise = Promise.resolve();
-    jest.fn(() => promise);
 
     fetch.mockResponse(JSON.stringify({
       "recordsTotal": 0,
     }));
-  
+
     const element = shallow(<HijackInfoComponent {...mock} />);
     // const element = screen.getByText(/Hijack Information/i);
     expect(element.text()).toContain('Hijack Information');
     expect(element.text()).toContain('BGP Announcement');
 
-    await act(() => promise);
   });
 });
