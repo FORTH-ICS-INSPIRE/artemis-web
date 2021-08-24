@@ -38,7 +38,7 @@ const handler = nc()
         name,
         lastLogin: new Date(),
         currentLogin: new Date(),
-        role: 'user', // just for testing. normally it will be 'pending'
+        role: 'pending',
         token: '',
       })
       .then(({ ops }) => ops[0]);
