@@ -42,35 +42,4 @@ describe('artemis-web', () => {
     cy.wait(2000);
     cy.get('h1').should('have.text', 'Pending Approval');
   });
-
-  // it('change password', () => {
-  //   // Custom command example, see `../support/commands.ts` file
-  //   cy.visit('/password_change');
-  //   cy.wait(2000);
-  //   cy.typeChangePass({
-  //     old_pass: newPass,
-  //     new_pass: '1234',
-  //     repeat_pass: '1234',
-  //   });
-  //   cy.get('#submit').click();
-  //   cy.wait(1000);
-  //   cy.get('#password_change_form').contains('has been updated');
-  // });
-
-  // it('logs in', () => {
-  //   cy.visit('/login');
-  //   cy.wait(2000);
-  //   cy.get('h1').should('have.text', 'Sign In');
-  //   cy.typeLogin({ email: newEmail, password: '1234' });
-  //   cy.login();
-  // });
-
-  // it('after login > Dashboard', () => {
-  //   // Custom command example, see `../support/commands.ts` file
-  //   cy.visit('/dashboard');
-  //   cy.wait(2000);
-  //   cy.waitFor('h1');
-  //   cy.get('h1').should('have.text', 'Dashboard');
-  //   // cy.get('#modules').find('tr').its('length').should('be.gt', 0);
-  // });
 });
