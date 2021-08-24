@@ -23,13 +23,10 @@ describe('artemis-web', () => {
     cy.register();
     cy.wait(1000);
     cy.get('h1').should('have.text', 'Pending Approval');
-    cy.get('#logout', { timeout: 2000 }).click({ force: true });
-    cy.wait(2000);
-    cy.get('h1').should('have.text', 'Sign In');
   });
 
   it('logs out', () => {
-    cy.visit('/dashboard');
+    cy.visit('/pending');
     // Custom command example, see `../support/commands.ts` file
     cy.get('#logout', { timeout: 2000 }).click({ force: true });
     cy.wait(2000);
@@ -43,7 +40,7 @@ describe('artemis-web', () => {
     cy.typeLogin({ email: newEmail, password: newPass });
     cy.login();
     cy.wait(2000);
-    cy.get('h1').should('have.text', 'Sign In');
+    cy.get('h1').should('have.text', 'Pending Approval');
   });
 
   // it('change password', () => {
