@@ -24,8 +24,7 @@
     "update": "nx migrate latest",
     "workspace-schematic": "nx workspace-schematic",
     "dep-graph": "nx dep-graph",
-    "help": "nx help",
-    "reactide-server": "webpack-dev-server --config reactide.config.js --mode development --hot"
+    "help": "nx help"
   },
   "private": true,
   "dependencies": {
