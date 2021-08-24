@@ -17,7 +17,7 @@ describe('artemis-web', () => {
     cy.waitFor('h1');
     cy.get('h1').should('have.text', 'System');
     cy.wait(2000);
-    cy.get('.card-body').its('length').should('eq', 9)
+    cy.get('.card-body').its('length').should('eq', 2)
   });
 
   it('[LDAP] admin logs out', () => {
