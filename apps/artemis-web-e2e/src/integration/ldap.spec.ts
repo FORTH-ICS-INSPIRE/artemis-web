@@ -20,6 +20,8 @@ describe('artemis-web', () => {
     cy.get('.card-body').its('length').should('eq', 9)
   });
 
+
+
   it('[LDAP] admin logs out', () => {
     cy.visit('/dashboard');
     cy.get('#logout', { timeout: 2000 }).click({ force: true });

@@ -61,11 +61,17 @@ describe('artemis-web', () => {
 
   it('logs in', () => {
     cy.visit('/login');
-    cy.wait(2000);
     cy.get('h1').should('have.text', 'Sign In');
     cy.typeLogin({ email: newEmail, password: newPass });
     cy.login();
     cy.wait(2000);
     cy.get('h1').should('have.text', 'Dashboard');
+  });
+
+  it('change password', () => {
+    cy.visit('/password_change');
+    cy.get('h1').should('have.text', 'Change Password');
+    cy.typeChangePass({ old_pass: newPass, new_pass: "1234" });
+    cy.contains('updated');
   });
 });
