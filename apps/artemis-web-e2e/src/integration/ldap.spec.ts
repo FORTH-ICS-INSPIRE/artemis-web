@@ -18,6 +18,8 @@ describe('artemis-web', () => {
     cy.get('h1').should('have.text', 'System');
   });
 
+
+
   it('[LDAP] admin logs out', () => {
     cy.visit('/dashboard');
     cy.get('#logout', { timeout: 2000 }).click({ force: true });
