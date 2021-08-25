@@ -26,7 +26,7 @@ async function isInCollection(db, name) {
       });
     }
     const user = await db.collection('users').findOne();
-    console.log(user)
+
     if (user == null) {
       db.collection('users').insertOne(
         {
