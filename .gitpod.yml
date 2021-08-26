@@ -2,7 +2,8 @@ image:
   file: .gitpod.Dockerfile
 
 tasks:
-  - command: docker-compose up -d
+  - init: docker-compose down
+    command: sudo docker-compose up
 
   - init: yarn install --frozen-lockfile
     command: |
