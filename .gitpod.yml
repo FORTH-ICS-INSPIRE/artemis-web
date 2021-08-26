@@ -9,7 +9,8 @@ tasks:
       export $(cat .env | grep -v "#" | xargs)
       MONGODB_HOST=localhost ./apps/artemis-web/scripts/wait-for -h localhost -p ${MONGODB_PORT} -t 0
       MONGODB_HOST=localhost node apps/artemis-web/scripts/query.js
-      MONGODB_HOST=localhost LDAP_HOST=localhost yarn run start
+      yarn build --prod
+      MONGODB_HOST=localhost LDAP_HOST=localhost yarn run start --prod
 ports:
   - port: 4200
     onOpen: open-browser
