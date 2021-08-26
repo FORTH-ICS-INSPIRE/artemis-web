@@ -2,11 +2,7 @@ image:
   file: .gitpod.Dockerfile
 
 tasks:
-  - init: |
-      mkdir -p /workspace/data && mongod --dbpath /workspace/data &
-      sleep 5
-      if [ -f .env ]; then export $(cat .env | sed 's/#.*//g' | xargs); fi
-    command: mongo admin --eval "db.createUser({user:'"$MONGODB_USER"',pwd:'"$MONGODB_PASS"',roles:[{role:'root',db:'admin'}]})"
+  - command: docker-compose up -d
 
   - init: yarn install --frozen-lockfile
     command: |
