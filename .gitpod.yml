@@ -3,7 +3,7 @@ image:
 
 tasks:
   - init: docker-compose down
-    command: sudo docker-compose up
+    command: docker-compose up
 
   - init: yarn install --frozen-lockfile
     command: |
