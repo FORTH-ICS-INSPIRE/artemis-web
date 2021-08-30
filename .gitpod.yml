@@ -1,4 +1,6 @@
-image: gitpod/workspace-mongodb
+image:
+  file: .gitpod.Dockerfile
+
 tasks:
   - init: yarn install --frozen-lockfile
     command: |
