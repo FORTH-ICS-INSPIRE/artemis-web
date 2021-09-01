@@ -5,7 +5,7 @@ import queryType from '../../libs/graphql.d';
 import { useMutation, useQuery, useSubscription } from '@apollo/client';
 
 export function useGraphQl(module: queryType, options: optionsType) {
-  const { isLive, key, limits, callback, isMutation, running, name } = options;
+  const { isLive, key, limits, callback, isMutation, running, name, isTesting } = options;
   let vars;
   const varTmp = {};
   const isSubscription = shallSubscribe(isLive);
@@ -35,14 +35,19 @@ export function useGraphQl(module: queryType, options: optionsType) {
   }
 
   /* eslint-disable react-hooks/rules-of-hooks */
-  if (isMutation) {
+  if (isTesting)
+    return null;
+  else if (isMutation) {
     const generator = new QueryGenerator(module, isSubscription, options);
 
     vars = {
       variables: { running, name },
     };
 
-    const res = useMutation(generator.getQuery(), vars);
+    const res = useMutation(generator.getQuery(), {
+      ...vars,
+      skip: isTesting,
+    });
 
     return res[0]();
   } else {
