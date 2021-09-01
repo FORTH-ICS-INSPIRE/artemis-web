@@ -24,6 +24,7 @@ type optionsType = {
   isMutation?: boolean;
   running?: boolean;
   name?: string;
+  isTesting?: boolean;
 };
 
 export default optionsType;

@@ -11,7 +11,7 @@ import { useGraphQl } from '../../utils/hooks/use-graphql';
 import { autoLogout, shallMock } from '../../utils/token';
 
 const SystemPage = (props) => {
-  if (shallMock()) {
+  if (shallMock(props.isTesting)) {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const { worker } = require('../../utils/mock-sw/browser');
     worker.start();
@@ -22,16 +22,15 @@ const SystemPage = (props) => {
   }, [props]);
 
   const user = props.user;
-
   const STATS_RES: any = useGraphQl('stats', {
-    isLive: true,
+    isLive: !shallMock(props.isTesting),
     hasDateFilter: false,
     hasColumnFilter: false,
   });
   const STATS_DATA: any = STATS_RES?.data;
 
   let CONFIG_DATA: any = useGraphQl('config', {
-    isLive: true,
+    isLive: !shallMock(props.isTesting),
     hasDateFilter: false,
     hasColumnFilter: false,
   });
@@ -135,6 +134,7 @@ const SystemPage = (props) => {
                           subModules={subModules}
                           labels={modulesLabels}
                           modulesStateObj={modulesStateObj}
+                          is
                         />
                       );
                     } else return <> </>;
@@ -156,5 +156,5 @@ const SystemPage = (props) => {
 export default AuthHOC(SystemPage, ['admin']);
 
 export const getServerSideProps = setup(async (req, res, csrftoken) => {
-  return { props: { _csrf: csrftoken,  _inactivity_timeout: process.env.INACTIVITY_TIMEOUT, system_version: process.env.SYSTEM_VERSION } };
+  return { props: { _csrf: csrftoken, isTesting: process.env.TESTING === 'true',  _inactivity_timeout: process.env.INACTIVITY_TIMEOUT, system_version: process.env.SYSTEM_VERSION } };
 });
