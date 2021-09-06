@@ -312,7 +312,7 @@ function extractHijackInfoLeft(
 function extractHijackInfoRight(hijack) {
   const hijackInfo = {
     'Time Started': [
-      formatDate(new Date(hijack.time_started), 2),
+      formatDate(new Date(hijack.time_started), Math.abs(new Date().getTimezoneOffset() / 60)),
       genTooltip(
         'Time Started:',
         null,
