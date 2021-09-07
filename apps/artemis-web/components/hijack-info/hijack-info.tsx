@@ -81,7 +81,9 @@ class HijackInfoComponent extends Component<any, any> {
   }
 
   getEventType(type: string): string {
-    if (type.includes("E|0"))
+    if (!type)
+      return "";
+    else if (type.includes("E|0"))
       return "moas";
     else if (type.includes("S|0"))
       return "submoas";
