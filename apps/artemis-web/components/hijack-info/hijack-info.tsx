@@ -49,7 +49,8 @@ class HijackInfoComponent extends Component<any, any> {
       editComment: false,
       commentSuccess: true,
       gripState: false,
-      event_id : ""
+      event_id: "",
+      gripFetched: false,
     };
 
     this.isMobile = props.isMobile;
@@ -59,23 +60,39 @@ class HijackInfoComponent extends Component<any, any> {
 
   }
 
-  async componentDidMount() {
+  async fetchGrip(hijackDataState) {
+    const asn = hijackDataState["hijack_as"];
+    const prefix = hijackDataState["prefix"];
+    const type = this.getEventType(hijackDataState["type"]);
 
-    const asn = this.hijackInfoLeft["Hijacker AS:"][0].props.asn;
-    const prefix = this.hijackInfoLeft["Prefix"][0];
+    const resp = await fetch(`https://api.grip.caida.org/v1/json/events?event_type=${type}&asns=${asn}&pfxs=${prefix}`, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+    });
 
-    const resp = await fetch(`https://api.grip.caida.org/v1/json/events?event_type=all&asns=${asn}&pfxs=${prefix}`, {
-        method: 'GET',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-      });
+    const json = await resp.json();
 
-      const json = await resp.json();
-      if (json.recordsTotal > 0) {
-        this.setState({ gripState: true, event_id: json.data[0]["id"] });
-      }
+    if (json.recordsTotal > 0) {
+      this.setState({ gripState: true, event_id: json.data[0]["id"], gripFetched: true });
+    }
+  }
+
+  getEventType(type: string): string {
+    if (type.includes("E|0"))
+      return "moas";
+    else if (type.includes("S|0"))
+      return "submoas";
+    else if (type.includes("E|1"))
+      return "edges";
+    else if (type.includes("S|1"))
+      return "edges";
+    else if (type.includes("S|-"))
+      return "defcon";
+    else
+      return "all";
   }
 
   render() {
@@ -87,12 +104,23 @@ class HijackInfoComponent extends Component<any, any> {
         context: this.props.context,
       }
     );
+
+    const type = this.getEventType(this.props.hijackDataState["type"]);
+    const asn = this.props.hijackDataState["hijack_as"];
+    const prefix = this.props.hijackDataState["prefix"];
+
+    if (!this.state.gripFetched && asn) {
+      this.fetchGrip(this.props.hijackDataState);
+    }
+
     const commentRef = this.commentRef;
     const hijackKey = this.hijackKey;
 
     const mRef = this.selectRef;
     const setState = this.setState;
     const event_id = this.state.event_id;
+
+
 
     return (
       <>
@@ -384,7 +412,7 @@ class HijackInfoComponent extends Component<any, any> {
                         type="button"
                         className={`btn btn-primary
                           } btn-lg`}
-                        onClick={() => window.open(`https://grip-dev.caida.org/events/${'all'}/${event_id}`, "_blank")}
+                        onClick={() => window.open(`https://grip-dev.caida.org/events/${type}/${event_id}`, "_blank")}
                       >
                         GRIP event
                       </button>
