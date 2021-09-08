@@ -10,6 +10,7 @@ import { BrokerExchangeOptions, BrokerQueueOptions } from 'typescript-rabbitmq';
 import Broker from 'typescript-rabbitmq';
 import uuidv4 from 'uuid/v4';
 import { csrf } from '../../libs/csrf';
+import limiter from '../../middleware/limiter';
 
 const sendRMQAction = async (obj) => {
   const { exchangeName, payload, routing_key } = obj;
@@ -66,6 +67,7 @@ const sendRMQAction = async (obj) => {
 };
 
 const handler = nc()
+  .use(limiter)
   .use(auth)
   .use(authorization(['admin']))
   .post(async (req: NextApiRequestExtended, res: NextApiResponseExtended) => {
