@@ -75,6 +75,7 @@ describe('artemis-web-api', () => {
         cy.request({
             method: 'POST',
             url: '/api/auth/login/credentials',
+            failOnStatusCode: false,
             headers: {
                 'x-artemis-api-key': Cypress.env('API_KEY')
             },
@@ -85,22 +86,7 @@ describe('artemis-web-api', () => {
                 "_csrf": ""
             }
         }).then((response) => {
-            expect(response.status, '200');
-            cy.request({
-                method: 'POST',
-                url: '/api/auth/login/credentials',
-                headers: {
-                    'x-artemis-api-key': Cypress.env('API_KEY')
-                },
-                body: {
-                    "email": "hermes@planetexpress.com",
-                    "password": "hermes",
-                    "rememberMe": false,
-                    "_csrf": ""
-                }
-            }).then((response) => {
-                expect(response.status, '429');
-            });
+            expect(response.status, '429');
         });
     });
 });
