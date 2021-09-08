@@ -6,8 +6,10 @@ import {
 } from '../../definitions';
 import auth from '../../middleware/auth';
 import { csrf } from '../../libs/csrf';
+import limiter from '../../middleware/limiter';
 
 const handler = nc()
+  .use(limiter)
   .use(auth)
   .use(authorization(['user', 'admin']))
   .get(async (req: NextApiRequestExtended, res: NextApiResponseExtended) => {

@@ -6,8 +6,10 @@ import {
   NextApiResponseExtended,
 } from '../../../definitions';
 import auth from '../../../middleware/auth';
+import limiter from '../../../middleware/limiter';
 
 const handler = nc()
+  .use(limiter)
   .use(auth)
   .put(async (req: NextApiRequestExtended, res: NextApiResponseExtended) => {
     try {

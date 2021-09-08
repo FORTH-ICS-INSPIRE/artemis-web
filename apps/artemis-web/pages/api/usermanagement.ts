@@ -8,8 +8,10 @@ import auth from '../../middleware/auth';
 import argon2 from 'argon2';
 import { nanoid } from 'nanoid';
 import { csrf } from '../../libs/csrf';
+import limiter from '../../middleware/limiter';
 
 const handler = nc()
+  .use(limiter)
   .use(auth)
   .use(authorization(['admin']))
   .post(async (req: NextApiRequestExtended, res: NextApiResponseExtended) => {

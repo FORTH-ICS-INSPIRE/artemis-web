@@ -5,6 +5,7 @@ import {
   NextApiResponseExtended,
 } from '../../../definitions';
 import { csrf } from '../../../libs/csrf';
+import limiter from '../../../middleware/limiter';
 
 const logout = (req: NextApiRequestExtended, res: NextApiResponseExtended) => {
   req.logOut();
@@ -15,6 +16,6 @@ const logout = (req: NextApiRequestExtended, res: NextApiResponseExtended) => {
   res.status(204).end();
 };
 
-const handler = nc().use(auth).delete(logout);
+const handler = nc().use(limiter).use(auth).delete(logout);
 
 export default csrf(handler);
