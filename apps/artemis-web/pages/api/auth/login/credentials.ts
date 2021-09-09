@@ -11,7 +11,7 @@ import { csrf } from '../../../../libs/csrf';
 import limiter from '../../../../middleware/limiter';
 
 const handler = nc()
-  .use(limiter)
+  .use(limiter())
   .use(auth)
   .post(
     passport.authenticate('local'),
