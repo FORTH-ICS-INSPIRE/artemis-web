@@ -10,7 +10,7 @@ import { csrf } from '../../../../libs/csrf';
 import limiter from '../../../../middleware/limiter';
 
 const handler = nc()
-  .use(limiter(__filename))
+  .use(limiter('ldap'))
   .use(auth)
   .post(
     passport.authenticate('ldapauth'),
