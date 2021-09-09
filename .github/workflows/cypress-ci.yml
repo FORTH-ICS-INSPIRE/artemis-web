@@ -34,7 +34,7 @@ jobs:
       - uses: actions/checkout@v2
       - run: yarn install --frozen-lockfile
       - run: yarn build --prod
-      - run: TESTING=true LIMIT_REQUESTS=2 yarn run nx e2e artemis-web-e2e --browser chrome --prod
+      - run: TESTING=true LIMIT_REQUESTS=3 yarn run nx e2e artemis-web-e2e --browser chrome --prod
         env:
           MONGODB_HOST: mongodb
           MONGODB_PORT: ${{ job.services.mongodb.ports[27017] }}
