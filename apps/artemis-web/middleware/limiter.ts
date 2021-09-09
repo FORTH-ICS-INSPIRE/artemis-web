@@ -46,10 +46,12 @@ function MemoryStore(windowMs, file) {
     }
 }
 
-const limiter = (file) => rateLimit({
-    windowMs: parseInt(process.env.LIMIT_WINDOW),
-    max: parseInt(process.env.LIMIT_REQUESTS),
-    store: new MemoryStore(parseInt(process.env.LIMIT_WINDOW), file)
-});
+const limiter = (file) => {
+    return rateLimit({
+        windowMs: parseInt(process.env.LIMIT_WINDOW),
+        max: parseInt(process.env.LIMIT_REQUESTS),
+        store: new MemoryStore(parseInt(process.env.LIMIT_WINDOW), file)
+    });
+}
 
 export default limiter;
