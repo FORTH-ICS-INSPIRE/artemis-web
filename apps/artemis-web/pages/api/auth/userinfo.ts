@@ -6,7 +6,7 @@ import { csrf } from '../../../libs/csrf';
 import limiter from '../../../middleware/limiter';
 
 const handler = nc()
-  .use(limiter)
+  .use(limiter())
   .use(auth)
   .get(async (req: NextApiRequest, res: NextApiResponse) => {
     res.json({ user: extractUser(req) });
