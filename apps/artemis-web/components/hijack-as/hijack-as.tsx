@@ -5,13 +5,13 @@ import { getSeen, getWithdrawn } from '../../utils/token';
 import Tooltip from '../tooltip/tooltip';
 
 const HijackAS = (props) => {
-  const seenTransitions = useTransition(props.seenState, null, {
+  const seenTransitions = useTransition(props.seenState, {
     from: { opacity: 0 },
     enter: { opacity: 1 },
     leave: { opacity: 0 },
   });
 
-  const withdrawnTransitions = useTransition(props.withdrawState, null, {
+  const withdrawnTransitions = useTransition(props.withdrawState, {
     from: { opacity: 0 },
     enter: { opacity: 1 },
     leave: { opacity: 0 },
@@ -27,10 +27,10 @@ const HijackAS = (props) => {
       <div className="col-lg-6">
         {props.seenState && (
           <div className="card">
-            {seenTransitions.map(({ item, key, props }) =>
+            {seenTransitions((props, item) =>
               item ? (
                 <animated.div
-                  key={key}
+                  key={item.key}
                   style={props}
                   className={'card-header multi-collapse collapse show'}
                 >
@@ -64,7 +64,7 @@ const HijackAS = (props) => {
                   </div>
                 </animated.div>
               ) : (
-                <animated.div key={key}></animated.div>
+                <animated.div key={item.key}></animated.div>
               )
             )}
           </div>
@@ -73,10 +73,10 @@ const HijackAS = (props) => {
       <div className="col-lg-6">
         {props.withdrawState && (
           <div className="card" style={{ borderTop: '0px' }}>
-            {withdrawnTransitions.map(({ item, key, props }) =>
+            {withdrawnTransitions((props, item) =>
               item ? (
                 <animated.div
-                  key={key}
+                  key={item.key}
                   style={{ ...props, borderTop: '0px' }}
                   className={'card-header multi-collapse collapse show'}
                 >
@@ -110,7 +110,7 @@ const HijackAS = (props) => {
                   </div>
                 </animated.div>
               ) : (
-                <animated.div key={key}></animated.div>
+                <animated.div key={item.key}></animated.div>
               )
             )}
           </div>

@@ -4,8 +4,7 @@ module.exports = {
   transform: {
     '^(?!.*\\.(js|jsx|ts|tsx|css|json)$)': '@nrwl/react/plugins/jest',
     '^.+\\.[tj]sx?$': [
-      'babel-jest',
-      { cwd: __dirname, configFile: './babel-jest.config.json' },
+      'babel-jest'
     ],
   },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
