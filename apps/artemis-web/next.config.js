@@ -1,10 +1,15 @@
 // /next.config.js
 const { createSecureHeaders } = require('next-secure-headers');
 
+
+require("dotenv").config({
+  path: `.env`,
+})
+
+const webpack = require('webpack')
+const nodeExternals = require('webpack-node-externals');
+
 module.exports = {
-  future: {
-    webpack5: false,
-  },
   poweredByHeader: false,
   i18n: { locales: ['en'], defaultLocale: 'en' },
   async headers() {
