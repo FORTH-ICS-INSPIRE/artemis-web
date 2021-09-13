@@ -28,6 +28,7 @@ import {
 import ErrorBoundary from '../error-boundary/error-boundary';
 import ExportJSON from '../export-json/export-json';
 import Tooltip from '../tooltip/tooltip';
+import Image from 'next/image';
 
 const getColumns = (stateValues) => [
   {
@@ -228,9 +229,9 @@ function handleData(data, tooltips, setTooltips, context, offset) {
         num_peers_seen: row.num_peers_seen,
         num_asns_inf: row.num_asns_inf,
         ack: row.seen ? (
-          <img alt="" src="./handled.png" />
+          <Image alt="" src="./handled.png" />
         ) : (
-          <img alt="" src="./unhadled.png" />
+          <Image alt="" src="./unhadled.png" />
         ),
         more: <Link href={`/hijack?key=${row.key}`}>View</Link>,
       };
@@ -343,8 +344,8 @@ const OngoingHijackTableComponent = (props: any): ReactElement => {
             key={i}
             value={option.text}
             className={`btn ${currSizePerPage === `${option.page}`
-                ? 'btn-secondary'
-                : 'btn-warning'
+              ? 'btn-secondary'
+              : 'btn-warning'
               }`}
           >
             {option.text}
@@ -501,12 +502,12 @@ const OngoingHijackTableComponent = (props: any): ReactElement => {
                 return (
                   <div>
                     <p>
-                      <img
+                      <Image
                         alt=""
                         id="nodata"
                         width="256"
                         src="checkmark.png"
-                      ></img>
+                      />
                     </p>
                     <h3>{'No hijack alerts! Go grab a beer!'}</h3>
                   </div>

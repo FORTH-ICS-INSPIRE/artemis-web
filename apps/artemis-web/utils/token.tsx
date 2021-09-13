@@ -1,6 +1,7 @@
 import React, { ReactElement } from 'react';
 import ReactTooltip from 'react-tooltip';
 import { Comparator, textFilter } from 'react-bootstrap-table2-filter';
+import Image from 'next/image';
 
 export const getRandomString = (len: number): string => {
   const buf = [],
@@ -101,7 +102,7 @@ export const genTooltip = (
 export const isObjectEmpty = (o: any): boolean => Object.keys(o).length === 0;
 
 const isDevelopment = (): boolean => process.env.NODE_ENV === 'development';
-const isCypress = () : boolean => process.env.TESTING === 'true';
+const isCypress = (): boolean => process.env.TESTING === 'true';
 const isBrowser = (): boolean => typeof window !== 'undefined';
 export const shallMock = (isTesting: boolean): boolean => (isDevelopment() && isBrowser()) || (isTesting && isBrowser());
 
@@ -226,7 +227,7 @@ export const getSortCaret = (order: string): any => {
   );
 };
 
-export const getWithdrawn = (hijackDataState) =>
+export const getWithdrawn = (hijackDataState: any): any =>
   hijackDataState ? hijackDataState.peers_withdrawn ?? [] : [];
 
 export const getSeen = (hijackDataState: any): any =>
@@ -270,9 +271,9 @@ export const expandColumnComponent = ({
 
   if (expandable) {
     content = expanded ? (
-      <img alt="" src="details_close.png" />
+      <Image alt="" src="details_close.png" />
     ) : (
-      <img alt="" src="details_open.png" />
+      <Image alt="" src="details_open.png" />
     );
   }
 
