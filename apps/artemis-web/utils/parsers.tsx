@@ -3,7 +3,7 @@ import Tooltip from '../components/tooltip/tooltip';
 import { fetchASNData } from './fetch-data';
 import { formatDate, genTooltip } from './token';
 
-export function extractUser(req): any {
+export function extractUser(req: any): any {
   if (!req.user) return null;
 
   const { _id, name, email, role, lastLogin } = req.user;
