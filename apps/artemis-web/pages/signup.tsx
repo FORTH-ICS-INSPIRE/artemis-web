@@ -5,7 +5,7 @@ import React from 'react';
 import { setup } from '../libs/csrf';
 import { useJWT } from '../utils/hooks/use-jwt';
 
-const SignupPage = (props) => {
+const SignupPage = (props: any): any => {
   const SignUpComponent = dynamic(
     () => import('../components/sign-up/sign-up')
   );

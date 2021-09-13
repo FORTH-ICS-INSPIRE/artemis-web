@@ -7,7 +7,6 @@ import {
   Grid,
   IconButton,
   Paper,
-  Switch,
 } from '@material-ui/core';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -23,7 +22,6 @@ import { useMedia } from 'react-media';
 import 'react-toastify/dist/ReactToastify.css';
 import AuthHOC from '../components/401-hoc/401-hoc';
 import BGPTableComponent from '../components/bgp-table/bgp-table';
-import DataplaneTableComponent from '../components/dataplane-table/dataplane-table';
 import HijackInfoComponent from '../components/hijack-info/hijack-info';
 import LearnRuleComponent from '../components/learn-rule/learn-rule';
 import Tooltip from '../components/tooltip/tooltip';

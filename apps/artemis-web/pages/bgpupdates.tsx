@@ -4,7 +4,6 @@ import {
   FormGroup,
   Grid,
   Paper,
-  Switch,
 } from '@material-ui/core';
 import Head from 'next/head';
 import React, { useEffect, useState } from 'react';
@@ -376,5 +375,5 @@ const BGPUpdates = (props) => {
 export default NotAuthHOC(BGPUpdates, ['admin', 'user']);
 
 export const getServerSideProps = setup(async (req, res, csrftoken) => {
-  return { props: { _csrf: csrftoken, isTesting: process.env.TESTING === 'true',  _inactivity_timeout: process.env.INACTIVITY_TIMEOUT, system_version: process.env.SYSTEM_VERSION } };
+  return { props: { _csrf: csrftoken, isTesting: process.env.TESTING === 'true', _inactivity_timeout: process.env.INACTIVITY_TIMEOUT, system_version: process.env.SYSTEM_VERSION } };
 });
