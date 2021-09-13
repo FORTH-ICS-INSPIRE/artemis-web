@@ -4,13 +4,11 @@ import { Db, MongoClient } from 'mongodb';
 
 const MONGODB_URI = `mongodb://${process.env.MONGODB_USER}:${process.env.MONGODB_PASS}@${process.env.MONGODB_HOST}:${process.env.MONGODB_PORT}`;
 const client = new MongoClient(MONGODB_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
 });
 
 let dbInstance: Db = null;
 
-if (!client.isConnected()) client.connect();
+client.connect();
 dbInstance = client.db(process.env.MONGODB_NAME);
 
 export const RememberMeStrategy = new Strategy(

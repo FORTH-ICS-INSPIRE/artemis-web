@@ -38,7 +38,6 @@ export const useFetch = (url) => {
     };
 
     fetchData();
-    return () => (mounted = false);
   }, [url]);
 
   return { status, data };
