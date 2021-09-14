@@ -506,7 +506,8 @@ const OngoingHijackTableComponent = (props: any): ReactElement => {
                         alt=""
                         id="nodata"
                         width="256"
-                        src="checkmark.png"
+                        height="256"
+                        src="/checkmark.png"
                       />
                     </p>
                     <h3>{'No hijack alerts! Go grab a beer!'}</h3>
