@@ -1,11 +1,13 @@
 import React from 'react';
-import { render } from '@testing-library/react';
-
+import Enzyme, { mount } from 'enzyme';
+import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import Footer from './footer';
+
+Enzyme.configure({ adapter: new Adapter() });
 
 describe('Footer', () => {
   it('should render successfully', () => {
-    const { baseElement } = render(<Footer />);
-    expect(baseElement).toBeTruthy();
+    const element = mount(<Footer system_version={"2.0.0"} />);
+    expect(element.text()).toContain("ARTEMIS v.'2.0.0@HEAD'");
   });
 });
