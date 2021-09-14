@@ -29,7 +29,7 @@ const handler = nc()
       return;
     }
     const hashedPassword = await argon2.hash(password);
-    const user = await req.db
+    const user_id = await req.db
       .collection('users')
       .insertOne({
         _id: nanoid(12),
@@ -41,7 +41,18 @@ const handler = nc()
         role: 'pending',
         token: '',
       })
-      .then(({ ops }) => ops[0]);
+      .then(({ insertedId }) => { return insertedId });
+
+    const user = {
+      _id: nanoid(12),
+      email,
+      password: hashedPassword,
+      name,
+      lastLogin: new Date(),
+      currentLogin: new Date(),
+      role: 'pending',
+      token: '',
+    };
 
     req.logIn(user, (err) => {
       if (err) throw err;
