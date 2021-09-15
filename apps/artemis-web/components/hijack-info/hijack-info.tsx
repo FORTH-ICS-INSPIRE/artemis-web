@@ -20,6 +20,7 @@ class HijackInfoComponent extends Component<any, any> {
   commentRef: any;
   isMobile: any;
   selectRef: any;
+  eventRef: any
   hijackInfoRight: any;
   hijackInfoLeft: any;
   user: any;
@@ -49,7 +50,7 @@ class HijackInfoComponent extends Component<any, any> {
       editComment: false,
       commentSuccess: true,
       gripState: false,
-      event_id: "",
+      event_data: [],
       gripFetched: false,
     };
 
@@ -57,6 +58,7 @@ class HijackInfoComponent extends Component<any, any> {
 
     this.commentRef = React.createRef();
     this.selectRef = React.createRef();
+    this.eventRef = React.createRef();
 
   }
 
@@ -74,9 +76,9 @@ class HijackInfoComponent extends Component<any, any> {
     });
 
     const json = await resp.json();
-
+    console.log(json)
     if (json.recordsTotal > 0) {
-      this.setState({ gripState: true, event_id: json.data[0]["id"], gripFetched: true });
+      this.setState({ gripState: true, event_data: json.data, gripFetched: true });
     }
   }
 
@@ -120,7 +122,7 @@ class HijackInfoComponent extends Component<any, any> {
 
     const mRef = this.selectRef;
     const setState = this.setState;
-    const event_id = this.state.event_id;
+    const event_data = this.state.event_data;
 
 
 
@@ -407,16 +409,34 @@ class HijackInfoComponent extends Component<any, any> {
                     <div className="card-header">
                       CAIDA GRIP{' '}
                     </div>
+
                     <div className="card-body">
+                      <select
+                        ref={this.eventRef}
+                        style={{
+                          width: '200px',
+                          display: 'inline-block',
+                          marginRight: '15px',
+                          float: 'left'
+                        }}
+                        className="form-control form-control-sm-auto"
+                      >
+                        {
+                          event_data.map((_event) => (
+                            <option>{_event.id}</option>
+                          ))
+                        }
+                      </select>
+                      {/* <br /> */}
                       <button
                         style={{ marginRight: '5px', marginTop: '5px', float: 'left' }}
                         id="edit_comment"
                         type="button"
                         className={`btn btn-primary
                           } btn-lg`}
-                        onClick={() => window.open(`https://grip-dev.caida.org/events/${type}/${event_id}`, "_blank")}
+                        onClick={() => window.open(`https://grip-dev.caida.org/events/${type}/${this.eventRef.current.value}`, "_blank")}
                       >
-                        GRIP event
+                        Go to GRIP event
                       </button>
                     </div>
                   </div>
