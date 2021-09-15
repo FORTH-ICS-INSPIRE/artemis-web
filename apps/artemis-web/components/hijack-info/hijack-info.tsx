@@ -76,7 +76,7 @@ class HijackInfoComponent extends Component<any, any> {
     });
 
     const json = await resp.json();
-    console.log(json)
+
     if (json.recordsTotal > 0) {
       this.setState({ gripState: true, event_data: json.data, gripFetched: true });
     }
