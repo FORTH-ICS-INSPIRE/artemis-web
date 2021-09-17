@@ -67,18 +67,23 @@ class HijackInfoComponent extends Component<any, any> {
     const prefix = hijackDataState["prefix"];
     const type = this.getEventType(hijackDataState["type"]);
 
-    const resp = await fetch(`https://api.grip.caida.org/v1/json/events?event_type=${type}&asns=${asn}&pfxs=${prefix}`, {
-      method: 'GET',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-    });
+    try {
+      const resp = await fetch(`https://api.grip.caida.org/v1/json/events?event_type=${type}&asns=${asn}&pfxs=${prefix}`, {
+        method: 'GET',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+      });
+      const json = await resp.json();
 
-    const json = await resp.json();
-
-    if (json.recordsTotal > 0) {
-      this.setState({ gripState: true, event_data: json.data, gripFetched: true });
+      if (json.recordsTotal > 0) {
+        this.setState({ gripState: true, event_data: json.data, gripFetched: true });
+      } else {
+        this.setState({ gripState: false, event_data: [], gripFetched: true });
+      }
+    } catch (e) {
+      this.setState({ gripState: false, event_data: [], gripFetched: true });
     }
   }
 
