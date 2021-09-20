@@ -67,7 +67,7 @@ const sendRMQAction = async (obj) => {
 };
 
 const handler = nc()
-  .use(limiter(__filename))
+  .use(limiter('rmq_admin_actoin'))
   .use(auth)
   .use(authorization(['admin']))
   .post(async (req: NextApiRequestExtended, res: NextApiResponseExtended) => {

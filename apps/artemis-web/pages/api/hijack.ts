@@ -9,7 +9,7 @@ import { csrf } from '../../libs/csrf';
 import limiter from '../../middleware/limiter';
 
 const handler = nc()
-  .use(limiter(__filename))
+  .use(limiter('hijack'))
   .use(auth)
   .use(authorization(['admin', 'user']))
   .post(async (req: NextApiRequestExtended, res: NextApiResponseExtended) => {
