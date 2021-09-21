@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [UNRELEASED/MASTER] (N/A) - yyyy-mm-dd
 ### Added
+- The user has to define 2 extra environmental variables: 
+  * LIMIT_WINDOW specifies the time window in ms.
+  * LIMIT_REQUESTS specifies the number of allowed requests in that secific time window.
 
 ### Changed
 
@@ -29,7 +32,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Export CSV is now a separate component
 - Timestamps now support the Today and Yesterday flag
 - Table pagination both top and bottom positions
-
+- Every api call now has a rate limit. The limit is per api endpoint, so it is not a global counter. The default value is 20 requests per 15 minutes.
 ### Fixed
 
 - Export CSV is now rename as ExportJSON
