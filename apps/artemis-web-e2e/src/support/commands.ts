@@ -31,6 +31,8 @@ Cypress.Commands.add('typeLogin', (user) => {
 
       cy.get('input[name=password]').type(user.password);
 
+      cy.get('input[name=captcha]').type('123');
+
       cy.get('input[type=checkbox]').click({ force: true });
     }
   });
@@ -39,6 +41,7 @@ Cypress.Commands.add('typeLogin', (user) => {
 Cypress.Commands.add('typeRegister', (user) => {
   cy.get('#username').type(user.name);
   cy.get('#email').type(user.email);
+  cy.get('#captcha').type('123');
   cy.get('#password').type(user.password);
 });
 
