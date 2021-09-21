@@ -1,0 +1,41 @@
+import authorization from '../../middleware/authorization';
+import nc from 'next-connect';
+import {
+  NextApiRequestExtended,
+  NextApiResponseExtended,
+} from '../../definitions';
+import auth from '../../middleware/auth';
+import { csrf } from '../../libs/csrf';
+
+const lambdaCaptcha = require('lambda-captcha')
+const SECRET = process.env.CAPTCHA_SECRET
+
+function generateCaptcha() {
+  const captchaConfig = lambdaCaptcha.LambdaCaptchaConfigManager.default(SECRET)
+  const captcha = lambdaCaptcha.create(captchaConfig)
+
+  return {
+    // The captcha SVG that you can display inside e.g. a form
+    captchaSvg: captcha.captchaSvg,
+
+    // This is the un-encrypted expression of the captcha.
+    captchaExpression: captcha.expr,
+
+    // This is the encrypted expression of the captcha.
+    // Pass it along with your server side verification requests.
+    encryptedCaptchaExpression: captcha.encryptedExpr
+  }
+}
+
+const handler = nc()
+  .use(auth)
+  .get(async (req: NextApiRequestExtended, res: NextApiResponseExtended) => {
+    const captcha = generateCaptcha();
+
+    const svg = captcha.captchaSvg;
+
+    res.status(200);
+    res.json({ svg: svg, encryptedExpr: captcha.encryptedCaptchaExpression });
+  });
+
+export default handler;

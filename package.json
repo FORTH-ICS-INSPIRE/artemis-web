@@ -46,6 +46,7 @@
     "graphql": "^15.3.0",
     "js-cookie": "^2.2.1",
     "jsonwebtoken": "^8.5.0",
+    "lambda-captcha": "^2.1.2",
     "mongodb": "^3.5.2",
     "nanoid": "^3.1.12",
     "next": "^10.2.0",

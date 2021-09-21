@@ -11,7 +11,7 @@ import {
 import { ThemeProvider } from '@material-ui/core/styles';
 import { theme, useStyles } from '../../utils/styles';
 import { useRouter } from 'next/router';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 const Login = (props) => {
   const [errorMsg, setErrorMsg] = useState('');
@@ -19,7 +19,29 @@ const Login = (props) => {
     email: '',
     password: '',
     rememberMe: false,
+    captcha: ''
   });
+
+  async function fetchMyCAPTCHA() {
+    const res = await fetch('/api/captcha', {
+      method: 'GET',
+      credentials: 'include',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (res.status === 200) {
+      const svg = await res.json();
+      setCaptcha({ svg: svg.svg, encryptedExpr: svg.encryptedExpr });
+    } else {
+      const msg = await res.text();
+      setErrorMsg(msg);
+    }
+  }
+
+  const [captcha, setCaptcha] = useState({ svg: '', encryptedExpr: '' });
   const router = useRouter();
 
   async function onClick(e, endpoint) {
@@ -32,7 +54,7 @@ const Login = (props) => {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ ...formData, _csrf: props._csrf }),
+      body: JSON.stringify({ ...formData, _csrf: props._csrf, encryptedExpr: captcha.encryptedExpr }),
     });
 
     if (res.status === 200) {
@@ -47,8 +69,13 @@ const Login = (props) => {
     } else {
       const msg = await res.text();
       setErrorMsg(msg);
+      fetchMyCAPTCHA();
     }
   }
+
+  useEffect(() => {
+    fetchMyCAPTCHA();
+  }, []);
 
   return (
     <ThemeProvider theme={theme}>
@@ -99,6 +126,24 @@ const Login = (props) => {
                 setFormData({ ...formData, password: e.target.value })
               }
             />
+
+            <img style={{ marginRight: '40px' }} src={`data:image/svg+xml;utf8,${encodeURIComponent(captcha.svg)}`} />
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              style={{ width: '300px' }}
+              id="captcha"
+              color="primary"
+              label="Captcha"
+              name="captcha"
+              autoComplete="captcha"
+              autoFocus
+              onChange={(e) =>
+                setFormData({ ...formData, captcha: e.target.value })
+              }
+            />
+            <br />
             <FormControlLabel
               className={props.classes.input}
               control={

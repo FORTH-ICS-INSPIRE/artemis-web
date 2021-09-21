@@ -8,11 +8,31 @@ import {
 } from '@material-ui/core';
 import { ThemeProvider } from '@material-ui/core/styles';
 import { theme, useStyles } from '../../utils/styles';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 const SignUp = (props) => {
   const { classes } = props;
   const [errorMsg, setErrorMsg] = useState('');
+  const [captcha, setCaptcha] = useState({ svg: '', encryptedExpr: '' });
+
+  async function fetchMyCAPTCHA() {
+    const res = await fetch('/api/captcha', {
+      method: 'GET',
+      credentials: 'include',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (res.status === 200) {
+      const svg = await res.json();
+      setCaptcha({ svg: svg.svg, encryptedExpr: svg.encryptedExpr });
+    } else {
+      const msg = await res.text();
+      setErrorMsg(msg);
+    }
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -20,6 +40,8 @@ const SignUp = (props) => {
       email: e.currentTarget.email.value,
       name: e.currentTarget.name.value,
       password: e.currentTarget.password.value,
+      captcha: e.currentTarget.captcha.value,
+      encryptedExpr: captcha.encryptedExpr,
       _csrf: props._csrf,
     };
 
@@ -34,8 +56,13 @@ const SignUp = (props) => {
       window.location.reload();
     } else {
       setErrorMsg(await res.text());
+      fetchMyCAPTCHA();
     }
   };
+
+  useEffect(() => {
+    fetchMyCAPTCHA();
+  }, []);
 
   return (
     <ThemeProvider theme={theme}>
@@ -88,6 +115,21 @@ const SignUp = (props) => {
                   type="password"
                   id="password"
                   autoComplete="current-password"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <img style={{ marginRight: '40px' }} src={`data:image/svg+xml;utf8,${encodeURIComponent(captcha.svg)}`} />
+                <TextField
+                  variant="outlined"
+                  margin="normal"
+                  required
+                  style={{ width: '300px' }}
+                  id="captcha"
+                  color="primary"
+                  label="Captcha"
+                  name="captcha"
+                  autoComplete="captcha"
+                  autoFocus
                 />
               </Grid>
             </Grid>
