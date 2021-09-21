@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [UNRELEASED/MASTER] (N/A) - yyyy-mm-dd
 ### Added
+- The user has to additionally define a CAPTCHA_SECRET variable in the .env file. This would preferably be a long random hash value.
+
 
 ### Changed
 
@@ -29,6 +31,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Export CSV is now a separate component
 - Timestamps now support the Today and Yesterday flag
 - Table pagination both top and bottom positions
+- Signup and Login forms now include a captcha field for bot protection
 
 ### Fixed
 
