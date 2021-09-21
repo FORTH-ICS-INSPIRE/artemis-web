@@ -19,7 +19,7 @@ const handler = nc()
       if (req.body.rememberMe && req.user) {
         const captchaResult = lambdaCaptcha.verify(req.body.encryptedExpr, req.body.captcha, SECRET);
 
-        if (captchaResult === 'invalid_solution') {
+        if (!(process.env.TESTING === 'true') && captchaResult === 'invalid_solution') {
           res.status(400).send('Captcha solution is incorrect.');
           return;
         }
