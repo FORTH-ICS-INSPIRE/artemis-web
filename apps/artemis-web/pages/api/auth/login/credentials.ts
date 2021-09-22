@@ -8,22 +8,15 @@ import {
   NextApiResponseExtended,
 } from '../../../../definitions';
 import { csrf } from '../../../../libs/csrf';
-const lambdaCaptcha = require('lambda-captcha')
-const SECRET = process.env.CAPTCHA_SECRET
+import captcha from '../../../../middleware/captcha';
 
 const handler = nc()
+  .use(captcha())
   .use(auth)
   .post(
     passport.authenticate('local'),
     (req: NextApiRequestExtended, res: NextApiResponseExtended, next) => {
       if (req.body.rememberMe && req.user) {
-        const captchaResult = lambdaCaptcha.verify(req.body.encryptedExpr, req.body.captcha, SECRET);
-
-        if (!(process.env.TESTING === 'true') && captchaResult === 'invalid_solution') {
-          res.status(400).send('Captcha solution is incorrect.');
-          return;
-        }
-
         const token = getRandomString(64);
         req.db.collection('users').updateOne(
           { email: req.body.email },

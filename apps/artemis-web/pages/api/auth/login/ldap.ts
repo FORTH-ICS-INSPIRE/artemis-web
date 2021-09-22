@@ -7,20 +7,14 @@ import {
 import auth from '../../../../middleware/auth';
 import { extractLdapUser } from '../../../../utils/parsers';
 import { csrf } from '../../../../libs/csrf';
-const lambdaCaptcha = require('lambda-captcha')
-const SECRET = process.env.CAPTCHA_SECRET
+import captcha from '../../../../middleware/captcha';
 
 const handler = nc()
+  .use(captcha())
   .use(auth)
   .post(
     passport.authenticate('ldapauth'),
     (req: NextApiRequestExtended, res: NextApiResponseExtended, next) => {
-      const captchaResult = lambdaCaptcha.verify(req.body.encryptedExpr, req.body.captcha, SECRET);
-
-      if (!(process.env.TESTING === 'true') && captchaResult === 'invalid_solution') {
-        res.status(400).send('Captcha solution is incorrect.');
-        return;
-      }
       res.json({ user: extractLdapUser(req) });
     }
   );

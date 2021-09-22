@@ -9,21 +9,14 @@ import {
   NextApiResponseExtended,
 } from '../../../definitions';
 import { csrf } from '../../../libs/csrf';
-const lambdaCaptcha = require('lambda-captcha')
-const SECRET = process.env.CAPTCHA_SECRET
+import captcha from '../../../middleware/captcha';
 
 const handler = nc()
+  .use(captcha())
   .use(auth)
   .post(async (req: NextApiRequestExtended, res: NextApiResponseExtended) => {
     const { name, password } = req.body;
     const email = normalizeEmail(req.body.email);
-
-    const captchaResult = lambdaCaptcha.verify(req.body.encryptedExpr, req.body.captcha, SECRET);
-
-    if (!(process.env.TESTING === 'true') && captchaResult === 'invalid_solution') {
-      res.status(400).send('Captcha solution is incorrect.');
-      return;
-    }
 
     if (!isEmail(email)) {
       res.status(400).send('The email you entered is invalid.');
