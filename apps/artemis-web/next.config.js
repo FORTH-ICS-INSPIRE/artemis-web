@@ -12,4 +12,5 @@ const nodeExternals = require('webpack-node-externals');
 module.exports = {
   poweredByHeader: false,
   i18n: { locales: ['en'], defaultLocale: 'en' },
+  basePath: process.env.ARTEMIS_WEB_BASE_DIR,
 };
