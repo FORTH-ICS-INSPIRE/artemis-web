@@ -49,11 +49,14 @@ describe('HijackInfoComponent', () => {
       tooltips: {},
     };
 
+    const promise = Promise.resolve();
+    jest.fn(() => promise);
+
     fetch.mockResponse(JSON.stringify({
       "recordsTotal": 0,
     }));
 
-    const element = shallow(<HijackInfoComponent {...mock} />);
+    const { element } = render(<HijackInfoComponent {...mock} />);
     // const element = screen.getByText(/Hijack Information/i);
     expect(element.text()).toContain('Hijack Information');
     expect(element.text()).toContain('BGP Announcement');

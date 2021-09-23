@@ -209,7 +209,7 @@ function extractHijackInfoLeft(
   { tooltips, setTooltips, context }
 ): any {
   const hijackInfo = {
-    'Hijacker AS:': [
+    'Hijacked AS:': [
       <Tooltip
         tooltips={tooltips}
         setTooltips={setTooltips}
@@ -227,7 +227,7 @@ function extractHijackInfoLeft(
         context={context}
       />,
       genTooltip(
-        'Hijacker AS:',
+        'Hijacked AS:',
         null,
         'hijack_title_info',
         'The AS that is potentially responsible for the hijack.</br>Note that this is an experimental field.'
@@ -267,7 +267,7 @@ function extractHijackInfoLeft(
         '# ASes Infected:',
         null,
         'infected_title_info',
-        `Number of infected ASes that seem to</br>route traffic towards the hijacker AS.</br>Note that this is an experimental field.`
+        `Number of infected ASes that seem to</br>route traffic towards the hijacked AS.</br>Note that this is an experimental field.`
       ),
     ],
     Prefix: [
