@@ -1,3 +1,4 @@
+import { act, render } from '@testing-library/react';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import { ContentState, EditorState } from 'draft-js';
 import Enzyme, { shallow } from 'enzyme';
@@ -49,6 +50,10 @@ describe('HijackInfoComponent', () => {
       tooltips: {},
     };
 
+    const promise = Promise.resolve();
+    jest.fn(() => promise);
+
+
     fetch.mockResponse(JSON.stringify({
       "recordsTotal": 0,
     }));
@@ -58,5 +63,6 @@ describe('HijackInfoComponent', () => {
     expect(element.text()).toContain('Hijack Information');
     expect(element.text()).toContain('BGP Announcement');
 
+    await act(() => promise);
   });
 });
