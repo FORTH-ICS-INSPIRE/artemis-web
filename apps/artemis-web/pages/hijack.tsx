@@ -85,7 +85,8 @@ const ViewHijackPage = (props) => {
 
   useGraphQl('hijackByKey', {
     callback: (data) => {
-      const hijacks = data.subscriptionData.data.view_hijacks;
+
+      const hijacks = data.subscriptionData ? data.subscriptionData.data.view_hijacks : data.view_hijacks;
       const hijackExists = hijacks.length !== 0;
 
       if (!hijackExists) {
