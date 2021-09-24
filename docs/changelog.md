@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [UNRELEASED/MASTER] (N/A) - yyyy-mm-dd
 ### Added
+- Grip api integration. When there is 1 or more GRIP events related to the ARTEMIS event, a dropdown menu with the event ids is added to the hijack page. When clicked, a new tab to grip event page is opened.
 
 ### Changed
 
