@@ -6,39 +6,39 @@ info:
 host: "demo.artemis-pc.duckdns.org"
 # basePath: "/v2"
 tags:
-- name: "login"
-  description: "API for credentials and LDAP authentication"
-- name: "user account"
-  description: "API related to the user's account"
-- name: "session"
-  description: "API for handling the session state"
-- name: "data"
-  description: "API for retrieving miscellaneous application data"
+  - name: "login"
+    description: "API for credentials and LDAP authentication"
+  - name: "user account"
+    description: "API related to the user's account"
+  - name: "session"
+    description: "API for handling the session state"
+  - name: "data"
+    description: "API for retrieving miscellaneous application data"
 schemes:
-- "https"
+  - "https"
 paths:
   /api/auth/login/credentials:
     post:
       tags:
-      - "login"
+        - "login"
       summary: "User logs in with credentials (email/password)."
       description: ""
       operationId: "credentials"
       consumes:
-      - "application/json"
+        - "application/json"
       produces:
-      - "application/json"
+        - "application/json"
       parameters:
-      - in: "body"
-        name: "body"
-        required: true
-        schema:
-          $ref: "#/definitions/loginBody"
-      - in: header
-        name: x-artemis-api-key
-        type: string
-        format: uuid
-        required: true
+        - in: "body"
+          name: "body"
+          required: true
+          schema:
+            $ref: "#/definitions/loginBody"
+        - in: header
+          name: x-artemis-api-key
+          type: string
+          format: uuid
+          required: true
       responses:
         "200":
           description: "successful operation"
@@ -47,25 +47,25 @@ paths:
   /api/auth/login/ldap:
     post:
       tags:
-      - "login"
+        - "login"
       summary: "User logs in with her ldap credentials (email/password)."
       description: ""
       operationId: "ldap"
       consumes:
-      - "application/json"
+        - "application/json"
       produces:
-      - "application/json"
+        - "application/json"
       parameters:
-      - in: "body"
-        name: "body"
-        required: true
-        schema:
-          $ref: "#/definitions/loginBody"
-      - in: header
-        name: x-artemis-api-key
-        type: string
-        format: uuid
-        required: true
+        - in: "body"
+          name: "body"
+          required: true
+          schema:
+            $ref: "#/definitions/loginBody"
+        - in: header
+          name: x-artemis-api-key
+          type: string
+          format: uuid
+          required: true
 
       responses:
         "200":
@@ -73,48 +73,48 @@ paths:
           schema:
             $ref: "#/definitions/user"
   /api/auth/logout:
-      delete:
-        tags:
+    delete:
+      tags:
         - "login"
-        summary: "User logout"
-        description: ""
-        operationId: "logoutp"
-        consumes:
+      summary: "User logout"
+      description: ""
+      operationId: "logoutp"
+      consumes:
         - "application/json"
-        produces:
+      produces:
         - "application/json"
-        parameters:
+      parameters:
         - in: header
           name: x-artemis-api-key
           type: string
           format: uuid
           required: true
 
-        responses:
-          "204":
-            description: "User logged out."
+      responses:
+        "204":
+          description: "User logged out."
   /api/auth/change-password:
     put:
       tags:
-      - "user account"
+        - "user account"
       summary: "Change user's password"
       description: ""
       operationId: "changePass"
       consumes:
-      - "application/json"
+        - "application/json"
       produces:
-      - "application/json"
+        - "application/json"
       parameters:
-      - in: "body"
-        name: "body"
-        required: true
-        schema:
-          $ref: "#/definitions/passBody"
-      - in: header
-        name: x-artemis-api-key
-        type: string
-        format: uuid
-        required: true
+        - in: "body"
+          name: "body"
+          required: true
+          schema:
+            $ref: "#/definitions/passBody"
+        - in: header
+          name: x-artemis-api-key
+          type: string
+          format: uuid
+          required: true
 
       responses:
         "200":
@@ -124,14 +124,14 @@ paths:
   /api/auth/jwt:
     get:
       tags:
-      - "session"
+        - "session"
       summary: "Retrieve JWT."
       description: ""
       operationId: "jwt"
       consumes:
-      - "application/json"
+        - "application/json"
       produces:
-      - "application/json"
+        - "application/json"
       parameters:
         - in: header
           name: x-artemis-api-key
@@ -147,25 +147,25 @@ paths:
   /api/auth/signup:
     post:
       tags:
-      - "user account"
+        - "user account"
       summary: "Create new account"
       description: ""
       operationId: "signup"
       consumes:
-      - "application/json"
+        - "application/json"
       produces:
-      - "application/json"
+        - "application/json"
       parameters:
-      - in: "body"
-        name: "body"
-        required: true
-        schema:
-          $ref: "#/definitions/signupBody"
-      - in: header
-        name: x-artemis-api-key
-        type: string
-        format: uuid
-        required: true
+        - in: "body"
+          name: "body"
+          required: true
+          schema:
+            $ref: "#/definitions/signupBody"
+        - in: header
+          name: x-artemis-api-key
+          type: string
+          format: uuid
+          required: true
 
       responses:
         "200":
@@ -177,20 +177,20 @@ paths:
   /api/auth/userinfo:
     post:
       tags:
-      - "user account"
+        - "user account"
       summary: "Get user information"
       description: ""
       operationId: "userifo"
       consumes:
-      - "application/json"
+        - "application/json"
       produces:
-      - "application/json"
+        - "application/json"
       parameters:
-      - in: header
-        name: x-artemis-api-key
-        type: string
-        format: uuid
-        required: true
+        - in: header
+          name: x-artemis-api-key
+          type: string
+          format: uuid
+          required: true
 
       responses:
         "200":
@@ -200,20 +200,20 @@ paths:
   /api/configs:
     get:
       tags:
-      - "data"
+        - "data"
       summary: "Get the configuration data"
       description: ""
       operationId: "configinfo"
       consumes:
-      - "application/json"
+        - "application/json"
       produces:
-      - "application/json"
+        - "application/json"
       parameters:
-      - in: header
-        name: x-artemis-api-key
-        type: string
-        format: uuid
-        required: true
+        - in: header
+          name: x-artemis-api-key
+          type: string
+          format: uuid
+          required: true
 
       responses:
         "200":
@@ -223,25 +223,25 @@ paths:
   /api/download_tables:
     get:
       tags:
-      - "data"
+        - "data"
       summary: "Get data for the table described in the action field, in json format"
       description: ""
       operationId: "downloadtable"
       consumes:
-      - "application/json"
+        - "application/json"
       produces:
-      - "application/json"
+        - "application/json"
       parameters:
-      - in: "body"
-        name: "body"
-        required: true
-        schema:
-          $ref: "#/definitions/tableBody"
-      - in: header
-        name: x-artemis-api-key
-        type: string
-        format: uuid
-        required: true
+        - in: "body"
+          name: "body"
+          required: true
+          schema:
+            $ref: "#/definitions/tableBody"
+        - in: header
+          name: x-artemis-api-key
+          type: string
+          format: uuid
+          required: true
 
       responses:
         "200":
@@ -271,7 +271,7 @@ definitions:
     type: "object"
     properties:
       action:
-        type: "string" 
+        type: "string"
       parameters:
         type: "string"
   jwt:

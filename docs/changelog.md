@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - The user has to define 2 extra environmental variables: 
   * LIMIT_WINDOW specifies the time window in ms.
   * LIMIT_REQUESTS specifies the number of allowed requests in that secific time window.
+- Grip api integration. When there is 1 or more GRIP events related to the ARTEMIS event, a dropdown menu with the event ids is added to the hijack page. When clicked, a new tab to grip event page is opened.
 
 ### Changed
 
