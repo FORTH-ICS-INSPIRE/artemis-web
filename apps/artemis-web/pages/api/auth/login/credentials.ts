@@ -8,8 +8,10 @@ import {
   NextApiResponseExtended,
 } from '../../../../definitions';
 import { csrf } from '../../../../libs/csrf';
+import limiter from '../../../../middleware/limiter';
 
 const handler = nc()
+  .use(limiter('credentials'))
   .use(auth)
   .post(
     passport.authenticate('local'),
