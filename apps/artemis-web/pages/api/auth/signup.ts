@@ -10,8 +10,10 @@ import {
 } from '../../../definitions';
 import { csrf } from '../../../libs/csrf';
 import captcha from '../../../middleware/captcha';
+import limiter from '../../../middleware/limiter';
 
 const handler = nc()
+  .use(limiter('signup'))
   .use(captcha())
   .use(auth)
   .post(async (req: NextApiRequestExtended, res: NextApiResponseExtended) => {

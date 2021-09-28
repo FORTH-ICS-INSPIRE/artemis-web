@@ -48,7 +48,9 @@ Cypress.Commands.add('typeRegister', (user) => {
 Cypress.Commands.add('typeChangePass', (user) => {
   cy.get('#old_password').type(user.old_pass);
   cy.get('#new_password').type(user.new_pass);
-  cy.get('#repeat_password').type(user.repeat_pass);
+  cy.get('#repeat_password').type(user.new_pass);
+
+  cy.get('#submit').click({ force: true });
 });
 
 Cypress.Commands.add('register', () => {

@@ -20,6 +20,9 @@ class HijackInfoComponent extends Component<any, any> {
   commentRef: any;
   isMobile: any;
   selectRef: any;
+  eventRef: any
+  hijackInfoRight: any;
+  hijackInfoLeft: any;
   user: any;
 
   constructor(props) {
@@ -29,17 +32,76 @@ class HijackInfoComponent extends Component<any, any> {
     this.setOpenModalState = props.setOpenModalState;
     this.hijackKey = props.hijackKey;
 
+    const [hijackInfoLeft, hijackInfoRight] = extractHijackInfos(
+      this.props.hijackDataState,
+      {
+        tooltips: this.props.tooltips,
+        setTooltips: this.props.setTooltips,
+        context: this.props.context,
+      }
+    );
+
+    this.hijackInfoLeft = hijackInfoLeft;
+    this.hijackInfoRight = hijackInfoRight;
+
     this.state = {
       seenState: false,
       withdrawState: false,
       editComment: false,
       commentSuccess: true,
+      gripState: false,
+      event_data: [],
+      gripFetched: false,
     };
 
     this.isMobile = props.isMobile;
 
     this.commentRef = React.createRef();
     this.selectRef = React.createRef();
+    this.eventRef = React.createRef();
+
+  }
+
+  async fetchGrip(hijackDataState) {
+    const asn = hijackDataState["hijack_as"];
+    const prefix = hijackDataState["prefix"];
+    const type = this.getEventType(hijackDataState["type"]);
+
+    try {
+      const resp = await fetch(`https://api.grip.caida.org/v1/json/events?event_type=${type}&asns=${asn}&pfxs=${prefix}`, {
+        method: 'GET',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+      });
+      const json = await resp.json();
+
+      if (json.recordsTotal > 0) {
+        this.setState({ gripState: true, event_data: json.data, gripFetched: true });
+      } else {
+        this.setState({ gripState: false, event_data: [], gripFetched: true });
+      }
+    } catch (e) {
+      this.setState({ gripState: false, event_data: [], gripFetched: true });
+    }
+  }
+
+  getEventType(type: string): string {
+    if (!type)
+      return "";
+    else if (type.includes("E|0"))
+      return "moas";
+    else if (type.includes("S|0"))
+      return "submoas";
+    else if (type.includes("E|1"))
+      return "edges";
+    else if (type.includes("S|1"))
+      return "edges";
+    else if (type.includes("S|-"))
+      return "defcon";
+    else
+      return "all";
   }
 
   render() {
@@ -51,11 +113,23 @@ class HijackInfoComponent extends Component<any, any> {
         context: this.props.context,
       }
     );
+
+    const type = this.getEventType(this.props.hijackDataState["type"]);
+    const asn = this.props.hijackDataState["hijack_as"];
+    const prefix = this.props.hijackDataState["prefix"];
+
+    if (!this.state.gripFetched && asn) {
+      this.fetchGrip(this.props.hijackDataState);
+    }
+
     const commentRef = this.commentRef;
     const hijackKey = this.hijackKey;
 
     const mRef = this.selectRef;
     const setState = this.setState;
+    const event_data = this.state.event_data;
+
+
 
     return (
       <>
@@ -329,6 +403,46 @@ class HijackInfoComponent extends Component<any, any> {
                         editorState={this.props.editorState}
                         onChange={this.props.setEditorState}
                       />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="row">
+                <div className="col-lg-12">
+                  <div className="card" style={{ marginTop: '12px', visibility: this.state.gripState ? "visible" : "hidden" }}>
+                    <div className="card-header">
+                      CAIDA GRIP{' '}
+                    </div>
+
+                    <div className="card-body">
+                      <select
+                        ref={this.eventRef}
+                        style={{
+                          width: '200px',
+                          display: 'inline-block',
+                          marginRight: '15px',
+                          float: 'left'
+                        }}
+                        className="form-control form-control-sm-auto"
+                      >
+                        {
+                          event_data.map((_event) => (
+                            <option>{_event.id}</option>
+                          ))
+                        }
+                      </select>
+                      {/* <br /> */}
+                      <button
+                        style={{ marginRight: '5px', marginTop: '5px', float: 'left' }}
+                        id="edit_comment"
+                        type="button"
+                        className={`btn btn-primary
+                          } btn-lg`}
+                        onClick={() => window.open(`https://grip-dev.caida.org/events/${type}/${this.eventRef.current.value}`, "_blank")}
+                      >
+                        Go to GRIP event
+                      </button>
                     </div>
                   </div>
                 </div>

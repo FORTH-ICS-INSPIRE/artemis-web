@@ -8,8 +8,10 @@ import auth from '../../../../middleware/auth';
 import { extractLdapUser } from '../../../../utils/parsers';
 import { csrf } from '../../../../libs/csrf';
 import captcha from '../../../../middleware/captcha';
+import limiter from '../../../../middleware/limiter';
 
 const handler = nc()
+  .use(limiter('ldap'))
   .use(captcha())
   .use(auth)
   .post(

@@ -9,8 +9,10 @@ import {
 } from '../../../../definitions';
 import { csrf } from '../../../../libs/csrf';
 import captcha from '../../../../middleware/captcha';
+import limiter from '../../../../middleware/limiter';
 
 const handler = nc()
+  .use(limiter('credentials'))
   .use(captcha())
   .use(auth)
   .post(
