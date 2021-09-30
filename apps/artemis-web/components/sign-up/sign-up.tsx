@@ -17,12 +17,13 @@ const SignUp = (props) => {
 
   async function fetchMyCAPTCHA() {
     const res = await fetch('/api/captcha', {
-      method: 'GET',
+      method: 'POST',
       credentials: 'include',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
+      body: JSON.stringify({ page: 'signup' })
     });
 
     if (res.status === 200) {

@@ -6,9 +6,12 @@ import {
 } from '../../definitions';
 import auth from '../../middleware/auth';
 import { csrf } from '../../libs/csrf';
+import memory from '../../utils/captchaMemoryStore';
 
 const lambdaCaptcha = require('lambda-captcha')
 const SECRET = process.env.CAPTCHA_SECRET
+
+
 
 function generateCaptcha() {
   const captchaConfig = lambdaCaptcha.LambdaCaptchaConfigManager.default(SECRET)
@@ -27,15 +30,25 @@ function generateCaptcha() {
   }
 }
 
+
 const handler = nc()
   .use(auth)
-  .get(async (req: NextApiRequestExtended, res: NextApiResponseExtended) => {
-    const captcha = generateCaptcha();
+  .post(async (req: NextApiRequestExtended, res: NextApiResponseExtended) => {
+    const { page } = req.body;
+    if (page === 'login') {
+      const hits = memory.getHits(req.ip);
+      if (!hits || hits < (parseInt(process.env.CAPTCHA_TRIES ?? '4'))) {
+        res.status(200);
+        res.json({ svg: '', encryptedExpr: '', hasCaptcha: false });
+        return;
+      }
+    }
 
+    const captcha = generateCaptcha();
     const svg = captcha.captchaSvg;
 
     res.status(200);
-    res.json({ svg: svg, encryptedExpr: captcha.encryptedCaptchaExpression });
+    res.json({ svg: svg, encryptedExpr: captcha.encryptedCaptchaExpression, hasCaptcha: true });
   });
 
 export default handler;

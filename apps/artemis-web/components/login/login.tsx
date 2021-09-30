@@ -24,24 +24,25 @@ const Login = (props) => {
 
   async function fetchMyCAPTCHA() {
     const res = await fetch('/api/captcha', {
-      method: 'GET',
+      method: 'POST',
       credentials: 'include',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
+      body: JSON.stringify({ page: 'login' })
     });
 
     if (res.status === 200) {
-      const svg = await res.json();
-      setCaptcha({ svg: svg.svg, encryptedExpr: svg.encryptedExpr });
+      const resp = await res.json();
+      setCaptcha({ svg: resp.svg, encryptedExpr: resp.encryptedExpr, hasCaptcha: resp.hasCaptcha });
     } else {
       const msg = await res.text();
       setErrorMsg(msg);
     }
   }
 
-  const [captcha, setCaptcha] = useState({ svg: '', encryptedExpr: '' });
+  const [captcha, setCaptcha] = useState({ svg: '', encryptedExpr: '', hasCaptcha: true });
   const router = useRouter();
 
   async function onClick(e, endpoint) {
@@ -126,23 +127,25 @@ const Login = (props) => {
                 setFormData({ ...formData, password: e.target.value })
               }
             />
-
-            <img style={{ marginRight: '40px' }} src={`data:image/svg+xml;utf8,${encodeURIComponent(captcha.svg)}`} />
-            <TextField
-              variant="outlined"
-              margin="normal"
-              required
-              style={{ width: '300px' }}
-              id="captcha"
-              color="primary"
-              label="Captcha"
-              name="captcha"
-              autoComplete="captcha"
-              autoFocus
-              onChange={(e) =>
-                setFormData({ ...formData, captcha: e.target.value })
-              }
-            />
+            {
+              captcha.hasCaptcha ? (<>
+                <img alt='captcha' style={{ marginRight: '40px' }} src={`data:image/svg+xml;utf8,${encodeURIComponent(captcha.svg)}`} />
+                <TextField
+                  variant="outlined"
+                  margin="normal"
+                  required
+                  style={{ width: '300px' }}
+                  id="captcha"
+                  color="primary"
+                  label="Captcha"
+                  name="captcha"
+                  autoComplete="captcha"
+                  autoFocus
+                  onChange={(e) =>
+                    setFormData({ ...formData, captcha: e.target.value })
+                  }
+                /> </>) : <span> </span>
+            }
             <br />
             <FormControlLabel
               className={props.classes.input}

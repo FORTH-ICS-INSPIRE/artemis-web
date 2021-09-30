@@ -1,5 +1,6 @@
 import { Strategy } from 'passport-local';
 import argon2 from 'argon2';
+import memory from '../../utils/captchaMemoryStore';
 
 export const LocalStrategy = new Strategy(
   { usernameField: 'email', passReqToCallback: true },
@@ -24,6 +25,7 @@ export const LocalStrategy = new Strategy(
         );
         return done(null, user);
       } else {
+        memory.incr(req.ip);
         return done(null, false, { message: 'Email or password is incorrect' });
       }
     } catch (e) {
