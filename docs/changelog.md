@@ -12,6 +12,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   * LIMIT_REQUESTS specifies the number of allowed requests in that secific time window.
 - Grip api integration. When there is 1 or more GRIP events related to the ARTEMIS event, a dropdown menu with the event ids is added to the hijack page. When clicked, a new tab to grip event page is opened.
 - The user has to additionally define a CAPTCHA_SECRET variable in the .env file. This would preferably be a long random hash value.
+- CAPTCHA_WINDOW specifies the time where the false login attempt count is valid
+- CAPTCHA_TRIES is the number of unsuccessful login attempts that are needed to trigger the CAPTCHA generation
 
 ### Changed
 
