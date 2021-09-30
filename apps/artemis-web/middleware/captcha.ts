@@ -16,7 +16,8 @@ export default function captcha(page: string) {
         if (!skipCaptcha && captchaResult === 'invalid_solution' || captchaChallengeStore[req.ip].includes(req.body.encryptedExpr)) {
             res.status(400).send('Captcha solution is incorrect.');
         } else {
-            captchaChallengeStore[req.ip].push(req.body.encryptedExpr);
+            if (req.body.encryptedExpr.length > 0)
+                captchaChallengeStore[req.ip].push(req.body.encryptedExpr);
             return next();
         }
     };
