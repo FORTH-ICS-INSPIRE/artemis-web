@@ -13,7 +13,7 @@ import limiter from '../../../../middleware/limiter';
 
 const handler = nc()
   .use(limiter('credentials'))
-  .use(captcha())
+  .use(captcha('login'))
   .use(auth)
   .post(
     passport.authenticate('local'),

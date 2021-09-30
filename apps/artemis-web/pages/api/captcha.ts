@@ -10,7 +10,7 @@ import memory from '../../utils/captchaMemoryStore';
 
 const lambdaCaptcha = require('lambda-captcha')
 const SECRET = process.env.CAPTCHA_SECRET
-
+import absoluteUrl from 'next-absolute-url'
 
 
 function generateCaptcha() {
@@ -33,8 +33,9 @@ function generateCaptcha() {
 
 const handler = nc()
   .use(auth)
-  .post(async (req: NextApiRequestExtended, res: NextApiResponseExtended) => {
+  .post(async (req: any, res: NextApiResponseExtended) => {
     const { page } = req.body;
+
     if (page === 'login') {
       const hits = memory.getHits(req.ip);
       if (!hits || hits < (parseInt(process.env.CAPTCHA_TRIES ?? '4'))) {

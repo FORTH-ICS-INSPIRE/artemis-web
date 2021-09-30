@@ -13,7 +13,7 @@ import memory from '../../../../utils/captchaMemoryStore';
 
 const handler = nc()
   .use(limiter('ldap'))
-  .use(captcha())
+  .use(captcha('login'))
   .use(auth)
   .post(async (req: NextApiRequestExtended, res: NextApiResponseExtended, next) => {
     memory.incr(req.ip);

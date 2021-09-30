@@ -14,7 +14,7 @@ import limiter from '../../../middleware/limiter';
 
 const handler = nc()
   .use(limiter('signup'))
-  .use(captcha())
+  .use(captcha('signup'))
   .use(auth)
   .post(async (req: NextApiRequestExtended, res: NextApiResponseExtended) => {
     const { name, password } = req.body;
