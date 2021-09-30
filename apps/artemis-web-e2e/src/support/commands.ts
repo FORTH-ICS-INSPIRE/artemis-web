@@ -31,7 +31,7 @@ Cypress.Commands.add('typeLogin', (user) => {
 
       cy.get('input[name=password]').type(user.password);
 
-      cy.get('input[name=captcha]').type('123');
+      // cy.get('input[name=captcha]').type('123');
 
       cy.get('input[type=checkbox]').click({ force: true });
     }
