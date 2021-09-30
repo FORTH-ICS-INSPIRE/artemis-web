@@ -42,7 +42,7 @@ const Login = (props) => {
     }
   }
 
-  const [captcha, setCaptcha] = useState({ svg: '', encryptedExpr: '', hasCaptcha: true });
+  const [captcha, setCaptcha] = useState({ svg: '', encryptedExpr: '', hasCaptcha: false });
   const router = useRouter();
 
   async function onClick(e, endpoint) {
