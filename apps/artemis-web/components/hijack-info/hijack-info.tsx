@@ -59,7 +59,6 @@ class HijackInfoComponent extends Component<any, any> {
     this.commentRef = React.createRef();
     this.selectRef = React.createRef();
     this.eventRef = React.createRef();
-
   }
 
   async fetchGrip(hijackDataState) {
