@@ -10,6 +10,7 @@ import {
 import { csrf } from '../../../../libs/csrf';
 import captcha from '../../../../middleware/captcha';
 import limiter from '../../../../middleware/limiter';
+import memory from '../../../../utils/captchaMemoryStore';
 
 const handler = nc()
   .use(limiter('credentials'))
@@ -19,6 +20,7 @@ const handler = nc()
     passport.authenticate('local'),
     (req: NextApiRequestExtended, res: NextApiResponseExtended, next) => {
       if (req.body.rememberMe && req.user) {
+        memory.reset(req.ip);
         const token = getRandomString(64);
         req.db.collection('users').updateOne(
           { email: req.body.email },

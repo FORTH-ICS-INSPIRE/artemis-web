@@ -21,6 +21,10 @@ function MemoryStore(windowMs) {
 
     this.getHits = (key) => hits[key];
 
+    this.reset = function (key) {
+        hits[key] = 0;
+    };
+
     // export an API to allow hits all IPs to be reset
     this.resetAll = function () {
         hits = {};
