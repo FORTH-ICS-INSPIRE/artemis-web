@@ -19,7 +19,7 @@ function MemoryStore(windowMs) {
         return hits[key];
     };
 
-    this.getHits = (key) => hits[key];
+    this.getHits = (key) => hits[key] ?? 0;
 
     this.reset = function (key) {
         hits[key] = 0;
