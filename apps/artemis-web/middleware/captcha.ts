@@ -11,7 +11,7 @@ export default function captcha(page: string) {
         const hits = memory.getHits(req.ip);
         if (!captchaChallengeStore[req.ip])
             captchaChallengeStore[req.ip] = [];
-        const skipCaptcha = (page === 'login' && hits < (parseInt(process.env.CAPTCHA_TRIES ?? '4'))) || (process.env.TESTING === 'true');
+        const skipCaptcha = (page === 'login' && hits < (parseInt(process.env.CAPTCHA_TRIES ?? '4', 10))) || (process.env.TESTING === 'true');
 
         if (!skipCaptcha && captchaResult === 'invalid_solution' || captchaChallengeStore[req.ip].includes(req.body.encryptedExpr)) {
             res.status(400).send('Captcha solution is incorrect.');
