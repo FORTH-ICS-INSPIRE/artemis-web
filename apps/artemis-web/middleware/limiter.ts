@@ -46,7 +46,7 @@ function MemoryStore(windowMs, file) {
     }
 }
 
-const limiter = (file) => {
+const limiter = (file: string): unknown => {
     return rateLimit({
         windowMs: parseInt(process.env.LIMIT_WINDOW ?? '900000', 10),
         max: parseInt(process.env.LIMIT_REQUESTS ?? '20', 10),
