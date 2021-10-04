@@ -11,7 +11,8 @@ function MemoryStore(windowMs) {
 
     this.incr = function (key) {
         if (hits[key]) {
-            hits[key]++;
+            if (hits[key] < parseInt(process.env.CAPTCHA_TRIES) ?? 4)
+                hits[key]++;
         } else {
             hits[key] = 1;
         }
