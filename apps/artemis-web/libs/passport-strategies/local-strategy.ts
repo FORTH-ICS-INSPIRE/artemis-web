@@ -23,6 +23,7 @@ export const LocalStrategy = new Strategy(
             },
           }
         );
+        memory.reset(req.ip);
         return done(null, user);
       } else {
         memory.incr(req.ip);

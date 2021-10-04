@@ -265,7 +265,7 @@ class HijackInfoComponent extends Component<any, any> {
           <div className="col-lg-12">
             <div className="card" style={{ marginTop: '12px', visibility: this.state.gripState ? "visible" : "hidden" }}>
               <div className="card-header">
-                CAIDA GRIP{' '}
+                Also detected by the GRIP project{' '}
               </div>
 
               <div className="card-body">
