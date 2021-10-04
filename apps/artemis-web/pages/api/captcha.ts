@@ -35,7 +35,7 @@ const handler = nc()
     const { page } = req.body;
     if (page === 'login') {
       const hits = memory.getHits(req.ip);
-      if (!hits || hits < (parseInt(process.env.CAPTCHA_TRIES ?? '4'))) {
+      if (!hits || hits < (parseInt(process.env.CAPTCHA_TRIES ?? '4', 10))) {
         res.status(200);
         res.json({ svg: '', encryptedExpr: '', hasCaptcha: false });
         return;

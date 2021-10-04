@@ -11,7 +11,7 @@ function MemoryStore(windowMs) {
 
     this.incr = function (key) {
         if (hits[key]) {
-            if (hits[key] < parseInt(process.env.CAPTCHA_TRIES) ?? 4)
+            if (hits[key] < parseInt(process.env.CAPTCHA_TRIES, 10) ?? 4)
                 hits[key]++;
         } else {
             hits[key] = 1;
@@ -38,6 +38,6 @@ function MemoryStore(windowMs) {
     }
 }
 
-const memory = new MemoryStore(parseInt(process.env.CAPTCHA_WINDOW) ?? 900000);
+const memory = new MemoryStore(parseInt(process.env.CAPTCHA_WINDOW, 10) ?? 900000);
 
 export default memory;
