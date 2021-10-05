@@ -69,4 +69,24 @@ describe('artemis-web-api', () => {
 
         });
     });
+
+    it('[API] login rate limit', () => {
+        cy.visit('/');
+        cy.request({
+            method: 'POST',
+            url: '/api/auth/login/credentials',
+            failOnStatusCode: false,
+            headers: {
+                'x-artemis-api-key': Cypress.env('API_KEY')
+            },
+            body: {
+                "email": "hermes@planetexpress.com",
+                "password": "hermes",
+                "rememberMe": false,
+                "_csrf": ""
+            }
+        }).then((response) => {
+            expect(response.status, '429');
+        });
+    });
 });

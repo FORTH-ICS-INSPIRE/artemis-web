@@ -9,8 +9,10 @@ import {
   NextApiResponseExtended,
 } from '../../../definitions';
 import { csrf } from '../../../libs/csrf';
+import limiter from '../../../middleware/limiter';
 
 const handler = nc()
+  .use(limiter('signup'))
   .use(auth)
   .post(async (req: NextApiRequestExtended, res: NextApiResponseExtended) => {
     const { name, password } = req.body;

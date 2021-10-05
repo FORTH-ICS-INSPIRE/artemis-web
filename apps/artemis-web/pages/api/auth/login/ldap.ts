@@ -7,8 +7,10 @@ import {
 import auth from '../../../../middleware/auth';
 import { extractLdapUser } from '../../../../utils/parsers';
 import { csrf } from '../../../../libs/csrf';
+import limiter from '../../../../middleware/limiter';
 
 const handler = nc()
+  .use(limiter('ldap'))
   .use(auth)
   .post(
     passport.authenticate('ldapauth'),
