@@ -2,7 +2,7 @@ import { FormControlLabel, FormGroup } from '@material-ui/core';
 import Head from 'next/head';
 import React, { useEffect, useState } from 'react';
 import { useMedia } from 'react-media';
-import { ToastContainer } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import AuthHOC from '../components/401-hoc/401-hoc';
 import ErrorBoundary from '../components/error-boundary/error-boundary';
@@ -28,7 +28,9 @@ const DashboardPage = (props: any) => {
   const [isLive, setIsLive] = useState(!shallMock(props.isTesting));
 
   const user = props.user;
-  // const notify = (message: React.ReactText) => toast(message);
+  const notify = (message: React.ReactText) => toast(message);
+
+  notify('fdsfds')
 
   const STATS_RES: any = useGraphQl('stats', {
     isLive: isLive,
@@ -201,5 +203,5 @@ const DashboardPage = (props: any) => {
 export default AuthHOC(DashboardPage, ['admin', 'user']);
 
 export const getServerSideProps = setup(async (req, res, csrftoken) => {
-  return { props: { _csrf: csrftoken, isTesting: process.env.TESTING === 'true',  _inactivity_timeout: process.env.INACTIVITY_TIMEOUT, system_version: process.env.SYSTEM_VERSION } };
+  return { props: { _csrf: csrftoken, isTesting: process.env.TESTING === 'true', _inactivity_timeout: process.env.INACTIVITY_TIMEOUT, system_version: process.env.SYSTEM_VERSION } };
 });

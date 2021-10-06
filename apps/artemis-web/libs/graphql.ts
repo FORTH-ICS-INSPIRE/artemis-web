@@ -1,7 +1,9 @@
 import {
   ApolloClient,
+  ApolloLink,
   createHttpLink,
   DocumentNode,
+  from,
   gql,
   InMemoryCache,
   NormalizedCacheObject,
@@ -12,6 +14,7 @@ import { WebSocketLink } from '@apollo/client/link/ws';
 import { getMainDefinition } from '@apollo/client/utilities';
 import { useMemo } from 'react';
 import queryType from './graphql.d';
+import { onError } from "@apollo/client/link/error";
 
 let accessToken = null;
 const requestToken = async () => {
@@ -28,7 +31,7 @@ const createApolloClient = () => {
   const httpLink =
     typeof window !== 'undefined'
       ? createHttpLink({
-        uri: `https://${window.location.hostname}:${window.location.port}/api/graphql`,
+        uri: `https://${window.location.hostname}/api/graphql`,
         useGETForQueries: false,
       })
       : null;
@@ -49,18 +52,10 @@ const createApolloClient = () => {
   const wsLink =
     typeof window !== 'undefined'
       ? new WebSocketLink({
-        uri: `wss://${window.location.hostname}:${window.location.port}/api/graphql`,
+        uri: `wss://${window.location.hostname}/api/graphql`,
         options: {
           reconnect: true,
           lazy: true,
-          connectionParams: async () => {
-            await requestToken();
-            return {
-              headers: {
-                authorization: `Bearer ${accessToken}`,
-              },
-            };
-          },
         },
       })
       : null;
@@ -76,12 +71,22 @@ const createApolloClient = () => {
           );
         },
         wsLink,
-        authLink.concat(httpLink)
+        httpLink
       )
       : null;
 
+  const errorLink = typeof window !== 'undefined' ? onError(({ graphQLErrors, networkError }) => {
+    if (graphQLErrors)
+      graphQLErrors.forEach(({ message, locations, path }) =>
+        console.log(
+          `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
+        )
+      );
+    if (networkError) console.log(`[Network error]: ${JSON.stringify(networkError)}`);
+  }) : null;
+
   return new ApolloClient({
-    link: splitLink,
+    link: from(typeof window !== 'undefined' ? [authLink, errorLink, splitLink] : []),
     cache: new InMemoryCache(),
   });
 };
