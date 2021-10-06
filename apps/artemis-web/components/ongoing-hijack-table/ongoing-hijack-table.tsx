@@ -229,9 +229,9 @@ function handleData(data, tooltips, setTooltips, context, offset) {
         num_peers_seen: row.num_peers_seen,
         num_asns_inf: row.num_asns_inf,
         ack: row.seen ? (
-          <Image alt="" src="./handled.png" />
+          <Image width="25" height="25" alt="" src="/handled.png" />
         ) : (
-          <Image alt="" src="./unhadled.png" />
+          <Image alt="" width="25" height="25" src="/unhadled.png" />
         ),
         more: <Link href={`/hijack?key=${row.key}`}>View</Link>,
       };

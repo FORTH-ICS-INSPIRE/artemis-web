@@ -42,7 +42,7 @@ class ErrorBoundary extends Component<PropsType, unknown> {
               alt=""
               height="256"
               width="256"
-              src={this.props.errorImage ? '/error.png' : 'c/heckmark.png'}
+              src={this.props.errorImage ? '/error.png' : '/checkmark.png'}
             />
           </p>
           <h3>{this.props.noDataMessage}</h3>
