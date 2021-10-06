@@ -11,15 +11,38 @@ import {
 import { ThemeProvider } from '@material-ui/core/styles';
 import { theme, useStyles } from '../../utils/styles';
 import { useRouter } from 'next/router';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
-const Login = (props) => {
+const Login = (props: any): any => {
   const [errorMsg, setErrorMsg] = useState('');
   const [formData, setFormData] = useState({
     email: '',
     password: '',
     rememberMe: false,
+    captcha: ''
   });
+
+  async function fetchMyCAPTCHA() {
+    const res = await fetch('/api/captcha', {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ page: 'login' })
+    });
+
+    if (res.status === 200) {
+      const resp = await res.json();
+      setCaptcha({ svg: resp.svg, encryptedExpr: resp.encryptedExpr, hasCaptcha: resp.hasCaptcha });
+    } else {
+      const msg = await res.text();
+      setErrorMsg(msg);
+    }
+  }
+
+  const [captcha, setCaptcha] = useState({ svg: '', encryptedExpr: '', hasCaptcha: false });
   const router = useRouter();
 
   async function onClick(e, endpoint) {
@@ -32,7 +55,7 @@ const Login = (props) => {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ ...formData, _csrf: props._csrf }),
+      body: JSON.stringify({ ...formData, _csrf: props._csrf, encryptedExpr: captcha.encryptedExpr }),
     });
 
     if (res.status === 200) {
@@ -47,8 +70,13 @@ const Login = (props) => {
     } else {
       const msg = await res.text();
       setErrorMsg(msg);
+      fetchMyCAPTCHA();
     }
   }
+
+  useEffect(() => {
+    fetchMyCAPTCHA();
+  }, []);
 
   return (
     <ThemeProvider theme={theme}>
@@ -99,6 +127,26 @@ const Login = (props) => {
                 setFormData({ ...formData, password: e.target.value })
               }
             />
+            {
+              captcha.hasCaptcha ? (<>
+                <img alt='captcha' style={{ marginRight: '40px' }} src={`data:image/svg+xml;utf8,${encodeURIComponent(captcha.svg)}`} />
+                <TextField
+                  variant="outlined"
+                  margin="normal"
+                  required
+                  style={{ width: '300px' }}
+                  id="captcha"
+                  color="primary"
+                  label="Captcha"
+                  name="captcha"
+                  autoComplete="captcha"
+                  autoFocus
+                  onChange={(e) =>
+                    setFormData({ ...formData, captcha: e.target.value })
+                  }
+                /> </>) : <span> </span>
+            }
+            <br />
             <FormControlLabel
               className={props.classes.input}
               control={

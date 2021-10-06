@@ -59,7 +59,6 @@ class HijackInfoComponent extends Component<any, any> {
     this.commentRef = React.createRef();
     this.selectRef = React.createRef();
     this.eventRef = React.createRef();
-
   }
 
   async fetchGrip(hijackDataState) {
@@ -104,7 +103,208 @@ class HijackInfoComponent extends Component<any, any> {
       return "all";
   }
 
-  render() {
+  getMobileInfo(mRef, hijackKey, commentRef, event_data, type): any {
+    return (
+      <div className="col-lg-3">
+        <div className="row" style={{ marginBottom: '15px' }}>
+          <div className="col-lg-12">
+            <div className="card">
+              <div className="card-header">Hijack Actions</div>
+              <div className="card-body">
+                {this.user && this.user.role === 'admin' ?
+                  (
+                    <select
+                      ref={this.selectRef}
+                      style={{
+                        width: '200px',
+                        display: 'inline-block',
+                        marginRight: '15px',
+                      }}
+                      className="form-control form-control-sm-auto"
+                      id="action_selection"
+                    >
+                      {!isSeen(this.props.hijackDataState) ? (
+                        <option value="hijack_action_acknowledge">
+                          Mark as Acknowledged
+                        </option>
+                      ) : (
+                        <option value="hijack_action_acknowledge_not">
+                          Mark as Not Acknowledged
+                        </option>
+                      )}
+                      {!isResolved(this.props.hijackDataState) &&
+                        !isIgnored(this.props.hijackDataState) && (
+                          <>
+                            <option value="hijack_action_resolve">
+                              Mark as Resolved
+                            </option>
+                            <option value="hijack_action_ignore">
+                              Mark as Ignored
+                            </option>
+                          </>
+                        )}
+                      {!isUnderMitigation(this.props.hijackDataState) ? (
+                        <option value="hijack_action_mitigate">
+                          Mitigate Hijack
+                        </option>
+                      ) : (
+                        <option value="hijack_action_unmitigate">
+                          Un-mitigate Hijack
+                        </option>
+                      )}
+                      <option value="hijack_action_delete">
+                        Delete Hijack
+                      </option>
+                      <option value="hijack_action_export">
+                        Export Hijack
+                      </option>
+                    </select>
+                  ) : (
+                    <select
+                      ref={this.selectRef}
+                      style={{
+                        width: '200px',
+                        display: 'inline-block',
+                        marginRight: '15px',
+                      }}
+                      className="form-control form-control-sm-auto"
+                      id="action_selection"
+                    >
+                      {!isSeen(this.props.hijackDataState) ? (
+                        <option value="hijack_action_acknowledge">
+                          Mark as Acknowledged
+                        </option>
+                      ) : (
+                        <option value="hijack_action_acknowledge_not">
+                          Mark as Not Acknowledged
+                        </option>
+                      )}
+                      <option value="hijack_action_export">
+                        Export Hijack
+                      </option>
+                    </select>
+                  )}
+                <button
+                  onClick={(e) =>
+                    mRef.current.value === 'hijack_action_ignore'
+                      ? this.setOpenModalState(true)
+                      : mRef.current.value === 'hijack_action_export'
+                        ? exportHijack(hijackKey, this.props._csrf)
+                        : sendHijackData(e, {
+                          hijackKey: hijackKey,
+                          selectState: mRef.current.value,
+                          prefix: this.props.hijackDataState.prefix,
+                          hijack_as: this.props.hijackDataState.hijack_as,
+                          type: this.props.hijackDataState.type,
+                          _csrf: this.props._csrf,
+                        })
+                  }
+                  style={{ marginRight: '5px' }}
+                  id="apply_selected"
+                  type="button"
+                  className="btn btn-primary btn-md"
+                >
+                  Apply
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="row">
+          <div className="col-lg-12">
+            <div className="card">
+              <div className="card-header">
+                Comments{' '}
+                <button
+                  style={{ marginRight: '5px', float: 'right' }}
+                  id="edit_comment"
+                  type="button"
+                  className={`btn btn-${!this.state.editComment ? 'primary' : 'secondary'
+                    } btn-md`}
+                  onClick={(e) => {
+                    if (this.state.editComment)
+                      this.setState({
+                        commentSuccess: submitComment(e, {
+                          commentRef,
+                          hijackKey,
+                          _csrf: this.props._csrf,
+                        }),
+                      });
+                    else commentRef.current.focus();
+
+                    this.setState({
+                      editComment: !this.state.editComment,
+                    });
+                  }}
+                >
+                  {!this.state.editComment ? 'Edit' : 'Save'}
+                </button>
+              </div>
+              <div className="card-body">
+                <h1
+                  style={{
+                    display: this.state.commentSuccess ? 'none' : 'block',
+                    color: 'red',
+                  }}
+                >
+                  {' '}
+                  Config failed to update.{' '}
+                </h1>
+                <Editor
+                  ref={commentRef}
+                  readOnly={!this.state.editComment}
+                  editorState={this.props.editorState}
+                  onChange={this.props.setEditorState}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="row">
+          <div className="col-lg-12">
+            <div className="card" style={{ marginTop: '12px', visibility: this.state.gripState ? "visible" : "hidden" }}>
+              <div className="card-header">
+                Also detected by the GRIP project{' '}
+              </div>
+
+              <div className="card-body">
+                <select
+                  ref={this.eventRef}
+                  style={{
+                    width: '200px',
+                    display: 'inline-block',
+                    marginRight: '15px',
+                    float: 'left'
+                  }}
+                  className="form-control form-control-sm-auto"
+                >
+                  {
+                    event_data.map((_event) => (
+                      <option>{_event.id}</option>
+                    ))
+                  }
+                </select>
+                {/* <br /> */}
+                <button
+                  style={{ marginRight: '5px', marginTop: '5px', float: 'left' }}
+                  id="edit_comment"
+                  type="button"
+                  className={`btn btn-primary
+                          } btn-lg`}
+                  onClick={() => window.open(`https://grip-dev.caida.org/events/${type}/${this.eventRef.current.value}`, "_blank")}
+                >
+                  Go to GRIP event
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  render(): any {
     const [hijackInfoLeft, hijackInfoRight] = extractHijackInfos(
       this.props.hijackDataState,
       {
@@ -116,7 +316,7 @@ class HijackInfoComponent extends Component<any, any> {
 
     const type = this.getEventType(this.props.hijackDataState["type"]);
     const asn = this.props.hijackDataState["hijack_as"];
-    const prefix = this.props.hijackDataState["prefix"];
+    // const prefix = this.props.hijackDataState["prefix"];
 
     if (!this.state.gripFetched && asn) {
       this.fetchGrip(this.props.hijackDataState);
@@ -128,8 +328,6 @@ class HijackInfoComponent extends Component<any, any> {
     const mRef = this.selectRef;
     const setState = this.setState;
     const event_data = this.state.event_data;
-
-
 
     return (
       <>
@@ -250,204 +448,8 @@ class HijackInfoComponent extends Component<any, any> {
               </div>
             </div>
           </div>
-
           {!this.isMobile && (
-            <div className="col-lg-3">
-              <div className="row" style={{ marginBottom: '15px' }}>
-                <div className="col-lg-12">
-                  <div className="card">
-                    <div className="card-header">Hijack Actions</div>
-                    <div className="card-body">
-                      {this.user && this.user.role === 'admin' ?
-                        (
-                          <select
-                            ref={this.selectRef}
-                            style={{
-                              width: '200px',
-                              display: 'inline-block',
-                              marginRight: '15px',
-                            }}
-                            className="form-control form-control-sm-auto"
-                            id="action_selection"
-                          >
-                            {!isSeen(this.props.hijackDataState) ? (
-                              <option value="hijack_action_acknowledge">
-                                Mark as Acknowledged
-                              </option>
-                            ) : (
-                              <option value="hijack_action_acknowledge_not">
-                                Mark as Not Acknowledged
-                              </option>
-                            )}
-                            {!isResolved(this.props.hijackDataState) &&
-                              !isIgnored(this.props.hijackDataState) && (
-                                <>
-                                  <option value="hijack_action_resolve">
-                                    Mark as Resolved
-                                  </option>
-                                  <option value="hijack_action_ignore">
-                                    Mark as Ignored
-                                  </option>
-                                </>
-                              )}
-                            {!isUnderMitigation(this.props.hijackDataState) ? (
-                              <option value="hijack_action_mitigate">
-                                Mitigate Hijack
-                              </option>
-                            ) : (
-                              <option value="hijack_action_unmitigate">
-                                Un-mitigate Hijack
-                              </option>
-                            )}
-                            <option value="hijack_action_delete">
-                              Delete Hijack
-                            </option>
-                            <option value="hijack_action_export">
-                              Export Hijack
-                            </option>
-                          </select>
-                        ) : (
-                          <select
-                            ref={this.selectRef}
-                            style={{
-                              width: '200px',
-                              display: 'inline-block',
-                              marginRight: '15px',
-                            }}
-                            className="form-control form-control-sm-auto"
-                            id="action_selection"
-                          >
-                            {!isSeen(this.props.hijackDataState) ? (
-                              <option value="hijack_action_acknowledge">
-                                Mark as Acknowledged
-                              </option>
-                            ) : (
-                              <option value="hijack_action_acknowledge_not">
-                                Mark as Not Acknowledged
-                              </option>
-                            )}
-                            <option value="hijack_action_export">
-                              Export Hijack
-                            </option>
-                          </select>
-                        )}
-                      <button
-                        onClick={(e) =>
-                          mRef.current.value === 'hijack_action_ignore'
-                            ? this.setOpenModalState(true)
-                            : mRef.current.value === 'hijack_action_export'
-                              ? exportHijack(hijackKey, this.props._csrf)
-                              : sendHijackData(e, {
-                                hijackKey: hijackKey,
-                                selectState: mRef.current.value,
-                                prefix: this.props.hijackDataState.prefix,
-                                hijack_as: this.props.hijackDataState.hijack_as,
-                                type: this.props.hijackDataState.type,
-                                _csrf: this.props._csrf,
-                              })
-                        }
-                        style={{ marginRight: '5px' }}
-                        id="apply_selected"
-                        type="button"
-                        className="btn btn-primary btn-md"
-                      >
-                        Apply
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="row">
-                <div className="col-lg-12">
-                  <div className="card">
-                    <div className="card-header">
-                      Comments{' '}
-                      <button
-                        style={{ marginRight: '5px', float: 'right' }}
-                        id="edit_comment"
-                        type="button"
-                        className={`btn btn-${!this.state.editComment ? 'primary' : 'secondary'
-                          } btn-md`}
-                        onClick={(e) => {
-                          if (this.state.editComment)
-                            setState({
-                              commentSuccess: submitComment(e, {
-                                commentRef,
-                                hijackKey,
-                                _csrf: this.props._csrf,
-                              }),
-                            });
-                          else commentRef.current.focus();
-
-                          this.setState({
-                            editComment: !this.state.editComment,
-                          });
-                        }}
-                      >
-                        {!this.state.editComment ? 'Edit' : 'Save'}
-                      </button>
-                    </div>
-                    <div className="card-body">
-                      <h1
-                        style={{
-                          display: this.state.commentSuccess ? 'none' : 'block',
-                          color: 'red',
-                        }}
-                      >
-                        {' '}
-                        Config failed to update.{' '}
-                      </h1>
-                      <Editor
-                        ref={commentRef}
-                        readOnly={!this.state.editComment}
-                        editorState={this.props.editorState}
-                        onChange={this.props.setEditorState}
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="row">
-                <div className="col-lg-12">
-                  <div className="card" style={{ marginTop: '12px', visibility: this.state.gripState ? "visible" : "hidden" }}>
-                    <div className="card-header">
-                      CAIDA GRIP{' '}
-                    </div>
-
-                    <div className="card-body">
-                      <select
-                        ref={this.eventRef}
-                        style={{
-                          width: '200px',
-                          display: 'inline-block',
-                          marginRight: '15px',
-                          float: 'left'
-                        }}
-                        className="form-control form-control-sm-auto"
-                      >
-                        {
-                          event_data.map((_event) => (
-                            <option>{_event.id}</option>
-                          ))
-                        }
-                      </select>
-                      {/* <br /> */}
-                      <button
-                        style={{ marginRight: '5px', marginTop: '5px', float: 'left' }}
-                        id="edit_comment"
-                        type="button"
-                        className={`btn btn-primary
-                          } btn-lg`}
-                        onClick={() => window.open(`https://grip-dev.caida.org/events/${type}/${this.eventRef.current.value}`, "_blank")}
-                      >
-                        Go to GRIP event
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+            this.getMobileInfo(mRef, hijackKey, commentRef, event_data, type)
           )}
         </div>
         <div className="row">

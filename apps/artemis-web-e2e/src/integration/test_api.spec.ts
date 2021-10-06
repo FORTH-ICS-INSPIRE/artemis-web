@@ -22,10 +22,11 @@ describe('artemis-web-api', () => {
                 "email": newEmail,
                 "password": newPass,
                 "name": name,
+                "page": 'signup',
+                "encryptedExpr": ''
             }
         }).then((response) => {
             expect(response.status, '200');
-
         });
     });
 
@@ -42,7 +43,9 @@ describe('artemis-web-api', () => {
                 "email": newEmail,
                 "password": newPass,
                 "rememberMe": false,
-                "_csrf": ""
+                "page": 'login',
+                "_csrf": "",
+                "encryptedExpr": ''
             }
         }).then((response) => {
             expect(response.body).to.have.property('user');
@@ -61,8 +64,10 @@ describe('artemis-web-api', () => {
             body: {
                 "email": "hermes@planetexpress.com",
                 "password": "hermes",
+                "page": 'login',
                 "rememberMe": false,
-                "_csrf": ""
+                "_csrf": "",
+                "encryptedExpr": ''
             }
         }).then((response) => {
             expect(response.body).to.have.property('user');
@@ -83,7 +88,9 @@ describe('artemis-web-api', () => {
                 "email": "hermes@planetexpress.com",
                 "password": "hermes",
                 "rememberMe": false,
-                "_csrf": ""
+                "page": 'login',
+                "_csrf": "",
+                "encryptedExpr": ''
             }
         }).then((response) => {
             expect(response.status, '429');

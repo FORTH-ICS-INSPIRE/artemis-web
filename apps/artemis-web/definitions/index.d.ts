@@ -3,6 +3,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 export interface NextApiRequestExtended extends NextApiRequest {
   db?: any;
   user: any;
+  ip?: string;
   logIn(user: any, arg1: (err: any) => void);
   logOut();
 }
