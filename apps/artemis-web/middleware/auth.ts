@@ -1,7 +1,7 @@
 import nc from 'next-connect';
 import passport from '../libs/passport';
 import database from './database';
-import { session } from 'next-session';
+import session from 'next-session';
 
 const auth = nc()
   .use(database)

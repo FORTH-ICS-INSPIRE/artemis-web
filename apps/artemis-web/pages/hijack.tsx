@@ -19,7 +19,7 @@ import DefaultErrorPage from 'next/error';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
-import { useMedia } from 'react-media';
+import Media from 'react-media';
 import 'react-toastify/dist/ReactToastify.css';
 import AuthHOC from '../components/401-hoc/401-hoc';
 import BGPTableComponent from '../components/bgp-table/bgp-table';
@@ -121,183 +121,183 @@ const ViewHijackPage = (props) => {
     );
   };
 
-  const matches = useMedia({ queries: GLOBAL_MEDIA_QUERIES });
-
   return (
     <>
       <Head>
         <title>ARTEMIS - Hijack</title>
       </Head>
       {user && hijackExists && (
-        <div
-          className="container overview col-lg-12"
-        // style={{ paddingTop: '120px' }}
-        >
-          <div className="row">
-            <div className="col-lg-1" />
-            <div className="col-lg-10">
+        <Media queries={GLOBAL_MEDIA_QUERIES}>
+          {matches => (
+            <div
+              className="container overview col-lg-12"
+            // style={{ paddingTop: '120px' }}
+            >
               <div className="row">
-                <div className="col-lg-9" style={{ color: 'black' }}>
-                  <h1>
-                    Viewing Hijack
-                    <small id="hijack_status">
-                      {findStatus(hijackDataState).map((status, i) => (
-                        <span
-                          key={i}
-                          style={{ marginLeft: '10px' }}
-                          className={
-                            'badge badge-pill badge-' + statuses[status]
-                          }
-                        >
-                          {status}
-                        </span>
-                      ))}
-                    </small>
-                  </h1>
-                </div>
-                {/* <div className="col-lg-1"></div> */}
-                {matches.pc && (
-                  <div className="col-lg-2">
-                    <h2 style={{ color: 'black' }}> Live Update: </h2>{' '}
-                  </div>
-                )}
-                <div className="col-lg-1">
-                  <FormGroup>
-                    <FormControlLabel
-                      control={
-                        <AntSwitch
-                          onChange={() => {
-                            setIsLive(!isLive);
-                          }}
-                          size="medium"
-                          checked={isLive}
-                        />
-                      }
-                      label=""
-                    />
-                  </FormGroup>
-                </div>
-              </div>
-              <hr style={{ backgroundColor: 'white' }} />
-            </div>
-          </div>
-          <HijackInfoComponent
-            {...props}
-            hijackDataState={hijackDataState}
-            isMobile={matches.mobile}
-            tooltips={tooltips}
-            setTooltips={setTooltips}
-            context={context}
-            classes={classes}
-            setOpenModalState={setOpenModalState}
-            hijackKey={hijackKey}
-            editorState={editorState}
-            setEditorState={setEditorState}
-          />
-          <div className="row" style={{ marginTop: '20px' }}>
-            <div className="col-lg-1" />
-            <div className="col-lg-10">
-              <div className="card">
-                <div className="card-header">Related BGP Updates</div>
-                <div className="card-body" style={{ textAlign: 'center' }}>
-                  <Dialog
-                    aria-labelledby="customized-dialog-title"
-                    open={openModalState}
-                  >
-                    <DialogTitle id="customized-dialog-title">
-                      Configuration diff (Learn new rule)
-                      <IconButton
-                        style={{ float: 'right' }}
-                        aria-label="close"
-                        onClick={() => setOpenModalState(false)}
-                      >
-                        <CloseIcon />
-                      </IconButton>
-                    </DialogTitle>
-                    <DialogContent dividers>
-                      <div id="modal_display_config_comparison">
-                        <LearnRuleComponent
-                          {...props}
-                          hijack={hijackDataState}
-                          config={config}
-                        />
+                <div className="col-lg-1" />
+                <div className="col-lg-10">
+                  <div className="row">
+                    <div className="col-lg-9" style={{ color: 'black' }}>
+                      <h1>
+                        Viewing Hijack
+                        <small id="hijack_status">
+                          {findStatus(hijackDataState).map((status, i) => (
+                            <span
+                              key={i}
+                              style={{ marginLeft: '10px' }}
+                              className={
+                                'badge badge-pill badge-' + statuses[status]
+                              }
+                            >
+                              {status}
+                            </span>
+                          ))}
+                        </small>
+                      </h1>
+                    </div>
+                    {/* <div className="col-lg-1"></div> */}
+                    {matches.pc && (
+                      <div className="col-lg-2">
+                        <h2 style={{ color: 'black' }}> Live Update: </h2>{' '}
                       </div>
-                    </DialogContent>
-                  </Dialog>
-                  <BGPTableComponent
-                    filter={0}
-                    _csrf={_csrf}
-                    isLive={isLive}
-                    setFilteredBgpData={setFilteredBgpData}
-                    hijackKey={hijackKey}
-                    skippedCols={['as_path', 'hijack_key']}
-                  />
+                    )}
+                    <div className="col-lg-1">
+                      <FormGroup>
+                        <FormControlLabel
+                          control={
+                            <AntSwitch
+                              onChange={() => {
+                                setIsLive(!isLive);
+                              }}
+                              size="medium"
+                              checked={isLive}
+                            />
+                          }
+                          label=""
+                        />
+                      </FormGroup>
+                    </div>
+                  </div>
+                  <hr style={{ backgroundColor: 'white' }} />
                 </div>
               </div>
-            </div>
-          </div>
-          <div className="row" style={{ marginTop: '20px' }}>
-            <div className="col-lg-1" />
-            <div className="col-lg-10">
-              <div className="card">
-                <div className="card-header"> View distinct values </div>
-                <div className="card-body">
-                  <div className="col-lg-3">
-                    <select
-                      className="form-control"
-                      id="distinct_values_selection"
-                      value={selectState}
-                      onChange={onChangeValue.bind(this)}
-                    >
-                      <option value="select">Select</option>
-                      <option value="origin_as">Origin AS</option>
-                      <option value="peer_asn">Peer AS</option>
-                      <option value="service">Service</option>
-                    </select>
+              <HijackInfoComponent
+                {...props}
+                hijackDataState={hijackDataState}
+                isMobile={matches.mobile}
+                tooltips={tooltips}
+                setTooltips={setTooltips}
+                context={context}
+                classes={classes}
+                setOpenModalState={setOpenModalState}
+                hijackKey={hijackKey}
+                editorState={editorState}
+                setEditorState={setEditorState}
+              />
+              <div className="row" style={{ marginTop: '20px' }}>
+                <div className="col-lg-1" />
+                <div className="col-lg-10">
+                  <div className="card">
+                    <div className="card-header">Related BGP Updates</div>
+                    <div className="card-body" style={{ textAlign: 'center' }}>
+                      <Dialog
+                        aria-labelledby="customized-dialog-title"
+                        open={openModalState}
+                      >
+                        <DialogTitle id="customized-dialog-title">
+                          Configuration diff (Learn new rule)
+                          <IconButton
+                            style={{ float: 'right' }}
+                            aria-label="close"
+                            onClick={() => setOpenModalState(false)}
+                          >
+                            <CloseIcon />
+                          </IconButton>
+                        </DialogTitle>
+                        <DialogContent dividers>
+                          <div id="modal_display_config_comparison">
+                            <LearnRuleComponent
+                              {...props}
+                              hijack={hijackDataState}
+                              config={config}
+                            />
+                          </div>
+                        </DialogContent>
+                      </Dialog>
+                      <BGPTableComponent
+                        filter={0}
+                        _csrf={_csrf}
+                        isLive={isLive}
+                        setFilteredBgpData={setFilteredBgpData}
+                        hijackKey={hijackKey}
+                        skippedCols={['as_path', 'hijack_key']}
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
-              <div className="card">
-                <div className="card-header">
-                  <Grid container spacing={3}>
-                    {filteredBgpData &&
-                      distinctValues.map((value, i) => {
-                        if (value !== undefined) {
-                          const asn = value;
-                          if (
-                            selectState === 'origin_as' ||
-                            selectState === 'peer_asn'
-                          )
-                            value = (
-                              <div key={1 + '_' + i}>
-                                <Tooltip
-                                  tooltips={tooltips}
-                                  setTooltips={setTooltips}
-                                  asn={asn}
-                                  label={`originD${i}`}
-                                  context={context}
-                                />
-                              </div>
-                            );
-                          return (
-                            <Grid key={0 + '_' + i} item xs>
-                              <Paper
-                                key={2 + '_' + i}
-                                className={classes.paper}
-                              >
-                                {value}
-                              </Paper>
-                            </Grid>
-                          );
-                        } else return <> </>;
-                      })}
-                  </Grid>
+              <div className="row" style={{ marginTop: '20px' }}>
+                <div className="col-lg-1" />
+                <div className="col-lg-10">
+                  <div className="card">
+                    <div className="card-header"> View distinct values </div>
+                    <div className="card-body">
+                      <div className="col-lg-3">
+                        <select
+                          className="form-control"
+                          id="distinct_values_selection"
+                          value={selectState}
+                          onChange={onChangeValue.bind(this)}
+                        >
+                          <option value="select">Select</option>
+                          <option value="origin_as">Origin AS</option>
+                          <option value="peer_asn">Peer AS</option>
+                          <option value="service">Service</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="card">
+                    <div className="card-header">
+                      <Grid container spacing={3}>
+                        {filteredBgpData &&
+                          distinctValues.map((value, i) => {
+                            if (value !== undefined) {
+                              const asn = value;
+                              if (
+                                selectState === 'origin_as' ||
+                                selectState === 'peer_asn'
+                              )
+                                value = (
+                                  <div key={1 + '_' + i}>
+                                    <Tooltip
+                                      tooltips={tooltips}
+                                      setTooltips={setTooltips}
+                                      asn={asn}
+                                      label={`originD${i}`}
+                                      context={context}
+                                    />
+                                  </div>
+                                );
+                              return (
+                                <Grid key={0 + '_' + i} item xs>
+                                  <Paper
+                                    key={2 + '_' + i}
+                                    className={classes.paper}
+                                  >
+                                    {value}
+                                  </Paper>
+                                </Grid>
+                              );
+                            } else return <> </>;
+                          })}
+                      </Grid>
+                    </div>
+                  </div>
                 </div>
+                <ToastContainer />
               </div>
-            </div>
-            <ToastContainer />
-          </div>
-          {/* <div className="row" style={{ marginTop: '20px' }}>
+              {/* <div className="row" style={{ marginTop: '20px' }}>
             <div className="col-lg-1" />
             <div className="col-lg-10">
               <div className="card">
@@ -308,7 +308,9 @@ const ViewHijackPage = (props) => {
               </div>
             </div>
           </div> */}
-        </div>
+            </div>
+          )}
+        </Media>
       )}
       {user && !hijackExists && (
         <DefaultErrorPage

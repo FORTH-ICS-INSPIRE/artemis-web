@@ -1,5 +1,4 @@
 import {
-  createMuiTheme,
   createStyles,
   makeStyles,
   Theme,
@@ -12,6 +11,7 @@ import {
   orange,
 } from '@material-ui/core/colors';
 import Switch from '@material-ui/core/Switch';
+import { createTheme } from '@material-ui/core/styles'
 
 const palletType = 'light';
 const darkState = false;
@@ -177,7 +177,7 @@ export const useStyles = makeStyles((_theme) => ({
   },
 }));
 
-export const theme = createMuiTheme({
+export const theme = createTheme({
   palette: {
     type: palletType,
     primary: {
