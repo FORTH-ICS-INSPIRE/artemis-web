@@ -8,11 +8,11 @@ import auth from '../../middleware/auth';
 import { csrf } from '../../libs/csrf';
 import memory from '../../utils/captchaMemoryStore';
 
-const lambdaCaptcha = require('lambda-captcha')
-const SECRET = process.env.CAPTCHA_SECRET
+import lambdaCaptcha from 'lambda-captcha';
+const SECRET = process.env.CAPTCHA_SECRET;
 
 function generateCaptcha() {
-  const captchaConfig = lambdaCaptcha.LambdaCaptchaConfigManager.default(SECRET)
+  const captchaConfig = lambdaCaptcha.LambdaCaptchaConfigManager.default(SECRET, '')
   const captcha = lambdaCaptcha.create(captchaConfig)
 
   return {
