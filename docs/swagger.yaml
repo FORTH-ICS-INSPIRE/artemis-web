@@ -319,6 +319,8 @@ components:
               type: string
             lastLogin:
               type: string
+            sessionId:
+              type: string
     configs:
       type: object
       properties:
