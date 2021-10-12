@@ -21,7 +21,7 @@ const handler = nc()
   })
   .post(
     passport.authenticate('ldapauth'),
-    (req: NextApiRequestExtended, res: NextApiResponseExtended, next) => {
+    (req: any, res: NextApiResponseExtended, next) => {
       memory.reset(req.ip);
       res.json({ user: extractLdapUser(req) });
     }
