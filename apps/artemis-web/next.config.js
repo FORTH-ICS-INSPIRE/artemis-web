@@ -40,15 +40,15 @@ module.exports = {
                 'https://demo.artemis-pc.duckdns.org/api/graphql',
               ],
               frameAncestors: "'none",
-              imgSrc: ["'self'", 'data:*'],
+              imgSrc: ["'self'", 'data:'],
               objectSrc: "'none",
             },
           },
-          forceHTTPSRedirect: [
-            true,
-            { maxAge: 60 * 60 * 24 * 4, includeSubDomains: true },
-          ],
-          referrerPolicy: 'strict-origin-when-cross-origin',
+          // forceHTTPSRedirect: [
+          //   true,
+          //   { maxAge: 60 * 60 * 24 * 4, includeSubDomains: true },
+          // ],
+          // referrerPolicy: 'strict-origin-when-cross-origin',
         }),
       },
     ];

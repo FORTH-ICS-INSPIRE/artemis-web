@@ -7,7 +7,10 @@ import auth from '../../middleware/auth';
 import { csrf } from '../../libs/csrf';
 import memory from '../../utils/captchaMemoryStore';
 
-import lambdaCaptcha from 'lambda-captcha';
+/* eslint-disable */
+const lambdaCaptcha = require('lambda-captcha');
+/* eslint-enable */
+
 const SECRET = process.env.CAPTCHA_SECRET
 
 function generateCaptcha() {
