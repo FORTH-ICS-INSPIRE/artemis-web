@@ -2,7 +2,7 @@ import { parseJwt } from '../../utils/parsers';
 import { useEffect, useState } from 'react';
 
 export function useJWT() {
-  const { status, data } = useFetch('/api/auth/jwt');
+  const { status, data } = useFetch('/api/auth/jwt', 'GET');
   const jwt = data ? parseJwt(data) : null;
   const user = jwt ? jwt.user : null;
   const loading = status !== 'fetched';
@@ -11,7 +11,7 @@ export function useJWT() {
 
 const cache = {};
 
-export const useFetch = (url) => {
+export const useFetch = (url, method = "GET") => {
   const [status, setStatus] = useState('idle');
   const [data, setData] = useState('');
 
@@ -26,7 +26,9 @@ export const useFetch = (url) => {
         setData(data);
         setStatus('fetched');
       } else {
-        const response = await fetch(url);
+        const response = await fetch(url, {
+          method: method
+        });
         const body = await response.text();
         const data = body.length > 0 ? body : null;
         cache[url] = data;

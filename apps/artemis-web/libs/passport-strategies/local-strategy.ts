@@ -24,7 +24,7 @@ export const LocalStrategy = new Strategy(
           }
         );
         memory.reset(req.ip);
-        return done(null, user);
+        return done(null, { ...user, id: req.session.id });
       } else {
         memory.incr(req.ip);
         return done(null, false, { message: 'Email or password is incorrect' });

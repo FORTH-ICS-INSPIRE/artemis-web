@@ -6,13 +6,14 @@ import { formatDate, genTooltip } from './token';
 export function extractUser(req: any): any {
   if (!req.user) return null;
 
-  const { _id, name, email, role, lastLogin } = req.user;
+  const { _id, name, email, role, lastLogin, id } = req.user;
   return {
     _id,
     name,
     email,
     role,
     lastLogin,
+    sessionId: id
   };
 }
 
@@ -57,6 +58,7 @@ export function extractLdapUser(req): any {
     email: mail,
     role: role,
     lastLogin: new Date(),
+    sessionId: req.session.id
   };
 }
 
