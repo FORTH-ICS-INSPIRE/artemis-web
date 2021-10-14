@@ -22,7 +22,7 @@ export function extractLdapUser(req): any {
 
   const mail = req.user[process.env.LDAP_EMAIL_FIELDNAME];
   let role = 'user';
-  const cnRegexp = /.*[c|C][n|N]=([a-zA-Z0-9 ]*),[o|O][u|U)]=.*/;
+  const cnRegexp = /.*[c|C][n|N]=([a-zA-Z0-9_ ]*),[o|O][u|U)]=.*/;
 
   let groupCnMatch: any, groupCn: any;
   console.log("User groups:");
