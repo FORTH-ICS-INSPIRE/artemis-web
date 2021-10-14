@@ -22,7 +22,7 @@ export function extractLdapUser(req): any {
 
   const mail = req.user[process.env.LDAP_EMAIL_FIELDNAME];
   let role = 'user';
-  const cnRegexp = /.*[c|C][n|N]=([a-zA-Z0-9_ ]*),[o|O][u|U)]=.*/;
+  const cnRegexp = /.*[c|C][n|N]=([a-zA-Z0-9_\- ]*),[o|O][u|U)]=.*/;
 
   let groupCnMatch: any, groupCn: any;
   console.log("User groups:");
@@ -47,15 +47,17 @@ export function extractLdapUser(req): any {
     console.log(process.env.LDAP_ADMIN_GROUP?.split(','));
     console.log("----------------");
 
-    groupCn = groupCnMatch[1];
+    if (groupCnMatch) {
+      groupCn = groupCnMatch[1];
 
-    console.log("Group cn :");
-    console.log("----------------");
-    console.log(groupCn);
-    console.log("----------------");
+      console.log("Group cn :");
+      console.log("----------------");
+      console.log(groupCn);
+      console.log("----------------");
 
-    if (process.env.LDAP_ADMIN_GROUP?.split(',').includes(groupCn)) {
-      role = 'admin';
+      if (process.env.LDAP_ADMIN_GROUP?.split(',').includes(groupCn)) {
+        role = 'admin';
+      }
     }
   });
 
