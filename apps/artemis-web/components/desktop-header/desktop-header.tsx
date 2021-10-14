@@ -38,14 +38,14 @@ const DesktopHeader = (props) => {
 
   const getItemClass = (path1, path2 = '+-"') =>
     window.location.pathname.includes(path1) ||
-    window.location.pathname.includes(path2)
+      window.location.pathname.includes(path2)
       ? 'nav-item visited'
       : 'nav-item';
 
   return (
     <div className="container">
       <a className="navbar-brand" href="/">
-        <img src="/artemis-logo.png" alt="" width="128px;" />
+        <img src="/artemis-logo-color.svg" alt="" width="128px;" />
       </a>
       <div className="collapse navbar-collapse" id="navbarCollapse">
         <ul className="nav navbar-nav navbar-right">

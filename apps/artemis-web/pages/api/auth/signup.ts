@@ -9,8 +9,12 @@ import {
   NextApiResponseExtended,
 } from '../../../definitions';
 import { csrf } from '../../../libs/csrf';
+import captcha from '../../../middleware/captcha';
+import limiter from '../../../middleware/limiter';
 
 const handler = nc()
+  .use(limiter('signup'))
+  .use(captcha('signup'))
   .use(auth)
   .post(async (req: NextApiRequestExtended, res: NextApiResponseExtended) => {
     const { name, password } = req.body;
@@ -38,7 +42,7 @@ const handler = nc()
         name,
         lastLogin: new Date(),
         currentLogin: new Date(),
-        role: 'user', // just for testing. normally it will be 'pending'
+        role: 'pending',
         token: '',
       })
       .then(({ ops }) => ops[0]);

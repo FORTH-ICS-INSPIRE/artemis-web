@@ -6,13 +6,14 @@ import { formatDate, genTooltip } from './token';
 export function extractUser(req): any {
   if (!req.user) return null;
 
-  const { _id, name, email, role, lastLogin } = req.user;
+  const { _id, name, email, role, lastLogin, id } = req.user;
   return {
     _id,
     name,
     email,
     role,
     lastLogin,
+    sessionId: id
   };
 }
 
@@ -21,12 +22,38 @@ export function extractLdapUser(req): any {
 
   const mail = req.user[process.env.LDAP_EMAIL_FIELDNAME];
   let role = 'user';
-  const cnRegexp = /.*[c|C][n|N]=([a-zA-Z0-9 ]*),[o|O][u|U)]=.*/;
+  const cnRegexp = /.*cn=(\S+),ou=.*/;
 
   let groupCnMatch: any, groupCn: any;
+  console.log("User groups:");
+  console.log("----------------");
+  console.log(req.user._groups);
+  console.log("----------------");
+
   req.user._groups.forEach((group) => {
     groupCnMatch = group.dn?.match(cnRegexp);
+    console.log("User group:");
+    console.log("----------------");
+    console.log(group);
+    console.log("----------------");
+
+    console.log("Group cn match :");
+    console.log("----------------");
+    console.log(groupCnMatch);
+    console.log("----------------");
+
+    console.log("LDAP_ADMIN_GROUP array :");
+    console.log("----------------");
+    console.log(process.env.LDAP_ADMIN_GROUP?.split(','));
+    console.log("----------------");
+
     groupCn = groupCnMatch[1];
+
+    console.log("Group cn :");
+    console.log("----------------");
+    console.log(groupCn);
+    console.log("----------------");
+
     if (process.env.LDAP_ADMIN_GROUP?.split(',').includes(groupCn)) {
       role = 'admin';
     }
@@ -57,6 +84,7 @@ export function extractLdapUser(req): any {
     email: mail,
     role: role,
     lastLogin: new Date(),
+    sessionId: req.session.id
   };
 }
 
@@ -267,7 +295,7 @@ function extractHijackInfoLeft(
         '# ASes Infected:',
         null,
         'infected_title_info',
-        `Number of infected ASes that seem to</br>route traffic towards the hijacker AS.</br>Note that this is an experimental field.`
+        `Number of infected ASes that seem to</br>route traffic towards the hijacked AS.</br>Note that this is an experimental field.`
       ),
     ],
     Prefix: [
@@ -289,7 +317,7 @@ function extractHijackInfoLeft(
       ),
     ],
     Config: [
-      formatDate(new Date(hijack.timestamp_of_config), 2),
+      formatDate(new Date(hijack.timestamp_of_config), Math.abs(new Date().getTimezoneOffset() / 60)),
       genTooltip(
         'Config:',
         null,
@@ -312,7 +340,7 @@ function extractHijackInfoLeft(
 function extractHijackInfoRight(hijack) {
   const hijackInfo = {
     'Time Started': [
-      formatDate(new Date(hijack.time_started), 2),
+      formatDate(new Date(hijack.time_started), Math.abs(new Date().getTimezoneOffset() / 60)),
       genTooltip(
         'Time Started:',
         null,
@@ -321,7 +349,7 @@ function extractHijackInfoRight(hijack) {
       ),
     ],
     'Time Detected': [
-      formatDate(new Date(hijack.time_detected), 2),
+      formatDate(new Date(hijack.time_detected), Math.abs(new Date().getTimezoneOffset() / 60)),
       genTooltip(
         'Time Detected:',
         null,
@@ -330,7 +358,7 @@ function extractHijackInfoRight(hijack) {
       ),
     ],
     'Last Update': [
-      hijack.time_last ? formatDate(new Date(hijack.time_last), 2) : 'Never',
+      hijack.time_last ? formatDate(new Date(hijack.time_last), Math.abs(new Date().getTimezoneOffset() / 60)) : 'Never',
       genTooltip(
         'Last Update:',
         null,
@@ -339,7 +367,7 @@ function extractHijackInfoRight(hijack) {
       ),
     ],
     'Time Ended': [
-      hijack.time_ended ? formatDate(new Date(hijack.time_ended), 2) : 'Never',
+      hijack.time_ended ? formatDate(new Date(hijack.time_ended), Math.abs(new Date().getTimezoneOffset() / 60)) : 'Never',
       genTooltip(
         'Time Ended:',
         null,
@@ -350,7 +378,7 @@ function extractHijackInfoRight(hijack) {
       ),
     ],
     'Mitigation Started': [
-      hijack.mitigation_started ?? 'Never',
+      hijack.mitigation_started ? formatDate(new Date(hijack.mitigation_started), Math.abs(new Date().getTimezoneOffset() / 60)) : 'Never',
       genTooltip(
         'Mitigation Started:',
         null,

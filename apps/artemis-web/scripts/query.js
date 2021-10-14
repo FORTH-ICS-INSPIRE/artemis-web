@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const email = process.env.DEFAULT_EMAIL;
 const password = process.env.DEFAULT_PASS;
 const URI = `mongodb://${process.env.MONGODB_USER}:${process.env.MONGODB_PASS}@${process.env.MONGODB_HOST}:${process.env.MONGODB_PORT}`;
@@ -24,6 +26,7 @@ async function isInCollection(db, name) {
       });
     }
     const user = await db.collection('users').findOne();
+
     if (user == null) {
       db.collection('users').insertOne(
         {

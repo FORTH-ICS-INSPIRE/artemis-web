@@ -31,33 +31,34 @@ const appendLeadingZeroes = (n: number): string => {
 };
 
 export const formatDate = (date: Date, incr = 0): string => {
-  date.setHours(date.getHours() + incr);
+  const newDate = new Date(date.toUTCString());
+  newDate.setHours(newDate.getHours() + incr);
 
   const today = new Date();
   const isToday =
-    date.getDate() === today.getDate() &&
-    date.getMonth() === today.getMonth() &&
-    date.getFullYear() === today.getFullYear();
+    newDate.getDate() === today.getDate() &&
+    newDate.getMonth() === today.getMonth() &&
+    newDate.getFullYear() === today.getFullYear();
 
   const isYesterday =
-    date.getDate() === today.getDate() - 1 &&
-    date.getMonth() === today.getMonth() &&
-    date.getFullYear() === today.getFullYear();
+    newDate.getDate() === today.getDate() - 1 &&
+    newDate.getMonth() === today.getMonth() &&
+    newDate.getFullYear() === today.getFullYear();
 
   const parsedDate = isToday
     ? 'Today'
     : isYesterday
       ? 'Yesterday'
-      : date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
+      : newDate.getFullYear() + '-' + (newDate.getMonth() + 1) + '-' + newDate.getDate();
 
   return (
     parsedDate +
     ' ' +
-    appendLeadingZeroes(date.getHours()) +
+    appendLeadingZeroes(newDate.getHours()) +
     ':' +
-    appendLeadingZeroes(date.getMinutes()) +
+    appendLeadingZeroes(newDate.getMinutes()) +
     ':' +
-    appendLeadingZeroes(date.getSeconds())
+    appendLeadingZeroes(newDate.getSeconds())
   );
 };
 
@@ -100,8 +101,9 @@ export const genTooltip = (
 export const isObjectEmpty = (o: any): boolean => Object.keys(o).length === 0;
 
 const isDevelopment = (): boolean => process.env.NODE_ENV === 'development';
+const isCypress = () : boolean => process.env.TESTING === 'true';
 const isBrowser = (): boolean => typeof window !== 'undefined';
-export const shallMock = (): boolean => isDevelopment() && isBrowser();
+export const shallMock = (isTesting: boolean): boolean => (isDevelopment() && isBrowser()) || (isTesting && isBrowser());
 
 export const shallSubscribe = (isLive: boolean): boolean => isLive;
 
@@ -330,7 +332,7 @@ export const autoLogout = (props: any): void => {
     'scroll',
     'keypress',
   ];
-  const time = parseInt(process.env.NEXT_PUBLIC_INACTIVITY_TIMEOUT, 10);
+  const time = parseInt(props._inactivity_timeout, 10);
 
   let warnTimeout: any;
   let logoutTimeout: any;

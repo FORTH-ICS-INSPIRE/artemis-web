@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import React from 'react';
+import React, { useEffect } from 'react';
 import AuthHOC from '../components/401-hoc/401-hoc';
 import PasswordChangeComponent from '../components/password-change/password-change';
 import { setup } from '../libs/csrf';
@@ -9,7 +9,9 @@ import { autoLogout } from '../utils/token';
 const PasswordChangePage = (props) => {
   const [user, loading] = useJWT();
 
-  autoLogout(props);
+  useEffect(() => {
+    autoLogout(props);
+  }, [props]);
 
   return (
     <>
@@ -30,5 +32,5 @@ const PasswordChangePage = (props) => {
 export default AuthHOC(PasswordChangePage, ['admin', 'user']);
 
 export const getServerSideProps = setup(async (req, res, csrftoken) => {
-  return { props: { _csrf: csrftoken } };
+  return { props: { _csrf: csrftoken,  _inactivity_timeout: process.env.INACTIVITY_TIMEOUT, system_version: process.env.SYSTEM_VERSION } };
 });

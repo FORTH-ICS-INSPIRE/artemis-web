@@ -1,5 +1,6 @@
+import { FormControlLabel, FormGroup } from '@material-ui/core';
 import Head from 'next/head';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useMedia } from 'react-media';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -10,31 +11,34 @@ import StatisticsTable from '../components/statistics-table/statistics-table';
 import StatusTable from '../components/status-table/status-table';
 import { setup } from '../libs/csrf';
 import { useGraphQl } from '../utils/hooks/use-graphql';
+import { AntSwitch } from '../utils/styles';
 import { autoLogout, GLOBAL_MEDIA_QUERIES, shallMock } from '../utils/token';
 
 const DashboardPage = (props: any) => {
-  autoLogout(props);
+  useEffect(() => {
+    autoLogout(props);
+  }, [props]);
 
-  if (shallMock()) {
+  if (shallMock(props.isTesting)) {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const { worker } = require('../utils/mock-sw/browser');
     worker.start();
   }
 
-  // autoLogout();
+  const [isLive, setIsLive] = useState(!shallMock(props.isTesting));
 
   const user = props.user;
   // const notify = (message: React.ReactText) => toast(message);
 
   const STATS_RES: any = useGraphQl('stats', {
-    isLive: true,
+    isLive: isLive,
     hasDateFilter: false,
     hasColumnFilter: false,
   });
   const STATS_DATA = STATS_RES.data;
 
   const INDEX_RES: any = useGraphQl('indexStats', {
-    isLive: true,
+    isLive: isLive,
     hasDateFilter: false,
     hasColumnFilter: false,
   });
@@ -57,22 +61,27 @@ const DashboardPage = (props: any) => {
                   <div className="col-lg-8">
                     <h1 style={{ color: 'black' }}>Dashboard</h1>{' '}
                   </div>
-                  {/* <div className="col-lg-1">
-                    {process.env.NODE_ENV === 'development' && (
-                      <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={() => {
-                          // if (hijacks.length) {
-                          notify(`Example notification !`);
-                          // }
-                        }}
-                      >
-                        {' '}
-                        NOTIFY ME!
-                      </Button>
-                    )}
-                  </div> */}
+                  {matches.pc && (
+                    <div className="col-lg-2">
+                      <h2 style={{ color: 'black' }}>Live Update:</h2>{' '}
+                    </div>
+                  )}
+                  <div className="col-lg-1">
+                    <FormGroup>
+                      <FormControlLabel
+                        control={
+                          <AntSwitch
+                            onChange={() => {
+                              setIsLive(!isLive);
+                            }}
+                            size="medium"
+                            checked={isLive}
+                          />
+                        }
+                        label=""
+                      />
+                    </FormGroup>
+                  </div>
                 </div>
                 <hr style={{ backgroundColor: 'white' }} />
               </div>
@@ -89,8 +98,8 @@ const DashboardPage = (props: any) => {
                       (
                       {user &&
                         new Date(user.lastLogin).toLocaleDateString() +
-                          ' ' +
-                          new Date(user.lastLogin).toLocaleTimeString()}
+                        ' ' +
+                        new Date(user.lastLogin).toLocaleTimeString()}
                       )
                     </b>
                     . You are {user && user.role}.
@@ -107,12 +116,12 @@ const DashboardPage = (props: any) => {
                   </div>
                   <div className="card-body" style={{ textAlign: 'center' }}>
                     {' '}
-                    <OngoingHijackTableComponent {...props} isLive={true} />
+                    <OngoingHijackTableComponent {...props} isLive={isLive} />
                   </div>
                 </div>
                 <span style={{ float: 'right', marginTop: '15px' }}>
                   Times are shown in your local time zone{' '}
-                  <b>GMT+2 (Europe/Athens).</b>
+                  <b>GMT{new Date().getTimezoneOffset() > 0 ? '-' : '+'}{Math.abs(new Date().getTimezoneOffset() / 60)} ({Intl.DateTimeFormat().resolvedOptions().timeZone}).</b>
                 </span>
               </div>
               {!matches.pc && (
@@ -192,5 +201,5 @@ const DashboardPage = (props: any) => {
 export default AuthHOC(DashboardPage, ['admin', 'user']);
 
 export const getServerSideProps = setup(async (req, res, csrftoken) => {
-  return { props: { _csrf: csrftoken } };
+  return { props: { _csrf: csrftoken, isTesting: process.env.TESTING === 'true',  _inactivity_timeout: process.env.INACTIVITY_TIMEOUT, system_version: process.env.SYSTEM_VERSION } };
 });

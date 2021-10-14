@@ -6,18 +6,31 @@ import {
 } from '../../definitions';
 import auth from '../../middleware/auth';
 import { csrf } from '../../libs/csrf';
+import limiter from '../../middleware/limiter';
 
 const handler = nc()
+  .use(limiter('hijack'))
   .use(auth)
-  .use(authorization(['admin']))
+  .use(authorization(['admin', 'user']))
   .post(async (req: NextApiRequestExtended, res: NextApiResponseExtended) => {
     const host: string = process.env.DATABASE_HOST;
     const configHost: string = process.env.CONFIG_HOST;
     const port: number = parseInt(process.env.API_PORT, 10);
     let resp = null;
+    const allowed_normal_actions = ['hijack_action_acknowledge', 'hijack_action_acknowledge_not'];
 
     switch (req.body.action) {
       case 'comment':
+        if (req.user.role !== 'admin') {
+          res.status(401);
+          res.json({
+            code: 401,
+            message: 'Unauthorized',
+          });
+
+          break;
+        }
+
         resp = await fetch(`http://${host}:${port}/hijackComment`, {
           method: 'POST',
           body: JSON.stringify({
@@ -36,6 +49,16 @@ const handler = nc()
 
         break;
       case 'approve':
+        if (req.user.role !== 'admin') {
+          res.status(401);
+          res.json({
+            code: 401,
+            message: 'Unauthorized',
+          });
+
+          break;
+        }
+
         resp = await fetch(`http://${configHost}:${port}/hijackLearnRule`, {
           method: 'POST',
           body: JSON.stringify({
@@ -58,6 +81,16 @@ const handler = nc()
 
         break;
       case 'show':
+        if (req.user.role !== 'admin') {
+          res.status(401);
+          res.json({
+            code: 401,
+            message: 'Unauthorized',
+          });
+
+          break;
+        }
+
         resp = await fetch(`http://${configHost}:${port}/hijackLearnRule`, {
           method: 'POST',
           body: JSON.stringify({
@@ -79,6 +112,16 @@ const handler = nc()
 
         break;
       default:
+        if (req.user.role !== 'admin' && !allowed_normal_actions.includes(req.body.action)) {
+          res.status(401);
+          res.json({
+            code: 401,
+            message: 'Unauthorized',
+          });
+
+          break;
+        }
+
         resp = await fetch(`http://${host}:${port}/hijackMultiAction`, {
           method: 'POST',
           body: JSON.stringify({

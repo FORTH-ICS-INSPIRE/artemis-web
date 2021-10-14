@@ -1,17 +1,20 @@
+
 import Head from 'next/head';
-import React from 'react';
+import React, { useEffect } from 'react';
 import AuthHOC from '../components/401-hoc/401-hoc';
 import ConfigComparisonComponent from '../components/config-comparison/config-comparison';
 import { setup } from '../libs/csrf';
 import { autoLogout, shallMock } from '../utils/token';
 
 const ConfigComparisonPage = (props) => {
-  if (shallMock()) {
+  if (shallMock(props.isTesting)) {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const { worker } = require('../utils/mock-sw/browser');
     worker.start();
   }
-  autoLogout(props);
+  useEffect(() => {
+    autoLogout(props);
+  }, [props]);
 
   const user = props.user;
 
@@ -50,5 +53,5 @@ const ConfigComparisonPage = (props) => {
 export default AuthHOC(ConfigComparisonPage, ['admin', 'user']);
 
 export const getServerSideProps = setup(async (req, res, csrftoken) => {
-  return { props: { _csrf: csrftoken } };
+  return { props: { _csrf: csrftoken, isTesting: process.env.TESTING === 'true',  _inactivity_timeout: process.env.INACTIVITY_TIMEOUT, system_version: process.env.SYSTEM_VERSION } };
 });

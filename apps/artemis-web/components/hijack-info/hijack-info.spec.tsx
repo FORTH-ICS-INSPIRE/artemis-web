@@ -52,6 +52,11 @@ describe('HijackInfoComponent', () => {
     };
     const promise = Promise.resolve();
     jest.fn(() => promise);
+
+    fetch.mockResponse(JSON.stringify({
+      "recordsTotal": 0,
+    }));
+  
     const { baseElement } = render(<HijackInfoComponent {...mock} />);
     expect(baseElement).toBeTruthy();
 

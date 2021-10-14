@@ -2,7 +2,7 @@ import { Grid } from '@material-ui/core';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/material.css';
 import Head from 'next/head';
-import React from 'react';
+import React, { useEffect } from 'react';
 import AuthHOC from '../../components/401-hoc/401-hoc';
 import SystemConfigurationComponent from '../../components/system-configuration/system-configuration';
 import SystemModule from '../../components/system-module/system-module';
@@ -11,25 +11,26 @@ import { useGraphQl } from '../../utils/hooks/use-graphql';
 import { autoLogout, shallMock } from '../../utils/token';
 
 const SystemPage = (props) => {
-  if (shallMock()) {
+  if (shallMock(props.isTesting)) {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const { worker } = require('../../utils/mock-sw/browser');
     worker.start();
   }
 
-  autoLogout(props);
+  useEffect(() => {
+    autoLogout(props);
+  }, [props]);
 
   const user = props.user;
-
   const STATS_RES: any = useGraphQl('stats', {
-    isLive: true,
+    isLive: !shallMock(props.isTesting),
     hasDateFilter: false,
     hasColumnFilter: false,
   });
   const STATS_DATA: any = STATS_RES?.data;
 
   let CONFIG_DATA: any = useGraphQl('config', {
-    isLive: true,
+    isLive: !shallMock(props.isTesting),
     hasDateFilter: false,
     hasColumnFilter: false,
   });
@@ -39,11 +40,11 @@ const SystemPage = (props) => {
 
   const modules = processes
     ? processes.map((ps) => {
-        return [
-          ps['name'].charAt(0).toUpperCase() + ps['name'].slice(1),
-          ps['running'],
-        ];
-      })
+      return [
+        ps['name'].charAt(0).toUpperCase() + ps['name'].slice(1),
+        ps['running'],
+      ];
+    })
     : [];
 
   const modulesStateObj = {};
@@ -133,6 +134,7 @@ const SystemPage = (props) => {
                           subModules={subModules}
                           labels={modulesLabels}
                           modulesStateObj={modulesStateObj}
+                          is
                         />
                       );
                     } else return <> </>;
@@ -154,5 +156,5 @@ const SystemPage = (props) => {
 export default AuthHOC(SystemPage, ['admin']);
 
 export const getServerSideProps = setup(async (req, res, csrftoken) => {
-  return { props: { _csrf: csrftoken } };
+  return { props: { _csrf: csrftoken, isTesting: process.env.TESTING === 'true',  _inactivity_timeout: process.env.INACTIVITY_TIMEOUT, system_version: process.env.SYSTEM_VERSION } };
 });

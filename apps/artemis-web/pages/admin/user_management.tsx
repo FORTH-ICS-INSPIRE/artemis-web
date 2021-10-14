@@ -22,8 +22,6 @@ const UserManagementPage = (props) => {
   const deleteRef = React.createRef<HTMLSelectElement>();
   const _csrf = props._csrf;
 
-  autoLogout(props);
-
   const manageUser = async (e, action, userName) => {
     e.preventDefault();
 
@@ -48,6 +46,7 @@ const UserManagementPage = (props) => {
   };
 
   useEffect(() => {
+    autoLogout(props);
     (async () => {
       const res = await fetch('/api/userlist', {
         method: 'GET',
@@ -59,7 +58,7 @@ const UserManagementPage = (props) => {
           (cUser) => cUser.email !== user.email
         );
         list = list.map((user) => {
-          user.lastLogin = formatDate(new Date(user.lastLogin), 2);
+          user.lastLogin = formatDate(new Date(user.lastLogin), Math.abs(new Date().getTimezoneOffset() / 60));
           return user;
         });
         setUserList(list);
@@ -70,7 +69,7 @@ const UserManagementPage = (props) => {
         setErrorMsg((await res.json()).message);
       }
     })();
-  }, [user.email]);
+  }, [user.email, props]);
 
   return (
     <>
@@ -300,5 +299,5 @@ const UserManagementPage = (props) => {
 export default AuthHOC(UserManagementPage, ['admin']);
 
 export const getServerSideProps = setup(async (req, res, csrftoken) => {
-  return { props: { _csrf: csrftoken } };
+  return { props: { _csrf: csrftoken, _inactivity_timeout: process.env.INACTIVITY_TIMEOUT, system_version: process.env.SYSTEM_VERSION } };
 });

@@ -9,13 +9,16 @@ import {
   Paper,
   Switch,
 } from '@material-ui/core';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 import CloseIcon from '@material-ui/icons/Close';
 import { ContentState, EditorState } from 'draft-js';
 import 'draft-js/dist/Draft.css';
 import DefaultErrorPage from 'next/error';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useMedia } from 'react-media';
 import 'react-toastify/dist/ReactToastify.css';
 import AuthHOC from '../components/401-hoc/401-hoc';
@@ -37,13 +40,15 @@ import {
 } from '../utils/token';
 
 const ViewHijackPage = (props) => {
-  if (shallMock()) {
+  if (shallMock(props.isTesting)) {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const { worker } = require('../utils/mock-sw/browser');
     worker.start();
   }
 
-  autoLogout(props);
+  useEffect(() => {
+    autoLogout(props);
+  }, [props]);
 
   const {
     isLive,
@@ -80,7 +85,8 @@ const ViewHijackPage = (props) => {
 
   useGraphQl('hijackByKey', {
     callback: (data) => {
-      const hijacks = data.subscriptionData.data.view_hijacks;
+
+      const hijacks = data.subscriptionData ? data.subscriptionData.data.view_hijacks : data.view_hijacks;
       const hijackExists = hijacks.length !== 0;
 
       if (!hijackExists) {
@@ -94,7 +100,7 @@ const ViewHijackPage = (props) => {
         );
       }
     },
-    isLive: true,
+    isLive: !shallMock(props.isTesting),
     key: hijackKey,
     sortOrder: 'desc',
     sortColumn: 'time_last',
@@ -125,7 +131,7 @@ const ViewHijackPage = (props) => {
       {user && hijackExists && (
         <div
           className="container overview col-lg-12"
-          // style={{ paddingTop: '120px' }}
+        // style={{ paddingTop: '120px' }}
         >
           <div className="row">
             <div className="col-lg-1" />
@@ -289,6 +295,7 @@ const ViewHijackPage = (props) => {
                 </div>
               </div>
             </div>
+            <ToastContainer />
           </div>
           {/* <div className="row" style={{ marginTop: '20px' }}>
             <div className="col-lg-1" />
@@ -316,5 +323,5 @@ const ViewHijackPage = (props) => {
 export default AuthHOC(ViewHijackPage, ['admin', 'user']);
 
 export const getServerSideProps = setup(async (req, res, csrftoken) => {
-  return { props: { _csrf: csrftoken } };
+  return { props: { _csrf: csrftoken, isTesting: process.env.TESTING === 'true', _inactivity_timeout: process.env.INACTIVITY_TIMEOUT, system_version: process.env.SYSTEM_VERSION } };
 });

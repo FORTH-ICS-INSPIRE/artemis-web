@@ -8,17 +8,8 @@
 // https://on.cypress.io/custom-commands
 // ***********************************************
 // eslint-disable-next-line @typescript-eslint/no-namespace
-declare namespace Cypress {
-  interface Chainable<Subject> {
-    typeLogin(user: any): void;
-    login(): void;
-    register(): void;
-    typeRegister(user: any): void;
-    loginLDAP(): void;
-    typeChangePass(user: any): void;
-  }
-}
-//
+import 'cypress-plugin-snapshots/commands';
+
 // -- This is a parent command --
 Cypress.Commands.add('typeLogin', (user) => {
   cy.get('body').then(($body) => {
@@ -29,6 +20,8 @@ Cypress.Commands.add('typeLogin', (user) => {
 
       cy.get('input[name=password]').type(user.password);
 
+      // cy.get('input[name=captcha]').type('123');
+
       cy.get('input[type=checkbox]').click({ force: true });
     }
   });
@@ -37,13 +30,16 @@ Cypress.Commands.add('typeLogin', (user) => {
 Cypress.Commands.add('typeRegister', (user) => {
   cy.get('#username').type(user.name);
   cy.get('#email').type(user.email);
+  cy.get('#captcha').type('123');
   cy.get('#password').type(user.password);
 });
 
 Cypress.Commands.add('typeChangePass', (user) => {
   cy.get('#old_password').type(user.old_pass);
   cy.get('#new_password').type(user.new_pass);
-  cy.get('#repeat_password').type(user.repeat_pass);
+  cy.get('#repeat_password').type(user.new_pass);
+
+  cy.get('#submit').click({ force: true });
 });
 
 Cypress.Commands.add('register', () => {

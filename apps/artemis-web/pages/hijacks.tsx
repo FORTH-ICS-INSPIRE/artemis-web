@@ -7,7 +7,7 @@ import {
 } from '@material-ui/core';
 import Head from 'next/head';
 import Link from 'next/link';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useMedia } from 'react-media';
 import { RangePicker } from 'react-minimal-datetime-range';
 import 'react-minimal-datetime-range/lib/react-minimal-datetime-range.min.css';
@@ -28,15 +28,18 @@ import {
 } from '../utils/token';
 
 const HijacksPage = (props) => {
-  const [isLive, setIsLive] = useState(true);
 
-  if (shallMock()) {
+  if (shallMock(props.isTesting)) {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const { worker } = require('../utils/mock-sw/browser');
     worker.start();
   }
 
-  autoLogout(props);
+  const [isLive, setIsLive] = useState(!shallMock(props.isTesting));
+
+  useEffect(() => {
+    autoLogout(props);
+  }, [props]);
 
   const [filterFrom, setFilterFrom] = useState(0);
   const [filterTo, setFilterTo] = useState(0);
@@ -91,7 +94,7 @@ const HijacksPage = (props) => {
       {user && (
         <div
           className="container overview col-lg-12"
-          // style={{ paddingTop: '120px' }}
+        // style={{ paddingTop: '120px' }}
         >
           <div className="row">
             <div className="col-lg-1" />
@@ -538,9 +541,9 @@ const HijacksPage = (props) => {
                   className="card-header"
                   style={{ backgroundColor: 'white' }}
                 >
-                  <span style={{ float: 'right' }}>
+                  <span style={{ float: 'right', marginTop: '15px' }}>
                     Times are shown in your local time zone{' '}
-                    <b>GMT+2 (Europe/Athens).</b>
+                    <b>GMT{new Date().getTimezoneOffset() > 0 ? '-' : '+'}{Math.abs(new Date().getTimezoneOffset() / 60)} ({Intl.DateTimeFormat().resolvedOptions().timeZone}).</b>
                   </span>
                 </div>
               </div>
@@ -610,5 +613,5 @@ const HijacksPage = (props) => {
 export default AuthHOC(HijacksPage, ['admin', 'user']);
 
 export const getServerSideProps = setup(async (req, res, csrftoken) => {
-  return { props: { _csrf: csrftoken } };
+  return { props: { _csrf: csrftoken, isTesting: process.env.TESTING === 'true',  _inactivity_timeout: process.env.INACTIVITY_TIMEOUT, system_version: process.env.SYSTEM_VERSION } };
 });

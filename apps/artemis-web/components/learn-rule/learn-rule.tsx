@@ -145,10 +145,6 @@ class LearnRuleComponent extends Component<
         window[key] = DMP[key];
       });
 
-      const key = this.hijack.key;
-      const prefix: string = this.hijack.prefix;
-      const dashedPrefix = prefix.replace(/\./g, '_').replace('/', '_');
-
       const config: string = this.config.data.view_configs[0].raw_config;
       this.getConfig();
 

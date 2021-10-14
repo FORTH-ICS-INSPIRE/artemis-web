@@ -1,11 +1,13 @@
 import Head from 'next/head';
-import React from 'react';
+import React, { useEffect } from 'react';
 import AuthHOC from '../components/401-hoc/401-hoc';
 import { setup } from '../libs/csrf';
 import { autoLogout } from '../utils/token';
 
 const PendingPage = (props) => {
-  autoLogout(props);
+  useEffect(() => {
+    autoLogout(props);
+  }, [props]);
 
   return (
     <>
@@ -50,5 +52,5 @@ const PendingPage = (props) => {
 export default AuthHOC(PendingPage, ['pending']);
 
 export const getServerSideProps = setup(async (req, res, csrftoken) => {
-  return { props: { _csrf: csrftoken } };
+  return { props: { _csrf: csrftoken, _inactivity_timeout: process.env.INACTIVITY_TIMEOUT, system_version: process.env.SYSTEM_VERSION } };
 });

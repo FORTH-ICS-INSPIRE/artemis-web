@@ -7,7 +7,7 @@ import {
   Switch,
 } from '@material-ui/core';
 import Head from 'next/head';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useMedia } from 'react-media';
 import { RangePicker } from 'react-minimal-datetime-range';
 import 'react-minimal-datetime-range/lib/react-minimal-datetime-range.min.css';
@@ -28,17 +28,20 @@ import {
 } from '../utils/token';
 
 const BGPUpdates = (props) => {
-  const [isLive, setIsLive] = useState(true);
   const context = React.useContext(TooltipContext);
   const _csrf = props._csrf;
 
-  if (shallMock()) {
+  if (shallMock(props.isTesting)) {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const { worker } = require('../utils/mock-sw/browser');
     worker.start();
   }
 
-  autoLogout(props);
+  const [isLive, setIsLive] = useState(!shallMock(props.isTesting));
+
+  useEffect(() => {
+    autoLogout(props);
+  }, [props]);
 
   const classes = useStyles();
 
@@ -373,5 +376,5 @@ const BGPUpdates = (props) => {
 export default NotAuthHOC(BGPUpdates, ['admin', 'user']);
 
 export const getServerSideProps = setup(async (req, res, csrftoken) => {
-  return { props: { _csrf: csrftoken } };
+  return { props: { _csrf: csrftoken, isTesting: process.env.TESTING === 'true',  _inactivity_timeout: process.env.INACTIVITY_TIMEOUT, system_version: process.env.SYSTEM_VERSION } };
 });

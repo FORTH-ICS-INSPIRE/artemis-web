@@ -16,6 +16,7 @@ const SystemModule = (props) => {
     isLive: false,
     isMutation: true,
     running: state[module],
+    isTesting: props.isTesting,
     name: module.toLowerCase().substring(0, module.toLowerCase().indexOf('-')),
   });
 
