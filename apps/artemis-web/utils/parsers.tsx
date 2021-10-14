@@ -25,35 +25,24 @@ export function extractLdapUser(req): any {
   const cnRegexp = /.*[c|C][n|N]=([a-zA-Z0-9_\- ]*),[o|O][u|U)]=.*/;
 
   let groupCnMatch: any, groupCn: any;
-  console.log("User groups:");
-  console.log("----------------");
+  console.log("All user groups:");
   console.log(req.user._groups);
-  console.log("----------------");
+  console.log("LDAP_ADMIN_GROUP array:");
+  console.log(process.env.LDAP_ADMIN_GROUP?.split(','));
 
   req.user._groups.forEach((group) => {
     groupCnMatch = group.dn?.match(cnRegexp);
-    console.log("User group:");
-    console.log("----------------");
+    console.log("Current user group:");
     console.log(group);
-    console.log("----------------");
 
-    console.log("Group cn match :");
-    console.log("----------------");
+    console.log("Group cn match:");
     console.log(groupCnMatch);
-    console.log("----------------");
-
-    console.log("LDAP_ADMIN_GROUP array :");
-    console.log("----------------");
-    console.log(process.env.LDAP_ADMIN_GROUP?.split(','));
-    console.log("----------------");
 
     if (groupCnMatch) {
       groupCn = groupCnMatch[1];
 
-      console.log("Group cn :");
-      console.log("----------------");
+      console.log("Group cn:");
       console.log(groupCn);
-      console.log("----------------");
 
       if (process.env.LDAP_ADMIN_GROUP?.split(',').includes(groupCn)) {
         role = 'admin';
