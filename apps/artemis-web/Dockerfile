@@ -6,6 +6,8 @@ COPY package.json yarn.lock ./
 
 RUN yarn install --frozen-lockfile
 
+RUN yarn cache clean
+
 COPY . .
 
 RUN apk add --no-cache bash
