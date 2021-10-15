@@ -53,7 +53,7 @@
     "nanoid": "^3.1.30",
     "next": "^11.1.2",
     "next-connect": "^0.10.2",
-    "next-csrf": "^0.1.2",
+    "next-csrf": "^0.1.1",
     "next-session": "^4.0.2",
     "nx": "^12.10.0",
     "passport": "^0.5.0",

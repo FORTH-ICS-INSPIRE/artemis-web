@@ -11,13 +11,6 @@ const getSession = nextSession({
   },
 });
 
-function withSession(handler) {
-  return async function handlerWithSession(req, res) {
-    await getSession(req, res);
-    return handler(req, res);
-  };
-}
-
 async function session(req, res, next) {
   try {
     await getSession(req, res);
