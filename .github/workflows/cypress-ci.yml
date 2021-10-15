@@ -15,7 +15,7 @@ jobs:
     # runs all of the steps inside the specified container rather than on the VM host.
     # Because of this the network configuration changes from host based network to a container network.
     container:
-      image: cypress/included:6.6.0
+      image: cypress/included:8.6.0
     services:
       mongodb:
         image: mongo
@@ -27,8 +27,8 @@ jobs:
       ldap:
         image: rroemhild/test-openldap
         ports:
-          - '389:389'
-          - '636:636'
+          - "389:389"
+          - "636:636"
 
     steps:
       - uses: actions/checkout@v2
@@ -38,7 +38,7 @@ jobs:
         env:
           MONGODB_HOST: mongodb
           MONGODB_PORT: ${{ job.services.mongodb.ports[27017] }}
-      - name: 'Upload Artifact'
+      - name: "Upload Artifact"
         if: failure()
         uses: actions/upload-artifact@v2
         with:
