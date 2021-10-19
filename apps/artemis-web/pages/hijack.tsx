@@ -9,7 +9,7 @@ import {
   Paper,
   Switch,
 } from '@material-ui/core';
-import { ToastContainer } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import CloseIcon from '@material-ui/icons/Close';
@@ -46,8 +46,13 @@ const ViewHijackPage = (props) => {
     worker.start();
   }
 
+  const notify = (message: React.ReactText) => toast(message);
+
   useEffect(() => {
     autoLogout(props);
+    if (props.error.length > 0) {
+      notify(props.error)
+    }
   }, [props]);
 
   const {

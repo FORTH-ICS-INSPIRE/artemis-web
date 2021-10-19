@@ -9,6 +9,7 @@ import SystemModule from '../../components/system-module/system-module';
 import { setup } from '../../libs/csrf';
 import { useGraphQl } from '../../utils/hooks/use-graphql';
 import { autoLogout, shallMock } from '../../utils/token';
+import { toast, ToastContainer } from 'react-toastify';
 
 const SystemPage = (props) => {
   if (shallMock(props.isTesting)) {
@@ -17,8 +18,13 @@ const SystemPage = (props) => {
     worker.start();
   }
 
+  const notify = (message: React.ReactText) => toast(message);
+
   useEffect(() => {
     autoLogout(props);
+    if (props.error.length > 0) {
+      notify(props.error)
+    }
   }, [props]);
 
   const user = props.user;
@@ -148,6 +154,7 @@ const SystemPage = (props) => {
             />
           </div>
         )}
+        <ToastContainer />
       </div>
     </>
   );
@@ -156,5 +163,5 @@ const SystemPage = (props) => {
 export default AuthHOC(SystemPage, ['admin']);
 
 export const getServerSideProps = setup(async (req, res, csrftoken) => {
-  return { props: { _csrf: csrftoken, isTesting: process.env.TESTING === 'true',  _inactivity_timeout: process.env.INACTIVITY_TIMEOUT, system_version: process.env.SYSTEM_VERSION } };
+  return { props: { _csrf: csrftoken, isTesting: process.env.TESTING === 'true', _inactivity_timeout: process.env.INACTIVITY_TIMEOUT, system_version: process.env.SYSTEM_VERSION } };
 });
