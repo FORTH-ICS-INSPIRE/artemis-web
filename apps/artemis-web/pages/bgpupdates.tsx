@@ -11,7 +11,7 @@ import React, { useEffect, useState } from 'react';
 import { useMedia } from 'react-media';
 import { RangePicker } from 'react-minimal-datetime-range';
 import 'react-minimal-datetime-range/lib/react-minimal-datetime-range.min.css';
-import { ToastContainer } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import NotAuthHOC from '../components/401-hoc/401-hoc';
 import BGPTableComponent from '../components/bgp-table/bgp-table';
@@ -30,6 +30,7 @@ import {
 const BGPUpdates = (props) => {
   const context = React.useContext(TooltipContext);
   const _csrf = props._csrf;
+  const notify = (message: React.ReactText) => toast(message);
 
   if (shallMock(props.isTesting)) {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -41,6 +42,9 @@ const BGPUpdates = (props) => {
 
   useEffect(() => {
     autoLogout(props);
+    if (props.error.length > 0) {
+      notify(props.error)
+    }
   }, [props]);
 
   const classes = useStyles();
@@ -376,5 +380,5 @@ const BGPUpdates = (props) => {
 export default NotAuthHOC(BGPUpdates, ['admin', 'user']);
 
 export const getServerSideProps = setup(async (req, res, csrftoken) => {
-  return { props: { _csrf: csrftoken, isTesting: process.env.TESTING === 'true',  _inactivity_timeout: process.env.INACTIVITY_TIMEOUT, system_version: process.env.SYSTEM_VERSION } };
+  return { props: { _csrf: csrftoken, isTesting: process.env.TESTING === 'true', _inactivity_timeout: process.env.INACTIVITY_TIMEOUT, system_version: process.env.SYSTEM_VERSION } };
 });

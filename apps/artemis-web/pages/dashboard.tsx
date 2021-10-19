@@ -15,8 +15,13 @@ import { AntSwitch } from '../utils/styles';
 import { autoLogout, GLOBAL_MEDIA_QUERIES, shallMock } from '../utils/token';
 
 const DashboardPage = (props: any) => {
+  const notify = (message: React.ReactText) => toast(message);
+
   useEffect(() => {
     autoLogout(props);
+    if (props.error.length > 0) {
+      notify(props.error)
+    }
   }, [props]);
 
   if (shallMock(props.isTesting)) {
@@ -28,9 +33,6 @@ const DashboardPage = (props: any) => {
   const [isLive, setIsLive] = useState(!shallMock(props.isTesting));
 
   const user = props.user;
-  const notify = (message: React.ReactText) => toast(message);
-
-  notify('fdsfds')
 
   const STATS_RES: any = useGraphQl('stats', {
     isLive: isLive,

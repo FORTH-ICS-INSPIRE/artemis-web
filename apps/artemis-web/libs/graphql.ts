@@ -27,7 +27,7 @@ const requestToken = async () => {
 
 let apolloClient: ApolloClient<NormalizedCacheObject>;
 
-const createApolloClient = () => {
+const createApolloClient = (setError) => {
   const httpLink =
     typeof window !== 'undefined'
       ? createHttpLink({
@@ -77,12 +77,17 @@ const createApolloClient = () => {
 
   const errorLink = typeof window !== 'undefined' ? onError(({ graphQLErrors, networkError }) => {
     if (graphQLErrors)
-      graphQLErrors.forEach(({ message, locations, path }) =>
+      graphQLErrors.forEach(({ message, locations, path }) => {
+        setError(`GraphQL error! ${message}`);
         console.log(
           `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
-        )
+        );
+      }
       );
-    if (networkError) console.log(`[Network error]: ${JSON.stringify(networkError)}`);
+    if (networkError) {
+      console.log(`[Network error]: ${JSON.stringify(networkError)}`);
+      setError(`GraphQL network error!`)
+    }
   }) : null;
 
   return new ApolloClient({
@@ -91,8 +96,8 @@ const createApolloClient = () => {
   });
 };
 
-export const initializeApollo = (initialState = null): any => {
-  const _apolloClient = apolloClient ?? createApolloClient();
+export const initializeApollo = (initialState = null, setError): any => {
+  const _apolloClient = apolloClient ?? createApolloClient(setError);
   if (initialState) {
     _apolloClient.cache.restore(initialState);
   }
@@ -493,7 +498,7 @@ export class QueryGenerator {
   }
 }
 
-export const useApollo = (initialState: any): any => {
-  const store = useMemo(() => initializeApollo(initialState), [initialState]);
+export const useApollo = (initialState: any, setError: any): any => {
+  const store = useMemo(() => initializeApollo(initialState, setError), [initialState]);
   return store;
 };

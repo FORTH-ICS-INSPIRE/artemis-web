@@ -29,6 +29,8 @@ import {
 
 const HijacksPage = (props) => {
 
+  const notify = (message: React.ReactText) => toast(message);
+
   if (shallMock(props.isTesting)) {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const { worker } = require('../utils/mock-sw/browser');
@@ -39,6 +41,9 @@ const HijacksPage = (props) => {
 
   useEffect(() => {
     autoLogout(props);
+    if (props.error.length > 0) {
+      notify(props.error)
+    }
   }, [props]);
 
   const [filterFrom, setFilterFrom] = useState(0);
@@ -613,5 +618,5 @@ const HijacksPage = (props) => {
 export default AuthHOC(HijacksPage, ['admin', 'user']);
 
 export const getServerSideProps = setup(async (req, res, csrftoken) => {
-  return { props: { _csrf: csrftoken, isTesting: process.env.TESTING === 'true',  _inactivity_timeout: process.env.INACTIVITY_TIMEOUT, system_version: process.env.SYSTEM_VERSION } };
+  return { props: { _csrf: csrftoken, isTesting: process.env.TESTING === 'true', _inactivity_timeout: process.env.INACTIVITY_TIMEOUT, system_version: process.env.SYSTEM_VERSION } };
 });
