@@ -9,20 +9,25 @@ import ErrorBoundary from '../components/error-boundary/error-boundary';
 import OngoingHijackTableComponent from '../components/ongoing-hijack-table/ongoing-hijack-table';
 import StatisticsTable from '../components/statistics-table/statistics-table';
 import StatusTable from '../components/status-table/status-table';
+import ErrorContext from '../context/error-context';
 import { setup } from '../libs/csrf';
 import { useGraphQl } from '../utils/hooks/use-graphql';
 import { AntSwitch } from '../utils/styles';
 import { autoLogout, GLOBAL_MEDIA_QUERIES, shallMock } from '../utils/token';
 
 const DashboardPage = (props: any) => {
-  const notify = (message: React.ReactText) => toast(message);
+  const context = React.useContext(ErrorContext);
 
+  const notify = (message: React.ReactText) => toast(message);
+  console.log('aaaaaa')
+  console.log(context)
   useEffect(() => {
     autoLogout(props);
-    if (props.error.length > 0) {
-      notify(props.error)
+    if (context.error.length > 0) {
+      notify(context.error)
+      // context.setError('')
     }
-  }, [props]);
+  }, [context]);
 
   if (shallMock(props.isTesting)) {
     // eslint-disable-next-line @typescript-eslint/no-var-requires

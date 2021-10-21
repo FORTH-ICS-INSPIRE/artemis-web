@@ -142,5 +142,8 @@
       "pre-commit": "yarn run format && yarn run lint",
       "pre-push": "yarn run affected:test"
     }
+  },
+  "msw": {
+    "workerDirectory": "dist/apps/artemis-web/public"
   }
 }
