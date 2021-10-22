@@ -5,6 +5,18 @@ import { useApollo } from '../libs/graphql';
 import Layout from '../components/layout/layout';
 import TooltipContext from '../context/tooltip-context';
 import ErrorContext from '../context/error-context';
+import { transitions, positions, Provider as AlertProvider } from 'react-alert';
+import AlertTemplate from 'react-alert-template-basic';
+import { useAlert } from "react-alert";
+
+const options = {
+  // you can also just use 'bottom center'
+  position: positions.BOTTOM_CENTER,
+  timeout: 5000,
+  offset: '30px',
+  // you can also just use 'scale'
+  transition: transitions.SCALE
+}
 
 const useStateWithLocalStorage = (localStorageKey) => {
   const [value, setValue] = useState(
@@ -30,7 +42,7 @@ function MyApp({ Component, pageProps }) {
   }
 
   const client = useApollo(pageProps.initialApolloState, setError);
-  console.log('aaaa')
+  // console.log('aaaa')
   /* eslint-enable react-hooks/rules-of-hooks */
   return (
     <ApolloProvider client={client}>
@@ -38,11 +50,9 @@ function MyApp({ Component, pageProps }) {
         <TooltipContext.Provider
           value={{ tooltips: tooltips, setTooltips: setTooltips }}
         >
-          <ErrorContext.Provider
-            value={{ error: error, setError: setError }}
-          >
+          <AlertProvider template={AlertTemplate} {...options}>
             <Component {...pageProps} />
-          </ErrorContext.Provider>
+          </AlertProvider>
         </TooltipContext.Provider>
       </Layout>
     </ApolloProvider>

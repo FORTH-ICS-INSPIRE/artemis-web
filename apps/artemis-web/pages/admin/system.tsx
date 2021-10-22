@@ -22,6 +22,7 @@ const SystemPage = (props) => {
 
   useEffect(() => {
     autoLogout(props);
+    console.log(props)
     if (props.error.length > 0) {
       notify(props.error)
     }

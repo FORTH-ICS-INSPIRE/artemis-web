@@ -86,17 +86,18 @@ const createApolloClient = (setError) => {
       );
     if (networkError) {
       console.log(`[Network error]: ${JSON.stringify(networkError)}`);
-      setError(`GraphQL network error!`)
+      setError.show(`GraphQL network error!`)
     }
   }) : null;
 
   return new ApolloClient({
-    link: from(typeof window !== 'undefined' ? [authLink, errorLink, splitLink] : []),
+    link: from(typeof window !== 'undefined' ? [errorLink, authLink, splitLink] : []),
     cache: new InMemoryCache(),
   });
 };
 
 export const initializeApollo = (initialState = null, setError): any => {
+  console.log('initial')
   const _apolloClient = apolloClient ?? createApolloClient(setError);
   if (initialState) {
     _apolloClient.cache.restore(initialState);

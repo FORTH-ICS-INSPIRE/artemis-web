@@ -14,20 +14,22 @@ import { setup } from '../libs/csrf';
 import { useGraphQl } from '../utils/hooks/use-graphql';
 import { AntSwitch } from '../utils/styles';
 import { autoLogout, GLOBAL_MEDIA_QUERIES, shallMock } from '../utils/token';
+import { useAlert } from "react-alert";
 
 const DashboardPage = (props: any) => {
   const context = React.useContext(ErrorContext);
+  const alert = useAlert();
 
   const notify = (message: React.ReactText) => toast(message);
   console.log('aaaaaa')
   console.log(context)
-  useEffect(() => {
-    autoLogout(props);
-    if (context.error.length > 0) {
-      notify(context.error)
-      // context.setError('')
-    }
-  }, [context]);
+  // useEffect(() => {
+  //   autoLogout(props);
+  //   if (context.error.length > 0) {
+  //     notify(context.error)
+  //     // context.setError('')
+  //   }
+  // }, [context]);
 
   if (shallMock(props.isTesting)) {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
