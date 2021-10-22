@@ -3,20 +3,19 @@ import {
   FormControlLabel,
   FormGroup,
   Grid,
-  Paper,
-  Switch,
+  Paper
 } from '@material-ui/core';
 import Head from 'next/head';
 import React, { useEffect, useState } from 'react';
+import { useAlert } from "react-alert";
 import { useMedia } from 'react-media';
 import { RangePicker } from 'react-minimal-datetime-range';
 import 'react-minimal-datetime-range/lib/react-minimal-datetime-range.min.css';
-import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import NotAuthHOC from '../components/401-hoc/401-hoc';
 import BGPTableComponent from '../components/bgp-table/bgp-table';
 import Tooltip from '../components/tooltip/tooltip';
-import TooltipContext from '../context/tooltip-context';
+import ErrorContext from '../context/error-context';
 import { setup } from '../libs/csrf';
 import { AntSwitch, useStyles } from '../utils/styles';
 import {
@@ -24,13 +23,21 @@ import {
   genTooltip,
   getSimpleDates,
   GLOBAL_MEDIA_QUERIES,
-  shallMock,
+  shallMock
 } from '../utils/token';
 
 const BGPUpdates = (props) => {
-  const context = React.useContext(TooltipContext);
   const _csrf = props._csrf;
-  const notify = (message: React.ReactText) => toast(message);
+
+  const context = React.useContext(ErrorContext);
+  const alert = useAlert();
+
+  useEffect(() => {
+    autoLogout(props);
+    if (context.error.length > 0) {
+      alert.error(context.error)
+    }
+  }, [context]);
 
   if (shallMock(props.isTesting)) {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -40,12 +47,6 @@ const BGPUpdates = (props) => {
 
   const [isLive, setIsLive] = useState(!shallMock(props.isTesting));
 
-  useEffect(() => {
-    autoLogout(props);
-    if (props.error.length > 0) {
-      notify(props.error)
-    }
-  }, [props]);
 
   const classes = useStyles();
 
@@ -105,6 +106,7 @@ const BGPUpdates = (props) => {
                         <AntSwitch
                           onChange={() => {
                             setIsLive(!isLive);
+                            context.setError('');
                           }}
                           size="medium"
                           checked={isLive}
@@ -370,7 +372,6 @@ const BGPUpdates = (props) => {
               </div>
             </div>
           </div>
-          <ToastContainer />
         </div>
       )}
     </>

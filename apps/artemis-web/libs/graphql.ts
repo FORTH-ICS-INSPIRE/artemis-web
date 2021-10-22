@@ -86,7 +86,7 @@ const createApolloClient = (setError) => {
       );
     if (networkError) {
       console.log(`[Network error]: ${JSON.stringify(networkError)}`);
-      setError.show(`GraphQL network error!`)
+      setError(`GraphQL network error!`)
     }
   }) : null;
 
@@ -97,7 +97,6 @@ const createApolloClient = (setError) => {
 };
 
 export const initializeApollo = (initialState = null, setError): any => {
-  console.log('initial')
   const _apolloClient = apolloClient ?? createApolloClient(setError);
   if (initialState) {
     _apolloClient.cache.restore(initialState);

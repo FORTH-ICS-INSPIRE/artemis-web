@@ -6,12 +6,8 @@ import {
   FormGroup,
   Grid,
   IconButton,
-  Paper,
-  Switch,
+  Paper
 } from '@material-ui/core';
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-
 import CloseIcon from '@material-ui/icons/Close';
 import { ContentState, EditorState } from 'draft-js';
 import 'draft-js/dist/Draft.css';
@@ -19,14 +15,14 @@ import DefaultErrorPage from 'next/error';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
+import { useAlert } from "react-alert";
 import { useMedia } from 'react-media';
-import 'react-toastify/dist/ReactToastify.css';
 import AuthHOC from '../components/401-hoc/401-hoc';
 import BGPTableComponent from '../components/bgp-table/bgp-table';
-import DataplaneTableComponent from '../components/dataplane-table/dataplane-table';
 import HijackInfoComponent from '../components/hijack-info/hijack-info';
 import LearnRuleComponent from '../components/learn-rule/learn-rule';
 import Tooltip from '../components/tooltip/tooltip';
+import ErrorContext from '../context/error-context';
 import { setup } from '../libs/csrf';
 import { useGraphQl } from '../utils/hooks/use-graphql';
 import { useHijack } from '../utils/hooks/use-hijack';
@@ -36,7 +32,7 @@ import {
   findStatus,
   GLOBAL_MEDIA_QUERIES,
   shallMock,
-  statuses,
+  statuses
 } from '../utils/token';
 
 const ViewHijackPage = (props) => {
@@ -46,14 +42,16 @@ const ViewHijackPage = (props) => {
     worker.start();
   }
 
-  const notify = (message: React.ReactText) => toast(message);
+  const contextE = React.useContext(ErrorContext);
+  const alert = useAlert();
 
   useEffect(() => {
     autoLogout(props);
-    if (props.error.length > 0) {
-      notify(props.error)
+    if (contextE.error.length > 0) {
+      alert.error(contextE.error)
     }
-  }, [props]);
+  }, [contextE]);
+
 
   const {
     isLive,
@@ -300,7 +298,6 @@ const ViewHijackPage = (props) => {
                 </div>
               </div>
             </div>
-            <ToastContainer />
           </div>
           {/* <div className="row" style={{ marginTop: '20px' }}>
             <div className="col-lg-1" />

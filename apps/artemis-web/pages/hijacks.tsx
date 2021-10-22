@@ -3,20 +3,19 @@ import {
   FormControlLabel,
   FormGroup,
   Grid,
-  Paper,
+  Paper
 } from '@material-ui/core';
 import Head from 'next/head';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
+import { useAlert } from "react-alert";
 import { useMedia } from 'react-media';
 import { RangePicker } from 'react-minimal-datetime-range';
 import 'react-minimal-datetime-range/lib/react-minimal-datetime-range.min.css';
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import AuthHOC from '../components/401-hoc/401-hoc';
 import HijackTableComponent from '../components/hijack-table/hijack-table';
 import Tooltip from '../components/tooltip/tooltip';
-import TooltipContext from '../context/tooltip-context';
+import ErrorContext from '../context/error-context';
 import { setup } from '../libs/csrf';
 import { AntSwitch, useStyles } from '../utils/styles';
 import {
@@ -24,12 +23,19 @@ import {
   genTooltip,
   getSimpleDates,
   GLOBAL_MEDIA_QUERIES,
-  shallMock,
+  shallMock
 } from '../utils/token';
 
 const HijacksPage = (props) => {
+  const contextE = React.useContext(ErrorContext);
+  const alert = useAlert();
 
-  const notify = (message: React.ReactText) => toast(message);
+  useEffect(() => {
+    autoLogout(props);
+    if (contextE.error.length > 0) {
+      alert.error(contextE.error)
+    }
+  }, [contextE]);
 
   if (shallMock(props.isTesting)) {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -39,13 +45,6 @@ const HijacksPage = (props) => {
 
   const [isLive, setIsLive] = useState(!shallMock(props.isTesting));
 
-  useEffect(() => {
-    autoLogout(props);
-    if (props.error.length > 0) {
-      notify(props.error)
-    }
-  }, [props]);
-
   const [filterFrom, setFilterFrom] = useState(0);
   const [filterTo, setFilterTo] = useState(0);
   const [filterStatus, setFilterStatus] = useState('');
@@ -54,9 +53,9 @@ const HijacksPage = (props) => {
   const [selectState, setSelectState] = useState('');
   const [statusButton, setStatusButton] = useState('');
   const [key, setKey] = useState(' ');
-  const context = React.useContext(TooltipContext);
   const [tooltips, setTooltips] = useState({});
   const [filteredHijackData, setFilteredHijackData] = useState([]);
+  const context = React.useContext(TooltipContext);
 
   const classes = useStyles();
   const setStatus = (status) => {
@@ -608,7 +607,6 @@ const HijacksPage = (props) => {
               </div>
             </div>
           </div>
-          <ToastContainer />
         </div>
       )}
     </>

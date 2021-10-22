@@ -1,8 +1,8 @@
 import { FormControlLabel, FormGroup } from '@material-ui/core';
 import Head from 'next/head';
 import React, { useEffect, useState } from 'react';
+import { useAlert } from "react-alert";
 import { useMedia } from 'react-media';
-import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import AuthHOC from '../components/401-hoc/401-hoc';
 import ErrorBoundary from '../components/error-boundary/error-boundary';
@@ -14,22 +14,17 @@ import { setup } from '../libs/csrf';
 import { useGraphQl } from '../utils/hooks/use-graphql';
 import { AntSwitch } from '../utils/styles';
 import { autoLogout, GLOBAL_MEDIA_QUERIES, shallMock } from '../utils/token';
-import { useAlert } from "react-alert";
 
 const DashboardPage = (props: any) => {
   const context = React.useContext(ErrorContext);
   const alert = useAlert();
 
-  const notify = (message: React.ReactText) => toast(message);
-  console.log('aaaaaa')
-  console.log(context)
-  // useEffect(() => {
-  //   autoLogout(props);
-  //   if (context.error.length > 0) {
-  //     notify(context.error)
-  //     // context.setError('')
-  //   }
-  // }, [context]);
+  useEffect(() => {
+    autoLogout(props);
+    if (context.error.length > 0) {
+      alert.error(context.error)
+    }
+  }, [context]);
 
   if (shallMock(props.isTesting)) {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -84,6 +79,7 @@ const DashboardPage = (props: any) => {
                           <AntSwitch
                             onChange={() => {
                               setIsLive(!isLive);
+                              context.setError('');
                             }}
                             size="medium"
                             checked={isLive}
@@ -201,7 +197,6 @@ const DashboardPage = (props: any) => {
                 </div>
               </div>
             )}
-            <ToastContainer />
           </div>
         )}
       </div>

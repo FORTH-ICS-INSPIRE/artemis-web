@@ -101,7 +101,7 @@ export const genTooltip = (
 export const isObjectEmpty = (o: any): boolean => Object.keys(o).length === 0;
 
 const isDevelopment = (): boolean => process.env.NODE_ENV === 'development';
-const isCypress = () : boolean => process.env.TESTING === 'true';
+const isCypress = (): boolean => process.env.TESTING === 'true';
 const isBrowser = (): boolean => typeof window !== 'undefined';
 export const shallMock = (isTesting: boolean): boolean => (isDevelopment() && isBrowser()) || (isTesting && isBrowser());
 
