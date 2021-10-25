@@ -16,6 +16,7 @@ import AuthHOC from '../components/401-hoc/401-hoc';
 import HijackTableComponent from '../components/hijack-table/hijack-table';
 import Tooltip from '../components/tooltip/tooltip';
 import ErrorContext from '../context/error-context';
+import TooltipContext from '../context/tooltip-context';
 import { setup } from '../libs/csrf';
 import { AntSwitch, useStyles } from '../utils/styles';
 import {

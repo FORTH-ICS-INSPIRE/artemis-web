@@ -3,7 +3,6 @@ import Head from 'next/head';
 import React, { useEffect, useState } from 'react';
 import { useAlert } from "react-alert";
 import { useMedia } from 'react-media';
-import 'react-toastify/dist/ReactToastify.css';
 import AuthHOC from '../components/401-hoc/401-hoc';
 import ErrorBoundary from '../components/error-boundary/error-boundary';
 import OngoingHijackTableComponent from '../components/ongoing-hijack-table/ongoing-hijack-table';
