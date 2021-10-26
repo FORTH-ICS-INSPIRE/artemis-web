@@ -31,6 +31,7 @@ import Tooltip from '../tooltip/tooltip';
 import ErrorBoundary from '../error-boundary/error-boundary';
 import { sendData } from '../../utils/fetch-data';
 import ExportJSON from '../export-json/export-json';
+import { useAlert } from "react-alert";
 
 const getExactMatchFilter = (stateValue, fieldName) =>
   textFilter({
@@ -332,6 +333,8 @@ const HijackTableComponent = (props) => {
     rpki_status: '',
     type: '',
   });
+  const alert = useAlert();
+
   const user = props.user;
 
   const exportFilters = {
@@ -659,6 +662,7 @@ const HijackTableComponent = (props) => {
                     dateTo={dateTo}
                     dateFrom={dateFrom}
                     _csrf={_csrf}
+                    alert={alert}
                     {...toolkitprops.csvProps}
                   >
                     Export JSON!!

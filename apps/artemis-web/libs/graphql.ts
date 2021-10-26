@@ -56,6 +56,14 @@ const createApolloClient = (setError) => {
         options: {
           reconnect: true,
           lazy: true,
+          connectionParams: async () => {
+            await requestToken();
+            return {
+              headers: {
+                authorization: `Bearer ${accessToken}`,
+              },
+            };
+          },
         },
       })
       : null;

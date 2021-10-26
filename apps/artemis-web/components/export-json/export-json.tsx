@@ -2,6 +2,7 @@ import { useStyles } from '../../utils/styles';
 import React from 'react';
 import { Button } from '@material-ui/core';
 import { ReactElement } from 'react';
+import { toast } from 'react-toastify';
 
 function getExportCondition(exportFilters, dateField = 'timestamp', type = '') {
   if (
@@ -45,7 +46,7 @@ function getExportCondition(exportFilters, dateField = 'timestamp', type = '') {
 const ExportJSON = (props: any): ReactElement => {
   const _csrf = props._csrf;
   const action = props.action;
-  const { exportFilters, dateField } = props;
+  const { exportFilters, dateField, alert } = props;
   const conditions = getExportCondition(exportFilters, dateField);
 
   const handleClick = async () => {
@@ -69,8 +70,14 @@ const ExportJSON = (props: any): ReactElement => {
       a.download = fileName;
       a.click();
     }
-    const data = await res.json();
-    download(JSON.stringify(data), 'data.json', 'text/json');
+
+    if (res.status === 200) {
+      const data = await res.json();
+      download(JSON.stringify(data), 'data.json', 'text/json');
+    } else {
+      console.log(res);
+      alert.error('Cannot export table data!');
+    }
   };
 
   const classes = useStyles();

@@ -30,6 +30,7 @@ import {
 import ErrorBoundary from '../error-boundary/error-boundary';
 import Tooltip from '../tooltip/tooltip';
 import ExportJSON from '../export-json/export-json';
+import { useAlert } from "react-alert";
 
 const getExpandRow = (expandState, tooltips, setTooltips, context) => {
   return {
@@ -486,6 +487,7 @@ const BGPTableComponent = (props) => {
   const [columnFilter, setColumnFilter] = useState({});
   const dateFrom: string = getISODate(filter);
   const dateTo: string = getISODate(filterTo ?? 0);
+  const alert = useAlert();
 
   const exportFilters = {
     hasColumnFilter: !isObjectEmpty(columnFilter),
@@ -720,6 +722,7 @@ const BGPTableComponent = (props) => {
                     _csrf={_csrf}
                     dateField={'timestamp'}
                     exportFilters={exportFilters}
+                    alert={alert}
                     {...toolkitprops.csvProps}
                   >
                     Export JSON!!

@@ -28,6 +28,7 @@ import {
 import ErrorBoundary from '../error-boundary/error-boundary';
 import ExportJSON from '../export-json/export-json';
 import Tooltip from '../tooltip/tooltip';
+import { useAlert } from "react-alert";
 
 const getColumns = (stateValues) => [
   {
@@ -264,6 +265,7 @@ const OngoingHijackTableComponent = (props: any): ReactElement => {
     rpki_status: '',
     type: '',
   });
+  const alert = useAlert();
 
   const HIJACK_COUNT: any = useGraphQl('hijackCount', {
     isLive: shallSubscribe(props.isLive),
@@ -343,8 +345,8 @@ const OngoingHijackTableComponent = (props: any): ReactElement => {
             key={i}
             value={option.text}
             className={`btn ${currSizePerPage === `${option.page}`
-                ? 'btn-secondary'
-                : 'btn-warning'
+              ? 'btn-secondary'
+              : 'btn-warning'
               }`}
           >
             {option.text}
@@ -468,9 +470,10 @@ const OngoingHijackTableComponent = (props: any): ReactElement => {
                     dateField={'time_last'}
                     exportFilters={exportFilters}
                     _csrf={_csrf}
+                    alert={alert}
                     {...toolkitprops.csvProps}
                   >
-                    Export JSON!!
+                    Export JSON
                   </ExportJSON>
                 </div>
               </div>

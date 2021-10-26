@@ -21,7 +21,7 @@ const DashboardPage = (props: any) => {
   useEffect(() => {
     autoLogout(props);
     if (context.error.length > 0) {
-      alert.error(context.error)
+      alert.error(context.error);
     }
   }, [context]);
 
