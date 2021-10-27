@@ -499,17 +499,19 @@ const BGPTableComponent = (props) => {
 
   let bgpCount = 0;
 
-  const BGP_COUNT: any = useGraphQl(hijackKey ? 'bgpCountByKey' : 'bgpCount', {
-    isLive: props.isLive,
-    callback: (data) => {
-      return;
-    },
-    hasColumnFilter: !isObjectEmpty(columnFilter),
-    columnFilter: columnFilter,
-    hasDateFilter: filter !== 0,
-    dateRange: { dateTo: dateTo, dateFrom: dateFrom },
-    key: hijackKey,
-  });
+  const BGP_COUNT: any =
+    useGraphQl(hijackKey ? 'bgpCountByKey' : 'bgpCount', {
+      isLive: props.isLive,
+      callback: (data) => {
+        return;
+      },
+      alert,
+      hasColumnFilter: !isObjectEmpty(columnFilter),
+      columnFilter: columnFilter,
+      hasDateFilter: filter !== 0,
+      dateRange: { dateTo: dateTo, dateFrom: dateFrom },
+      key: hijackKey,
+    });
 
   bgpCount =
     BGP_COUNT && BGP_COUNT.data ? BGP_COUNT.data.count_data.aggregate.count : 0;

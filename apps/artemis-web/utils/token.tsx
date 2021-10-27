@@ -323,7 +323,7 @@ export const GLOBAL_MEDIA_QUERIES = {
   mobile: '(max-width: 700px)',
 };
 
-export const autoLogout = (props: any): void => {
+export const autoLogout = (props: any, alert: any): void => {
   const events = [
     'load',
     'mousemove',
@@ -375,7 +375,7 @@ export const autoLogout = (props: any): void => {
   }
 
   function warn() {
-    alert(`You will be logged out automatically in ${time / 2} seconds.`);
+    alert.info(`You will be logged out automatically in ${time / 2} seconds.`);
   }
 
   function logout() {

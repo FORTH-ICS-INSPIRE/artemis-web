@@ -1,12 +1,14 @@
 import { Button } from '@material-ui/core';
-import UserCreationComponent from '../../components/user-creation/user-creation';
-import UsersPasswordComponent from '../../components/users-password/users-password';
 import Head from 'next/head';
 import React, { useEffect, useState } from 'react';
+import { useAlert } from "react-alert";
 import AuthHOC from '../../components/401-hoc/401-hoc';
+import UserCreationComponent from '../../components/user-creation/user-creation';
 import UserListComponent from '../../components/user-list/user-list';
-import { autoLogout, formatDate } from '../../utils/token';
+import UsersPasswordComponent from '../../components/users-password/users-password';
+import ErrorContext from '../../context/error-context';
 import { setup } from '../../libs/csrf';
+import { autoLogout, formatDate } from '../../utils/token';
 
 const UserManagementPage = (props) => {
   const user = props.user;
@@ -15,6 +17,8 @@ const UserManagementPage = (props) => {
   const [normalList, setNormalList] = useState([]);
   const [adminList, setAdminList] = useState([]);
   const [errorMsg, setErrorMsg] = useState('');
+  const contextE = React.useContext(ErrorContext);
+  const alert = useAlert();
 
   const approvalRef = React.createRef<HTMLSelectElement>();
   const promoteRef = React.createRef<HTMLSelectElement>();
@@ -45,8 +49,12 @@ const UserManagementPage = (props) => {
     }
   };
 
+
   useEffect(() => {
-    autoLogout(props);
+    autoLogout(props, alert);
+    if (contextE.error.length > 0) {
+      alert.error(contextE.error);
+    }
     (async () => {
       const res = await fetch('/api/userlist', {
         method: 'GET',
@@ -69,7 +77,7 @@ const UserManagementPage = (props) => {
         setErrorMsg((await res.json()).message);
       }
     })();
-  }, [user.email, props]);
+  }, [user.email, props, contextE]);
 
   return (
     <>

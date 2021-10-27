@@ -46,12 +46,11 @@ const ViewHijackPage = (props) => {
   const alert = useAlert();
 
   useEffect(() => {
-    autoLogout(props);
+    autoLogout(props, alert);
     if (contextE.error.length > 0) {
       alert.error(contextE.error)
     }
   }, [contextE]);
-
 
   const {
     isLive,

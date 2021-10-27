@@ -25,6 +25,7 @@ type optionsType = {
   running?: boolean;
   name?: string;
   isTesting?: boolean;
+  alert?: any;
 };
 
 export default optionsType;

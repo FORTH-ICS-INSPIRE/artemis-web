@@ -3,13 +3,14 @@ import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/material.css';
 import Head from 'next/head';
 import React, { useEffect } from 'react';
+import { useAlert } from "react-alert";
 import AuthHOC from '../../components/401-hoc/401-hoc';
 import SystemConfigurationComponent from '../../components/system-configuration/system-configuration';
 import SystemModule from '../../components/system-module/system-module';
+import ErrorContext from '../../context/error-context';
 import { setup } from '../../libs/csrf';
 import { useGraphQl } from '../../utils/hooks/use-graphql';
 import { autoLogout, shallMock } from '../../utils/token';
-import { toast, ToastContainer } from 'react-toastify';
 
 const SystemPage = (props) => {
   if (shallMock(props.isTesting)) {
@@ -18,15 +19,15 @@ const SystemPage = (props) => {
     worker.start();
   }
 
-  const notify = (message: React.ReactText) => toast(message);
+  const contextE = React.useContext(ErrorContext);
+  const alert = useAlert();
 
   useEffect(() => {
-    autoLogout(props);
-    console.log(props)
-    if (props.error.length > 0) {
-      notify(props.error)
+    autoLogout(props, alert);
+    if (contextE.error.length > 0) {
+      alert.error(contextE.error);
     }
-  }, [props]);
+  }, [contextE]);
 
   const user = props.user;
   const STATS_RES: any = useGraphQl('stats', {
@@ -155,7 +156,6 @@ const SystemPage = (props) => {
             />
           </div>
         )}
-        <ToastContainer />
       </div>
     </>
   );

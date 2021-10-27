@@ -3,9 +3,10 @@ import { shallSubscribe } from '../token';
 import optionsType from './use-graphql.d';
 import queryType from '../../libs/graphql.d';
 import { useMutation, useQuery, useSubscription } from '@apollo/client';
+import { useEffect } from 'react';
 
 export function useGraphQl(module: queryType, options: optionsType) {
-  const { isLive, key, limits, callback, isMutation, running, name, isTesting } = options;
+  const { isLive, key, limits, callback, isMutation, running, name, isTesting, alert } = options;
   let vars;
   const varTmp = {};
   const isSubscription = shallSubscribe(isLive);
@@ -58,6 +59,14 @@ export function useGraphQl(module: queryType, options: optionsType) {
       ...vars,
       skip: !isSubscription,
     });
+
+    useEffect(() => {
+      if (!res1.loading && !res1.data && !res1.error) {
+        if (alert) {
+          alert.error('GraphQL cannot connect to server!');
+        }
+      }
+    }, [res1]);
 
     const res2 = useQuery(generator2.getQuery(), {
       ...vars,

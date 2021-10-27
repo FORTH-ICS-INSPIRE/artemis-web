@@ -19,7 +19,7 @@ const DashboardPage = (props: any) => {
   const alert = useAlert();
 
   useEffect(() => {
-    autoLogout(props);
+    autoLogout(props, alert);
     if (context.error.length > 0) {
       alert.error(context.error);
     }

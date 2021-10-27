@@ -52,7 +52,7 @@ const createApolloClient = (setError) => {
   const wsLink =
     typeof window !== 'undefined'
       ? new WebSocketLink({
-        uri: `wss://${window.location.hostname}/api/graphql`,
+        uri: `wss://${window.location.hostname}:4200/api/graphql`,
         options: {
           reconnect: true,
           lazy: true,
