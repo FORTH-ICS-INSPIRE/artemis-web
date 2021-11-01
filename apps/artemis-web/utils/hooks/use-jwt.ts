@@ -16,7 +16,7 @@ export const useFetch = (url, method = "GET") => {
   const [data, setData] = useState('');
 
   useEffect(() => {
-    let mounted = true;
+    const mounted = true;
     if (!url) return;
 
     const fetchData = async () => {
