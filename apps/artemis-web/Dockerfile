@@ -9,7 +9,8 @@ RUN yarn install --frozen-lockfile && yarn cache clean
 COPY . .
 
 RUN apk add --no-cache bash \
- && apk add --no-cache libc6-compat
+ && apk add --no-cache libc6-compat \
+ && apk add --no-cache gcompat
 
 COPY ./apps/artemis-web/scripts/* ./
 
