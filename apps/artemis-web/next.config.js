@@ -8,7 +8,7 @@ module.exports = {
   poweredByHeader: false,
   i18n: { locales: ['en'], defaultLocale: 'en' },
   basePath: process.env.ARTEMIS_WEB_BASE_DIR,
-  swcMinify: true,
+  swcMinify: false,
   async headers() {
     return [
       {
