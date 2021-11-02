@@ -1,4 +1,4 @@
-FROM node:14.17.6-alpine
+FROM node:14.17.6-bullseye-slim
 
 WORKDIR /app
 
@@ -7,10 +7,6 @@ COPY package.json yarn.lock ./
 RUN yarn install --frozen-lockfile && yarn cache clean
 
 COPY . .
-
-RUN apk add --no-cache bash \
- && apk add --no-cache libc6-compat \
- && apk add --no-cache gcompat
 
 COPY ./apps/artemis-web/scripts/* ./
 
