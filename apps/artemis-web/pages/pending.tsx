@@ -24,7 +24,12 @@ const PendingPage = (props) => {
                 <div className="row">
                   <div className="col-lg-3" />
                   <div className="col-lg-7">
-                    <Image alt="" width='256' height="256" src="/pending_approval.png" />
+                    <Image
+                      alt=""
+                      width="256"
+                      height="256"
+                      src="/pending_approval.png"
+                    />
                   </div>
                 </div>
                 <div className="row" style={{ marginTop: '20px' }}>
@@ -53,5 +58,11 @@ const PendingPage = (props) => {
 export default AuthHOC(PendingPage, ['pending']);
 
 export const getServerSideProps = setup(async (req, res, csrftoken) => {
-  return { props: { _csrf: csrftoken, _inactivity_timeout: process.env.INACTIVITY_TIMEOUT, system_version: process.env.SYSTEM_VERSION } };
+  return {
+    props: {
+      _csrf: csrftoken,
+      _inactivity_timeout: process.env.INACTIVITY_TIMEOUT,
+      system_version: process.env.SYSTEM_VERSION,
+    },
+  };
 });

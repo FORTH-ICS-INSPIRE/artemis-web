@@ -45,7 +45,9 @@ const handler = nc()
         role: 'pending',
         token: '',
       })
-      .then(({ insertedId }) => { return insertedId });
+      .then(({ insertedId }) => {
+        return insertedId;
+      });
 
     const user = {
       _id: nanoid(12),

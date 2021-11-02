@@ -53,10 +53,11 @@ describe('HijackInfoComponent', () => {
     const promise = Promise.resolve();
     jest.fn(() => promise);
 
-
-    fetch.mockResponse(JSON.stringify({
-      "recordsTotal": 0,
-    }));
+    fetch.mockResponse(
+      JSON.stringify({
+        recordsTotal: 0,
+      })
+    );
 
     const element = shallow(<HijackInfoComponent {...mock} />);
     // const element = screen.getByText(/Hijack Information/i);

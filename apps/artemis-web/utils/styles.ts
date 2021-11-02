@@ -3,7 +3,7 @@ import {
   makeStyles,
   Theme,
   withStyles,
-  createTheme
+  createTheme,
 } from '@material-ui/core';
 
 import {

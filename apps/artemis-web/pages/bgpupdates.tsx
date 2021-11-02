@@ -78,7 +78,7 @@ const BGPUpdates = (props) => {
       </Head>
       {user && (
         <Media queries={GLOBAL_MEDIA_QUERIES}>
-          {matches => (
+          {(matches) => (
             <div className="container overview col-lg-12">
               <div className="row">
                 <div className="col-lg-1" />
@@ -377,5 +377,12 @@ const BGPUpdates = (props) => {
 export default NotAuthHOC(BGPUpdates, ['admin', 'user']);
 
 export const getServerSideProps = setup(async (req, res, csrftoken) => {
-  return { props: { _csrf: csrftoken, isTesting: process.env.TESTING === 'true', _inactivity_timeout: process.env.INACTIVITY_TIMEOUT, system_version: process.env.SYSTEM_VERSION } };
+  return {
+    props: {
+      _csrf: csrftoken,
+      isTesting: process.env.TESTING === 'true',
+      _inactivity_timeout: process.env.INACTIVITY_TIMEOUT,
+      system_version: process.env.SYSTEM_VERSION,
+    },
+  };
 });

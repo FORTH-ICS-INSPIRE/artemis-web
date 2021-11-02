@@ -70,8 +70,8 @@ function __awaiter(thisArg, _arguments, P, generator) {
     return value instanceof P
       ? value
       : new P(function (resolve) {
-        resolve(value);
-      });
+          resolve(value);
+        });
   }
   return new (P || (P = Promise))(function (resolve, reject) {
     function fulfilled(value) {
@@ -99,14 +99,14 @@ function __awaiter(thisArg, _arguments, P, generator) {
 
 function __generator(thisArg, body) {
   var _ = {
-    label: 0,
-    sent: function () {
-      if (t[0] & 1) throw t[1];
-      return t[1];
+      label: 0,
+      sent: function () {
+        if (t[0] & 1) throw t[1];
+        return t[1];
+      },
+      trys: [],
+      ops: [],
     },
-    trys: [],
-    ops: [],
-  },
     f,
     y,
     t,
@@ -114,9 +114,9 @@ function __generator(thisArg, body) {
   return (
     (g = { next: verb(0), throw: verb(1), return: verb(2) }),
     typeof Symbol === 'function' &&
-    (g[Symbol.iterator] = function () {
-      return this;
-    }),
+      (g[Symbol.iterator] = function () {
+        return this;
+      }),
     g
   );
   function verb(n) {
@@ -130,13 +130,13 @@ function __generator(thisArg, body) {
       try {
         if (
           ((f = 1),
-            y &&
+          y &&
             (t =
               op[0] & 2
                 ? y['return']
                 : op[0]
-                  ? y['throw'] || ((t = y['return']) && t.call(y), 0)
-                  : y.next) &&
+                ? y['throw'] || ((t = y['return']) && t.call(y), 0)
+                : y.next) &&
             !(t = t.call(y, op[1])).done)
         )
           return t;
@@ -200,14 +200,14 @@ var commonjsGlobal =
   typeof globalThis !== 'undefined'
     ? globalThis
     : typeof window !== 'undefined'
-      ? window
-      : typeof global !== 'undefined'
-        ? global
-        : // eslint-disable-next-line no-restricted-globals
-        typeof self !== 'undefined'
-          ? // eslint-disable-next-line no-restricted-globals
-          self
-          : {};
+    ? window
+    : typeof global !== 'undefined'
+    ? global
+    : // eslint-disable-next-line no-restricted-globals
+    typeof self !== 'undefined'
+    ? // eslint-disable-next-line no-restricted-globals
+      self
+    : {};
 
 function createCommonjsModule(fn, basedir, module) {
   return (
@@ -1495,7 +1495,7 @@ var rndm = createCommonjsModule(function (module, exports) {
 
 var generateAttempts =
   crypto__default['default'].randomBytes ===
-    crypto__default['default'].pseudoRandomBytes
+  crypto__default['default'].pseudoRandomBytes
     ? 1
     : 3;
 

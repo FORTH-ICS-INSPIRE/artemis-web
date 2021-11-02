@@ -207,8 +207,14 @@ function handleData(data, tooltips, setTooltips, context, offset) {
     hijacks = HIJACK_DATA.map((row, i) => {
       return {
         id: i,
-        time_last: formatDate(new Date(row.time_last), Math.abs(new Date().getTimezoneOffset() / 60)),
-        time_detected: formatDate(new Date(row.time_detected), Math.abs(new Date().getTimezoneOffset() / 60)),
+        time_last: formatDate(
+          new Date(row.time_last),
+          Math.abs(new Date().getTimezoneOffset() / 60)
+        ),
+        time_detected: formatDate(
+          new Date(row.time_detected),
+          Math.abs(new Date().getTimezoneOffset() / 60)
+        ),
         prefix: row.prefix,
         configured_prefix: row.configured_prefix,
         type: row.type,
@@ -343,10 +349,11 @@ const OngoingHijackTableComponent = (props: any): ReactElement => {
           <option
             key={i}
             value={option.text}
-            className={`btn ${currSizePerPage === `${option.page}`
-              ? 'btn-secondary'
-              : 'btn-warning'
-              }`}
+            className={`btn ${
+              currSizePerPage === `${option.page}`
+                ? 'btn-secondary'
+                : 'btn-warning'
+            }`}
           >
             {option.text}
           </option>

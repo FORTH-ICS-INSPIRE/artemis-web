@@ -85,8 +85,9 @@ const ViewHijackPage = (props) => {
 
   useGraphQl('hijackByKey', {
     callback: (data) => {
-
-      const hijacks = data.subscriptionData ? data.subscriptionData.data.view_hijacks : data.view_hijacks;
+      const hijacks = data.subscriptionData
+        ? data.subscriptionData.data.view_hijacks
+        : data.view_hijacks;
       const hijackExists = hijacks.length !== 0;
 
       if (!hijackExists) {
@@ -128,10 +129,10 @@ const ViewHijackPage = (props) => {
       </Head>
       {user && hijackExists && (
         <Media queries={GLOBAL_MEDIA_QUERIES}>
-          {matches => (
+          {(matches) => (
             <div
               className="container overview col-lg-12"
-            // style={{ paddingTop: '120px' }}
+              // style={{ paddingTop: '120px' }}
             >
               <div className="row">
                 <div className="col-lg-1" />
@@ -325,5 +326,12 @@ const ViewHijackPage = (props) => {
 export default AuthHOC(ViewHijackPage, ['admin', 'user']);
 
 export const getServerSideProps = setup(async (req, res, csrftoken) => {
-  return { props: { _csrf: csrftoken, isTesting: process.env.TESTING === 'true', _inactivity_timeout: process.env.INACTIVITY_TIMEOUT, system_version: process.env.SYSTEM_VERSION } };
+  return {
+    props: {
+      _csrf: csrftoken,
+      isTesting: process.env.TESTING === 'true',
+      _inactivity_timeout: process.env.INACTIVITY_TIMEOUT,
+      system_version: process.env.SYSTEM_VERSION,
+    },
+  };
 });

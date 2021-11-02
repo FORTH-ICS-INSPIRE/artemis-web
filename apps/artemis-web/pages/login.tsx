@@ -36,5 +36,7 @@ const LoginPage = (props: any): any => {
 export default LoginPage;
 
 export const getServerSideProps = setup(async (req, res, csrftoken) => {
-  return { props: { _csrf: csrftoken, system_version: process.env.SYSTEM_VERSION } };
+  return {
+    props: { _csrf: csrftoken, system_version: process.env.SYSTEM_VERSION },
+  };
 });

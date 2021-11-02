@@ -52,7 +52,7 @@ const DashboardPage = (props: any) => {
       <div id="page-container">
         {user && (
           <Media queries={GLOBAL_MEDIA_QUERIES}>
-            {matches => (
+            {(matches) => (
               <div id="content-wrap" style={{ paddingBottom: '5rem' }}>
                 <div className="row">
                   <div className="col-lg-1" />
@@ -92,14 +92,14 @@ const DashboardPage = (props: any) => {
                     <div className="card">
                       <div className="card-header">Activity</div>
                       <div className="card-body">
-                        Welcome back <b>{user && user.email}</b>, your last login
-                        was at{' '}
+                        Welcome back <b>{user && user.email}</b>, your last
+                        login was at{' '}
                         <b>
                           (
                           {user &&
                             new Date(user.lastLogin).toLocaleDateString() +
-                            ' ' +
-                            new Date(user.lastLogin).toLocaleTimeString()}
+                              ' ' +
+                              new Date(user.lastLogin).toLocaleTimeString()}
                           )
                         </b>
                         . You are {user && user.role}.
@@ -114,21 +114,34 @@ const DashboardPage = (props: any) => {
                       <div className="card-header">
                         Ongoing, Non-Dormant Hijacks{' '}
                       </div>
-                      <div className="card-body" style={{ textAlign: 'center' }}>
+                      <div
+                        className="card-body"
+                        style={{ textAlign: 'center' }}
+                      >
                         {' '}
-                        <OngoingHijackTableComponent {...props} isLive={isLive} />
+                        <OngoingHijackTableComponent
+                          {...props}
+                          isLive={isLive}
+                        />
                       </div>
                     </div>
                     <span style={{ float: 'right', marginTop: '15px' }}>
                       Times are shown in your local time zone{' '}
-                      <b>GMT{new Date().getTimezoneOffset() > 0 ? '-' : '+'}{Math.abs(new Date().getTimezoneOffset() / 60)} ({Intl.DateTimeFormat().resolvedOptions().timeZone}).</b>
+                      <b>
+                        GMT{new Date().getTimezoneOffset() > 0 ? '-' : '+'}
+                        {Math.abs(new Date().getTimezoneOffset() / 60)} (
+                        {Intl.DateTimeFormat().resolvedOptions().timeZone}).
+                      </b>
                     </span>
                   </div>
                   {!matches.pc && (
                     <div className="col-lg-4">
                       <div className="card">
                         <div className="card-header"> System Status </div>
-                        <div className="card-body" style={{ textAlign: 'center' }}>
+                        <div
+                          className="card-body"
+                          style={{ textAlign: 'center' }}
+                        >
                           <ErrorBoundary
                             containsData={STATS_DATA}
                             noDataMessage={'No modules found.'}
@@ -141,7 +154,10 @@ const DashboardPage = (props: any) => {
                       </div>
                       <div className="card" style={{ marginTop: '20px' }}>
                         <div className="card-header"> Statistics </div>
-                        <div className="card-body" style={{ textAlign: 'center' }}>
+                        <div
+                          className="card-body"
+                          style={{ textAlign: 'center' }}
+                        >
                           <ErrorBoundary
                             containsData={INDEX_DATA}
                             noDataMessage={'No statistics found.'}
@@ -161,7 +177,10 @@ const DashboardPage = (props: any) => {
                     <div className="col-lg-5">
                       <div className="card">
                         <div className="card-header"> System Status </div>
-                        <div className="card-body" style={{ textAlign: 'center' }}>
+                        <div
+                          className="card-body"
+                          style={{ textAlign: 'center' }}
+                        >
                           <ErrorBoundary
                             containsData={STATS_DATA}
                             noDataMessage={'No modules found.'}
@@ -176,7 +195,10 @@ const DashboardPage = (props: any) => {
                     <div className="col-lg-5">
                       <div className="card">
                         <div className="card-header"> Statistics </div>
-                        <div className="card-body" style={{ textAlign: 'center' }}>
+                        <div
+                          className="card-body"
+                          style={{ textAlign: 'center' }}
+                        >
                           <ErrorBoundary
                             containsData={INDEX_DATA}
                             noDataMessage={'No statistics found.'}
@@ -203,5 +225,12 @@ const DashboardPage = (props: any) => {
 export default AuthHOC(DashboardPage, ['admin', 'user']);
 
 export const getServerSideProps = setup(async (req, res, csrftoken) => {
-  return { props: { _csrf: csrftoken, isTesting: process.env.TESTING === 'true', _inactivity_timeout: process.env.INACTIVITY_TIMEOUT, system_version: process.env.SYSTEM_VERSION } };
+  return {
+    props: {
+      _csrf: csrftoken,
+      isTesting: process.env.TESTING === 'true',
+      _inactivity_timeout: process.env.INACTIVITY_TIMEOUT,
+      system_version: process.env.SYSTEM_VERSION,
+    },
+  };
 });

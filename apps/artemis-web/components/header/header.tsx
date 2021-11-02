@@ -10,7 +10,7 @@ const Header = (props) => {
 
   return (
     <Media queries={GLOBAL_MEDIA_QUERIES}>
-      {matches => (
+      {(matches) => (
         <nav
           className="navbar navbar-expand-md navbar-dark fixed-top bg-dark"
           style={{
@@ -18,14 +18,11 @@ const Header = (props) => {
             padding: matches.mobile ? '.5rem 0rem' : '.5rem 1rem',
           }}
         >
-
-          {
-            matches.mobile ? (
-              <MobileHeader user={user} {...props} />
-            ) : (
-              <DesktopHeader user={user} {...props} />
-            )
-          }
+          {matches.mobile ? (
+            <MobileHeader user={user} {...props} />
+          ) : (
+            <DesktopHeader user={user} {...props} />
+          )}
         </nav>
       )}
     </Media>

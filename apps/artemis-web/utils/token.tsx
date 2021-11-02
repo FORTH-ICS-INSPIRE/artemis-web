@@ -49,8 +49,12 @@ export const formatDate = (date: Date, incr = 0): string => {
   const parsedDate = isToday
     ? 'Today'
     : isYesterday
-      ? 'Yesterday'
-      : newDate.getFullYear() + '-' + (newDate.getMonth() + 1) + '-' + newDate.getDate();
+    ? 'Yesterday'
+    : newDate.getFullYear() +
+      '-' +
+      (newDate.getMonth() + 1) +
+      '-' +
+      newDate.getDate();
 
   return (
     parsedDate +
@@ -104,7 +108,8 @@ export const isObjectEmpty = (o: any): boolean => Object.keys(o).length === 0;
 const isDevelopment = (): boolean => process.env.NODE_ENV === 'development';
 const isCypress = (): boolean => process.env.TESTING === 'true';
 const isBrowser = (): boolean => typeof window !== 'undefined';
-export const shallMock = (isTesting: boolean): boolean => (isDevelopment() && isBrowser()) || (isTesting && isBrowser());
+export const shallMock = (isTesting: boolean): boolean =>
+  (isDevelopment() && isBrowser()) || (isTesting && isBrowser());
 
 export const shallSubscribe = (isLive: boolean): boolean => isLive;
 
@@ -292,7 +297,10 @@ export const expandedColumnHeaderComponent = (): ReactElement<any, any> => {
   );
 };
 
-export const exportHijack = async (hijack_key: string, _csrf: string): Promise<void> => {
+export const exportHijack = async (
+  hijack_key: string,
+  _csrf: string
+): Promise<void> => {
   const res = await fetch('/api/download_tables', {
     method: 'POST',
     credentials: 'include',

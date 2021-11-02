@@ -28,7 +28,6 @@ import {
 } from '../utils/token';
 
 const HijacksPage = (props) => {
-
   if (shallMock(props.isTesting)) {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const { worker } = require('../utils/mock-sw/browser');
@@ -146,19 +145,14 @@ const HijacksPage = (props) => {
       <div className="col-lg-1" />
       <div className="col-lg-10">
         <div className="card">
-          <div
-            className="card-header"
-            style={{ backgroundColor: 'white' }}
-          >
+          <div className="card-header" style={{ backgroundColor: 'white' }}>
             <div className="row">
               <div className="col-lg-6">
                 <div className="row">
                   <div className="col-lg-12">
                     <Button
                       className={
-                        0 === filterButton
-                          ? 'selectedButton'
-                          : 'defaultButton'
+                        0 === filterButton ? 'selectedButton' : 'defaultButton'
                       }
                       style={{ marginRight: '5px' }}
                       variant="outlined"
@@ -181,9 +175,7 @@ const HijacksPage = (props) => {
                     </Button>
                     <Button
                       className={
-                        1 === filterButton
-                          ? 'selectedButton'
-                          : 'defaultButton'
+                        1 === filterButton ? 'selectedButton' : 'defaultButton'
                       }
                       style={{ marginRight: '5px' }}
                       variant="outlined"
@@ -206,9 +198,7 @@ const HijacksPage = (props) => {
                     </Button>
                     <Button
                       className={
-                        2 === filterButton
-                          ? 'selectedButton'
-                          : 'defaultButton'
+                        2 === filterButton ? 'selectedButton' : 'defaultButton'
                       }
                       style={{ marginRight: '5px' }}
                       variant="outlined"
@@ -231,9 +221,7 @@ const HijacksPage = (props) => {
                     </Button>
                     <Button
                       className={
-                        3 === filterButton
-                          ? 'selectedButton'
-                          : 'defaultButton'
+                        3 === filterButton ? 'selectedButton' : 'defaultButton'
                       }
                       variant="outlined"
                       style={{ marginRight: '5px' }}
@@ -256,9 +244,7 @@ const HijacksPage = (props) => {
                     </Button>
                     <Button
                       className={
-                        4 === filterButton
-                          ? 'selectedButton'
-                          : 'defaultButton'
+                        4 === filterButton ? 'selectedButton' : 'defaultButton'
                       }
                       style={{ marginRight: '5px' }}
                       variant="outlined"
@@ -306,12 +292,10 @@ const HijacksPage = (props) => {
                         setDateTime1(res[0]);
                         setDateTime2(res[1]);
                         const difference1: number =
-                          (new Date().getTime() -
-                            new Date(res[0]).getTime()) /
+                          (new Date().getTime() - new Date(res[0]).getTime()) /
                           36e5;
                         const difference2: number =
-                          (new Date().getTime() -
-                            new Date(res[1]).getTime()) /
+                          (new Date().getTime() - new Date(res[1]).getTime()) /
                           36e5;
                         setFilterFrom(difference1);
                         setFilterTo(difference2);
@@ -327,10 +311,7 @@ const HijacksPage = (props) => {
                 </div>
               </div>
               <div className="col-lg-5 offset-lg-1">
-                <div
-                  className="form-group row"
-                  style={{ textAlign: 'right' }}
-                >
+                <div className="form-group row" style={{ textAlign: 'right' }}>
                   <div className="col-sm-10">
                     <input
                       onChange={(event) => setKey(event.target.value)}
@@ -548,7 +529,6 @@ const HijacksPage = (props) => {
     </div>
   );
 
-
   return (
     <>
       <Head>
@@ -556,10 +536,10 @@ const HijacksPage = (props) => {
       </Head>
       {user && (
         <Media queries={GLOBAL_MEDIA_QUERIES}>
-          {matches => (
+          {(matches) => (
             <div
               className="container overview col-lg-12"
-            // style={{ paddingTop: '120px' }}
+              // style={{ paddingTop: '120px' }}
             >
               <div className="row">
                 <div className="col-lg-1" />
@@ -605,15 +585,17 @@ const HijacksPage = (props) => {
                     >
                       <span style={{ float: 'right', marginTop: '15px' }}>
                         Times are shown in your local time zone{' '}
-                        <b>GMT{new Date().getTimezoneOffset() > 0 ? '-' : '+'}{Math.abs(new Date().getTimezoneOffset() / 60)} ({Intl.DateTimeFormat().resolvedOptions().timeZone}).</b>
+                        <b>
+                          GMT{new Date().getTimezoneOffset() > 0 ? '-' : '+'}
+                          {Math.abs(new Date().getTimezoneOffset() / 60)} (
+                          {Intl.DateTimeFormat().resolvedOptions().timeZone}).
+                        </b>
                       </span>
                     </div>
                   </div>
                 </div>
               </div>
-              {
-                getAdditionalActions()
-              }
+              {getAdditionalActions()}
               <ToastContainer />
             </div>
           )}
@@ -626,5 +608,12 @@ const HijacksPage = (props) => {
 export default AuthHOC(HijacksPage, ['admin', 'user']);
 
 export const getServerSideProps = setup(async (req, res, csrftoken) => {
-  return { props: { _csrf: csrftoken, isTesting: process.env.TESTING === 'true', _inactivity_timeout: process.env.INACTIVITY_TIMEOUT, system_version: process.env.SYSTEM_VERSION } };
+  return {
+    props: {
+      _csrf: csrftoken,
+      isTesting: process.env.TESTING === 'true',
+      _inactivity_timeout: process.env.INACTIVITY_TIMEOUT,
+      system_version: process.env.SYSTEM_VERSION,
+    },
+  };
 });

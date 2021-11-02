@@ -27,8 +27,8 @@ jobs:
       ldap:
         image: rroemhild/test-openldap
         ports:
-          - "389:389"
-          - "636:636"
+          - '389:389'
+          - '636:636'
 
     steps:
       - uses: actions/checkout@v2
@@ -38,7 +38,7 @@ jobs:
         env:
           MONGODB_HOST: mongodb
           MONGODB_PORT: ${{ job.services.mongodb.ports[27017] }}
-      - name: "Upload Artifact"
+      - name: 'Upload Artifact'
         if: failure()
         uses: actions/upload-artifact@v2
         with:

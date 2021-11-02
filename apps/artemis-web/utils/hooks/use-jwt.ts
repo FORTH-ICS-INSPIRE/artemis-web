@@ -11,7 +11,7 @@ export function useJWT() {
 
 const cache = {};
 
-export const useFetch = (url, method = "GET") => {
+export const useFetch = (url, method = 'GET') => {
   const [status, setStatus] = useState('idle');
   const [data, setData] = useState('');
 
@@ -27,7 +27,7 @@ export const useFetch = (url, method = "GET") => {
         setStatus('fetched');
       } else {
         const response = await fetch(url, {
-          method: method
+          method: method,
         });
         const body = await response.text();
         const data = body.length > 0 ? body : null;

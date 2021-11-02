@@ -1,13 +1,12 @@
 import nc from 'next-connect';
 import passport from '../libs/passport';
 import database from './database';
-import nextSession from "next-session";
+import nextSession from 'next-session';
 const getSession = nextSession({
   cookie: {
     maxAge: parseInt(process.env.SESSION_TIMEOUT, 10),
     secure:
-      process.env.NODE_ENV === 'production' &&
-      process.env.TESTING === 'false',
+      process.env.NODE_ENV === 'production' && process.env.TESTING === 'false',
   },
 });
 
@@ -22,9 +21,7 @@ async function session(req, res, next) {
 
 const auth = nc()
   .use(database)
-  .use(
-    session
-  )
+  .use(session)
   .use(passport.initialize())
   .use(passport.session())
   .use(passport.authenticate('remember-me'));
