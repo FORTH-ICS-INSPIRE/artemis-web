@@ -80,7 +80,7 @@ class HijackInfoComponent extends Component<any, any> {
 
       if (json.recordsTotal > 0) {
         json.data.forEach(event => {
-          if (Math.abs(new Date(hijackDataState["time_started"]).getTime() - Math.abs(parseInt(event.view_ts) * 1000)) < 3600000) {
+          if (Math.abs(new Date(hijackDataState["time_started"]).getTime() - Math.abs(parseInt(event.view_ts, 10) * 1000)) < 3600000) {
             eventData.push(event);
           }
         });
