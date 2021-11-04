@@ -8,7 +8,7 @@ module.exports = {
   poweredByHeader: false,
   i18n: { locales: ['en'], defaultLocale: 'en' },
   basePath: process.env.ARTEMIS_WEB_BASE_DIR,
-  swcMinify: false,
+  swcMinify: true,
   async headers() {
     return [
       {
@@ -45,11 +45,11 @@ module.exports = {
               objectSrc: "'none",
             },
           },
-          // forceHTTPSRedirect: [
-          //   true,
-          //   { maxAge: 60 * 60 * 24 * 4, includeSubDomains: true },
-          // ],
-          // referrerPolicy: 'strict-origin-when-cross-origin',
+          forceHTTPSRedirect: [
+            true,
+            { maxAge: 60 * 60 * 24 * 4, includeSubDomains: true },
+          ],
+          referrerPolicy: 'strict-origin-when-cross-origin',
         }),
       },
     ];
