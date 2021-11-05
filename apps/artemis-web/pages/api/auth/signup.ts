@@ -33,10 +33,11 @@ const handler = nc()
       return;
     }
     const hashedPassword = await argon2.hash(password);
+    const id = nanoid(12);
     const user_id = await req.db
       .collection('users')
       .insertOne({
-        _id: nanoid(12),
+        _id: id,
         email,
         password: hashedPassword,
         name,
@@ -50,7 +51,7 @@ const handler = nc()
       });
 
     const user = {
-      _id: nanoid(12),
+      _id: id,
       email,
       password: hashedPassword,
       name,
