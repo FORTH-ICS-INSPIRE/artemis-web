@@ -4,7 +4,7 @@ import { ApolloProvider } from '@apollo/client';
 import { useApollo } from '../libs/graphql';
 import Layout from '../components/layout/layout';
 import TooltipContext from '../context/tooltip-context';
-import { KBarProvider } from "kbar";
+import { KBarAnimator, KBarPortal, KBarPositioner, KBarProvider, KBarSearch } from "kbar";
 
 const useStateWithLocalStorage = (localStorageKey) => {
   const [value, setValue] = useState(
@@ -49,7 +49,15 @@ function MyApp({ Component, pageProps }) {
   return (
     <ApolloProvider client={client}>
       <KBarProvider actions={actions}>
-        <Layout {...pageProps}>
+        <KBarPortal> // Renders the content outside the root node
+          <KBarPositioner> // Centers the content
+            <KBarAnimator> // Handles the show/hide and height animations
+              <KBarSearch /> // Search input
+              {/* <KBarResults /> // Results renderer */}
+            </KBarAnimator>
+          </KBarPositioner>
+        </KBarPortal>
+        <Layout>
           <TooltipContext.Provider
             value={{ tooltips: tooltips, setTooltips: setTooltips }}
           >
@@ -57,6 +65,7 @@ function MyApp({ Component, pageProps }) {
           </TooltipContext.Provider>
         </Layout>
       </KBarProvider>
+
     </ApolloProvider>
   );
 }
