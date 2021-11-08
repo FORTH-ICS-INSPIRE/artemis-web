@@ -93,8 +93,8 @@ function MyApp({ Component, pageProps }) {
 
   configure({
     ignoreTags: ['input', 'select', 'textarea'],
-    ignoreEventsCondition: function () {
-    }
+    // ignoreEventsCondition: function () {
+    // }
   });
 
   return (
