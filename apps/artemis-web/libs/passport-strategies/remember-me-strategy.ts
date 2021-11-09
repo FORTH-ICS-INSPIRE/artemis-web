@@ -7,8 +7,14 @@ const client = new MongoClient(MONGODB_URI, {});
 
 let dbInstance: Db = null;
 
-client.connect();
-dbInstance = client.db(process.env.MONGODB_NAME);
+(async () => {
+  try {
+    await client.connect();
+    dbInstance = client.db(process.env.MONGODB_NAME);
+  } catch (err) {
+    console.error(err);
+  }
+})();
 
 export const RememberMeStrategy = new Strategy(
   (token, done) => {
