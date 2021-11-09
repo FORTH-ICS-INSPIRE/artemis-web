@@ -45,7 +45,7 @@ describe('artemis-web', () => {
   });
 
   it('[LDAP] admin visits User Management Page', () => {
-    cy.get('body').type('{alt+m}');
+    cy.get('input').type('{alt+m}');
 
     cy.waitFor('h1');
     cy.get('h1').should('have.text', 'User Management');
@@ -70,7 +70,7 @@ describe('artemis-web', () => {
   });
 
   it('change password', () => {
-    cy.get('body').type('{alt+p}');
+    cy.get('input').type('{alt+p}');
 
     cy.get('h1').should('have.text', 'Change Password');
     cy.typeChangePass({ old_pass: newPass, new_pass: "1234" });
