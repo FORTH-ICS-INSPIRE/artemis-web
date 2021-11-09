@@ -38,7 +38,7 @@ const AuthHOC = (WrappedComponent, ACL = []) => {
         <GlobalHotKeys keyMap={keyMap} handlers={handlers(toggleIsOpen)}>
           <WrappedComponent {...props} user={user}></WrappedComponent>
           <CommandLineModal
-            commands={commands}
+            commands={commands(user.role)}
             isOpen={cmdLineModal}
             toggleIsModalOpen={toggleIsOpen}
             title={'Navigate with the keyboard'}
