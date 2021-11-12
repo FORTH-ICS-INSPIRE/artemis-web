@@ -6,8 +6,7 @@ import React, { useState } from 'react';
 import { GlobalHotKeys } from 'react-hotkeys';
 import { commands, handlers, keyMap } from '../../utils/power-actions';
 import { OfflineBoltOutlined } from '@material-ui/icons';
-import CommandLineModal from 'react-super-cmd';
-
+import CommandLineModal from "react-super-cmd";
 
 const AuthHOC = (WrappedComponent, ACL = []) => {
   const Wrapped = (props) => {
