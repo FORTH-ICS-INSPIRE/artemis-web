@@ -1,6 +1,7 @@
 import React, { ReactElement } from 'react';
 import ReactTooltip from 'react-tooltip';
 import { Comparator, textFilter } from 'react-bootstrap-table2-filter';
+import Image from 'next/image';
 
 export const getRandomString = (len: number): string => {
   const buf = [],
@@ -49,7 +50,11 @@ export const formatDate = (date: Date, incr = 0): string => {
     ? 'Today'
     : isYesterday
       ? 'Yesterday'
-      : newDate.getFullYear() + '-' + (newDate.getMonth() + 1) + '-' + newDate.getDate();
+      : newDate.getFullYear() +
+      '-' +
+      (newDate.getMonth() + 1) +
+      '-' +
+      newDate.getDate();
 
   return (
     parsedDate +
@@ -101,9 +106,10 @@ export const genTooltip = (
 export const isObjectEmpty = (o: any): boolean => Object.keys(o).length === 0;
 
 const isDevelopment = (): boolean => process.env.NODE_ENV === 'development';
-const isCypress = () : boolean => process.env.TESTING === 'true';
+const isCypress = (): boolean => process.env.TESTING === 'true';
 const isBrowser = (): boolean => typeof window !== 'undefined';
-export const shallMock = (isTesting: boolean): boolean => (isDevelopment() && isBrowser()) || (isTesting && isBrowser());
+export const shallMock = (isTesting: boolean): boolean =>
+  (isDevelopment() && isBrowser()) || (isTesting && isBrowser());
 
 export const shallSubscribe = (isLive: boolean): boolean => isLive;
 
@@ -226,7 +232,7 @@ export const getSortCaret = (order: string): any => {
   );
 };
 
-export const getWithdrawn = (hijackDataState) =>
+export const getWithdrawn = (hijackDataState: any): any =>
   hijackDataState ? hijackDataState.peers_withdrawn ?? [] : [];
 
 export const getSeen = (hijackDataState: any): any =>
@@ -270,9 +276,9 @@ export const expandColumnComponent = ({
 
   if (expandable) {
     content = expanded ? (
-      <img alt="" src="details_close.png" />
+      <img alt="" src="/details_close.png" />
     ) : (
-      <img alt="" src="details_open.png" />
+      <img alt="" src="/details_open.png" />
     );
   }
 
@@ -291,7 +297,10 @@ export const expandedColumnHeaderComponent = (): ReactElement<any, any> => {
   );
 };
 
-export const exportHijack = async (hijack_key: string, _csrf: string): Promise<void> => {
+export const exportHijack = async (
+  hijack_key: string,
+  _csrf: string
+): Promise<void> => {
   const res = await fetch('/api/download_tables', {
     method: 'POST',
     credentials: 'include',

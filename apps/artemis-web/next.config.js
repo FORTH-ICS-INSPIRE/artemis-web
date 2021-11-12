@@ -1,12 +1,14 @@
 // /next.config.js
+require('dotenv').config({
+  path: `.env`,
+});
 const { createSecureHeaders } = require('next-secure-headers');
 
 module.exports = {
-  future: {
-    webpack5: false,
-  },
   poweredByHeader: false,
   i18n: { locales: ['en'], defaultLocale: 'en' },
+  basePath: process.env.ARTEMIS_WEB_BASE_DIR,
+  swcMinify: true,
   async headers() {
     return [
       {
@@ -39,7 +41,7 @@ module.exports = {
                 'https://demo.artemis-pc.duckdns.org/api/graphql',
               ],
               frameAncestors: "'none",
-              imgSrc: ["'self'", 'data:*'],
+              imgSrc: ["'self'", 'data:'],
               objectSrc: "'none",
             },
           },

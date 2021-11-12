@@ -2145,7 +2145,6 @@ var csrf = function (handler, _a) {
           if (!tokenFromCookieUnsigned) {
             throw new HttpError(403, csrfErrorMessage);
           }
-
           // verify CSRF token
           if (!tokens.verify(csrfSecret, tokenFromCookieUnsigned)) {
             throw new HttpError(403, csrfErrorMessage);
@@ -2192,9 +2191,9 @@ var setup = function (handler, _a) {
         res = isApi
           ? args[1] // (req, *res*)
           : args[0].res;
+
         reqCsrfToken = tokens.create(csrfSecret);
         reqCsrfTokenSigned = cookieSignature.sign(reqCsrfToken, secret);
-
         // res.setHeader(
         //   'Set-Cookie',
         //   serialize_1(tokenKey, reqCsrfTokenSigned, cookieOptions)

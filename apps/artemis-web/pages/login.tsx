@@ -5,7 +5,7 @@ import React from 'react';
 import { setup } from '../libs/csrf';
 import { useJWT } from '../utils/hooks/use-jwt';
 
-const LoginPage = (props) => {
+const LoginPage = (props: any): any => {
   const [user, loading] = useJWT();
   const router = useRouter();
   if (user && !loading) {
@@ -36,5 +36,7 @@ const LoginPage = (props) => {
 export default LoginPage;
 
 export const getServerSideProps = setup(async (req, res, csrftoken) => {
-  return { props: { _csrf: csrftoken,  system_version: process.env.SYSTEM_VERSION } };
+  return {
+    props: { _csrf: csrftoken, system_version: process.env.SYSTEM_VERSION },
+  };
 });

@@ -1,7 +1,7 @@
 import { FormControlLabel, FormGroup } from '@material-ui/core';
 import Head from 'next/head';
 import React, { useEffect, useState } from 'react';
-import { useMedia } from 'react-media';
+import Media from 'react-media';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import AuthHOC from '../components/401-hoc/401-hoc';
@@ -44,8 +44,6 @@ const DashboardPage = (props: any) => {
   });
   const INDEX_DATA = INDEX_RES.data;
 
-  const matches = useMedia({ queries: GLOBAL_MEDIA_QUERIES });
-
   return (
     <>
       <Head>
@@ -53,145 +51,171 @@ const DashboardPage = (props: any) => {
       </Head>
       <div id="page-container">
         {user && (
-          <div id="content-wrap" style={{ paddingBottom: '5rem' }}>
-            <div className="row">
-              <div className="col-lg-1" />
-              <div className="col-lg-10">
+          <Media queries={GLOBAL_MEDIA_QUERIES}>
+            {(matches) => (
+              <div id="content-wrap" style={{ paddingBottom: '5rem' }}>
                 <div className="row">
-                  <div className="col-lg-8">
-                    <h1 style={{ color: 'black' }}>Dashboard</h1>{' '}
+                  <div className="col-lg-1" />
+                  <div className="col-lg-10">
+                    <div className="row">
+                      <div className="col-lg-8">
+                        <h1 style={{ color: 'black' }}>Dashboard</h1>{' '}
+                      </div>
+                      {matches.pc && (
+                        <div className="col-lg-2">
+                          <h2 style={{ color: 'black' }}>Live Update:</h2>{' '}
+                        </div>
+                      )}
+                      <div className="col-lg-1">
+                        <FormGroup>
+                          <FormControlLabel
+                            control={
+                              <AntSwitch
+                                onChange={() => {
+                                  setIsLive(!isLive);
+                                }}
+                                size="medium"
+                                checked={isLive}
+                              />
+                            }
+                            label=""
+                          />
+                        </FormGroup>
+                      </div>
+                    </div>
+                    <hr style={{ backgroundColor: 'white' }} />
                   </div>
-                  {matches.pc && (
-                    <div className="col-lg-2">
-                      <h2 style={{ color: 'black' }}>Live Update:</h2>{' '}
+                </div>
+                <div className="row">
+                  <div className="col-lg-1" />
+                  <div className="col-lg-10">
+                    <div className="card">
+                      <div className="card-header">Activity</div>
+                      <div className="card-body">
+                        Welcome back <b>{user && user.email}</b>, your last
+                        login was at{' '}
+                        <b>
+                          (
+                          {user &&
+                            new Date(user.lastLogin).toLocaleDateString() +
+                              ' ' +
+                              new Date(user.lastLogin).toLocaleTimeString()}
+                          )
+                        </b>
+                        . You are {user && user.role}.
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="row" style={{ marginTop: '20px' }}>
+                  <div className="col-lg-1" />
+                  <div className={!matches.pc ? 'col-lg-6' : 'col-lg-10'}>
+                    <div className="card">
+                      <div className="card-header">
+                        Ongoing, Non-Dormant Hijacks{' '}
+                      </div>
+                      <div
+                        className="card-body"
+                        style={{ textAlign: 'center' }}
+                      >
+                        {' '}
+                        <OngoingHijackTableComponent
+                          {...props}
+                          isLive={isLive}
+                        />
+                      </div>
+                    </div>
+                    <span style={{ float: 'right', marginTop: '15px' }}>
+                      Times are shown in your local time zone{' '}
+                      <b>
+                        GMT{new Date().getTimezoneOffset() > 0 ? '-' : '+'}
+                        {Math.abs(new Date().getTimezoneOffset() / 60)} (
+                        {Intl.DateTimeFormat().resolvedOptions().timeZone}).
+                      </b>
+                    </span>
+                  </div>
+                  {!matches.pc && (
+                    <div className="col-lg-4">
+                      <div className="card">
+                        <div className="card-header"> System Status </div>
+                        <div
+                          className="card-body"
+                          style={{ textAlign: 'center' }}
+                        >
+                          <ErrorBoundary
+                            containsData={STATS_DATA}
+                            noDataMessage={'No modules found.'}
+                            errorImage={true}
+                            customError={STATS_RES.error}
+                          >
+                            <StatusTable data={STATS_DATA} />
+                          </ErrorBoundary>
+                        </div>
+                      </div>
+                      <div className="card" style={{ marginTop: '20px' }}>
+                        <div className="card-header"> Statistics </div>
+                        <div
+                          className="card-body"
+                          style={{ textAlign: 'center' }}
+                        >
+                          <ErrorBoundary
+                            containsData={INDEX_DATA}
+                            noDataMessage={'No statistics found.'}
+                            customError={INDEX_RES.error}
+                            errorImage={true}
+                          >
+                            <StatisticsTable data={INDEX_DATA} />
+                          </ErrorBoundary>
+                        </div>
+                      </div>
                     </div>
                   )}
-                  <div className="col-lg-1">
-                    <FormGroup>
-                      <FormControlLabel
-                        control={
-                          <AntSwitch
-                            onChange={() => {
-                              setIsLive(!isLive);
-                            }}
-                            size="medium"
-                            checked={isLive}
-                          />
-                        }
-                        label=""
-                      />
-                    </FormGroup>
-                  </div>
                 </div>
-                <hr style={{ backgroundColor: 'white' }} />
-              </div>
-            </div>
-            <div className="row">
-              <div className="col-lg-1" />
-              <div className="col-lg-10">
-                <div className="card">
-                  <div className="card-header">Activity</div>
-                  <div className="card-body">
-                    Welcome back <b>{user && user.email}</b>, your last login
-                    was at{' '}
-                    <b>
-                      (
-                      {user &&
-                        new Date(user.lastLogin).toLocaleDateString() +
-                        ' ' +
-                        new Date(user.lastLogin).toLocaleTimeString()}
-                      )
-                    </b>
-                    . You are {user && user.role}.
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="row" style={{ marginTop: '20px' }}>
-              <div className="col-lg-1" />
-              <div className={!matches.pc ? 'col-lg-6' : 'col-lg-10'}>
-                <div className="card">
-                  <div className="card-header">
-                    Ongoing, Non-Dormant Hijacks{' '}
-                  </div>
-                  <div className="card-body" style={{ textAlign: 'center' }}>
-                    {' '}
-                    <OngoingHijackTableComponent {...props} isLive={isLive} />
-                  </div>
-                </div>
-                <span style={{ float: 'right', marginTop: '15px' }}>
-                  Times are shown in your local time zone{' '}
-                  <b>GMT{new Date().getTimezoneOffset() > 0 ? '-' : '+'}{Math.abs(new Date().getTimezoneOffset() / 60)} ({Intl.DateTimeFormat().resolvedOptions().timeZone}).</b>
-                </span>
-              </div>
-              {!matches.pc && (
-                <div className="col-lg-4">
-                  <div className="card">
-                    <div className="card-header"> System Status </div>
-                    <div className="card-body" style={{ textAlign: 'center' }}>
-                      <ErrorBoundary
-                        containsData={STATS_DATA}
-                        noDataMessage={'No modules found.'}
-                        errorImage={true}
-                        customError={STATS_RES.error}
-                      >
-                        <StatusTable data={STATS_DATA} />
-                      </ErrorBoundary>
+                {matches.pc && (
+                  <div className="row" style={{ marginTop: '20px' }}>
+                    <div className="col-lg-1" />
+                    <div className="col-lg-5">
+                      <div className="card">
+                        <div className="card-header"> System Status </div>
+                        <div
+                          className="card-body"
+                          style={{ textAlign: 'center' }}
+                        >
+                          <ErrorBoundary
+                            containsData={STATS_DATA}
+                            noDataMessage={'No modules found.'}
+                            errorImage={true}
+                            customError={STATS_RES.error}
+                          >
+                            <StatusTable data={STATS_DATA} />
+                          </ErrorBoundary>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="col-lg-5">
+                      <div className="card">
+                        <div className="card-header"> Statistics </div>
+                        <div
+                          className="card-body"
+                          style={{ textAlign: 'center' }}
+                        >
+                          <ErrorBoundary
+                            containsData={INDEX_DATA}
+                            noDataMessage={'No statistics found.'}
+                            customError={INDEX_RES.error}
+                            errorImage={true}
+                          >
+                            <StatisticsTable data={INDEX_DATA} />
+                          </ErrorBoundary>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                  <div className="card" style={{ marginTop: '20px' }}>
-                    <div className="card-header"> Statistics </div>
-                    <div className="card-body" style={{ textAlign: 'center' }}>
-                      <ErrorBoundary
-                        containsData={INDEX_DATA}
-                        noDataMessage={'No statistics found.'}
-                        customError={INDEX_RES.error}
-                        errorImage={true}
-                      >
-                        <StatisticsTable data={INDEX_DATA} />
-                      </ErrorBoundary>
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
-            {matches.pc && (
-              <div className="row" style={{ marginTop: '20px' }}>
-                <div className="col-lg-1" />
-                <div className="col-lg-5">
-                  <div className="card">
-                    <div className="card-header"> System Status </div>
-                    <div className="card-body" style={{ textAlign: 'center' }}>
-                      <ErrorBoundary
-                        containsData={STATS_DATA}
-                        noDataMessage={'No modules found.'}
-                        errorImage={true}
-                        customError={STATS_RES.error}
-                      >
-                        <StatusTable data={STATS_DATA} />
-                      </ErrorBoundary>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-lg-5">
-                  <div className="card">
-                    <div className="card-header"> Statistics </div>
-                    <div className="card-body" style={{ textAlign: 'center' }}>
-                      <ErrorBoundary
-                        containsData={INDEX_DATA}
-                        noDataMessage={'No statistics found.'}
-                        customError={INDEX_RES.error}
-                        errorImage={true}
-                      >
-                        <StatisticsTable data={INDEX_DATA} />
-                      </ErrorBoundary>
-                    </div>
-                  </div>
-                </div>
+                )}
+                <ToastContainer />
               </div>
             )}
-            <ToastContainer />
-          </div>
+          </Media>
         )}
       </div>
     </>
@@ -201,5 +225,12 @@ const DashboardPage = (props: any) => {
 export default AuthHOC(DashboardPage, ['admin', 'user']);
 
 export const getServerSideProps = setup(async (req, res, csrftoken) => {
-  return { props: { _csrf: csrftoken, isTesting: process.env.TESTING === 'true',  _inactivity_timeout: process.env.INACTIVITY_TIMEOUT, system_version: process.env.SYSTEM_VERSION } };
+  return {
+    props: {
+      _csrf: csrftoken,
+      isTesting: process.env.TESTING === 'true',
+      _inactivity_timeout: process.env.INACTIVITY_TIMEOUT,
+      system_version: process.env.SYSTEM_VERSION,
+    },
+  };
 });

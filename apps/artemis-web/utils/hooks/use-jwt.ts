@@ -11,12 +11,12 @@ export function useJWT() {
 
 const cache = {};
 
-export const useFetch = (url, method = "GET") => {
+export const useFetch = (url, method = 'GET') => {
   const [status, setStatus] = useState('idle');
   const [data, setData] = useState('');
 
   useEffect(() => {
-    let mounted = true;
+    const mounted = true;
     if (!url) return;
 
     const fetchData = async () => {
@@ -27,7 +27,7 @@ export const useFetch = (url, method = "GET") => {
         setStatus('fetched');
       } else {
         const response = await fetch(url, {
-          method: method
+          method: method,
         });
         const body = await response.text();
         const data = body.length > 0 ? body : null;
@@ -40,7 +40,6 @@ export const useFetch = (url, method = "GET") => {
     };
 
     fetchData();
-    return () => (mounted = false);
   }, [url]);
 
   return { status, data };

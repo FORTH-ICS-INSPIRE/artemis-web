@@ -54,7 +54,8 @@
             "passWithNoTests": true
           }
         }
-      }
+      },
+      "tags": []
     },
     "artemis-web-e2e": {
       "root": "apps/artemis-web-e2e",
@@ -82,11 +83,10 @@
             "exclude": ["**/node_modules/**", "!apps/artemis-web-e2e/**/*"]
           }
         }
-      }
+      },
+      "tags": [],
+      "implicitDependencies": ["artemis-web"]
     }
-  },
-  "cli": {
-    "defaultCollection": "@nrwl/next"
   },
   "schematics": {
     "@nrwl/react": {
@@ -100,6 +100,5 @@
         "linter": "eslint"
       }
     }
-  },
-  "defaultProject": "artemis-web"
+  }
 }

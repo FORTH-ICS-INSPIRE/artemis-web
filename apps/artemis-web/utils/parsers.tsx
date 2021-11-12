@@ -3,7 +3,7 @@ import Tooltip from '../components/tooltip/tooltip';
 import { fetchASNData } from './fetch-data';
 import { formatDate, genTooltip } from './token';
 
-export function extractUser(req): any {
+export function extractUser(req: any): any {
   if (!req.user) return null;
 
   const { _id, name, email, role, lastLogin, id } = req.user;
@@ -13,7 +13,7 @@ export function extractUser(req): any {
     email,
     role,
     lastLogin,
-    sessionId: id
+    sessionId: id,
   };
 }
 
@@ -25,23 +25,23 @@ export function extractLdapUser(req): any {
   const cnRegexp = /.*[c|C][n|N]=([a-zA-Z0-9_\- ]*),[o|O][u|U)]=.*/;
 
   let groupCnMatch: any, groupCn: any;
-  console.log("All user groups:");
+  console.log('All user groups:');
   console.log(req.user._groups);
-  console.log("LDAP_ADMIN_GROUP array:");
+  console.log('LDAP_ADMIN_GROUP array:');
   console.log(process.env.LDAP_ADMIN_GROUP?.split(','));
 
   req.user._groups.forEach((group) => {
     groupCnMatch = group.dn?.match(cnRegexp);
-    console.log("Current user group:");
+    console.log('Current user group:');
     console.log(group);
 
-    console.log("Group cn match:");
+    console.log('Group cn match:');
     console.log(groupCnMatch);
 
     if (groupCnMatch) {
       groupCn = groupCnMatch[1];
 
-      console.log("Group cn:");
+      console.log('Group cn:');
       console.log(groupCn);
 
       if (process.env.LDAP_ADMIN_GROUP?.split(',').includes(groupCn)) {
@@ -75,7 +75,7 @@ export function extractLdapUser(req): any {
     email: mail,
     role: role,
     lastLogin: new Date(),
-    sessionId: req.session.id
+    sessionId: req.session.id,
   };
 }
 
@@ -308,7 +308,10 @@ function extractHijackInfoLeft(
       ),
     ],
     Config: [
-      formatDate(new Date(hijack.timestamp_of_config), Math.abs(new Date().getTimezoneOffset() / 60)),
+      formatDate(
+        new Date(hijack.timestamp_of_config),
+        Math.abs(new Date().getTimezoneOffset() / 60)
+      ),
       genTooltip(
         'Config:',
         null,
@@ -331,7 +334,10 @@ function extractHijackInfoLeft(
 function extractHijackInfoRight(hijack) {
   const hijackInfo = {
     'Time Started': [
-      formatDate(new Date(hijack.time_started), Math.abs(new Date().getTimezoneOffset() / 60)),
+      formatDate(
+        new Date(hijack.time_started),
+        Math.abs(new Date().getTimezoneOffset() / 60)
+      ),
       genTooltip(
         'Time Started:',
         null,
@@ -340,7 +346,10 @@ function extractHijackInfoRight(hijack) {
       ),
     ],
     'Time Detected': [
-      formatDate(new Date(hijack.time_detected), Math.abs(new Date().getTimezoneOffset() / 60)),
+      formatDate(
+        new Date(hijack.time_detected),
+        Math.abs(new Date().getTimezoneOffset() / 60)
+      ),
       genTooltip(
         'Time Detected:',
         null,
@@ -349,7 +358,12 @@ function extractHijackInfoRight(hijack) {
       ),
     ],
     'Last Update': [
-      hijack.time_last ? formatDate(new Date(hijack.time_last), Math.abs(new Date().getTimezoneOffset() / 60)) : 'Never',
+      hijack.time_last
+        ? formatDate(
+            new Date(hijack.time_last),
+            Math.abs(new Date().getTimezoneOffset() / 60)
+          )
+        : 'Never',
       genTooltip(
         'Last Update:',
         null,
@@ -358,7 +372,12 @@ function extractHijackInfoRight(hijack) {
       ),
     ],
     'Time Ended': [
-      hijack.time_ended ? formatDate(new Date(hijack.time_ended), Math.abs(new Date().getTimezoneOffset() / 60)) : 'Never',
+      hijack.time_ended
+        ? formatDate(
+            new Date(hijack.time_ended),
+            Math.abs(new Date().getTimezoneOffset() / 60)
+          )
+        : 'Never',
       genTooltip(
         'Time Ended:',
         null,
@@ -369,7 +388,12 @@ function extractHijackInfoRight(hijack) {
       ),
     ],
     'Mitigation Started': [
-      hijack.mitigation_started ? formatDate(new Date(hijack.mitigation_started), Math.abs(new Date().getTimezoneOffset() / 60)) : 'Never',
+      hijack.mitigation_started
+        ? formatDate(
+            new Date(hijack.mitigation_started),
+            Math.abs(new Date().getTimezoneOffset() / 60)
+          )
+        : 'Never',
       genTooltip(
         'Mitigation Started:',
         null,
@@ -486,11 +510,11 @@ export async function extractHijackTooltips(hijack): Promise<any> {
   const tooltip1 =
     ASN_int_origin && ASN_int_origin.toString() !== '-'
       ? parseASNData(
-        ASN_int_origin,
-        name_origin,
-        countries_origin,
-        abuse_origin
-      )
+          ASN_int_origin,
+          name_origin,
+          countries_origin,
+          abuse_origin
+        )
       : '';
 
   const tooltip2 =

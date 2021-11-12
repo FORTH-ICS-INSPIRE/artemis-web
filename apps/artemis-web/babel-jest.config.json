@@ -1,14 +1,24 @@
 {
   "presets": [
     [
-      "@babel/preset-env",
-      {
-        "targets": {
-          "node": "current"
+      [
+        "@babel/preset-env",
+        {
+          "modules": false
         }
+      ],
+      "@babel/preset-react",
+      "@babel/preset-typescript"
+    ]
+  ],
+  "plugins": [
+    "@babel/proposal-class-properties",
+    "@babel/proposal-object-rest-spread",
+    [
+      "@babel/plugin-proposal-private-property-in-object",
+      {
+        "loose": false
       }
-    ],
-    "@babel/preset-typescript",
-    "@babel/preset-react"
+    ]
   ]
 }

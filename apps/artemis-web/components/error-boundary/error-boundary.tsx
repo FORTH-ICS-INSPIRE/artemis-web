@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Image from 'next/image';
 
 type PropsType = {
   customError: any;
@@ -28,7 +29,7 @@ class ErrorBoundary extends Component<PropsType, unknown> {
       return (
         <div>
           <p>
-            <img alt="" width="256" src="error.png"></img>
+            <Image alt="" height="256" width="256" src="/error.png" />
           </p>
           <h3>{this.state.errorMessage}</h3>
         </div>
@@ -37,10 +38,12 @@ class ErrorBoundary extends Component<PropsType, unknown> {
       return (
         <div>
           <p>
-            <img
+            <Image
               alt=""
-              src={this.props.errorImage ? 'error.png' : 'checkmark.png'}
-            ></img>
+              height="256"
+              width="256"
+              src={this.props.errorImage ? '/error.png' : '/checkmark.png'}
+            />
           </p>
           <h3>{this.props.noDataMessage}</h3>
         </div>

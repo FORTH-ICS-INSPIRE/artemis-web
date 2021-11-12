@@ -1,10 +1,11 @@
 import {
-  createMuiTheme,
   createStyles,
   makeStyles,
   Theme,
   withStyles,
+  createTheme,
 } from '@material-ui/core';
+
 import {
   deepOrange,
   deepPurple,
@@ -177,7 +178,7 @@ export const useStyles = makeStyles((_theme) => ({
   },
 }));
 
-export const theme = createMuiTheme({
+export const theme = createTheme({
   palette: {
     type: palletType,
     primary: {

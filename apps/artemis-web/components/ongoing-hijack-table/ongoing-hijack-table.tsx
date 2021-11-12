@@ -28,6 +28,7 @@ import {
 import ErrorBoundary from '../error-boundary/error-boundary';
 import ExportJSON from '../export-json/export-json';
 import Tooltip from '../tooltip/tooltip';
+import Image from 'next/image';
 
 const getColumns = (stateValues) => [
   {
@@ -206,8 +207,14 @@ function handleData(data, tooltips, setTooltips, context, offset) {
     hijacks = HIJACK_DATA.map((row, i) => {
       return {
         id: i,
-        time_last: formatDate(new Date(row.time_last), Math.abs(new Date().getTimezoneOffset() / 60)),
-        time_detected: formatDate(new Date(row.time_detected), Math.abs(new Date().getTimezoneOffset() / 60)),
+        time_last: formatDate(
+          new Date(row.time_last),
+          Math.abs(new Date().getTimezoneOffset() / 60)
+        ),
+        time_detected: formatDate(
+          new Date(row.time_detected),
+          Math.abs(new Date().getTimezoneOffset() / 60)
+        ),
         prefix: row.prefix,
         configured_prefix: row.configured_prefix,
         type: row.type,
@@ -228,9 +235,9 @@ function handleData(data, tooltips, setTooltips, context, offset) {
         num_peers_seen: row.num_peers_seen,
         num_asns_inf: row.num_asns_inf,
         ack: row.seen ? (
-          <img alt="" src="./handled.png" />
+          <Image width="25" height="25" alt="" src="/handled.png" />
         ) : (
-          <img alt="" src="./unhadled.png" />
+          <Image alt="" width="25" height="25" src="/unhadled.png" />
         ),
         more: <Link href={`/hijack?key=${row.key}`}>View</Link>,
       };
@@ -342,10 +349,11 @@ const OngoingHijackTableComponent = (props: any): ReactElement => {
           <option
             key={i}
             value={option.text}
-            className={`btn ${currSizePerPage === `${option.page}`
+            className={`btn ${
+              currSizePerPage === `${option.page}`
                 ? 'btn-secondary'
                 : 'btn-warning'
-              }`}
+            }`}
           >
             {option.text}
           </option>
@@ -501,12 +509,13 @@ const OngoingHijackTableComponent = (props: any): ReactElement => {
                 return (
                   <div>
                     <p>
-                      <img
+                      <Image
                         alt=""
                         id="nodata"
                         width="256"
-                        src="checkmark.png"
-                      ></img>
+                        height="256"
+                        src="/checkmark.png"
+                      />
                     </p>
                     <h3>{'No hijack alerts! Go grab a beer!'}</h3>
                   </div>

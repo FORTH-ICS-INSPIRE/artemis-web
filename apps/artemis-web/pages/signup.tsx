@@ -5,7 +5,7 @@ import React from 'react';
 import { setup } from '../libs/csrf';
 import { useJWT } from '../utils/hooks/use-jwt';
 
-const SignupPage = (props) => {
+const SignupPage = (props: any): any => {
   const SignUpComponent = dynamic(
     () => import('../components/sign-up/sign-up')
   );
@@ -39,5 +39,7 @@ const SignupPage = (props) => {
 export default SignupPage;
 
 export const getServerSideProps = setup(async (req, res, csrftoken) => {
-  return { props: { _csrf: csrftoken, system_version: process.env.SYSTEM_VERSION } };
+  return {
+    props: { _csrf: csrftoken, system_version: process.env.SYSTEM_VERSION },
+  };
 });

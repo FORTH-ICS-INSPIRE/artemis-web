@@ -3,15 +3,18 @@ import { getRandomString } from '../../utils/token';
 import { Db, MongoClient } from 'mongodb';
 
 const MONGODB_URI = `mongodb://${process.env.MONGODB_USER}:${process.env.MONGODB_PASS}@${process.env.MONGODB_HOST}:${process.env.MONGODB_PORT}`;
-const client = new MongoClient(MONGODB_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+const client = new MongoClient(MONGODB_URI, {});
 
 let dbInstance: Db = null;
 
-if (!client.isConnected()) client.connect();
-dbInstance = client.db(process.env.MONGODB_NAME);
+(async () => {
+  try {
+    await client.connect();
+    dbInstance = client.db(process.env.MONGODB_NAME);
+  } catch (err) {
+    console.error(err);
+  }
+})();
 
 export const RememberMeStrategy = new Strategy(
   (token, done) => {

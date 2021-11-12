@@ -1,10 +1,7 @@
 import { Db, MongoClient } from 'mongodb';
 
 const MONGODB_URI = `mongodb://${process.env.MONGODB_USER}:${process.env.MONGODB_PASS}@${process.env.MONGODB_HOST}:${process.env.MONGODB_PORT}`;
-const client = new MongoClient(MONGODB_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+const client = new MongoClient(MONGODB_URI, {});
 
 export async function setUpDb(db: Db) {
   db.collection('tokens').createIndex(
@@ -15,7 +12,7 @@ export async function setUpDb(db: Db) {
 }
 
 export default async function database(req, res, next) {
-  if (!client.isConnected()) await client.connect();
+  await client.connect();
   req.dbClient = client;
   req.db = client.db(process.env.MONGODB_NAME);
   await setUpDb(req.db);

@@ -21,13 +21,21 @@
       }
     }
   },
-  "projects": {
-    "artemis-web": {
-      "tags": []
+  "cli": {
+    "defaultCollection": "@nrwl/next"
+  },
+  "generators": {
+    "@nrwl/react": {
+      "application": {
+        "babel": true
+      }
     },
-    "artemis-web-e2e": {
-      "tags": [],
-      "implicitDependencies": ["artemis-web"]
+    "@nrwl/next": {
+      "application": {
+        "style": "css",
+        "linter": "eslint"
+      }
     }
-  }
+  },
+  "defaultProject": "artemis-web"
 }
