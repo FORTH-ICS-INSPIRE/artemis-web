@@ -1,10 +1,12 @@
-import './styles.sass';
-import React, { useState } from 'react';
 import { ApolloProvider } from '@apollo/client';
-import { useApollo } from '../libs/graphql';
+import OfflineBoltOutlined from "@material-ui/icons/OfflineBoltOutlined";
+import React, { useState } from 'react';
+import { configure, GlobalHotKeys } from "react-hotkeys";
+import CommandLineModal from "react-super-cmd";
 import Layout from '../components/layout/layout';
 import TooltipContext from '../context/tooltip-context';
-import { KBarAnimator, KBarPortal, KBarPositioner, KBarProvider, KBarSearch } from "kbar";
+import { useApollo } from '../libs/graphql';
+import './styles.sass';
 
 const useStateWithLocalStorage = (localStorageKey) => {
   const [value, setValue] = useState(
@@ -29,44 +31,92 @@ function MyApp({ Component, pageProps }) {
   }
   /* eslint-enable react-hooks/rules-of-hooks */
 
-  const actions = [
-    {
-      id: "dashboard",
-      name: "Dashboard",
-      shortcut: ["d"],
-      keywords: "Dashboard",
-      perform: () => (window.location.pathname = "/"),
+  const [cmdLineModal, setCmdLineModal] = useState(false);
+  const commands = {
+    Dashboard: {
+      name: 'Dashboard', shortcut: 'alt+d', callback: () => window.location.pathname = "/dashboard"
     },
-    {
-      id: "bgpupdates",
-      name: "BGP Updates",
-      shortcut: ["b"],
-      keywords: "bgpupdates",
-      perform: () => (window.location.pathname = "/bgpupdates"),
+    BGPUpdates: {
+      name: 'BGP Updates', shortcut: 'alt+b', callback: () => window.location.pathname = "/bgpupdates"
     },
-  ];
+    Hijacks: {
+      name: 'Hijacks', shortcut: 'alt+h', callback: () => window.location.pathname = "/hijacks"
+    },
+    System: {
+      name: 'System', shortcut: 'alt+s', callback: () => window.location.pathname = "/admin/system"
+    },
+    UserManagement: {
+      name: 'User Management', shortcut: 'alt+m', callback: () => window.location.pathname = "/admin/user_management"
+    },
+    Password: {
+      name: 'Password Change', shortcut: 'alt+p', callback: () => window.location.pathname = "/password_change"
+    },
+    Config: {
+      name: 'Config Comparison', shortcut: 'alt+c', callback: () => window.location.pathname = "/config_comparison"
+    },
+  };
+  function toggleIsOpen() {
+    setCmdLineModal(previousState => !previousState);
+  };
+
+  const keyMap = {
+    TOGGLE_MODAL: "cmd+k", DASHBOARD_JUMP: "alt+d", BGPUPDATES_JUMP: "alt+b",
+    HIJACKS_JUMP: "alt+h", SYSTEM_JUMP: "alt+s", USERMANAGEMENT_JUMP: "alt+m",
+    PASSWORD_JUMP: "alt+p", CONFIG_JUMP: "alt+c"
+  };
+  const handlers = {
+    TOGGLE_MODAL: () => {
+      toggleIsOpen();
+    },
+    DASHBOARD_JUMP: () => {
+      window.location.pathname = "/dashboard";
+    },
+    BGPUPDATES_JUMP: () => {
+      window.location.pathname = "/bgpupdates";
+    },
+    HIJACKS_JUMP: () => {
+      window.location.pathname = "/hijacks";
+    },
+    SYSTEM_JUMP: () => {
+      window.location.pathname = "/admin/system";
+    },
+    USERMANAGEMENT_JUMP: () => {
+      window.location.pathname = "/admin/user_management";
+    },
+    PASSWORD_JUMP: () => {
+      window.location.pathname = "/password_change";
+    },
+    CONFIG_JUMP: () => {
+      window.location.pathname = "/config_comparison";
+    },
+  };
+
+  configure({
+    ignoreTags: ['input', 'select', 'textarea'],
+    ignoreEventsCondition: function () {
+    }
+  });
 
   return (
-    <ApolloProvider client={client}>
-      <KBarProvider actions={actions}>
-        <KBarPortal> // Renders the content outside the root node
-          <KBarPositioner> // Centers the content
-            <KBarAnimator> // Handles the show/hide and height animations
-              <KBarSearch /> // Search input
-              {/* <KBarResults /> // Results renderer */}
-            </KBarAnimator>
-          </KBarPositioner>
-        </KBarPortal>
+    <GlobalHotKeys keyMap={keyMap} handlers={handlers}>
+      <ApolloProvider client={client}>
         <Layout>
           <TooltipContext.Provider
             value={{ tooltips: tooltips, setTooltips: setTooltips }}
           >
             <Component {...pageProps} />
+            <CommandLineModal commands={commands}
+              isOpen={cmdLineModal}
+              toggleIsModalOpen={toggleIsOpen}
+              title={"Navigate with the keyboard"}
+              logo={<OfflineBoltOutlined />}
+              noOptionsText="No commands found. Try a different search term."
+            />
           </TooltipContext.Provider>
         </Layout>
-      </KBarProvider>
 
-    </ApolloProvider>
+      </ApolloProvider>
+    </GlobalHotKeys>
   );
 }
 
