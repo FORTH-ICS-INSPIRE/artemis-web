@@ -65,7 +65,6 @@ class HijackInfoComponent extends Component<any, any> {
     const asn = hijackDataState["hijack_as"];
     const prefix = hijackDataState["prefix"];
     const type = this.getEventType(hijackDataState["type"]);
-    console.log(hijackDataState)
 
     try {
       const resp = await fetch(`https://api.grip.caida.org/v1/json/events?event_type=${type}&asns=${asn}&pfxs=${prefix}`, {
@@ -84,7 +83,7 @@ class HijackInfoComponent extends Component<any, any> {
             eventData.push(event);
           }
         });
-        console.log(eventData)
+
         if (eventData.length > 0)
           this.setState({
             event_data: eventData,

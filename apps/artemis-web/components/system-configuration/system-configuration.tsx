@@ -76,7 +76,6 @@ const SystemConfigurationComponent = (props) => {
 
       if (res.status === 200) {
         const resp = await res.json();
-        console.log(resp);
         setAlertState('block');
         setAlertMessage(resp.payload.payload.message);
       }
