@@ -49,6 +49,7 @@
     "jsonwebtoken": "^8.5.1",
     "lambda-captcha": "^2.1.2",
     "mongodb": "^4.1.3",
+    "kbar": "^0.1.0-beta.19",
     "nanoid": "^3.1.30",
     "next": "^12.0.2",
     "next-connect": "^0.11.0",

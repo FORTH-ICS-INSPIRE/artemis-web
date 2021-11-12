@@ -4,6 +4,7 @@ import { ApolloProvider } from '@apollo/client';
 import { useApollo } from '../libs/graphql';
 import Layout from '../components/layout/layout';
 import TooltipContext from '../context/tooltip-context';
+import { KBarProvider } from "kbar";
 
 const useStateWithLocalStorage = (localStorageKey) => {
   const [value, setValue] = useState(
@@ -28,15 +29,34 @@ function MyApp({ Component, pageProps }) {
   }
   /* eslint-enable react-hooks/rules-of-hooks */
 
+  const actions = [
+    {
+      id: "dashboard",
+      name: "Dashboard",
+      shortcut: ["d"],
+      keywords: "Dashboard",
+      perform: () => (window.location.pathname = "/"),
+    },
+    {
+      id: "bgpupdates",
+      name: "BGP Updates",
+      shortcut: ["b"],
+      keywords: "bgpupdates",
+      perform: () => (window.location.pathname = "/bgpupdates"),
+    },
+  ];
+
   return (
     <ApolloProvider client={client}>
-      <Layout {...pageProps}>
-        <TooltipContext.Provider
-          value={{ tooltips: tooltips, setTooltips: setTooltips }}
-        >
-          <Component {...pageProps} />
-        </TooltipContext.Provider>
-      </Layout>
+      <KBarProvider actions={actions}>
+        <Layout {...pageProps}>
+          <TooltipContext.Provider
+            value={{ tooltips: tooltips, setTooltips: setTooltips }}
+          >
+            <Component {...pageProps} />
+          </TooltipContext.Provider>
+        </Layout>
+      </KBarProvider>
     </ApolloProvider>
   );
 }
