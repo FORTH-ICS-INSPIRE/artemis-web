@@ -49,8 +49,8 @@ export const formatDate = (date: Date, incr = 0): string => {
   const parsedDate = isToday
     ? 'Today'
     : isYesterday
-    ? 'Yesterday'
-    : newDate.getFullYear() +
+      ? 'Yesterday'
+      : newDate.getFullYear() +
       '-' +
       (newDate.getMonth() + 1) +
       '-' +
@@ -276,9 +276,9 @@ export const expandColumnComponent = ({
 
   if (expandable) {
     content = expanded ? (
-      <Image alt="" src="details_close.png" />
+      <img alt="" src="/details_close.png" />
     ) : (
-      <Image alt="" src="details_open.png" />
+      <img alt="" src="/details_open.png" />
     );
   }
 
