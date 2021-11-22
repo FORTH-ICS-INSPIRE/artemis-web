@@ -75,9 +75,27 @@ class HijackInfoComponent extends Component<any, any> {
         },
       });
       const json = await resp.json();
+      const eventData = [];
 
       if (json.recordsTotal > 0) {
-        this.setState({ gripState: true, event_data: json.data, gripFetched: true });
+        json.data.forEach(event => {
+          if (Math.abs(new Date(hijackDataState["time_started"]).getTime() - Math.abs(parseInt(event.view_ts, 10) * 1000)) < 3600000) {
+            eventData.push(event);
+          }
+        });
+
+        if (eventData.length > 0)
+          this.setState({
+            event_data: eventData,
+            gripFetched: true,
+            gripState: true,
+          });
+        else
+          this.setState({
+            gripFetched: true,
+            gripState: false,
+            event_data: [],
+          });
       } else {
         this.setState({ gripState: false, event_data: [], gripFetched: true });
       }
