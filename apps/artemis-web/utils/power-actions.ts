@@ -65,8 +65,8 @@ export const commands = (role) => (
             callback: () => (window.location.pathname = '/config_comparison'),
         },
     });
-// To trigger the search modal: 
-// Windows + Linux OS: ctrl + Windows key (super) + k 
+// To trigger the search modal:
+// Windows + Linux OS: ctrl + Windows key (super) + k
 // MacOS : cmd + k
 export const keyMap = {
     TOGGLE_MODAL: 'cmd+k',
