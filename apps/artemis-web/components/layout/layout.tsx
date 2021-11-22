@@ -7,7 +7,6 @@ export default class Layout extends React.Component<any> {
   render() {
     const { children } = this.props;
     const props = this.props;
-    // const Footer = dynamic(() => import('../footer/footer'));
     const Header = dynamic(() => import('../header/header'));
 
     return (
@@ -31,7 +30,7 @@ export default class Layout extends React.Component<any> {
         <div className="layout">
           <Header {...props} />
           <div className="main-container">{children}</div>
-          <Footer system_version={this.props.system_version}/>
+          <Footer system_version={this.props.system_version} />
         </div>
       </>
     );

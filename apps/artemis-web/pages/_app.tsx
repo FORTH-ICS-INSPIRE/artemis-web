@@ -22,6 +22,7 @@ const useStateWithLocalStorage = (localStorageKey) => {
 function MyApp({ Component, pageProps }) {
   const client = useApollo(pageProps.initialApolloState);
   let tooltips, setTooltips;
+
   /* eslint-disable react-hooks/rules-of-hooks */
   if (typeof window !== 'undefined') {
     [tooltips, setTooltips] = useStateWithLocalStorage('tooltips');
@@ -35,6 +36,7 @@ function MyApp({ Component, pageProps }) {
           value={{ tooltips: tooltips, setTooltips: setTooltips }}
         >
           <Component {...pageProps} />
+
         </TooltipContext.Provider>
       </Layout>
     </ApolloProvider>
