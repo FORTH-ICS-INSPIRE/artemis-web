@@ -66,7 +66,7 @@ export const commands = (role) => (
         },
     });
 // To trigger the search modal: 
-// Windows OS: ctrl + Windows key (super) + k 
+// Windows + Linux OS: ctrl + Windows key (super) + k 
 // MacOS : cmd + k
 export const keyMap = {
     TOGGLE_MODAL: 'cmd+k',
