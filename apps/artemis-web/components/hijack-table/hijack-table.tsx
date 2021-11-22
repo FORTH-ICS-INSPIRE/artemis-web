@@ -555,7 +555,6 @@ const HijackTableComponent = (props) => {
         }
         <button
           onClick={(e) => {
-            console.log(selectRef.current.value);
             sendData(e, {
               hijackKeys: hijackState.map((hijack) => hijack.key),
               selectState: selectRef.current.value,
