@@ -1,90 +1,116 @@
-# ArtemisWeb
+#
 
-This project was generated using [Nx](https://nx.dev).
+<p align="center">
+<img src="docs/images/Twitter_Cover_Blue_ARTEMIS.png" style="margin-bottom: 15px;"/>
+</p>
 
-<p align="center"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="450"></p>
+[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/FORTH-ICS-INSPIRE/artemis-web)
 
-🔎 **Nx is a set of Extensible Dev Tools for Monorepos.**
 
-## Adding capabilities to your workspace
+# ARTEMIS Web Application Installation
 
-Nx supports many plugins which add capabilities for developing different types of applications and different tools.
 
-These capabilities include generating applications, libraries, etc as well as the devtools to test, and build projects as well.
+## Install Packages
 
-Below are our core plugins:
+### Install Docker
 
-- [React](https://reactjs.org)
-  - `npm install --save-dev @nrwl/react`
-- Web (no framework frontends)
-  - `npm install --save-dev @nrwl/web`
-- [Angular](https://angular.io)
-  - `npm install --save-dev @nrwl/angular`
-- [Nest](https://nestjs.com)
-  - `npm install --save-dev @nrwl/nest`
-- [Express](https://expressjs.com)
-  - `npm install --save-dev @nrwl/express`
-- [Node](https://nodejs.org)
-  - `npm install --save-dev @nrwl/node`
+1. Make sure that your Ubuntu package sources are up-to-date:
 
-There are also many [community plugins](https://nx.dev/nx-community) you could add.
+```
+   sudo apt-get update
+```
 
-## Generate an application
+2. **(For rootless installation look below)** If not already installed, follow the instructions [here](https://docs.docker.com/install/linux/docker-ce/ubuntu/#install-docker-ce) to install the latest version of the docker tool for managing containers, and [here](https://docs.docker.com/compose/install/#install-compose) to install the docker-compose tool for supporting multi-container Docker applications.
 
-Run `nx g @nrwl/react:app my-app` to generate an application.
+   In production, we have used the following versions successfully:
 
-> You can use any of the plugins above to generate applications as well.
+```
+   $ docker -v
+   Docker version 18.09.0, build 4d60db4
+   $ docker-compose -v
+   docker-compose version 1.20.0, build ca8d3c6
+```
 
-When using Nx, you can create multiple applications and libraries in the same workspace.
+3. If you would like to run docker without using sudo, please create a docker group, if not existing:
 
-## Generate a library
+```
+   sudo groupadd docker
+```
 
-Run `nx g @nrwl/react:lib my-lib` to generate a library.
+and then add the user to the docker group:
 
-> You can also use any of the plugins above to generate libraries as well.
+```
+   sudo usermod -aG docker $USER
+```
 
-Libraries are sharable across libraries and applications. They can be imported from `@artemis-web/mylib`.
+For more instructions and potential debugging on this please consult this [webpage](https://docs.docker.com/install/linux/linux-postinstall/#manage-docker-as-a-non-root-user).
 
-## Development server
+### Download ARTEMIS Web App
 
-Run `nx serve my-app` for a dev server. Navigate to http://localhost:4200/. The app will automatically reload if you change any of the source files.
+1. Install git for downloading ARTEMIS:
 
-## Code scaffolding
+```
+   sudo apt-get install git
+```
 
-Run `nx g @nrwl/react:component my-component --project=my-app` to generate a new component.
+2. Download ARTEMIS from GitHub (if not already downloaded):
 
-## Build
+```
+   git clone https://github.com/FORTH-ICS-INSPIRE/artemis-web
+```
 
-Run `nx build my-app` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+3. The docker-compose utility is configured to pull the latest **stable** released images that are built remotely on [docker cloud](https://cloud.docker.com/). Run the following:
 
-## Running unit tests
+```
+cd artemis-web
+docker-compose pull
+```
 
-Run `nx test my-app` to execute the unit tests via [Jest](https://jestjs.io).
+to trigger this.
 
-Run `nx affected:test` to execute the unit tests affected by a change.
+No further installation/building actions are required on your side at this point.
 
-## Running end-to-end tests
+4. Install Node.js and npm from Ubuntu repository (for newer versions you have to install from the NodeSource repository).
 
-Run `ng e2e my-app` to execute the end-to-end tests via [Cypress](https://www.cypress.io).
+```
+sudo apt update
+sudo apt -y install curl dirmngr apt-transport-https lsb-release ca-certificates
+curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -
+sudo apt -y install nodejs
 
-Run `nx affected:e2e` to execute the end-to-end tests affected by a change.
+node --version # must be 12 or newer
+```
 
-## Understand your workspace
+5. Install required node modules by running:
 
-Run `nx dep-graph` to see a diagram of the dependencies of your projects.
+```
+cd artemis_web
+yarn install
+```
 
-## Further help
+### Running the ARTEMIS Web App in development mode
 
-Visit the [Nx Documentation](https://nx.dev) to learn more.
+1. To get the mongo db up and running, execute:
 
-## ☁ Nx Cloud
+```
+cd artemis-web
+docker-compose up # add -d for detached state
+```
 
-### Computation Memoization in the Cloud
+2. To get the app running, run the following:
 
-<p align="center"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-cloud-card.png"></p>
+```
+MONGODB_HOST=localhost LDAP_HOST=localhost yarn start
+```
 
-Nx Cloud pairs with Nx in order to enable you to build and test code more rapidly, by up to 10 times. Even teams that are new to Nx can connect to Nx Cloud and start saving time instantly.
+3. Open a browser and visit http://localhost:4200
 
-Teams using Nx gain the advantage of building full-stack applications with their preferred framework alongside Nx’s advanced code generation and project dependency graph, plus a unified experience for both frontend and backend developers.
+### Running the ARTEMIS Web App in production mode
 
-Visit [Nx Cloud](https://nx.app/) to learn more.
+1. To get the app running, run the following:
+
+```
+docker-compose -f docker-compose.prod.yml up # add -d for detached state
+```
+
+3. Open a browser and visit https://localhost
