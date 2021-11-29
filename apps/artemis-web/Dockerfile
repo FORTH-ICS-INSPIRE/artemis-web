@@ -1,5 +1,7 @@
 FROM node:14.17.6-bullseye-slim
 
+RUN apt update && apt install git -y
+
 WORKDIR /app
 
 COPY package.json yarn.lock ./
