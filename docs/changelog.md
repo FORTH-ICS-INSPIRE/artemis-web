@@ -22,10 +22,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - A web command line search experience based on https://saharmor.github.io/react-super-cmd. To trigger the search modal:
   - Windows + Linux OS: ctrl + Windows key (super) + k
   - MacOS : cmd + k
+- Gitpod integration
+- Additional Integration and Unit tests
+- Unauthorized action notifications
 
 ### Changed
 
-- migrated to Nextjs 11/12 and webpack 5
+- migrated to Nextjs 12.0.2 and SWC
 
 ### Fixed
 
@@ -34,6 +37,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Bug with logout warning popup
 - GQL ports in frontend
 - `login` and `JWT` auth calls and documentation
+- Timezone issues with some timestamps
 
 ## [2.1.0] (Bellerophon) - 2021-05-17
 
