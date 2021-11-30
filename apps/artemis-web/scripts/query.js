@@ -15,7 +15,7 @@ async function isInCollection(db, name) {
   const argon2 = require('argon2');
   const { nanoid } = require('nanoid');
 
-  const client = new MongoClient(URI);
+  const client = new MongoClient(URI, {});
   try {
     await client.connect();
 
@@ -47,7 +47,5 @@ async function isInCollection(db, name) {
     }
   } catch (e) {
     console.error(e);
-  } finally {
-    client.close();
   }
 })();
