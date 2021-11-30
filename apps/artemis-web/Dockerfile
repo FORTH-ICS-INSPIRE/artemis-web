@@ -1,6 +1,8 @@
 FROM node:14.17.6-bullseye-slim
 
-RUN apt-get update && apt-get install git -y
+RUN apt-get update && apt-get install -y --no-install-recommends git \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
