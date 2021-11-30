@@ -1,6 +1,6 @@
 FROM node:14.17.6-bullseye-slim
 
-RUN apt update && apt install git -y
+RUN apt-get update && apt-get install git -y
 
 WORKDIR /app
 
