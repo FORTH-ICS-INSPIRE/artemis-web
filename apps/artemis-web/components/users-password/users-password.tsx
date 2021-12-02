@@ -1,5 +1,4 @@
 import { Button, Grid, TextField } from '@material-ui/core';
-import { useStyles } from '../../utils/styles';
 import React, { useState } from 'react';
 
 const UsersPasswordComponent = (props) => {
@@ -36,8 +35,6 @@ const UsersPasswordComponent = (props) => {
       setSuccessMsg('');
     }
   };
-
-  const classes = useStyles();
 
   return (
     <form id="password_change_form" method="post" onSubmit={handleSubmit}>

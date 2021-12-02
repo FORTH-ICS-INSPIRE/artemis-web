@@ -1,7 +1,6 @@
 import React, { ReactElement } from 'react';
 import ReactTooltip from 'react-tooltip';
 import { Comparator, textFilter } from 'react-bootstrap-table2-filter';
-import Image from 'next/image';
 
 export const getRandomString = (len: number): string => {
   const buf = [],

@@ -1,6 +1,7 @@
 import rateLimit from "express-rate-limit";
+/* eslint-disable */
 require('dotenv').config();
-
+/* eslint-enable */
 
 function calculateNextResetTime(windowMs) {
     const d = new Date();

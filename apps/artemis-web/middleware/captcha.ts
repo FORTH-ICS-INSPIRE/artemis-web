@@ -1,6 +1,9 @@
 import memory from "../utils/captchaMemoryStore";
 
+/* eslint-disable */
 const lambdaCaptcha = require('lambda-captcha')
+/* eslint-enable */
+
 const SECRET = process.env.CAPTCHA_SECRET
 
 const captchaChallengeStore = {};

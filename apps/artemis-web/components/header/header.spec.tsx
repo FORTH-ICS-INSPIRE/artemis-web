@@ -1,10 +1,7 @@
 import React from 'react';
-import { act, render } from '@testing-library/react';
 import { configure, shallow } from 'enzyme';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
-import Header from './header';
 import DesktopHeader from '../desktop-header/desktop-header';
-import { enableFetchMocks } from 'jest-fetch-mock';
 
 configure({ adapter: new Adapter() });
 

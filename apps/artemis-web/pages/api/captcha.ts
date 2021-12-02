@@ -1,10 +1,8 @@
 import nc from 'next-connect';
 import {
-  NextApiRequestExtended,
   NextApiResponseExtended,
 } from '../../definitions';
 import auth from '../../middleware/auth';
-import { csrf } from '../../libs/csrf';
 import memory from '../../utils/captchaMemoryStore';
 
 /* eslint-disable */

@@ -5,7 +5,6 @@ import {
   NextApiResponseExtended,
 } from '../../definitions';
 import auth from '../../middleware/auth';
-import { csrf } from '../../libs/csrf';
 import limiter from '../../middleware/limiter';
 
 const handler = nc()
