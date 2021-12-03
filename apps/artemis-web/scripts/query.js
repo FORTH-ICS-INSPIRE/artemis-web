@@ -44,6 +44,8 @@ async function isInCollection(db, name) {
           client.close();
         }
       );
+    } else {
+      client.close();
     }
   } catch (e) {
     console.error(e);
