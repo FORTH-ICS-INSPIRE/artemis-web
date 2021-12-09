@@ -29,8 +29,8 @@ const PasswordChangePage = (props) => {
   );
 };
 
-export default AuthHOC(PasswordChangePage, ['admin', 'user']);
+export default AuthHOC(PasswordChangePage, ['admin', 'user'], 'ldap-user');
 
 export const getServerSideProps = setup(async (req, res, csrftoken) => {
-  return { props: { _csrf: csrftoken,  _inactivity_timeout: process.env.INACTIVITY_TIMEOUT, system_version: process.env.SYSTEM_VERSION } };
+  return { props: { _csrf: csrftoken, _inactivity_timeout: process.env.INACTIVITY_TIMEOUT, system_version: process.env.SYSTEM_VERSION } };
 });
