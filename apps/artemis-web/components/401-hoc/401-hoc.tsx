@@ -8,7 +8,7 @@ import { commands, handlers, keyMap } from '../../utils/power-actions';
 import { OfflineBoltOutlined } from '@material-ui/icons';
 import CommandLineModal from "react-super-cmd";
 
-const AuthHOC = (WrappedComponent, ACL = []) => {
+const AuthHOC = (WrappedComponent, ACL = [], blockUserType = '') => {
   const Wrapped = (props) => {
     const [cmdLineModal, setCmdLineModal] = useState(false);
     function toggleIsOpen() {
@@ -20,7 +20,7 @@ const AuthHOC = (WrappedComponent, ACL = []) => {
       router.push('/login');
     }
 
-    if (user && !loading && !ACL.includes(user.role)) {
+    if (user && !loading && (!ACL.includes(user.role) || blockUserType === user.type)) {
       return (
         <>
           <Head>
