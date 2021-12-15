@@ -78,6 +78,7 @@ export function extractLdapUser(req): any {
     email: mail,
     role: role,
     lastLogin: new Date(),
+    type: 'ldap-user',
     sessionId: req.session.id,
   };
 }
