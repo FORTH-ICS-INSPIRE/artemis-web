@@ -8,10 +8,15 @@ build:
     RUN apt-get update && apt-get install -y make gcc g++ git python3 \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
+    
+    COPY package.json ./
 
-    COPY package.json yarn.lock ./
+    RUN set http_proxy=
+    RUN set https_proxy=
+    RUN yarn config delete proxy
+    RUN yarn config set registry "https://registry.npmjs.org"
 
-    RUN yarn install --frozen-lockfile && yarn cache clean
+    RUN yarn install  --network-timeout 100000 && yarn cache clean
 
     COPY . .
 
@@ -19,6 +24,10 @@ build:
 
     RUN yarn build --prod
 
-docker:
-    ENTRYPOINT ["./entrypoint"]
-    SAVE IMAGE curiouzk0d3r/artemis-frontend-web:arm64-latest
+
+run:
+  ENTRYPOINT ["./entrypoint"]
+
+release:
+    SAVE IMAGE --push curiouzk0d3r/artemis-frontend-web:arm64-latest
+    

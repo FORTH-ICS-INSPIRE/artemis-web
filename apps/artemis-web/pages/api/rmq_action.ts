@@ -8,9 +8,12 @@ import auth from '../../middleware/auth';
 import * as Amqp from 'amqp-ts';
 import { BrokerExchangeOptions, BrokerQueueOptions } from 'typescript-rabbitmq';
 import Broker from 'typescript-rabbitmq';
-import uuidv4 from 'uuid/v4';
 import { csrf } from '../../libs/csrf';
 import limiter from '../../middleware/limiter';
+/* eslint-disable */
+
+const { v4: uuidv4 } = require('uuid');
+/* eslint-enable */
 
 const sendRMQAction = async (obj) => {
   const { exchangeName, payload, routing_key } = obj;
