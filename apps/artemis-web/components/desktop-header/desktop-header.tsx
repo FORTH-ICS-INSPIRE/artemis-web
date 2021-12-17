@@ -38,7 +38,7 @@ const DesktopHeader = (props) => {
 
   const getItemClass = (path1, path2 = '+-"') =>
     window.location.pathname.includes(path1) ||
-      window.location.pathname.includes(path2)
+    window.location.pathname.includes(path2)
       ? 'nav-item visited'
       : 'nav-item';
 
@@ -158,7 +158,14 @@ const DesktopHeader = (props) => {
           )}
           {user && (
             <li className="nav-item">
-              <a id="logout" className="nav-link" onClick={handleLogout}>
+              <a
+                role="button"
+                tabIndex={0}
+                id="logout"
+                className="nav-link"
+                onKeyDown={handleLogout}
+                onClick={handleLogout}
+              >
                 Logout
               </a>
             </li>

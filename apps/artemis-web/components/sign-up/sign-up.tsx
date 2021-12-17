@@ -23,7 +23,7 @@ const SignUp = (props) => {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ page: 'signup' })
+      body: JSON.stringify({ page: 'signup' }),
     });
 
     if (res.status === 200) {
@@ -92,7 +92,6 @@ const SignUp = (props) => {
                   fullWidth
                   id="username"
                   label="Username"
-                  autoFocus
                 />
               </Grid>
               <Grid item xs={12}>
@@ -119,7 +118,12 @@ const SignUp = (props) => {
                 />
               </Grid>
               <Grid item xs={12}>
-                <img style={{ marginRight: '40px' }} src={`data:image/svg+xml;utf8,${encodeURIComponent(captcha.svg)}`} />
+                <img
+                  style={{ marginRight: '40px' }}
+                  src={`data:image/svg+xml;utf8,${encodeURIComponent(
+                    captcha.svg
+                  )}`}
+                />
                 <TextField
                   variant="outlined"
                   margin="normal"
@@ -130,7 +134,6 @@ const SignUp = (props) => {
                   label="Captcha"
                   name="captcha"
                   autoComplete="captcha"
-                  autoFocus
                 />
               </Grid>
             </Grid>
