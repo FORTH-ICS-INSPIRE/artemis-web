@@ -54,7 +54,7 @@ const DashboardPage = (props: any) => {
           <Media queries={GLOBAL_MEDIA_QUERIES}>
             {(matches) => (
               <div id="content-wrap" style={{ paddingBottom: '5rem' }}>
-                <div className="row">
+                <div className="row" role="toolbar">
                   <div className="col-lg-1" />
                   <div className="col-lg-10">
                     <div className="row">
@@ -63,22 +63,18 @@ const DashboardPage = (props: any) => {
                       </div>
                       {matches.pc && (
                         <div className="col-lg-2">
-                          <h2 style={{ color: 'black' }}>Live Update:</h2>{' '}
+                          <h2 style={{ color: 'black' }}><label htmlFor="toggle">Live Update:</label></h2>{' '}
                         </div>
                       )}
                       <div className="col-lg-1">
                         <FormGroup>
-                          <FormControlLabel
-                            control={
-                              <AntSwitch
-                                onChange={() => {
-                                  setIsLive(!isLive);
-                                }}
-                                size="medium"
-                                checked={isLive}
-                              />
-                            }
-                            label=""
+                          <AntSwitch
+                            id='toggle'
+                            onChange={() => {
+                              setIsLive(!isLive);
+                            }}
+                            size="medium"
+                            checked={isLive}
                           />
                         </FormGroup>
                       </div>
@@ -98,8 +94,8 @@ const DashboardPage = (props: any) => {
                           (
                           {user &&
                             new Date(user.lastLogin).toLocaleDateString() +
-                              ' ' +
-                              new Date(user.lastLogin).toLocaleTimeString()}
+                            ' ' +
+                            new Date(user.lastLogin).toLocaleTimeString()}
                           )
                         </b>
                         . You are {user && user.role}.

@@ -126,9 +126,9 @@ class StatusTable extends Component<StatsType, any> {
     const monitorList = [];
 
     return (
-      <>
+      <div role={"contentinfo"}>
         <h5>Backend Microservices</h5>
-        <table id="modules" className="table table-hover">
+        <table id="bmodules" className="table table-hover">
           <thead>
             <tr>
               <th style={{ textAlign: 'left' }}>Name</th>
@@ -156,7 +156,7 @@ class StatusTable extends Component<StatsType, any> {
                       index={i}
                       tooltip={
                         tooltips[
-                          process.name.slice(0, process.name.indexOf('-'))
+                        process.name.slice(0, process.name.indexOf('-'))
                         ]
                       }
                       date={this.state.date}
@@ -171,7 +171,7 @@ class StatusTable extends Component<StatsType, any> {
         </table>
 
         <h5>Monitor (tap) Microservices</h5>
-        <table id="modules" className="table table-hover">
+        <table id="mmodules" className="table table-hover">
           <thead>
             <tr>
               <th style={{ textAlign: 'left' }}>Name</th>
@@ -199,7 +199,7 @@ class StatusTable extends Component<StatsType, any> {
                       index={i + '2'}
                       tooltip={
                         tooltips[
-                          process.name.slice(0, process.name.indexOf('-'))
+                        process.name.slice(0, process.name.indexOf('-'))
                         ]
                       }
                       date={this.state.date}
@@ -212,7 +212,7 @@ class StatusTable extends Component<StatsType, any> {
             )}
           </tbody>
         </table>
-      </>
+      </div>
     );
   }
 }

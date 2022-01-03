@@ -1,15 +1,13 @@
-import authorization from '../../middleware/authorization';
 import nc from 'next-connect';
+import Broker, { BrokerExchangeOptions } from 'typescript-rabbitmq';
+import uuidv4 from 'uuid/v4';
 import {
   NextApiRequestExtended,
-  NextApiResponseExtended,
+  NextApiResponseExtended
 } from '../../definitions';
-import auth from '../../middleware/auth';
-import * as Amqp from 'amqp-ts';
-import { BrokerExchangeOptions, BrokerQueueOptions } from 'typescript-rabbitmq';
-import Broker from 'typescript-rabbitmq';
-import uuidv4 from 'uuid/v4';
 import { csrf } from '../../libs/csrf';
+import auth from '../../middleware/auth';
+import authorization from '../../middleware/authorization';
 import limiter from '../../middleware/limiter';
 
 const sendRMQAction = async (obj) => {
@@ -75,9 +73,6 @@ const handler = nc()
     const {
       action,
       hijack_key,
-      prefix,
-      hijack_type,
-      hijack_as,
       state,
     } = req.body;
 

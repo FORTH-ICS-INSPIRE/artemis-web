@@ -337,9 +337,10 @@ const OngoingHijackTableComponent = (props: any): ReactElement => {
       className="btn-group"
       role="group"
     >
-      Show
+      <label htmlFor="entries">Show</label>
       <select
-        style={{ width: '80px', marginLeft: '10px', marginRight: '10px' }}
+        id='entries'
+        style={{ width: '80px', marginLeft: '10px', marginRight: '10px', color: '#000`' }}
         onChange={(event) =>
           onSizePerPageChange(parseInt(event.target.value, 10))
         }
@@ -349,11 +350,10 @@ const OngoingHijackTableComponent = (props: any): ReactElement => {
           <option
             key={i}
             value={option.text}
-            className={`btn ${
-              currSizePerPage === `${option.page}`
-                ? 'btn-secondary'
-                : 'btn-warning'
-            }`}
+            className={`btn ${currSizePerPage === `${option.page}`
+              ? 'btn-secondary'
+              : 'btn-warning'
+              }`}
           >
             {option.text}
           </option>
@@ -541,15 +541,17 @@ const OngoingHijackTableComponent = (props: any): ReactElement => {
   );
 
   return (
-    <ErrorBoundary
-      containsData={true}
-      noDataMessage={'No hijack alerts.'}
-      customError={HIJACK_COUNT.error}
-    >
-      <PaginationProvider pagination={paginationFactory(options)}>
-        {contentTable}
-      </PaginationProvider>
-    </ErrorBoundary>
+    <div role={"contentinfo"}>
+      <ErrorBoundary
+        containsData={true}
+        noDataMessage={'No hijack alerts.'}
+        customError={HIJACK_COUNT.error}
+      >
+        <PaginationProvider pagination={paginationFactory(options)}>
+          {contentTable}
+        </PaginationProvider>
+      </ErrorBoundary>
+    </div>
   );
 };
 

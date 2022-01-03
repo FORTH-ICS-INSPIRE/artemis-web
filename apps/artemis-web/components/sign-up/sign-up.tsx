@@ -85,7 +85,7 @@ const SignUp = (props) => {
             <Grid container spacing={2}>
               <Grid item xs={12} sm={12}>
                 <TextField
-                  autoComplete="uname"
+                  autoComplete="username"
                   name="name"
                   variant="outlined"
                   required
@@ -120,6 +120,7 @@ const SignUp = (props) => {
               <Grid item xs={12}>
                 <img
                   style={{ marginRight: '40px' }}
+                  alt='CAPTCHA'
                   src={`data:image/svg+xml;utf8,${encodeURIComponent(
                     captcha.svg
                   )}`}
@@ -133,7 +134,6 @@ const SignUp = (props) => {
                   color="primary"
                   label="Captcha"
                   name="captcha"
-                  autoComplete="captcha"
                 />
               </Grid>
             </Grid>
@@ -147,7 +147,7 @@ const SignUp = (props) => {
             >
               Sign Up
             </Button>
-            <Grid container justify="flex-end">
+            <Grid container justifyContent="flex-end">
               <Grid item>
                 <Link href="/login" variant="body2">
                   Already have an account? Login
