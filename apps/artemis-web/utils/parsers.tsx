@@ -5,7 +5,9 @@ import { formatDate, genTooltip } from './token';
 
 export function extractUser(req: any): any {
   if (!req.user) return null;
-
+  let type = 'user';
+  if (req.user.password === '<REDUCTED>')
+    type = 'ldap-user';
   const { _id, name, email, role, lastLogin, id } = req.user;
   return {
     _id,
@@ -14,6 +16,7 @@ export function extractUser(req: any): any {
     role,
     lastLogin,
     sessionId: id,
+    type
   };
 }
 
@@ -75,6 +78,7 @@ export function extractLdapUser(req): any {
     email: mail,
     role: role,
     lastLogin: new Date(),
+    type: 'ldap-user',
     sessionId: req.session.id,
   };
 }
@@ -360,9 +364,9 @@ function extractHijackInfoRight(hijack) {
     'Last Update': [
       hijack.time_last
         ? formatDate(
-            new Date(hijack.time_last),
-            Math.abs(new Date().getTimezoneOffset() / 60)
-          )
+          new Date(hijack.time_last),
+          Math.abs(new Date().getTimezoneOffset() / 60)
+        )
         : 'Never',
       genTooltip(
         'Last Update:',
@@ -374,9 +378,9 @@ function extractHijackInfoRight(hijack) {
     'Time Ended': [
       hijack.time_ended
         ? formatDate(
-            new Date(hijack.time_ended),
-            Math.abs(new Date().getTimezoneOffset() / 60)
-          )
+          new Date(hijack.time_ended),
+          Math.abs(new Date().getTimezoneOffset() / 60)
+        )
         : 'Never',
       genTooltip(
         'Time Ended:',
@@ -390,9 +394,9 @@ function extractHijackInfoRight(hijack) {
     'Mitigation Started': [
       hijack.mitigation_started
         ? formatDate(
-            new Date(hijack.mitigation_started),
-            Math.abs(new Date().getTimezoneOffset() / 60)
-          )
+          new Date(hijack.mitigation_started),
+          Math.abs(new Date().getTimezoneOffset() / 60)
+        )
         : 'Never',
       genTooltip(
         'Mitigation Started:',
@@ -510,11 +514,11 @@ export async function extractHijackTooltips(hijack): Promise<any> {
   const tooltip1 =
     ASN_int_origin && ASN_int_origin.toString() !== '-'
       ? parseASNData(
-          ASN_int_origin,
-          name_origin,
-          countries_origin,
-          abuse_origin
-        )
+        ASN_int_origin,
+        name_origin,
+        countries_origin,
+        abuse_origin
+      )
       : '';
 
   const tooltip2 =
