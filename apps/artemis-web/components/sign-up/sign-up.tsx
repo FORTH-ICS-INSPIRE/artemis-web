@@ -67,7 +67,7 @@ const SignUp = (props) => {
 
   return (
     <ThemeProvider theme={theme}>
-      <Container maxWidth="sm" role="contentinfo">
+      <Container maxWidth="sm" role="article">
         <div className={classes.paper}>
           <img
             width="150"

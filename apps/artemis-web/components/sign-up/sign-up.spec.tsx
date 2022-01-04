@@ -14,7 +14,7 @@ describe('SignUp', () => {
   it('should have no accessibility violations', async () => {
     fetchPolyfill('');
 
-    const { baseElement } = render(<SignUp />);
+    const { baseElement } = render(<div role={"main"}><SignUp /></div>);
     const results = await axe(baseElement);
     expect(results).toHaveNoViolations();
   });

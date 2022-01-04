@@ -21,7 +21,7 @@ describe('Login', () => {
   it('should have no accessibility violations', async () => {
     fetchPolyfill('');
 
-    const html = mount(<Login />).getDOMNode();
+    const html = mount(<div role={"main"}> <Login /> </div>).getDOMNode();
     const results = await axe(html);
     expect(results).toHaveNoViolations();
   });
