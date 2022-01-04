@@ -92,7 +92,7 @@ const Login = (props: any): any => {
 
   return (
     <ThemeProvider theme={theme}>
-      <Container component="main" maxWidth="sm">
+      <Container maxWidth="sm">
         <div className={props.classes.paper}>
           <img
             width="150"
@@ -100,13 +100,7 @@ const Login = (props: any): any => {
             alt="avatar"
             className="img-responsive"
           />
-          <Typography
-            className={props.classes.input}
-            component="h1"
-            variant="h5"
-          >
-            Sign In
-          </Typography>
+          <h1>Sign In</h1>
           {errorMsg && <p className="error">{errorMsg}</p>}
           <form method="post" className="login-form">
             <input name="stype" type="hidden" defaultValue="login" />

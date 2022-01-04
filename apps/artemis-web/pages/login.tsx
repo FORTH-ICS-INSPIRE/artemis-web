@@ -22,7 +22,9 @@ const LoginPage = (props: any): any => {
       <Head>
         <title>ARTEMIS - Login</title>
       </Head>
+      {/* <h1 style={{ display: 'none' }}>Sign In</h1> */}
       <div id="login-container">
+
         {!user && !loading && (
           <div id="content-wrap">
             <LoginComponent {...props} />

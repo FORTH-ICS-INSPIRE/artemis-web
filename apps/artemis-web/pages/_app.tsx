@@ -52,7 +52,6 @@ function MyApp({ Component, pageProps }) {
           value={{ tooltips: tooltips, setTooltips: setTooltips }}
         >
           <Component {...pageProps} />
-
         </TooltipContext.Provider>
       </Layout>
     </ApolloProvider>

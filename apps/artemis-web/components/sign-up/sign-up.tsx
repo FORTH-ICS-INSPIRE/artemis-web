@@ -67,7 +67,7 @@ const SignUp = (props) => {
 
   return (
     <ThemeProvider theme={theme}>
-      <Container component="main" maxWidth="sm">
+      <Container maxWidth="sm">
         <div className={classes.paper}>
           <img
             width="150"
@@ -75,9 +75,9 @@ const SignUp = (props) => {
             alt="avatar"
             className="img-responsive"
           />
-          <Typography className={classes.input} component="h1" variant="h5">
+          <h1>
             Sign up
-          </Typography>
+          </h1>
           <form method="post" onSubmit={handleSubmit} className="login-form">
             {errorMsg ? <p style={{ color: 'red' }}>{errorMsg}</p> : null}
             <input name="emailVerified" type="hidden" defaultValue={'true'} />
