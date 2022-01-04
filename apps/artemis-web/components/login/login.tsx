@@ -92,7 +92,7 @@ const Login = (props: any): any => {
 
   return (
     <ThemeProvider theme={theme}>
-      <Container maxWidth="sm">
+      <Container maxWidth="sm" role="contentinfo">
         <div className={props.classes.paper}>
           <img
             width="150"
