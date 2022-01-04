@@ -1,6 +1,6 @@
 import nc from 'next-connect';
 import Broker, { BrokerExchangeOptions } from 'typescript-rabbitmq';
-import uuidv4 from 'uuid/v4';
+import { v4 as uuidv4 } from 'uuid';
 import {
   NextApiRequestExtended,
   NextApiResponseExtended

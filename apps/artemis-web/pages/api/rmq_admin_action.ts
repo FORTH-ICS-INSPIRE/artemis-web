@@ -8,7 +8,7 @@ import auth from '../../middleware/auth';
 import * as Amqp from 'amqp-ts';
 import { BrokerExchangeOptions, BrokerQueueOptions } from 'typescript-rabbitmq';
 import Broker from 'typescript-rabbitmq';
-import uuidv4 from 'uuid/v4';
+import { v4 as uuidv4 } from 'uuid';
 import { csrf } from '../../libs/csrf';
 import limiter from '../../middleware/limiter';
 
