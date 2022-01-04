@@ -115,11 +115,14 @@ const DesktopHeader = (props) => {
                   onClose={handleCloseAction}
                   style={{ top: '14px' }}
                 >
-                  <Link href="/password_change">
-                    <MenuItem onClick={handleCloseAction}>
-                      Password Change
-                    </MenuItem>
-                  </Link>
+                  {
+                    user.type !== 'ldap-user' &&
+                    (<Link href="/password_change">
+                      <MenuItem onClick={handleCloseAction}>
+                        Password Change
+                      </MenuItem>
+                    </Link>)
+                  }
                   <Link href="/config_comparison">
                     <MenuItem onClick={handleCloseAction}>
                       Config Comparison
