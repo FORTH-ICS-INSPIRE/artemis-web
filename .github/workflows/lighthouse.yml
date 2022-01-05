@@ -23,4 +23,3 @@ jobs:
           yarn global add @lhci/cli
           export lhcli="$(yarn global bin)/lhci"
           $lhcli autorun
-          $lhcli audit-accessibility
