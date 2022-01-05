@@ -20,7 +20,7 @@ jobs:
       - run: yarn build --prod
       - name: run lighthouse CI
         run: |
-          npm install -g @lhci/cli
+          yarn global add @lhci/cli
           export lhcli="$(yarn global bin)/lhci"
           $lhcli autorun
           $lhcli audit-accessibility

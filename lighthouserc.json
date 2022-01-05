@@ -4,9 +4,8 @@
       "url": [
         "http://localhost:4200/login"
       ],
-      "startServerCommand": "serve:lhci",
+      "startServerCommand": "yarn start",
       "startServerReadyPattern": "Accepting connections",
-      "staticDistDir": "dist",
       "settings": {
         "onlyCategories": [
           "accessibility"
