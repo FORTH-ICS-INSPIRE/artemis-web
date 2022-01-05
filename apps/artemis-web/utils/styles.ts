@@ -169,7 +169,7 @@ export const useStyles = makeStyles((_theme) => ({
   },
   submit: {
     margin: _theme.spacing(3, 0, 2),
-    color: "white",
+    color: 'white',
   },
   input: {
     color: 'black',

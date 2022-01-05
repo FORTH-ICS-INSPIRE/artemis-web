@@ -15,14 +15,16 @@ const HomePage = (props) => {
   } else if (!user && !loading && router) {
     router.push('/login');
   }
-  return <>
-    <Head>
-      <title>ARTEMIS</title>
-    </Head>
-    <div>
-      <h1>Loading...</h1>
-    </div>
-  </>;
+  return (
+    <>
+      <Head>
+        <title>ARTEMIS</title>
+      </Head>
+      <div>
+        <h1>Loading...</h1>
+      </div>
+    </>
+  );
 };
 
 export default HomePage;

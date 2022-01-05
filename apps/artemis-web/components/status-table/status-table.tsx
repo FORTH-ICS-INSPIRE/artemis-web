@@ -126,7 +126,7 @@ class StatusTable extends Component<StatsType, any> {
     const monitorList = [];
 
     return (
-      <div role={"contentinfo"}>
+      <div role={'contentinfo'}>
         <h5>Backend Microservices</h5>
         <table id="bmodules" className="table table-hover">
           <thead>
@@ -156,7 +156,7 @@ class StatusTable extends Component<StatsType, any> {
                       index={i}
                       tooltip={
                         tooltips[
-                        process.name.slice(0, process.name.indexOf('-'))
+                          process.name.slice(0, process.name.indexOf('-'))
                         ]
                       }
                       date={this.state.date}
@@ -199,7 +199,7 @@ class StatusTable extends Component<StatsType, any> {
                       index={i + '2'}
                       tooltip={
                         tooltips[
-                        process.name.slice(0, process.name.indexOf('-'))
+                          process.name.slice(0, process.name.indexOf('-'))
                         ]
                       }
                       date={this.state.date}

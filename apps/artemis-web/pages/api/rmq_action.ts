@@ -3,7 +3,7 @@ import Broker, { BrokerExchangeOptions } from 'typescript-rabbitmq';
 import { v4 as uuidv4 } from 'uuid';
 import {
   NextApiRequestExtended,
-  NextApiResponseExtended
+  NextApiResponseExtended,
 } from '../../definitions';
 import { csrf } from '../../libs/csrf';
 import auth from '../../middleware/auth';
@@ -12,12 +12,8 @@ import limiter from '../../middleware/limiter';
 
 const sendRMQAction = async (obj) => {
   const { exchangeName, payload, routing_key } = obj;
-  const {
-    RABBITMQ_USER,
-    RABBITMQ_PASS,
-    RABBITMQ_HOST,
-    RABBITMQ_PORT,
-  } = process.env;
+  const { RABBITMQ_USER, RABBITMQ_PASS, RABBITMQ_HOST, RABBITMQ_PORT } =
+    process.env;
 
   const config: any = {
     connection: {
@@ -70,11 +66,7 @@ const handler = nc()
   .use(authorization(['admin', 'user']))
   .post(async (req: NextApiRequestExtended, res: NextApiResponseExtended) => {
     let obj = {};
-    const {
-      action,
-      hijack_key,
-      state,
-    } = req.body;
+    const { action, hijack_key, state } = req.body;
 
     switch (action) {
       case 'seen':

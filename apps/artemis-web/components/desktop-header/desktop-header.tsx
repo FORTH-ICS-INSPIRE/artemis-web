@@ -38,7 +38,7 @@ const DesktopHeader = (props) => {
 
   const getItemClass = (path1, path2 = '+-"') =>
     window.location.pathname.includes(path1) ||
-      window.location.pathname.includes(path2)
+    window.location.pathname.includes(path2)
       ? 'nav-item visited'
       : 'nav-item';
 
@@ -115,14 +115,13 @@ const DesktopHeader = (props) => {
                   onClose={handleCloseAction}
                   style={{ top: '14px' }}
                 >
-                  {
-                    user.type !== 'ldap-user' &&
-                    (<Link href="/password_change">
+                  {user.type !== 'ldap-user' && (
+                    <Link href="/password_change">
                       <MenuItem onClick={handleCloseAction}>
                         Password Change
                       </MenuItem>
-                    </Link>)
-                  }
+                    </Link>
+                  )}
                   <Link href="/config_comparison">
                     <MenuItem onClick={handleCloseAction}>
                       Config Comparison

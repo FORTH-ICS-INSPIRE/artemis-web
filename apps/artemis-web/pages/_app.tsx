@@ -14,9 +14,9 @@ if (process.env.NODE_ENV !== 'production' && typeof window !== 'undefined') {
     rules: [
       {
         id: 'radiogroup',
-        enabled: true
-      }
-    ]
+        enabled: true,
+      },
+    ],
   };
   axe(React, ReactDOM, 1000, config);
 }

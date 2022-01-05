@@ -24,6 +24,7 @@ export const LocalStrategy = new Strategy(
           }
         );
         memory.reset(req.ip);
+        console.log({ ...user, id: req.session.id })
         return done(null, { ...user, id: req.session.id });
       } else {
         memory.incr(req.ip);

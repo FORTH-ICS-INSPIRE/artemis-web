@@ -6,7 +6,7 @@ import React, { useState } from 'react';
 import { GlobalHotKeys } from 'react-hotkeys';
 import { commands, handlers, keyMap } from '../../utils/power-actions';
 import { OfflineBoltOutlined } from '@material-ui/icons';
-import CommandLineModal from "react-super-cmd";
+import CommandLineModal from 'react-super-cmd';
 
 const AuthHOC = (WrappedComponent, ACL = [], blockUserType = '') => {
   const Wrapped = (props) => {
@@ -20,7 +20,11 @@ const AuthHOC = (WrappedComponent, ACL = [], blockUserType = '') => {
       router.push('/login');
     }
 
-    if (user && !loading && (!ACL.includes(user.role) || blockUserType === user.type)) {
+    if (
+      user &&
+      !loading &&
+      (!ACL.includes(user.role) || blockUserType === user.type)
+    ) {
       return (
         <>
           <Head>
@@ -45,8 +49,7 @@ const AuthHOC = (WrappedComponent, ACL = [], blockUserType = '') => {
             noOptionsText="No commands found. Try a different search term."
           />
         </GlobalHotKeys>
-      )
-        ;
+      );
     } else {
       return <> </>;
     }

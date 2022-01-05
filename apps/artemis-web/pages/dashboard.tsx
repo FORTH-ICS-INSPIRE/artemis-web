@@ -63,13 +63,15 @@ const DashboardPage = (props: any) => {
                       </div>
                       {matches.pc && (
                         <div className="col-lg-2">
-                          <h2 style={{ color: 'black' }}><label htmlFor="toggle">Live Update:</label></h2>{' '}
+                          <h2 style={{ color: 'black' }}>
+                            <label htmlFor="toggle">Live Update:</label>
+                          </h2>{' '}
                         </div>
                       )}
                       <div className="col-lg-1">
                         <FormGroup>
                           <AntSwitch
-                            id='toggle'
+                            id="toggle"
                             onChange={() => {
                               setIsLive(!isLive);
                             }}
@@ -94,8 +96,8 @@ const DashboardPage = (props: any) => {
                           (
                           {user &&
                             new Date(user.lastLogin).toLocaleDateString() +
-                            ' ' +
-                            new Date(user.lastLogin).toLocaleTimeString()}
+                              ' ' +
+                              new Date(user.lastLogin).toLocaleTimeString()}
                           )
                         </b>
                         . You are {user && user.role}.

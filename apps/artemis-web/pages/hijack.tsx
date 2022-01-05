@@ -6,7 +6,7 @@ import {
   FormGroup,
   Grid,
   IconButton,
-  Paper
+  Paper,
 } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import { ContentState, EditorState } from 'draft-js';
@@ -32,9 +32,8 @@ import {
   findStatus,
   GLOBAL_MEDIA_QUERIES,
   shallMock,
-  statuses
+  statuses,
 } from '../utils/token';
-
 
 const ViewHijackPage = (props) => {
   if (shallMock(props.isTesting)) {
@@ -129,7 +128,7 @@ const ViewHijackPage = (props) => {
           {(matches) => (
             <div
               className="container overview col-lg-12"
-            // style={{ paddingTop: '120px' }}
+              // style={{ paddingTop: '120px' }}
             >
               <div className="row">
                 <div className="col-lg-1" />

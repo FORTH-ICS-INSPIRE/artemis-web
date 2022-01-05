@@ -75,9 +75,7 @@ const SignUp = (props) => {
             alt="avatar"
             className="img-responsive"
           />
-          <h1>
-            Sign up
-          </h1>
+          <h1>Sign up</h1>
           <form method="post" onSubmit={handleSubmit} className="login-form">
             {errorMsg ? <p style={{ color: 'red' }}>{errorMsg}</p> : null}
             <input name="emailVerified" type="hidden" defaultValue={'true'} />
@@ -120,7 +118,7 @@ const SignUp = (props) => {
               <Grid item xs={12}>
                 <img
                   style={{ marginRight: '40px' }}
-                  alt='CAPTCHA'
+                  alt="CAPTCHA"
                   src={`data:image/svg+xml;utf8,${encodeURIComponent(
                     captcha.svg
                   )}`}

@@ -1,6 +1,6 @@
 import React from 'react';
 import { render } from '@testing-library/react';
-import { fetch as fetchPolyfill } from 'whatwg-fetch'
+import { fetch as fetchPolyfill } from 'whatwg-fetch';
 import { axe, toHaveNoViolations } from 'jest-axe';
 
 import StatusTable from './status-table';
@@ -26,13 +26,15 @@ describe('StatsTable', () => {
   it('should have no accessibility violations', async () => {
     fetchPolyfill('');
 
-    const { baseElement } = render(<StatusTable
-      data={{
-        view_processes: [
-          { name: 'test', running: true, timestamp: Date.now() },
-        ],
-      }}
-    />);
+    const { baseElement } = render(
+      <StatusTable
+        data={{
+          view_processes: [
+            { name: 'test', running: true, timestamp: Date.now() },
+          ],
+        }}
+      />
+    );
     const results = await axe(baseElement);
     expect(results).toHaveNoViolations();
   });

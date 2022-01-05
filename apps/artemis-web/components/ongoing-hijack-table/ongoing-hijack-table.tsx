@@ -339,8 +339,13 @@ const OngoingHijackTableComponent = (props: any): ReactElement => {
     >
       <label htmlFor="entries">Show</label>
       <select
-        id='entries'
-        style={{ width: '80px', marginLeft: '10px', marginRight: '10px', color: '#000`' }}
+        id="entries"
+        style={{
+          width: '80px',
+          marginLeft: '10px',
+          marginRight: '10px',
+          color: '#000`',
+        }}
         onChange={(event) =>
           onSizePerPageChange(parseInt(event.target.value, 10))
         }
@@ -350,10 +355,11 @@ const OngoingHijackTableComponent = (props: any): ReactElement => {
           <option
             key={i}
             value={option.text}
-            className={`btn ${currSizePerPage === `${option.page}`
-              ? 'btn-secondary'
-              : 'btn-warning'
-              }`}
+            className={`btn ${
+              currSizePerPage === `${option.page}`
+                ? 'btn-secondary'
+                : 'btn-warning'
+            }`}
           >
             {option.text}
           </option>
@@ -541,7 +547,7 @@ const OngoingHijackTableComponent = (props: any): ReactElement => {
   );
 
   return (
-    <div role={"contentinfo"}>
+    <div role={'contentinfo'}>
       <ErrorBoundary
         containsData={true}
         noDataMessage={'No hijack alerts.'}

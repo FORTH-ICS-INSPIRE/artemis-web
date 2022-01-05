@@ -19,11 +19,13 @@ describe('StatisticsTable', () => {
   });
 
   it('should have no accessibility violations', async () => {
-    const { baseElement } = render(<StatsTable
-      data={{
-        view_index_all_stats: [{}],
-      }}
-    />);
+    const { baseElement } = render(
+      <StatsTable
+        data={{
+          view_index_all_stats: [{}],
+        }}
+      />
+    );
     const results = await axe(baseElement);
     expect(results).toHaveNoViolations();
   });

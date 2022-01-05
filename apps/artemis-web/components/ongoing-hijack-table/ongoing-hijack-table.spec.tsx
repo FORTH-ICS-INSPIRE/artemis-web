@@ -2,7 +2,7 @@ import { MockedProvider } from '@apollo/client/testing';
 import { render } from '@testing-library/react';
 import React from 'react';
 import OngoingHijackTable from './ongoing-hijack-table';
-import { fetch as fetchPolyfill } from 'whatwg-fetch'
+import { fetch as fetchPolyfill } from 'whatwg-fetch';
 import { axe, toHaveNoViolations } from 'jest-axe';
 import { mocks } from './mockData';
 
