@@ -3,8 +3,15 @@ require('dotenv').config({
   path: `.env`,
 });
 const { createSecureHeaders } = require('next-secure-headers');
+const withPWA = require("next-pwa");
 
-module.exports = {
+module.exports = withPWA({
+  pwa: {
+    dest: "public",
+    register: true,
+    skipWaiting: true,
+    disable: process.env.NODE_ENV === "development",
+  },
   poweredByHeader: false,
   i18n: { locales: ['en'], defaultLocale: 'en' },
   basePath: process.env.ARTEMIS_WEB_BASE_DIR,
@@ -22,6 +29,7 @@ module.exports = {
                 "'unsafe-inline'",
                 'https://cdn.jsdelivr.net/',
                 'https://code.jquery.com',
+                'https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css',
               ],
               scriptSrc: [
                 "'self'",
@@ -29,6 +37,7 @@ module.exports = {
                 "'unsafe-eval'",
                 'https://cdn.jsdelivr.net/',
                 'https://code.jquery.com',
+                'https://code.jquery.com/jquery-3.5.1.slim.min.js',
               ],
               connectSrc: [
                 "'self'",
@@ -40,9 +49,7 @@ module.exports = {
                 'http://localhost/api/graphql',
                 'https://demo.artemis-pc.duckdns.org/api/graphql',
               ],
-              frameAncestors: "'none",
               imgSrc: ["'self'", 'data:'],
-              objectSrc: "'none",
             },
           },
           forceHTTPSRedirect: [
@@ -54,4 +61,4 @@ module.exports = {
       },
     ];
   },
-};
+});
