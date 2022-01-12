@@ -6,6 +6,7 @@ import TooltipContext from '../context/tooltip-context';
 import { useApollo } from '../libs/graphql';
 import { firebaseCloudMessaging } from '../libs/webPush';
 import './styles.sass';
+import { toast, ToastContainer } from 'react-toastify';
 
 const useStateWithLocalStorage = (localStorageKey) => {
   const [value, setValue] = useState(
@@ -24,9 +25,10 @@ const useStateWithLocalStorage = (localStorageKey) => {
 function MyApp({ Component, pageProps }) {
   const client = useApollo(pageProps.initialApolloState);
   let tooltips, setTooltips;
-
+  const notify = (message: React.ReactText) => toast(message);
 
   useEffect(() => {
+    notify('yolo')
     setToken(); async function setToken() {
       try {
         const token = await firebaseCloudMessaging.init();
@@ -40,7 +42,11 @@ function MyApp({ Component, pageProps }) {
     function getMessage() {
       console.log('aaaa')
       const messaging = getMessaging();
-      onMessage(messaging, (message) => console.log('foreground', message));
+      onMessage(messaging, (message) => {
+        console.log('ttttttt');
+        console.log(message.notification.body)
+        toast(message.notification.body)
+      });
     }
   }, []);
 
@@ -61,6 +67,7 @@ function MyApp({ Component, pageProps }) {
 
         </TooltipContext.Provider>
       </Layout>
+      <ToastContainer />
     </ApolloProvider>
   );
 }
