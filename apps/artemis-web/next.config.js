@@ -48,6 +48,8 @@ module.exports = withPWA({
                 'https://localhost/api/graphql',
                 'http://localhost/api/graphql',
                 'https://demo.artemis-pc.duckdns.org/api/graphql',
+                'https://firebaseinstallations.googleapis.com/',
+                'https://fcmregistrations.googleapis.com/v1/projects/artemis-304609/registrations',
               ],
               imgSrc: ["'self'", 'data:'],
             },

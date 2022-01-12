@@ -2,31 +2,21 @@ importScripts('https://www.gstatic.com/firebasejs/8.2.1/firebase-app.js');
 importScripts('https://www.gstatic.com/firebasejs/8.2.1/firebase-messaging.js');
 
 firebase.initializeApp({
-    apiKey: 'api-key',
-    authDomain: 'project-id.firebaseapp.com',
-    databaseURL: 'https://project-id.firebaseio.com',
-    projectId: 'project-id',
-    storageBucket: 'project-id.appspot.com',
-    messagingSenderId: 'sender-id',
-    appId: 'app-id',
-    measurementId: 'G-measurement-id',
+    apiKey: "AIzaSyBpdFZRDzxDiznntPd",
+    authDomain: "artemis-304609.firebaseapp.com",
+    projectId: "artemis-304609",
+    // storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+    messagingSenderId: "1033505772898",
+    appId: "1:1033505772898:web:c70a7e62a2b67ee4e8083b",
 });
+firebase.messaging();
 
-// Retrieve an instance of Firebase Messaging so that it can handle background
-// messages.
-const messaging = firebase.messaging();
-
-
-
-messaging.onBackgroundMessage(function (payload) {
-    console.log('[firebase-messaging-sw.js] Received background message ', payload);
-    // Customize notification here
-    const notificationTitle = 'Background Message Title';
-    const notificationOptions = {
-        body: 'Background Message body.',
-        icon: '/firebase-logo.png'
+//background notifications will be received here
+firebase.messaging().setBackgroundMessageHandler((payload) => {
+    const { title, body } = JSON.parse(payload.data.notification);
+    var options = {
+        body,
+        icon: '/icons/launcher-icon-4x.png',
     };
-
-    self.registration.showNotification(notificationTitle,
-        notificationOptions);
+    registration.showNotification(title, options);
 });
