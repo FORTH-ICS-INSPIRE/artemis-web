@@ -49,6 +49,8 @@ module.exports = withPWA({
                 'http://localhost/api/graphql',
                 'https://code.jquery.com/',
                 'https://cdn.jsdelivr.net/',
+                'https://firebaseinstallations.googleapis.com/v1/projects/artemis-304609/installations',
+                'https://fcmregistrations.googleapis.com/v1/projects/artemis-304609/registrations',
               ],
               imgSrc: ["'self'", 'data:'],
             },

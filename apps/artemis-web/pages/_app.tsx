@@ -28,8 +28,9 @@ function MyApp({ Component, pageProps }) {
   const notify = (message: React.ReactText) => toast(message);
 
   useEffect(() => {
-    notify('yolo')
-    setToken(); async function setToken() {
+
+    setToken();
+    async function setToken() {
       try {
         const token = await firebaseCloudMessaging.init();
         if (token) {
@@ -45,7 +46,7 @@ function MyApp({ Component, pageProps }) {
       onMessage(messaging, (message) => {
         console.log('ttttttt');
         console.log(message.notification.body)
-        toast(message.notification.body)
+        // toast(message.notification.body)
       });
     }
   }, []);
@@ -64,10 +65,9 @@ function MyApp({ Component, pageProps }) {
           value={{ tooltips: tooltips, setTooltips: setTooltips }}
         >
           <Component {...pageProps} />
-
         </TooltipContext.Provider>
       </Layout>
-      <ToastContainer />
+
     </ApolloProvider>
   );
 }
