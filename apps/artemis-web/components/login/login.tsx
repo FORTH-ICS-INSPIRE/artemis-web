@@ -19,7 +19,7 @@ const Login = (props: any): any => {
     email: '',
     password: '',
     rememberMe: false,
-    captcha: ''
+    captcha: '',
   });
 
   async function fetchMyCAPTCHA() {
@@ -30,19 +30,27 @@ const Login = (props: any): any => {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ page: 'login' })
+      body: JSON.stringify({ page: 'login' }),
     });
 
     if (res.status === 200) {
       const resp = await res.json();
-      setCaptcha({ svg: resp.svg, encryptedExpr: resp.encryptedExpr, hasCaptcha: resp.hasCaptcha });
+      setCaptcha({
+        svg: resp.svg,
+        encryptedExpr: resp.encryptedExpr,
+        hasCaptcha: resp.hasCaptcha,
+      });
     } else {
       const msg = await res.text();
       setErrorMsg(msg);
     }
   }
 
-  const [captcha, setCaptcha] = useState({ svg: '', encryptedExpr: '', hasCaptcha: false });
+  const [captcha, setCaptcha] = useState({
+    svg: '',
+    encryptedExpr: '',
+    hasCaptcha: false,
+  });
   const router = useRouter();
 
   async function onClick(e, endpoint) {
@@ -55,7 +63,11 @@ const Login = (props: any): any => {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ ...formData, _csrf: props._csrf, encryptedExpr: captcha.encryptedExpr }),
+      body: JSON.stringify({
+        ...formData,
+        _csrf: props._csrf,
+        encryptedExpr: captcha.encryptedExpr,
+      }),
     });
 
     if (res.status === 200) {
@@ -80,7 +92,7 @@ const Login = (props: any): any => {
 
   return (
     <ThemeProvider theme={theme}>
-      <Container component="main" maxWidth="sm">
+      <Container maxWidth="sm" role="article">
         <div className={props.classes.paper}>
           <img
             width="150"
@@ -88,13 +100,7 @@ const Login = (props: any): any => {
             alt="avatar"
             className="img-responsive"
           />
-          <Typography
-            className={props.classes.input}
-            component="h1"
-            variant="h5"
-          >
-            Sign In
-          </Typography>
+          <h1>Sign In</h1>
           {errorMsg && <p className="error">{errorMsg}</p>}
           <form method="post" className="login-form">
             <input name="stype" type="hidden" defaultValue="login" />
@@ -108,7 +114,6 @@ const Login = (props: any): any => {
               label="Email Address"
               name="email"
               autoComplete="email"
-              autoFocus
               onChange={(e) =>
                 setFormData({ ...formData, email: e.target.value })
               }
@@ -127,9 +132,15 @@ const Login = (props: any): any => {
                 setFormData({ ...formData, password: e.target.value })
               }
             />
-            {
-              captcha.hasCaptcha ? (<>
-                <img alt='captcha' style={{ marginRight: '40px' }} src={`data:image/svg+xml;utf8,${encodeURIComponent(captcha.svg)}`} />
+            {captcha.hasCaptcha ? (
+              <>
+                <img
+                  alt="captcha"
+                  style={{ marginRight: '40px' }}
+                  src={`data:image/svg+xml;utf8,${encodeURIComponent(
+                    captcha.svg
+                  )}`}
+                />
                 <TextField
                   variant="outlined"
                   margin="normal"
@@ -140,12 +151,14 @@ const Login = (props: any): any => {
                   label="Captcha"
                   name="captcha"
                   autoComplete="captcha"
-                  autoFocus
                   onChange={(e) =>
                     setFormData({ ...formData, captcha: e.target.value })
                   }
-                /> </>) : <span> </span>
-            }
+                />{' '}
+              </>
+            ) : (
+              <span> </span>
+            )}
             <br />
             <FormControlLabel
               className={props.classes.input}

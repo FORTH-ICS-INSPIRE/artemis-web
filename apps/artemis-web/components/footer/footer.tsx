@@ -1,7 +1,7 @@
-import { Container, CssBaseline } from '@material-ui/core';
+import { Container } from '@material-ui/core';
 import { useFooterStyles } from '../../utils/styles';
 import React from 'react';
-import Copyright from './copyright';
+// import Copyright from './copyright';
 
 type MyProps = {
   classes: {
@@ -15,7 +15,7 @@ type MyProps = {
 class FooterComponent extends React.Component<MyProps> {
   render() {
     const { classes, system_version } = this.props;
-    const { root, footer, link } = classes;
+    // const { root, footer, link } = classes;
 
     return (
       <footer className="footer">

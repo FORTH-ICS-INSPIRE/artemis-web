@@ -48,8 +48,8 @@ export const formatDate = (date: Date, incr = 0): string => {
   const parsedDate = isToday
     ? 'Today'
     : isYesterday
-      ? 'Yesterday'
-      : newDate.getFullYear() +
+    ? 'Yesterday'
+    : newDate.getFullYear() +
       '-' +
       (newDate.getMonth() + 1) +
       '-' +
@@ -287,7 +287,12 @@ export const expandColumnComponent = ({
 export const expandedColumnHeaderComponent = (): ReactElement<any, any> => {
   return (
     <div
+      role="button"
+      tabIndex={0}
       onClick={(e) => {
+        e.stopPropagation();
+      }}
+      onKeyDown={(e) => {
         e.stopPropagation();
       }}
     >

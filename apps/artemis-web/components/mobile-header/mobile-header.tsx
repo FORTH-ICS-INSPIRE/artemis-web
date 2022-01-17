@@ -150,12 +150,11 @@ const MobileHeader = (props) => {
                   onClose={handleCloseAction}
                   style={{ top: '36px' }}
                 >
-                  {
-                    user.type !== 'ldap-user' &&
-                    (<MenuItem onClick={handleCloseAction}>
+                  {user.type !== 'ldap-user' && (
+                    <MenuItem onClick={handleCloseAction}>
                       <Link href="/password_change">Password Change</Link>
                     </MenuItem>
-                    )}
+                  )}
                   <MenuItem onClick={handleCloseAction}>
                     <Link href="/config_comparison">Config Comparison</Link>
                   </MenuItem>

@@ -26,7 +26,11 @@ class Tooltip extends Component<any, any> {
               setTooltip: this.setTooltip,
             })
           }
-          data-tip
+          onFocus={() =>
+            fetchTooltip(asn, context, {
+              setTooltip: this.setTooltip,
+            })
+          }
           data-for={label}
         >
           {html || asn}

@@ -95,7 +95,6 @@ const PasswordChange = (props) => {
                   label="Old Password"
                   autoComplete="current-password"
                   type="password"
-                  autoFocus
                 />
               </Grid>
               <Grid item xs={12}>

@@ -23,7 +23,7 @@ const SignUp = (props) => {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ page: 'signup' })
+      body: JSON.stringify({ page: 'signup' }),
     });
 
     if (res.status === 200) {
@@ -67,7 +67,7 @@ const SignUp = (props) => {
 
   return (
     <ThemeProvider theme={theme}>
-      <Container component="main" maxWidth="sm">
+      <Container maxWidth="sm" role="article">
         <div className={classes.paper}>
           <img
             width="150"
@@ -75,9 +75,7 @@ const SignUp = (props) => {
             alt="avatar"
             className="img-responsive"
           />
-          <Typography className={classes.input} component="h1" variant="h5">
-            Sign up
-          </Typography>
+          <h1>Sign up</h1>
           <form method="post" onSubmit={handleSubmit} className="login-form">
             {errorMsg ? <p style={{ color: 'red' }}>{errorMsg}</p> : null}
             <input name="emailVerified" type="hidden" defaultValue={'true'} />
@@ -85,14 +83,13 @@ const SignUp = (props) => {
             <Grid container spacing={2}>
               <Grid item xs={12} sm={12}>
                 <TextField
-                  autoComplete="uname"
+                  autoComplete="username"
                   name="name"
                   variant="outlined"
                   required
                   fullWidth
                   id="username"
                   label="Username"
-                  autoFocus
                 />
               </Grid>
               <Grid item xs={12}>
@@ -119,7 +116,13 @@ const SignUp = (props) => {
                 />
               </Grid>
               <Grid item xs={12}>
-                <img style={{ marginRight: '40px' }} src={`data:image/svg+xml;utf8,${encodeURIComponent(captcha.svg)}`} />
+                <img
+                  style={{ marginRight: '40px' }}
+                  alt="CAPTCHA"
+                  src={`data:image/svg+xml;utf8,${encodeURIComponent(
+                    captcha.svg
+                  )}`}
+                />
                 <TextField
                   variant="outlined"
                   margin="normal"
@@ -129,8 +132,6 @@ const SignUp = (props) => {
                   color="primary"
                   label="Captcha"
                   name="captcha"
-                  autoComplete="captcha"
-                  autoFocus
                 />
               </Grid>
             </Grid>
@@ -144,7 +145,7 @@ const SignUp = (props) => {
             >
               Sign Up
             </Button>
-            <Grid container justify="flex-end">
+            <Grid container justifyContent="flex-end">
               <Grid item>
                 <Link href="/login" variant="body2">
                   Already have an account? Login

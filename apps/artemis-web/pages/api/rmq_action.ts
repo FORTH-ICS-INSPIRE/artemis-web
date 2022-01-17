@@ -1,25 +1,19 @@
-import authorization from '../../middleware/authorization';
 import nc from 'next-connect';
+import Broker, { BrokerExchangeOptions } from 'typescript-rabbitmq';
+import { v4 as uuidv4 } from 'uuid';
 import {
   NextApiRequestExtended,
   NextApiResponseExtended,
 } from '../../definitions';
-import auth from '../../middleware/auth';
-import * as Amqp from 'amqp-ts';
-import { BrokerExchangeOptions, BrokerQueueOptions } from 'typescript-rabbitmq';
-import Broker from 'typescript-rabbitmq';
-import uuidv4 from 'uuid/v4';
 import { csrf } from '../../libs/csrf';
+import auth from '../../middleware/auth';
+import authorization from '../../middleware/authorization';
 import limiter from '../../middleware/limiter';
 
 const sendRMQAction = async (obj) => {
   const { exchangeName, payload, routing_key } = obj;
-  const {
-    RABBITMQ_USER,
-    RABBITMQ_PASS,
-    RABBITMQ_HOST,
-    RABBITMQ_PORT,
-  } = process.env;
+  const { RABBITMQ_USER, RABBITMQ_PASS, RABBITMQ_HOST, RABBITMQ_PORT } =
+    process.env;
 
   const config: any = {
     connection: {
@@ -72,14 +66,7 @@ const handler = nc()
   .use(authorization(['admin', 'user']))
   .post(async (req: NextApiRequestExtended, res: NextApiResponseExtended) => {
     let obj = {};
-    const {
-      action,
-      hijack_key,
-      prefix,
-      hijack_type,
-      hijack_as,
-      state,
-    } = req.body;
+    const { action, hijack_key, state } = req.body;
 
     switch (action) {
       case 'seen':

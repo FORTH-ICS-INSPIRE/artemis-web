@@ -19,6 +19,7 @@ const handler = nc()
   .post(
     passport.authenticate('local'),
     (req: NextApiRequestExtended, res: NextApiResponseExtended, next) => {
+      console.log('mpuike')
       if (req.body.rememberMe && req.user) {
         memory.reset(req.ip);
         const token = getRandomString(64);

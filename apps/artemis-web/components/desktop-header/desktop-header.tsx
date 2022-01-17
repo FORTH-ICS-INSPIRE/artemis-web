@@ -38,14 +38,14 @@ const DesktopHeader = (props) => {
 
   const getItemClass = (path1, path2 = '+-"') =>
     window.location.pathname.includes(path1) ||
-      window.location.pathname.includes(path2)
+    window.location.pathname.includes(path2)
       ? 'nav-item visited'
       : 'nav-item';
 
   return (
     <div className="container">
-      <a className="navbar-brand" href="/">
-        <img src="/artemis-logo-color.svg" alt="" width="128px;" />
+      <a className="navbar-brand" aria-label="Close" href="/">
+        <img src="/artemis-logo-color.svg" alt="artemis logo" width="128px;" />
       </a>
       <div className="collapse navbar-collapse" id="navbarCollapse">
         <ul className="nav navbar-nav navbar-right">
@@ -115,14 +115,13 @@ const DesktopHeader = (props) => {
                   onClose={handleCloseAction}
                   style={{ top: '14px' }}
                 >
-                  {
-                    user.type !== 'ldap-user' &&
-                    (<Link href="/password_change">
+                  {user.type !== 'ldap-user' && (
+                    <Link href="/password_change">
                       <MenuItem onClick={handleCloseAction}>
                         Password Change
                       </MenuItem>
-                    </Link>)
-                  }
+                    </Link>
+                  )}
                   <Link href="/config_comparison">
                     <MenuItem onClick={handleCloseAction}>
                       Config Comparison
@@ -161,7 +160,14 @@ const DesktopHeader = (props) => {
           )}
           {user && (
             <li className="nav-item">
-              <a id="logout" className="nav-link" onClick={handleLogout}>
+              <a
+                role="button"
+                tabIndex={0}
+                id="logout"
+                className="nav-link"
+                onKeyDown={handleLogout}
+                onClick={handleLogout}
+              >
                 Logout
               </a>
             </li>

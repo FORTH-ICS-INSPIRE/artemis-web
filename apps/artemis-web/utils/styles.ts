@@ -16,7 +16,7 @@ import Switch from '@material-ui/core/Switch';
 
 const palletType = 'light';
 const darkState = false;
-const mainPrimaryColor = darkState ? orange[500] : lightBlue[500];
+const mainPrimaryColor = darkState ? orange[500] : lightBlue[800];
 const mainSecondaryColor = darkState ? deepOrange[900] : deepPurple[500];
 
 export const AntSwitch = withStyles((theme: Theme) =>
@@ -169,6 +169,7 @@ export const useStyles = makeStyles((_theme) => ({
   },
   submit: {
     margin: _theme.spacing(3, 0, 2),
+    color: 'white',
   },
   input: {
     color: 'black',

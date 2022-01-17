@@ -1,0 +1,15 @@
+{
+  "ci": {
+    "collect": {
+      "url": ["http://localhost:4200/login"],
+      "startServerCommand": "yarn start",
+      "startServerReadyPattern": "Accepting connections",
+      "settings": {
+        "onlyCategories": ["accessibility"]
+      }
+    },
+    "upload": {
+      "target": "temporary-public-storage"
+    }
+  }
+}

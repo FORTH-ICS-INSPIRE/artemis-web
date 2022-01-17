@@ -11,14 +11,16 @@
   ],
   "plugins": [
     "@typescript-eslint",
-    "@nrwl/nx"
+    "@nrwl/nx",
+    "jsx-a11y"
   ],
   "extends": [
     "eslint:recommended",
     "plugin:@typescript-eslint/eslint-recommended",
     "plugin:@typescript-eslint/recommended",
     "prettier",
-    "plugin:@next/next/recommended"
+    "plugin:@next/next/recommended",
+    "plugin:jsx-a11y/recommended"
   ],
   "rules": {
     "@typescript-eslint/explicit-member-accessibility": "off",

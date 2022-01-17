@@ -1,6 +1,7 @@
 import React from 'react';
 import { useJWT } from '../utils/hooks/use-jwt';
 import { useRouter } from 'next/router';
+import Head from 'next/head';
 
 const HomePage = (props) => {
   const [user, loading] = useJWT();
@@ -14,7 +15,16 @@ const HomePage = (props) => {
   } else if (!user && !loading && router) {
     router.push('/login');
   }
-  return <div> Loading... </div>;
+  return (
+    <>
+      <Head>
+        <title>ARTEMIS</title>
+      </Head>
+      <div>
+        <h1>Loading...</h1>
+      </div>
+    </>
+  );
 };
 
 export default HomePage;

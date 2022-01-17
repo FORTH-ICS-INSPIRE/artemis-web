@@ -1,0 +1,24 @@
+name: Lighthouse
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  lighthouse:
+    name: audit-accessibility
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - run: yarn install --frozen-lockfile
+      - run: yarn build --prod
+      - name: run lighthouse CI
+        run: |
+          yarn global add @lhci/cli
+          export lhcli="$(yarn global bin)/lhci"
+          $lhcli autorun
