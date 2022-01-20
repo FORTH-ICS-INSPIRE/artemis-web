@@ -97,8 +97,11 @@ const Login = (props: any): any => {
           'Content-Type': 'application/json',
         },
       });
-      if (ldapResp.status === 200)
+      if (ldapResp.status === 200) {
         setHasLdap((await ldapResp.json()).hasLdap);
+
+        if (!hasLdap) console.log('LDAP is not available!')
+      }
     };
 
     pingLdap();

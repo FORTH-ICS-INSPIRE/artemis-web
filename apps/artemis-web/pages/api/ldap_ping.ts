@@ -17,7 +17,6 @@ const params = {
 }
 
 const handler = nc()
-    .use(limiter('ldap'))
     .get(async (req: NextApiRequestExtended, res: NextApiResponseExtended, next) => {
         try {
             await connection.connect(params)
