@@ -1,18 +1,14 @@
-const { Telnet } = require('telnet-client')
-const connection = new Telnet()
 import nc from 'next-connect';
+import { Telnet } from 'telnet-client';
 import {
     NextApiRequestExtended,
-    NextApiResponseExtended,
+    NextApiResponseExtended
 } from '../../definitions';
-import auth from '../../middleware/auth';
-import { extractLdapUser } from '../../utils/parsers';
-import { csrf } from '../../libs/csrf';
-import captcha from '../../middleware/captcha';
 import limiter from '../../middleware/limiter';
-import memory from '../../utils/captchaMemoryStore';
 
-// these parameters are just examples and most probably won't work for your use-case.
+const connection = new Telnet()
+
+
 const params = {
     host: process.env.LDAP_HOST,
     port: process.env.LDAP_PORT,

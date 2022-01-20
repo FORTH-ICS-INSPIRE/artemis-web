@@ -87,17 +87,21 @@ const Login = (props: any): any => {
     }
   }
 
-  useEffect(async () => {
-    const ldapResp = await fetch('/api/ldap_ping', {
-      method: 'GET',
-      credentials: 'include',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-    });
-    if (ldapResp.status === 200)
-      setHasLdap((await ldapResp.json()).hasLdap);
+  useEffect(() => {
+    const pingLdap = async () => {
+      const ldapResp = await fetch('/api/ldap_ping', {
+        method: 'GET',
+        credentials: 'include',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+      });
+      if (ldapResp.status === 200)
+        setHasLdap((await ldapResp.json()).hasLdap);
+    };
+
+    pingLdap();
 
     fetchMyCAPTCHA();
   }, []);
