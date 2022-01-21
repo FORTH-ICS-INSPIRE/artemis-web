@@ -7,6 +7,7 @@ describe('artemis-web', () => {
     cy.visit('/login');
     cy.get('h1').should('have.text', 'Sign In');
     cy.typeLogin({ email: 'hermes@planetexpress.com', password: 'hermes' });
+    cy.wait(2000);
     cy.loginLDAP();
     cy.waitFor('h1');
     cy.get('h1').should('have.text', 'Dashboard');
@@ -33,6 +34,7 @@ describe('artemis-web', () => {
     cy.visit('/login');
     cy.get('h1').should('have.text', 'Sign In');
     cy.typeLogin({ email: 'fry@planetexpress.com', password: 'fry' });
+    cy.wait(2000);
     cy.loginLDAP();
     cy.waitFor('h1');
     cy.get('h1').should('have.text', 'Dashboard');

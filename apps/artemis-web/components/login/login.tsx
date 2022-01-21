@@ -21,6 +21,7 @@ const Login = (props: any): any => {
     rememberMe: false,
     captcha: '',
   });
+  const [hasLdap, setHasLdap] = useState(false);
 
   async function fetchMyCAPTCHA() {
     const res = await fetch('/api/captcha', {
@@ -87,6 +88,24 @@ const Login = (props: any): any => {
   }
 
   useEffect(() => {
+    const pingLdap = async () => {
+      const ldapResp = await fetch('/api/ldap_ping', {
+        method: 'GET',
+        credentials: 'include',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+      });
+      if (ldapResp.status === 200) {
+        setHasLdap((await ldapResp.json()).hasLdap);
+
+        if (!hasLdap) console.log('LDAP is not available!')
+      }
+    };
+
+    pingLdap();
+
     fetchMyCAPTCHA();
   }, []);
 
@@ -184,16 +203,18 @@ const Login = (props: any): any => {
             >
               Login
             </Button>
-            <Button
-              fullWidth
-              variant="contained"
-              color="primary"
-              id="ldap_login"
-              className={props.classes.submit}
-              onClick={(e) => onClick(e, '/api/auth/login/ldap')}
-            >
-              Login with LDAP
-            </Button>
+            {(hasLdap &&
+              <Button
+                fullWidth
+                variant="contained"
+                color="primary"
+                id="ldap_login"
+                className={props.classes.submit}
+                onClick={(e) => onClick(e, '/api/auth/login/ldap')}
+              >
+                Login with LDAP
+              </Button>
+            )}
             <Grid container>
               <Grid style={{ textAlign: 'left' }} item xs></Grid>
               <Grid item>
