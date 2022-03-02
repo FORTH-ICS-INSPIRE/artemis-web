@@ -14,10 +14,17 @@ const handler = nc()
   .put(async (req: NextApiRequestExtended, res: NextApiResponseExtended) => {
     try {
       const { old_password, new_password } = req.body;
+      const regex = /^(?=.*[A-Z])(?=.*[!@#$&*])(?=.*[0-9])(?=.*[a-z]).{8,}$/g;
+
       if (!req.user) throw new Error('You need to be logged in.');
 
       if (!(await argon2.verify(req.user.password, old_password)))
         throw new Error('Old password is wrong.');
+
+      if (!new_password.match(regex)) {
+        res.status(400).send('Weak password');
+        return;
+      }
 
       const password = await argon2.hash(new_password);
 

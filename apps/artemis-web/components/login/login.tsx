@@ -145,7 +145,7 @@ const Login = (props: any): any => {
               name="password"
               label="Password"
               type="password"
-              id="password"
+              id="password2"
               autoComplete="current-password"
               onChange={(e) =>
                 setFormData({ ...formData, password: e.target.value })

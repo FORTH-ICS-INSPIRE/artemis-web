@@ -8,11 +8,20 @@ import {
 import { ThemeProvider } from '@material-ui/core/styles';
 import { theme, useStyles } from '../../utils/styles';
 import React, { useState } from 'react';
+import NiceInputPassword from 'react-nice-input-password';
+import 'react-nice-input-password/dist/react-nice-input-password.css';
+import LockIcon from '@material-ui/icons/Lock';
 
 const PasswordChange = (props) => {
   const { classes } = props;
   const [errorMsg, setErrorMsg] = useState('');
   const [successMsg, setSuccessMsg] = useState('');
+  const [passState, setPassState] = useState({ password: "" });
+  const handleChange = (data: any) => {
+    setPassState({
+      password: data.value,
+    });
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -41,7 +50,7 @@ const PasswordChange = (props) => {
     if (res.status === 200) {
       setSuccessMsg(
         (await res.json()).message +
-          '\n Please login with your new credentials.'
+        '\n Please login with your new credentials.'
       );
       setErrorMsg('');
       await fetch('/api/auth/logout', {
@@ -59,6 +68,9 @@ const PasswordChange = (props) => {
       setSuccessMsg('');
     }
   };
+
+  const { password } = passState;
+  const value = password;
 
   return (
     <ThemeProvider theme={theme}>
@@ -97,17 +109,49 @@ const PasswordChange = (props) => {
                   type="password"
                 />
               </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  variant="outlined"
-                  required
-                  fullWidth
-                  id="new_password"
-                  label="New Password"
-                  name="new_password"
-                  type="password"
-                />
-              </Grid>
+              <NiceInputPassword
+                name="password"
+                value={value}
+                id="password"
+                showSecurityLevelBar
+                onChange={handleChange}
+                autoComplete="current-password"
+                LabelComponent={"Password"}
+                InputComponent={TextField}
+                InputComponentProps={{
+                  variant: 'outlined',
+                  name: "password",
+                  label: "Password",
+                  fullWidth: true,
+                  required: true,
+                  InputProps: {
+                    endAdornment: <LockIcon />,
+                  }
+                }}
+                // showSecurityLevelDescription
+                securityLevels={[
+                  {
+                    descriptionLabel: <Typography>1 number</Typography>,
+                    validator: /.*[0-9].*/,
+                  },
+                  {
+                    descriptionLabel: <Typography>1 uppercase</Typography>,
+                    validator: /.*[A-Z].*/,
+                  },
+                  {
+                    descriptionLabel: <Typography>1 special letter</Typography>,
+                    validator: /.*[!@#$&*].*/,
+                  },
+                  {
+                    descriptionLabel: <Typography>1 lowecase letter</Typography>,
+                    validator: /.*[a-z].*/,
+                  },
+                  {
+                    descriptionLabel: <Typography>at least 8</Typography>,
+                    validator: /.*.{8,}/,
+                  }
+                ]}
+              />
               <Grid item xs={12}>
                 <TextField
                   variant="outlined"
