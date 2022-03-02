@@ -4,16 +4,26 @@ import {
   Grid,
   Link,
   TextField,
-  Typography,
+  Typography
 } from '@material-ui/core';
 import { ThemeProvider } from '@material-ui/core/styles';
-import { theme, useStyles } from '../../utils/styles';
+import LockIcon from '@material-ui/icons/Lock';
 import React, { useEffect, useState } from 'react';
+import NiceInputPassword from 'react-nice-input-password';
+import 'react-nice-input-password/dist/react-nice-input-password.css';
+import { theme, useStyles } from '../../utils/styles';
 
 const SignUp = (props) => {
   const { classes } = props;
   const [errorMsg, setErrorMsg] = useState('');
   const [captcha, setCaptcha] = useState({ svg: '', encryptedExpr: '' });
+  const [passState, setPassState] = useState({ password: "" });
+  const handleChange = (data: any) => {
+    setPassState({
+      password: data.value,
+    });
+  }
+
 
   async function fetchMyCAPTCHA() {
     const res = await fetch('/api/captcha', {
@@ -65,6 +75,9 @@ const SignUp = (props) => {
     fetchMyCAPTCHA();
   }, []);
 
+  const { password } = passState;
+  const value = password;
+
   return (
     <ThemeProvider theme={theme}>
       <Container maxWidth="sm" role="article">
@@ -104,15 +117,48 @@ const SignUp = (props) => {
                 />
               </Grid>
               <Grid item xs={12}>
-                <TextField
-                  variant="outlined"
-                  required
-                  fullWidth
+                <NiceInputPassword
                   name="password"
-                  label="Password"
-                  type="password"
+                  value={value}
                   id="password"
+                  showSecurityLevelBar
+                  onChange={handleChange}
                   autoComplete="current-password"
+                  LabelComponent={"Password"}
+                  InputComponent={TextField}
+                  InputComponentProps={{
+                    variant: 'outlined',
+                    name: "password",
+                    label: "Password",
+                    fullWidth: true,
+                    required: true,
+                    InputProps: {
+                      endAdornment: <LockIcon />,
+                    }
+                  }}
+                  // showSecurityLevelDescription
+                  securityLevels={[
+                    {
+                      descriptionLabel: <Typography>1 number</Typography>,
+                      validator: /.*[0-9].*/,
+                    },
+                    {
+                      descriptionLabel: <Typography>1 uppercase</Typography>,
+                      validator: /.*[A-Z].*/,
+                    },
+                    {
+                      descriptionLabel: <Typography>1 special letter</Typography>,
+                      validator: /.*[!@#$&*].*/,
+                    },
+                    {
+                      descriptionLabel: <Typography>1 lowecase letter</Typography>,
+                      validator: /.*[a-z].*/,
+                    },
+                    {
+                      descriptionLabel: <Typography>at least 8</Typography>,
+                      validator: /.*.{8,}/,
+                    }
+                  ]}
                 />
               </Grid>
               <Grid item xs={12}>
