@@ -31,6 +31,7 @@ class Tooltip extends Component<any, any> {
               setTooltip: this.setTooltip,
             })
           }
+          data-tip
           data-for={label}
         >
           {html || asn}
