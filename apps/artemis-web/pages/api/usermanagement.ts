@@ -16,6 +16,8 @@ const handler = nc()
   .use(authorization(['admin']))
   .post(async (req: NextApiRequestExtended, res: NextApiResponseExtended) => {
     const { userName, action, new_password, email } = req.body;
+    const regex = /^(?=.*[A-Z])(?=.*[!@#$&*])(?=.*[0-9])(?=.*[a-z]).{8,}$/g;
+
     switch (action) {
       case 'approval':
         await req.db.collection('users').updateOne(
@@ -48,6 +50,10 @@ const handler = nc()
         );
         break;
       case 'changePass':
+        if (!new_password.match(regex)) {
+          res.status(400).send('Weak password. Password must be at least 8 characters.\nAlso must include: 1 number, 1 uppercase, 1 special letter, 1 lowecase letter.');
+          return;
+        }
         await req.db.collection('users').updateOne(
           { name: userName },
           {
@@ -58,6 +64,10 @@ const handler = nc()
         );
         break;
       case 'create':
+        if (!new_password.match(regex)) {
+          res.status(400).send('Weak password. Password must be at least 8 characters.\nAlso must include: 1 number, 1 uppercase, 1 special letter, 1 lowecase letter.');
+          return;
+        }
         await req.db
           .collection('users')
           .insertOne({

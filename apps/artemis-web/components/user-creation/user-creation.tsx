@@ -1,9 +1,66 @@
-import { Button, Grid, TextField } from '@material-ui/core';
+import { Button, Grid, TextField, Typography } from '@material-ui/core';
+import dynamic from 'next/dynamic';
 import React, { useState } from 'react';
+import LockIcon from '@material-ui/icons/Lock';
+import 'react-nice-input-password/dist/react-nice-input-password.css';
 
 const UserCreationComponent = (props) => {
   const [errorMsg, setErrorMsg] = useState('');
   const [successMsg, setSuccessMsg] = useState('');
+  const NiceInputPassword2: any = dynamic(() => import('react-nice-input-password'), { ssr: false });
+
+  const NiceInputPassword = React.memo((props) => {
+    const [passState, setPassState] = useState({ password: "" });
+    const handleChange = (data: any) => {
+      setPassState({
+        password: data.value,
+      });
+    }
+    return <NiceInputPassword2
+      name="new_password"
+      id="new_password"
+      value={passState.password}
+      onChange={handleChange}
+      showSecurityLevelBar
+      showSecurityLevelDescription
+      autoComplete="current-password"
+      LabelComponent={"Password"}
+      InputComponent={TextField}
+      InputComponentProps={{
+        variant: 'outlined',
+        name: "new_password",
+        label: "New Password",
+        fullWidth: true,
+        required: true,
+        InputProps: {
+          endAdornment: <LockIcon />,
+        }
+      }}
+      // showSecurityLevelDescription
+      securityLevels={[
+        {
+          descriptionLabel: <Typography>1 number</Typography>,
+          validator: /.*[0-9].*/,
+        },
+        {
+          descriptionLabel: <Typography>1 uppercase</Typography>,
+          validator: /.*[A-Z].*/,
+        },
+        {
+          descriptionLabel: <Typography>1 special letter</Typography>,
+          validator: /.*[!@#$&*].*/,
+        },
+        {
+          descriptionLabel: <Typography>1 lowecase letter</Typography>,
+          validator: /.*[a-z].*/,
+        },
+        {
+          descriptionLabel: <Typography>at least 8</Typography>,
+          validator: /.*.{8,}/,
+        }
+      ]}
+    />
+  });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -72,7 +129,7 @@ const UserCreationComponent = (props) => {
               />
             </Grid>
             <Grid item xs={12}>
-              <TextField
+              {/* <TextField
                 variant="outlined"
                 required
                 fullWidth
@@ -80,6 +137,8 @@ const UserCreationComponent = (props) => {
                 label="New Password"
                 name="new_password"
                 type="password"
+              /> */}
+              <NiceInputPassword
               />
             </Grid>
           </Grid>

@@ -142,7 +142,7 @@ const Login = (props: any): any => {
               margin="normal"
               required
               fullWidth
-              name="password"
+              name="login_password"
               label="Password"
               type="password"
               id="password"
