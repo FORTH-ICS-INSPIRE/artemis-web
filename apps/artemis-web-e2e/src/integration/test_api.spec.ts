@@ -9,7 +9,7 @@ describe('artemis-web-api', () => {
         cy.visit('/');
         const chance = new Chance();
         newEmail = chance.email();
-        newPass = chance.string({ length: 5 });
+        newPass = 'aA1!123456';
         const name = chance.first();
 
         cy.request({

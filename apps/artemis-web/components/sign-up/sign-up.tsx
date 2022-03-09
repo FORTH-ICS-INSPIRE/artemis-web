@@ -12,13 +12,14 @@ import React, { useEffect, useState } from 'react';
 import 'react-nice-input-password/dist/react-nice-input-password.css';
 import LockIcon from '@material-ui/icons/Lock';
 import dynamic from 'next/dynamic';
+import * as NP from 'react-nice-input-password';
 
 const SignUp = (props) => {
   const { classes } = props;
   const [errorMsg, setErrorMsg] = useState('');
   const [captcha, setCaptcha] = useState({ svg: '', encryptedExpr: '' });
 
-  const NiceInputPassword2: any = dynamic(() => import('react-nice-input-password'), { ssr: false });
+  const NiceInputPassword2: NP = dynamic(() => import('react-nice-input-password'), { ssr: false });
 
   const NiceInputPassword = React.memo((props) => {
     const [passState, setPassState] = useState({ password: "" });

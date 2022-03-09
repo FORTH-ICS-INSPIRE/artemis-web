@@ -18,7 +18,7 @@ describe('artemis-web', () => {
     cy.visit('/signup');
     const chance = new Chance();
     newEmail = chance.email();
-    newPass = chance.string({ length: 5 });
+    newPass = 'aA1!23456'
     const name = chance.first();
     newName = name;
     cy.typeRegister({ name: name, email: newEmail, password: newPass });
