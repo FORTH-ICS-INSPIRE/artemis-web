@@ -115,12 +115,12 @@ const PasswordChange = (props) => {
                   onChange={handleChange}
                   showSecurityLevelBar
                   autoComplete="current-password"
-                  LabelComponent={"New Password"}
+                  LabelComponent={"Password"}
                   InputComponent={TextField}
                   InputComponentProps={{
                     variant: 'outlined',
                     name: "new_password",
-                    label: "New Password",
+                    label: "New password",
                     fullWidth: true,
                     required: true,
                     InputProps: {

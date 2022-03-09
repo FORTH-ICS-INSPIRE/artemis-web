@@ -22,7 +22,6 @@ const handler = nc()
       if (!(await argon2.verify(req.user.password, old_password)))
         throw new Error('Old password is wrong.');
 
-
       if (!new_password.match(regex)) {
         res.status(400).send('Weak password. Password must be at least 8 characters.\nAlso must include: 1 number, 1 uppercase, 1 special letter, 1 lowecase letter.');
         return;

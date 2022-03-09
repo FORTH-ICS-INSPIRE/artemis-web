@@ -3,7 +3,6 @@ import Chance from 'chance';
 let newEmail;
 let newPass;
 
-
 describe('artemis-web-api', () => {
     it('[API] signup', () => {
         cy.visit('/');

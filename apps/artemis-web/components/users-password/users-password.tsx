@@ -4,7 +4,6 @@ import 'react-nice-input-password/dist/react-nice-input-password.css';
 import LockIcon from '@material-ui/icons/Lock';
 import dynamic from 'next/dynamic';
 
-
 const UsersPasswordComponent = (props) => {
   const users = props.data;
   const [errorMsg, setErrorMsg] = useState('');
