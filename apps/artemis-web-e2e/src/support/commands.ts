@@ -43,7 +43,7 @@ Cypress.Commands.add('typeChangePass', (user) => {
 });
 
 Cypress.Commands.add('register', () => {
-  cy.get('button[type=submit]').click();
+  cy.get('button[type=submit]').click({ force: true });
   cy.wait(1000);
 });
 

@@ -3,16 +3,17 @@ import dynamic from 'next/dynamic';
 import React, { useState } from 'react';
 import LockIcon from '@material-ui/icons/Lock';
 import 'react-nice-input-password/dist/react-nice-input-password.css';
-import NiceInputPassword from 'react-nice-input-password';
+import * as NP from 'react-nice-input-password';
 
 const UserCreationComponent = (props) => {
   const [errorMsg, setErrorMsg] = useState('');
   const [successMsg, setSuccessMsg] = useState('');
-  const NiceInputPassword2: NiceInputPassword = dynamic(() => import('react-nice-input-password'), { ssr: false });
+  const NiceInputPassword2: NP = dynamic(() => import('react-nice-input-password'), { ssr: false });
 
-  const NiceInputPassword3 = React.memo((props) => {
+
+  const NiceInputPassword = React.memo((props) => {
     const [passState, setPassState] = useState({ password: "" });
-    const handleChange = (data: any) => {
+    const handleChange = (data) => {
       setPassState({
         password: data.value,
       });
@@ -130,16 +131,8 @@ const UserCreationComponent = (props) => {
               />
             </Grid>
             <Grid item xs={12}>
-              {/* <TextField
-                variant="outlined"
-                required
-                fullWidth
-                id="new_password"
-                label="New Password"
-                name="new_password"
-                type="password"
-              /> */}
-              <NiceInputPassword3
+
+              <NiceInputPassword
               />
             </Grid>
           </Grid>
