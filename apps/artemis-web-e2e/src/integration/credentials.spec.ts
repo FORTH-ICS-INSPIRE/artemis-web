@@ -71,7 +71,7 @@ describe('artemis-web', () => {
   it('change password', () => {
     cy.visit('/password_change');
     cy.get('h1').should('have.text', 'Change Password');
-    cy.typeChangePass({ old_pass: newPass, new_pass: "1234" });
+    cy.typeChangePass({ old_pass: newPass, new_pass: "qQ1!23457" });
     cy.contains('updated');
   });
 });
