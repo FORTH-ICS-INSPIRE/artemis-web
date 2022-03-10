@@ -18,7 +18,7 @@ Cypress.Commands.add('typeLogin', (user) => {
     if ($body.find('input[name=email]').length) {
       cy.get('input[name=email]').type(user.email);
 
-      cy.get('input[name=password]').type(user.password);
+      cy.get('input[name=login_password]').type(user.password);
 
       // cy.get('input[name=captcha]').type('123');
 

@@ -13,7 +13,7 @@ const UsersPasswordComponent = (props) => {
 
   const NiceInputPassword = React.memo((props) => {
     const [passState, setPassState] = useState({ password: "" });
-    const handleChange = (data: any) => {
+    const handleChange = (data) => {
       setPassState({
         password: data.value,
       });

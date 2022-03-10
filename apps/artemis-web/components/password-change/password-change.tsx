@@ -18,7 +18,7 @@ const PasswordChange = (props) => {
   const [successMsg, setSuccessMsg] = useState('');
   const NiceInputPassword2: any = dynamic(() => import('react-nice-input-password'), { ssr: false });
   const [passState, setPassState] = useState({ password: "" });
-  const handleChange = (data: any) => {
+  const handleChange = (data) => {
     setPassState({
       password: data.value,
     });
