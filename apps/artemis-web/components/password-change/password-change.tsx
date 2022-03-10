@@ -18,12 +18,57 @@ const PasswordChange = (props) => {
   const [errorMsg, setErrorMsg] = useState('');
   const [successMsg, setSuccessMsg] = useState('');
   const NiceInputPassword2: NP = dynamic(() => import('react-nice-input-password'), { ssr: false });
-  const [passState, setPassState] = useState({ password: "" });
-  const handleChange = (data) => {
-    setPassState({
-      password: data.value,
-    });
-  }
+
+  const NiceInputPassword = React.memo((props) => {
+    const [passState, setPassState] = useState({ password: "" });
+    const handleChange = (data) => {
+      setPassState({
+        password: data.value,
+      });
+    }
+    return <NiceInputPassword2
+      name="new_password"
+      id="new_password"
+      value={passState.password}
+      onChange={handleChange}
+      showSecurityLevelBar
+      autoComplete="current-password"
+      LabelComponent={"Password"}
+      InputComponent={TextField}
+      InputComponentProps={{
+        variant: 'outlined',
+        name: "new_password",
+        label: "New Password",
+        fullWidth: true,
+        required: true,
+        InputProps: {
+          endAdornment: <LockIcon />,
+        }
+      }}
+      securityLevels={[
+        {
+          descriptionLabel: <Typography>1 number</Typography>,
+          validator: /.*[0-9].*/,
+        },
+        {
+          descriptionLabel: <Typography>1 uppercase</Typography>,
+          validator: /.*[A-Z].*/,
+        },
+        {
+          descriptionLabel: <Typography>1 special letter</Typography>,
+          validator: /.*[!@#$&*].*/,
+        },
+        {
+          descriptionLabel: <Typography>1 lowecase letter</Typography>,
+          validator: /.*[a-z].*/,
+        },
+        {
+          descriptionLabel: <Typography>at least 8</Typography>,
+          validator: /.*.{8,}/,
+        }
+      ]}
+    />
+  });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -109,49 +154,7 @@ const PasswordChange = (props) => {
                 />
               </Grid>
               <Grid item xs={12}>
-                <NiceInputPassword2
-                  name="new_password"
-                  id="new_password"
-                  value={passState.password}
-                  onChange={handleChange}
-                  showSecurityLevelBar
-                  autoComplete="current-password"
-                  LabelComponent={"Password"}
-                  InputComponent={TextField}
-                  InputComponentProps={{
-                    variant: 'outlined',
-                    name: "new_password",
-                    label: "New password",
-                    fullWidth: true,
-                    required: true,
-                    InputProps: {
-                      endAdornment: <LockIcon />,
-                    }
-                  }}
-                  securityLevels={
-                    [
-                      {
-                        descriptionLabel: <Typography>1 number</Typography>,
-                        validator: /.*[0-9].*/,
-                      },
-                      {
-                        descriptionLabel: <Typography>1 uppercase</Typography>,
-                        validator: /.*[A-Z].*/,
-                      },
-                      {
-                        descriptionLabel: <Typography>1 special letter</Typography>,
-                        validator: /.*[!@#$&*].*/,
-                      },
-                      {
-                        descriptionLabel: <Typography>1 lowecase letter</Typography>,
-                        validator: /.*[a-z].*/,
-                      },
-                      {
-                        descriptionLabel: <Typography>at least 8</Typography>,
-                        validator: /.*.{8,}/,
-                      }
-                    ]}
-                />
+                <NiceInputPassword />
               </Grid>
               <Grid item xs={12}>
                 <TextField
