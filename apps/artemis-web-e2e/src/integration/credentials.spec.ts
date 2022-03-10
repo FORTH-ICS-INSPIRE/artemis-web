@@ -23,7 +23,7 @@ describe('artemis-web', () => {
     newName = name;
     cy.typeRegister({ name: name, email: newEmail, password: newPass });
     cy.register();
-    cy.wait(1000);
+    cy.wait(2000);
     cy.get('h1').should('have.text', 'Pending Approval');
   });
 
