@@ -3,13 +3,12 @@ import Chance from 'chance';
 let newEmail;
 let newPass;
 
-
 describe('artemis-web-api', () => {
     it('[API] signup', () => {
         cy.visit('/');
         const chance = new Chance();
         newEmail = chance.email();
-        newPass = chance.string({ length: 5 });
+        newPass = 'aA1!123456';
         const name = chance.first();
 
         cy.request({

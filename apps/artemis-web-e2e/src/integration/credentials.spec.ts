@@ -18,12 +18,12 @@ describe('artemis-web', () => {
     cy.visit('/signup');
     const chance = new Chance();
     newEmail = chance.email();
-    newPass = chance.string({ length: 5 });
+    newPass = 'aA1!23456'
     const name = chance.first();
     newName = name;
     cy.typeRegister({ name: name, email: newEmail, password: newPass });
     cy.register();
-    cy.wait(1000);
+    cy.wait(2000);
     cy.get('h1').should('have.text', 'Pending Approval');
   });
 
@@ -71,7 +71,7 @@ describe('artemis-web', () => {
   it('change password', () => {
     cy.visit('/password_change');
     cy.get('h1').should('have.text', 'Change Password');
-    cy.typeChangePass({ old_pass: newPass, new_pass: "1234" });
+    cy.typeChangePass({ old_pass: newPass, new_pass: "qQ1!23457" });
     cy.contains('updated');
   });
 });

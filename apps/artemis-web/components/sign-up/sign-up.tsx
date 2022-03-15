@@ -9,11 +9,68 @@ import {
 import { ThemeProvider } from '@material-ui/core/styles';
 import { theme, useStyles } from '../../utils/styles';
 import React, { useEffect, useState } from 'react';
+import 'react-nice-input-password/dist/react-nice-input-password.css';
+import LockIcon from '@material-ui/icons/Lock';
+import dynamic from 'next/dynamic';
+import * as NP from 'react-nice-input-password';
 
 const SignUp = (props) => {
   const { classes } = props;
   const [errorMsg, setErrorMsg] = useState('');
   const [captcha, setCaptcha] = useState({ svg: '', encryptedExpr: '' });
+
+  const NiceInputPassword2: NP = dynamic(() => import('react-nice-input-password'), { ssr: false });
+
+  const NiceInputPassword = React.memo((props) => {
+    const [passState, setPassState] = useState({ password: "" });
+    const handleChange = (data) => {
+      setPassState({
+        password: data.value,
+      });
+    }
+    return <NiceInputPassword2
+      name="password"
+      id="password"
+      value={passState.password}
+      onChange={handleChange}
+      showSecurityLevelBar
+      autoComplete="current-password"
+      LabelComponent={"Password"}
+      InputComponent={TextField}
+      InputComponentProps={{
+        variant: 'outlined',
+        name: "password",
+        label: "Password",
+        fullWidth: true,
+        required: true,
+        InputProps: {
+          endAdornment: <LockIcon />,
+        }
+      }}
+      securityLevels={[
+        {
+          descriptionLabel: <Typography>1 number</Typography>,
+          validator: /.*[0-9].*/,
+        },
+        {
+          descriptionLabel: <Typography>1 uppercase</Typography>,
+          validator: /.*[A-Z].*/,
+        },
+        {
+          descriptionLabel: <Typography>1 special letter</Typography>,
+          validator: /.*[!@#$&*].*/,
+        },
+        {
+          descriptionLabel: <Typography>1 lowecase letter</Typography>,
+          validator: /.*[a-z].*/,
+        },
+        {
+          descriptionLabel: <Typography>at least 8</Typography>,
+          validator: /.*.{8,}/,
+        }
+      ]}
+    />
+  });
 
   async function fetchMyCAPTCHA() {
     const res = await fetch('/api/captcha', {
@@ -77,7 +134,7 @@ const SignUp = (props) => {
           />
           <h1>Sign up</h1>
           <form method="post" onSubmit={handleSubmit} className="login-form">
-            {errorMsg ? <p style={{ color: 'red' }}>{errorMsg}</p> : null}
+            {errorMsg ? <p style={{ color: 'red', whiteSpace: "pre-line" }}>{errorMsg}</p> : null}
             <input name="emailVerified" type="hidden" defaultValue={'true'} />
             <input name="stype" type="hidden" defaultValue="signup" />
             <Grid container spacing={2}>
@@ -104,16 +161,7 @@ const SignUp = (props) => {
                 />
               </Grid>
               <Grid item xs={12}>
-                <TextField
-                  variant="outlined"
-                  required
-                  fullWidth
-                  name="password"
-                  label="Password"
-                  type="password"
-                  id="password"
-                  autoComplete="current-password"
-                />
+                <NiceInputPassword />
               </Grid>
               <Grid item xs={12}>
                 <img

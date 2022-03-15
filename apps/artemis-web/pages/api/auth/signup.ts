@@ -19,6 +19,7 @@ const handler = nc()
   .post(async (req: NextApiRequestExtended, res: NextApiResponseExtended) => {
     const { name, password } = req.body;
     const email = normalizeEmail(req.body.email);
+    const regex = /^(?=.*[A-Z])(?=.*[!@#$&*])(?=.*[0-9])(?=.*[a-z]).{8,}$/g;
 
     if (!isEmail(email)) {
       res.status(400).send('The email you entered is invalid.');
@@ -26,6 +27,10 @@ const handler = nc()
     }
     if (!password || !name) {
       res.status(400).send('Missing field(s)');
+      return;
+    }
+    if (!password.match(regex)) {
+      res.status(400).send('Weak password. Password must be at least 8 characters.\nAlso must include: 1 number, 1 uppercase, 1 special letter, 1 lowecase letter.');
       return;
     }
     if ((await req.db.collection('users').countDocuments({ email })) > 0) {
