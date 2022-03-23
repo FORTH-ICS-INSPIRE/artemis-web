@@ -16,6 +16,10 @@ export default class Layout extends React.Component<any> {
             rel="stylesheet"
             href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
           />
+          <link
+            rel="shortcut icon"
+            type="image/png"
+            href="/Favicon_ARTEMIS.png"></link>
           <script
             src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
             integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
