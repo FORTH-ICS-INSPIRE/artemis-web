@@ -215,6 +215,20 @@ const Login = (props: any): any => {
                 Login with LDAP
               </Button>
             )}
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              color="primary"
+              className={props.classes.submit}
+            >
+              <a
+                style={{ color: "white", textDecoration: "none" }}
+                href='/api/auth/login/google'
+              >
+                Login with Google
+              </a>
+            </Button>
             <Grid container>
               <Grid style={{ textAlign: 'left' }} item xs></Grid>
               <Grid item>
