@@ -22,6 +22,7 @@ const Login = (props: any): any => {
     captcha: '',
   });
   const [hasLdap, setHasLdap] = useState(false);
+  const hasGoogle = props.hasGoogle;
 
   async function fetchMyCAPTCHA() {
     const res = await fetch('/api/captcha', {
@@ -215,16 +216,18 @@ const Login = (props: any): any => {
                 Login with LDAP
               </Button>
             )}
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              color="primary"
-              className={props.classes.submit}
-              onClick={() => window.location.href = '/api/auth/login/google'}
-            >
-              Login with Google
-            </Button>
+            {(hasGoogle === 'true' ?
+              (<Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                color="primary"
+                className={props.classes.submit}
+                onClick={() => window.location.href = '/api/auth/login/google'}
+              >
+                Login with Google
+              </Button>) : <></>
+            )}
             <Grid container>
               <Grid style={{ textAlign: 'left' }} item xs></Grid>
               <Grid item>
@@ -236,7 +239,7 @@ const Login = (props: any): any => {
           </form>
         </div>
       </Container>
-    </ThemeProvider>
+    </ThemeProvider >
   );
 };
 

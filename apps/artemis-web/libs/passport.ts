@@ -26,7 +26,7 @@ if (process.env.LDAP_ENABLED === 'true') {
   passport.use(LdapStrategy);
 }
 
-if (process.env.GOOGLE_ENABLED === 'true') {
+if (process.env.NEXT_PUBLIC_GOOGLE_ENABLED === 'true') {
   passport.use(Google);
 }
 
