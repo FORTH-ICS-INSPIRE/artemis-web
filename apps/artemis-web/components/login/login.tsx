@@ -221,13 +221,9 @@ const Login = (props: any): any => {
               variant="contained"
               color="primary"
               className={props.classes.submit}
+              onClick={() => window.location.href = '/api/auth/login/google'}
             >
-              <a
-                style={{ color: "white", textDecoration: "none" }}
-                href='/api/auth/login/google'
-              >
-                Login with Google
-              </a>
+              Login with Google
             </Button>
             <Grid container>
               <Grid style={{ textAlign: 'left' }} item xs></Grid>
