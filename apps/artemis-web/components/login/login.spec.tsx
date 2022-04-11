@@ -15,7 +15,7 @@ describe('Login', () => {
     const element = mount(<Login />);
     expect(element.text()).toContain('Sign In');
     expect(element.find(TextField)).toHaveLength(2);
-    expect(element.find(Button)).toHaveLength(2);
+    expect(element.find(Button)).toHaveLength(1);
   });
 
   it('should have no accessibility violations', async () => {
