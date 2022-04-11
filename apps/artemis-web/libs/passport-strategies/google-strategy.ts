@@ -13,7 +13,7 @@ const Google = new GoogleStrategy({
             const google_id = profile.id;
             const user = await req.db.collection('users').findOne({ google_id });
             if (!user) {
-                const user_id = await req.db
+                await req.db
                     .collection('users')
                     .insertOne({
                         _id: profile.id,
