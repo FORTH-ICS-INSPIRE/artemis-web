@@ -14,7 +14,7 @@ const handler = nc()
         next();
     })
     .get(
-        passport.authenticate('google', { failureRedirect: '/error' }), (req: any, res: NextApiResponseExtended, next) => {
+        passport.authenticate('google', { failureRedirect: '/error' }), (req: NextApiRequestExtended, res: NextApiResponseExtended, next) => {
             res.redirect('/');
         }
     );
