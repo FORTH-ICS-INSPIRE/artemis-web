@@ -12,7 +12,6 @@ import {
 var https = require('https');
 const jwt = require('jsonwebtoken');
 
-
 require('dotenv').config();
 const URI = `mongodb://${process.env.MONGODB_USER}:${process.env.MONGODB_PASS}@${process.env.MONGODB_HOST}:${process.env.MONGODB_PORT}`;
 let last_key = '';
@@ -43,39 +42,6 @@ const forgeToken = async (): Promise<string> => {
 const fetchHijackUpdates = async () => {
     const jwt: string = await forgeToken();
 
-    const query = gql`
-        query hijacks {
-        view_hijacks(
-            limit: 1, offset: 0, order_by: {time_last: desc}
-        ) {
-            active
-            comment
-            configured_prefix
-            hijack_as
-            ignored
-            dormant
-            key
-            rpki_status
-            mitigation_started
-            num_asns_inf
-            num_peers_seen
-            outdated
-            peers_seen
-            peers_withdrawn
-            prefix
-            resolved
-            seen
-            time_detected
-            time_ended
-            time_last
-            time_started
-            timestamp_of_config
-            type
-            under_mitigation
-            withdrawn
-        }
-        }`;
-
     const agent = new https.Agent({
         rejectUnauthorized: false,
     })
@@ -104,21 +70,54 @@ const fetchHijackUpdates = async () => {
     });
 
     for await (const startTime of setInterval(10000, Date.now())) {
+        let date = new Date();
+        date.setSeconds(date.getSeconds() - 1000000);
+
+        const query = gql`
+        query hijacks {
+        view_hijacks(
+            order_by: {time_last: desc}, where: {time_detected: {_gte: "${date.toISOString()}"}}
+        ) {
+            active
+            comment
+            configured_prefix
+            hijack_as
+            ignored
+            dormant
+            key
+            rpki_status
+            mitigation_started
+            num_asns_inf
+            num_peers_seen
+            outdated
+            peers_seen
+            peers_withdrawn
+            prefix
+            resolved
+            seen
+            time_detected
+            time_ended
+            time_last
+            time_started
+            timestamp_of_config
+            type
+            under_mitigation
+            withdrawn
+        }
+        }`;
         const result = await client.query({
             query,
         });
         const hijacks = result.data.view_hijacks;
-        const key = hijacks[0].key;
 
-        if (last_key !== key) {
-            last_key = key;
+        hijacks.forEach(hijack => {
+            const key = hijack.key;
             sendNotificationFillDbEntries(key);
-        }
+        });
     }
 }
 
-
-function sendNotification(hijackKey, hjRandom) {
+const sendNotification = (hijackKey: string, hjRandom: string) => {
     console.log(`Sending notification for hijack ${hijackKey}...`);
     let admin = require("firebase-admin");
     //@todo add path to service account file
@@ -197,7 +196,7 @@ const fillDbEntries = async (hijackKey: string, hjRandom: string): Promise<void>
     }
 }
 
-async function sendNotificationFillDbEntries(hijackKey) {
+const sendNotificationFillDbEntries = async (hijackKey: string) => {
     const { nanoid } = require('nanoid');
     let hjRandom = nanoid(12);
     await sendNotification(hijackKey, hjRandom);
