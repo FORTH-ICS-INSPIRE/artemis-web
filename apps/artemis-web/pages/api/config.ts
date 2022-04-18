@@ -8,6 +8,7 @@ import auth from '../../middleware/auth';
 import { csrf } from '../../libs/csrf';
 import limiter from '../../middleware/limiter';
 
+export const config = { api: { bodyParser: { sizeLimit: '4mb' } } };
 const handler = nc()
   .use(limiter('config'))
   .use(auth)
