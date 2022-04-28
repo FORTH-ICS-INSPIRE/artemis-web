@@ -121,10 +121,12 @@ const sendNotification = (hijackKey: string, hjRandom: string) => {
     console.log(`Sending notification for hijack ${hijackKey}...`);
     let admin = require("firebase-admin");
     //@todo add path to service account file
-    let serviceAccount = require("serviceAccountFilePath");
-    admin.initializeApp({
-        credential: admin.credential.cert(serviceAccount)
-    });
+    if (!admin.apps.length) {
+        let serviceAccount = require("serviceAccountFilePath");
+        admin.initializeApp({
+            credential: admin.credential.cert(serviceAccount)
+        });
+    }
 
     const topic = 'hjtopic';
     const message = {
