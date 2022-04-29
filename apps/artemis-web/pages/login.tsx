@@ -8,6 +8,8 @@ import { useJWT } from '../utils/hooks/use-jwt';
 const LoginPage = (props: any): any => {
   const [user, loading] = useJWT();
   const router = useRouter();
+  const hasGoogle = process.env.NEXT_PUBLIC_GOOGLE_ENABLED;
+
   if (user && !loading) {
     if (user.role === 'pending') {
       router.push('pending');
@@ -26,7 +28,7 @@ const LoginPage = (props: any): any => {
       <div id="login-container">
         {!user && !loading && (
           <div id="content-wrap">
-            <LoginComponent {...props} />
+            <LoginComponent {...props} hasGoogle={hasGoogle} />
           </div>
         )}
       </div>

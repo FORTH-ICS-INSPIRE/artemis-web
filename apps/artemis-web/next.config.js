@@ -39,6 +39,7 @@ module.exports = {
                 'https://localhost/api/graphql',
                 'http://localhost/api/graphql',
                 'https://demo.artemis-pc.duckdns.org/api/graphql',
+                'https://accounts.google.com/o/oauth2/v2/auth'
               ],
               frameAncestors: "'none",
               imgSrc: ["'self'", 'data:'],
@@ -49,7 +50,7 @@ module.exports = {
             true,
             { maxAge: 60 * 60 * 24 * 4, includeSubDomains: true },
           ],
-          referrerPolicy: 'strict-origin-when-cross-origin',
+          referrerPolicy: 'origin',
         }),
       },
     ];

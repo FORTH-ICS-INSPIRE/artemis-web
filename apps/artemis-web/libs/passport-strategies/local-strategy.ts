@@ -9,9 +9,14 @@ export const LocalStrategy = new Strategy(
       const user = await req.db.collection('users').findOne({ email });
       if (user?.password === '<REDUCTED>') {
         return done(null, false, {
-          message: 'Trying to login with an LDAP account',
+          message: 'Trying to login with LDAP account',
+        });
+      } else if (user?.password === '<GOOGLE_ACCOUNT>') {
+        return done(null, false, {
+          message: 'Trying to login with GOOGLE account',
         });
       }
+
       if (user && (await argon2.verify(user.password, password))) {
         const lastLogin = user.currentLogin;
         await req.db.collection('users').updateOne(
