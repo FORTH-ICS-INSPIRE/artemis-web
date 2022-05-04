@@ -69,7 +69,7 @@ const fetchHijackUpdates = async () => {
     });
 
     for await (const startTime of setInterval(10000, Date.now())) {
-        let date = new Date();
+        const date = new Date();
         date.setSeconds(date.getSeconds() - 10);
 
         const query = gql`
@@ -118,10 +118,10 @@ const fetchHijackUpdates = async () => {
 
 const sendNotification = (hijackKey: string, hjRandom: string) => {
     console.log(`Sending notification for hijack ${hijackKey}...`);
-    let admin = require("firebase-admin");
+    const admin = require("firebase-admin");
     //@todo add path to service account file
     if (!admin.apps.length) {
-        let serviceAccount = require(process.env.SERVICE_ACCOUNT_PATH);
+        const serviceAccount = require(process.env.SERVICE_ACCOUNT_PATH);
         admin.initializeApp({
             credential: admin.credential.cert(serviceAccount)
         });
@@ -153,7 +153,7 @@ const sendNotification = (hijackKey: string, hjRandom: string) => {
     console.log(`Sending notification for hijack ${hijackKey} finished`);
 }
 
-const isInCollection = async (db: Db, name: string): Promise<Boolean> => {
+const isInCollection = async (db: Db, name: string): Promise<boolean> => {
     const collections = await db.listCollections().toArray();
 
     return collections.some((collection) => collection.name === name);
@@ -199,7 +199,7 @@ const fillDbEntries = async (hijackKey: string, hjRandom: string): Promise<void>
 
 const sendNotificationFillDbEntries = async (hijackKey: string) => {
     const { nanoid } = require('nanoid');
-    let hjRandom = nanoid(12);
+    const hjRandom = nanoid(12);
     await sendNotification(hijackKey, hjRandom);
     await fillDbEntries(hijackKey, hjRandom);
 }
