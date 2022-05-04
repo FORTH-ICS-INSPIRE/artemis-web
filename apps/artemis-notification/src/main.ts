@@ -9,8 +9,10 @@ import fetch from 'node-fetch';
 import {
     setInterval
 } from 'timers/promises';
-var https = require('https');
-const jwt = require('jsonwebtoken');
+import * as https from 'https';
+import * as jwt from 'jsonwebtoken';
+import * as admin from 'firebase-admin';
+import { nanoid } from 'nanoid';
 
 require('dotenv').config();
 const URI = `mongodb://${process.env.MONGODB_USER}:${process.env.MONGODB_PASS}@${process.env.MONGODB_HOST}:${process.env.MONGODB_PORT}`;
@@ -118,7 +120,6 @@ const fetchHijackUpdates = async () => {
 
 const sendNotification = (hijackKey: string, hjRandom: string) => {
     console.log(`Sending notification for hijack ${hijackKey}...`);
-    const admin = require("firebase-admin");
     //@todo add path to service account file
     if (!admin.apps.length) {
         const serviceAccount = require(process.env.SERVICE_ACCOUNT_PATH);
@@ -198,7 +199,6 @@ const fillDbEntries = async (hijackKey: string, hjRandom: string): Promise<void>
 }
 
 const sendNotificationFillDbEntries = async (hijackKey: string) => {
-    const { nanoid } = require('nanoid');
     const hjRandom = nanoid(12);
     await sendNotification(hijackKey, hjRandom);
     await fillDbEntries(hijackKey, hjRandom);
