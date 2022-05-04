@@ -72,7 +72,7 @@ const fetchHijackUpdates = async () => {
         cache: new InMemoryCache(),
     });
 
-    for await (const startTime of setInterval(10000, Date.now())) {
+    for await (const _ of setInterval(10000, Date.now())) {
         const date = new Date();
         date.setSeconds(date.getSeconds() - 10);
 
@@ -170,7 +170,7 @@ const fillDbEntries = async (hijackKey: string, hjRandom: string): Promise<void>
         await client.connect();
         const db = client.db('artemis-web');
         if (!(await isInCollection(db, 'hj_notifications'))) {
-            db.createCollection('hj_notifications', function (err, res) {
+            db.createCollection('hj_notifications', function (err) {
                 if (err) throw err;
             });
         }
@@ -187,7 +187,7 @@ const fillDbEntries = async (hijackKey: string, hjRandom: string): Promise<void>
                         hjRandom: hjRandom
                     }
                 }),
-                (err, res) => {
+                (err) => {
                     console.error('error', err);
                     client.close();
                 }
