@@ -21,6 +21,7 @@ export interface NextApiResponseExtended extends NextApiResponse {
       secure?: boolean;
     }
   );
+  header(string, string);
   status(number);
   clearCookie(string);
 }

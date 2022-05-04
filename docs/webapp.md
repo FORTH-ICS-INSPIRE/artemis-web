@@ -6,6 +6,18 @@ The default `ADMIN` user can login with the credentials set in the `.env` variab
 
 We recommend that you use the latest version of Chrome for the best ARTEMIS experience.
 
+
+## Logging in
+
+```
+https://<ARTEMIS_HOST>/login
+```
+
+An ARTEMIS user can enter the web application using one of the following 3 methods:
+1. With credentials
+2. With LDAP
+3. With supported Single-Sign-On (SSO) services
+
 ## Registering users
 
 ```
@@ -207,6 +219,9 @@ Regarding the Hijacks table, the following auxiliary actions are supported:
 
 - Login
   ![ARTEMIS - Login Page](./screenshot/login.png)
+
+- Login with SSO
+  ![ARTEMIS - SSO modal](./screenshot/SSO_modal.png)
 
 - Register
   ![ARTEMIS - Register Page](./screenshot/signup.png)
