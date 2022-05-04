@@ -122,7 +122,7 @@ const sendNotification = (hijackKey: string, hjRandom: string) => {
     let admin = require("firebase-admin");
     //@todo add path to service account file
     if (!admin.apps.length) {
-        let serviceAccount = require("serviceAccountFilePath");
+        let serviceAccount = require(process.env.SERVICE_ACCOUNT_PATH);
         admin.initializeApp({
             credential: admin.credential.cert(serviceAccount)
         });
@@ -161,7 +161,7 @@ const isInCollection = async (db: any, name: string): Promise<Boolean> => {
 }
 
 const fillDbEntries = async (hijackKey: string, hjRandom: string): Promise<void> => {
-    console.info(`Filling DB entries for hijack ${hijackKey}...`);
+    // console.info(`Filling DB entries for hijack ${hijackKey}...`);
 
     const client = new MongoClient(URI, {});
     try {
@@ -191,7 +191,7 @@ const fillDbEntries = async (hijackKey: string, hjRandom: string): Promise<void>
                 }
             );
         }
-        console.log(`Filling DB entries for hijack ${hijackKey} finished`);
+        // console.log(`Filling DB entries for hijack ${hijackKey} finished`);
     } catch (e) {
         console.error('error', e);
         client.close();
