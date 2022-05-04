@@ -72,9 +72,10 @@ const fetchHijackUpdates = async () => {
         cache: new InMemoryCache(),
     });
 
-    for await (const _ of setInterval(10000, Date.now())) {
+    setInterval(10000, async () => {
         const date = new Date();
         date.setSeconds(date.getSeconds() - 10);
+        console.log(date)
 
         const query = gql`
         query hijacks {
@@ -117,7 +118,7 @@ const fetchHijackUpdates = async () => {
             const key = hijack.key;
             sendNotificationFillDbEntries(key);
         });
-    }
+    });
 }
 
 const sendNotification = async (hijackKey: string, hjRandom: string) => {
