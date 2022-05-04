@@ -72,7 +72,7 @@ const fetchHijackUpdates = async () => {
         cache: new InMemoryCache(),
     });
 
-    for await (const _startTime of setInterval(10000, Date.now())) {
+    for await (const {} of setInterval(10000, Date.now())) {
         const date = new Date();
         date.setSeconds(date.getSeconds() - 10);
 
