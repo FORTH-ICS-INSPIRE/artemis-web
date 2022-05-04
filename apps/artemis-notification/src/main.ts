@@ -4,7 +4,7 @@ import {
     InMemoryCache
 } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
-import { MongoClient } from 'mongodb';
+import { MongoClient, Db } from 'mongodb';
 import fetch from 'node-fetch';
 import {
     setInterval
@@ -14,7 +14,6 @@ const jwt = require('jsonwebtoken');
 
 require('dotenv').config();
 const URI = `mongodb://${process.env.MONGODB_USER}:${process.env.MONGODB_PASS}@${process.env.MONGODB_HOST}:${process.env.MONGODB_PORT}`;
-let last_key = '';
 
 const forgeToken = async (): Promise<string> => {
     const client = new MongoClient(URI, {});
@@ -154,7 +153,7 @@ const sendNotification = (hijackKey: string, hjRandom: string) => {
     console.log(`Sending notification for hijack ${hijackKey} finished`);
 }
 
-const isInCollection = async (db: any, name: string): Promise<Boolean> => {
+const isInCollection = async (db: Db, name: string): Promise<Boolean> => {
     const collections = await db.listCollections().toArray();
 
     return collections.some((collection) => collection.name === name);
