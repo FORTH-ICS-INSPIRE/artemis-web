@@ -120,11 +120,11 @@ const fetchHijackUpdates = async () => {
     }
 }
 
-const sendNotification = (hijackKey: string, hjRandom: string) => {
+const sendNotification = async (hijackKey: string, hjRandom: string) => {
     console.log(`Sending notification for hijack ${hijackKey}...`);
     //@todo add path to service account file
     if (!admin.apps.length) {
-        const serviceAccount = require(process.env.SERVICE_ACCOUNT_PATH); // eslint-disable-line no-var-requires
+        const serviceAccount = await import(process.env.SERVICE_ACCOUNT_PATH); // eslint-disable-line no-var-requires
         admin.initializeApp({
             credential: admin.credential.cert(serviceAccount)
         });
