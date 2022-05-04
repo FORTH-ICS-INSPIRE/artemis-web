@@ -13,8 +13,10 @@ import * as https from 'https';
 import * as jwt from 'jsonwebtoken';
 import * as admin from 'firebase-admin';
 import { nanoid } from 'nanoid';
+import * as dotenv from 'dotenv';
 
-require('dotenv').config();
+dotenv.config();
+
 const URI = `mongodb://${process.env.MONGODB_USER}:${process.env.MONGODB_PASS}@${process.env.MONGODB_HOST}:${process.env.MONGODB_PORT}`;
 
 const forgeToken = async (): Promise<string> => {
