@@ -72,8 +72,9 @@ const fetchHijackUpdates = async () => {
         cache: new InMemoryCache(),
     });
 
-    for await (const {} of setInterval(10000, Date.now())) {
+    for await (const startTime of setInterval(10000, Date.now())) {
         const date = new Date();
+        console.log((date.getTime() - startTime) / 10000);
         date.setSeconds(date.getSeconds() - 10);
 
         const query = gql`
