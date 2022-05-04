@@ -7,5 +7,4 @@ module.exports = {
   moduleFileExtensions: ['ts', 'js', 'html'],
   coverageReporters: ['html'],
   testEnvironment: 'jsdom',
-  projects: '<rootDir>/apps/artemis-notification',
 };
