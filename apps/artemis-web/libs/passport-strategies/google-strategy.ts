@@ -1,8 +1,8 @@
 const GoogleStrategy = require('passport-google-oauth20');
 
 const Google = new GoogleStrategy({
-    clientID: process.env.GOOGLE_CLIENT_ID,
-    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    clientID: process.env.GOOGLE_CLIENT_ID ?? 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
     callbackURL: '/api/auth/callback/google',
     scope: ['profile'],
     passReqToCallback: true
