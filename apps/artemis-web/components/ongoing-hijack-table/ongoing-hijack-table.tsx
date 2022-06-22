@@ -355,11 +355,10 @@ const OngoingHijackTableComponent = (props: any): ReactElement => {
           <option
             key={i}
             value={option.text}
-            className={`btn ${
-              currSizePerPage === `${option.page}`
+            className={`btn ${currSizePerPage === `${option.page}`
                 ? 'btn-secondary'
                 : 'btn-warning'
-            }`}
+              }`}
           >
             {option.text}
           </option>
@@ -447,7 +446,7 @@ const OngoingHijackTableComponent = (props: any): ReactElement => {
         if (filters[key])
           setStateValues({
             ...stateValues,
-            [key]: isNumeric(filters[key].filterVal)
+            [key]: isNumeric(filters[key].filterVal) || key === 'type'
               ? filters[key].filterVal
               : -1,
           });

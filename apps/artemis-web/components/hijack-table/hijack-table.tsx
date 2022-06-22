@@ -605,7 +605,7 @@ const HijackTableComponent = (props) => {
           setStateValues({
             ...stateValues,
             [key]:
-              isNumeric(filters[key].filterVal) || key === 'rpki_status'
+              isNumeric(filters[key].filterVal) || key === 'rpki_status' || key === 'type'
                 ? filters[key].filterVal
                 : -1,
           });
