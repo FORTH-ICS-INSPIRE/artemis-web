@@ -1,5 +1,5 @@
 import authorization from '../../middleware/authorization';
-import nc from 'next-connect';
+import { createRouter } from "next-connect";
 import {
   NextApiRequestExtended,
   NextApiResponseExtended,
@@ -7,7 +7,9 @@ import {
 import auth from '../../middleware/auth';
 import limiter from '../../middleware/limiter';
 
-const handler = nc()
+const router = createRouter();
+
+const handler = router
   .use(limiter('as_sets'))
   .use(auth)
   .use(authorization(['admin']))

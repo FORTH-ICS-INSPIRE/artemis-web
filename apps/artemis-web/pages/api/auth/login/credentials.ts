@@ -1,4 +1,4 @@
-import nc from 'next-connect';
+import { createRouter } from "next-connect";
 import auth from '../../../../middleware/auth';
 import passport from '../../../../libs/passport';
 import { extractUser } from '../../../../utils/parsers';
@@ -12,7 +12,9 @@ import captcha from '../../../../middleware/captcha';
 import limiter from '../../../../middleware/limiter';
 import memory from '../../../../utils/captchaMemoryStore';
 
-const handler = nc()
+const router = createRouter();
+
+const handler = router
   .use(limiter('credentials'))
   .use(captcha('login'))
   .use(auth)

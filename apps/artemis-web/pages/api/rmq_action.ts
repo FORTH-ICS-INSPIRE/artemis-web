@@ -1,4 +1,4 @@
-import nc from 'next-connect';
+import { createRouter } from "next-connect";
 import Broker, { BrokerExchangeOptions } from 'typescript-rabbitmq';
 import { v4 as uuidv4 } from 'uuid';
 import {
@@ -60,7 +60,9 @@ const sendRMQAction = async (obj) => {
   console.log('sender: message sent ..');
 };
 
-const handler = nc()
+const router = createRouter();
+
+const handler = router
   .use(limiter('rmq_action'))
   .use(auth)
   .use(authorization(['admin', 'user']))

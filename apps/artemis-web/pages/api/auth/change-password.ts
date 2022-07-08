@@ -1,7 +1,7 @@
 
 import { csrf } from '../../../libs/csrf';
 import argon2 from 'argon2';
-import nc from 'next-connect';
+import { createRouter } from "next-connect";
 import {
   NextApiRequestExtended,
   NextApiResponseExtended,
@@ -9,7 +9,9 @@ import {
 import auth from '../../../middleware/auth';
 import limiter from '../../../middleware/limiter';
 
-const handler = nc()
+const router = createRouter();
+
+const handler = router
   .use(limiter('change-password'))
   .use(auth)
   .put(async (req: NextApiRequestExtended, res: NextApiResponseExtended) => {

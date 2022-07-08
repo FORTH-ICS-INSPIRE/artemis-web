@@ -1,7 +1,8 @@
-import nc from 'next-connect';
 import passport from '../libs/passport';
 import database from './database';
 import nextSession from 'next-session';
+import { createRouter } from "next-connect";
+
 const getSession = nextSession({
   cookie: {
     maxAge: parseInt(process.env.SESSION_TIMEOUT, 10),
@@ -19,7 +20,9 @@ async function session(req, res, next) {
   }
 }
 
-const auth = nc()
+const router = createRouter();
+
+const auth = router
   .use(database)
   .use(session)
   .use(passport.initialize())

@@ -6,6 +6,7 @@ type PropsType = {
   containsData: boolean;
   noDataMessage: string;
   errorImage?: boolean;
+  children: React.ReactNode;
 };
 
 class ErrorBoundary extends Component<PropsType, unknown> {

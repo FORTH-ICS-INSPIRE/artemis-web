@@ -1,5 +1,5 @@
 import authorization from '../../middleware/authorization';
-import nc from 'next-connect';
+import { createRouter } from "next-connect";
 import {
   NextApiRequestExtended,
   NextApiResponseExtended,
@@ -9,7 +9,9 @@ import { csrf } from '../../libs/csrf';
 import limiter from '../../middleware/limiter';
 
 export const config = { api: { bodyParser: { sizeLimit: '4mb' } } };
-const handler = nc()
+const router = createRouter();
+
+const handler = router
   .use(limiter('config'))
   .use(auth)
   .use(authorization(['admin']))

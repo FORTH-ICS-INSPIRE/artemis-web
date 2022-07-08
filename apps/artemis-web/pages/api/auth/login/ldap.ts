@@ -1,4 +1,4 @@
-import nc from 'next-connect';
+import { createRouter } from "next-connect";
 import passport from '../../../../libs/passport';
 import {
   NextApiRequestExtended,
@@ -11,7 +11,9 @@ import captcha from '../../../../middleware/captcha';
 import limiter from '../../../../middleware/limiter';
 import memory from '../../../../utils/captchaMemoryStore';
 
-const handler = nc()
+const router = createRouter();
+
+const handler = router
   .use(limiter('ldap'))
   .use(captcha('login'))
   .use(auth)

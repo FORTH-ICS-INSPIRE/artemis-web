@@ -1,4 +1,4 @@
-import nc from 'next-connect';
+import { createRouter } from "next-connect";
 import { Telnet } from 'telnet-client';
 import {
     NextApiRequestExtended,
@@ -16,7 +16,9 @@ const params = {
     timeout: 1000
 }
 
-const handler = nc()
+const router = createRouter();
+
+const handler = router
     .get(async (req: NextApiRequestExtended, res: NextApiResponseExtended, next) => {
         try {
             await connection.connect(params)

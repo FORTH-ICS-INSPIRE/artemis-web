@@ -1,4 +1,4 @@
-import nc from 'next-connect';
+import { createRouter } from "next-connect";
 import {
     NextApiRequestExtended,
     NextApiResponseExtended
@@ -7,7 +7,9 @@ import passport from '../../../../libs/passport';
 import auth from '../../../../middleware/auth';
 import memory from '../../../../utils/captchaMemoryStore';
 
-const handler = nc()
+const router = createRouter();
+
+const handler = router
     .use(auth)
     .get(async (req: NextApiRequestExtended, res: NextApiResponseExtended, next) => {
         memory.incr(req.ip);

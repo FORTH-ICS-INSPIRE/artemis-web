@@ -1,4 +1,4 @@
-import nc from 'next-connect';
+import { createRouter } from "next-connect";
 import auth from '../../../middleware/auth';
 import {
   NextApiRequestExtended,
@@ -8,7 +8,9 @@ import jwt from 'jsonwebtoken';
 import { csrf } from '../../../libs/csrf';
 import { extractUser } from '../../../utils/parsers';
 
-const handler = nc()
+const router = createRouter();
+
+const handler = router
   .use(auth)
   .get((req: NextApiRequestExtended, res: NextApiResponseExtended) => {
     if (!req.user) res.send({});

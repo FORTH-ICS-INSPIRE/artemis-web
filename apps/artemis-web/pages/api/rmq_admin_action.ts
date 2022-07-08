@@ -1,5 +1,5 @@
 import authorization from '../../middleware/authorization';
-import nc from 'next-connect';
+import { createRouter } from "next-connect";
 import {
   NextApiRequestExtended,
   NextApiResponseExtended,
@@ -62,7 +62,9 @@ const sendRMQAction = async (obj) => {
   console.log('sender: message sent ..');
 };
 
-const handler = nc()
+const router = createRouter();
+
+const handler = router
   .use(limiter('rmq_admin_actoin'))
   .use(auth)
   .use(authorization(['admin']))

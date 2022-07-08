@@ -1,4 +1,4 @@
-import nc from 'next-connect';
+import { createRouter } from "next-connect";
 import {
   NextApiResponseExtended,
 } from '../../definitions';
@@ -31,7 +31,9 @@ function generateCaptcha() {
   };
 }
 
-const handler = nc()
+const router = createRouter();
+
+const handler = router
   .use(auth)
   .post(async (req: any, res: NextApiResponseExtended) => {
     const { page } = req.body;

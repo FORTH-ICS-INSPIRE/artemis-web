@@ -1,4 +1,4 @@
-import nc from 'next-connect';
+import { createRouter } from "next-connect";
 import {
     NextApiRequestExtended,
     NextApiResponseExtended
@@ -8,7 +8,9 @@ import auth from '../../../../middleware/auth';
 import limiter from '../../../../middleware/limiter';
 import memory from '../../../../utils/captchaMemoryStore';
 
-const handler = nc()
+const router = createRouter();
+
+const handler = router
     .use(limiter('google'))
     .use(auth)
     .get(async (req: NextApiRequestExtended, res: NextApiResponseExtended, next) => {

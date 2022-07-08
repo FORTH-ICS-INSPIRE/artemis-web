@@ -1,5 +1,5 @@
 import authorization from '../../middleware/authorization';
-import nc from 'next-connect';
+import { createRouter } from "next-connect";
 import {
   NextApiRequestExtended,
   NextApiResponseExtended,
@@ -8,7 +8,9 @@ import auth from '../../middleware/auth';
 import { csrf } from '../../libs/csrf';
 import limiter from '../../middleware/limiter';
 
-const handler = nc()
+const router = createRouter();
+
+const handler = router
   .use(limiter('configs'))
   .use(auth)
   .use(authorization(['user', 'admin']))

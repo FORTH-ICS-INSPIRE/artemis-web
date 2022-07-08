@@ -1,4 +1,4 @@
-import nc from 'next-connect';
+import { createRouter } from "next-connect";
 import isEmail from 'validator/lib/isEmail';
 import normalizeEmail from 'validator/lib/normalizeEmail';
 import argon2 from 'argon2';
@@ -12,7 +12,9 @@ import { csrf } from '../../../libs/csrf';
 import captcha from '../../../middleware/captcha';
 import limiter from '../../../middleware/limiter';
 
-const handler = nc()
+const router = createRouter();
+
+const handler = router
   .use(limiter('signup'))
   .use(captcha('signup'))
   .use(auth)

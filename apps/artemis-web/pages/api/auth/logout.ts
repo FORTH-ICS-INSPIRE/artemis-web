@@ -1,4 +1,4 @@
-import nc from 'next-connect';
+import { createRouter } from "next-connect";
 import auth from '../../../middleware/auth';
 import {
   NextApiRequestExtended,
@@ -16,6 +16,8 @@ const logout = (req: NextApiRequestExtended, res: NextApiResponseExtended) => {
   res.status(204).end();
 };
 
-const handler = nc().use(limiter('logout')).use(auth).delete(logout);
+const router = createRouter();
+
+const handler = router.use(limiter('logout')).use(auth).delete(logout);
 
 export default csrf(handler);
