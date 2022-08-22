@@ -1,4 +1,6 @@
 #!/bin/bash
 ./wait-for -h ${MONGODB_HOST} -p ${MONGODB_PORT} -t 0
 node query.js
+
+(yarn start:notification&)
 NODE_ENV=production NEXT_PUBLIC_REVISION=$(git rev-parse HEAD) yarn run nx serve artemis-web --prod
