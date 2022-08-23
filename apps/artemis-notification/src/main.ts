@@ -6,9 +6,6 @@ import {
 import { setContext } from '@apollo/client/link/context';
 import { MongoClient, Db } from 'mongodb';
 import fetch from 'node-fetch';
-import {
-    setInterval
-} from 'timers/promises';
 import * as https from 'https';
 import * as jwt from 'jsonwebtoken';
 import * as admin from 'firebase-admin';
@@ -72,7 +69,7 @@ const fetchHijackUpdates = async () => {
         cache: new InMemoryCache(),
     });
 
-    for await (const startTime of setInterval(10000, Date.now())) {
+    const notificationCall = async () => {
         const date = new Date();
         date.setSeconds(date.getSeconds() - 10);
 
@@ -118,6 +115,8 @@ const fetchHijackUpdates = async () => {
             sendNotificationFillDbEntries(key);
         });
     }
+
+    setInterval(notificationCall, 10000);
 }
 
 const sendNotification = async (hijackKey: string, hjRandom: string) => {
