@@ -55,7 +55,7 @@
     "next-session": "^4.0.2",
     "node-fetch": "^2.6.1",
     "nx": "^13.1.2",
-    "passport": "^0.5.0",
+    "passport": "^0.4.1",
     "passport-google-oauth": "^2.0.0",
     "passport-google-oauth20": "^2.0.0",
     "passport-ldapauth": "^3.0.1",
