@@ -1,6 +1,58 @@
 {
   "version": 1,
   "projects": {
+    "artemis-notification": {
+      "root": "apps/artemis-notification",
+      "sourceRoot": "apps/artemis-notification/src",
+      "projectType": "application",
+      "architect": {
+        "build": {
+          "builder": "@nrwl/node:webpack",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "outputPath": "dist/apps/artemis-notification",
+            "main": "apps/artemis-notification/src/main.ts",
+            "tsConfig": "apps/artemis-notification/tsconfig.app.json",
+            "assets": ["apps/artemis-notification/src/assets"]
+          },
+          "configurations": {
+            "production": {
+              "optimization": true,
+              "extractLicenses": true,
+              "inspect": false,
+              "fileReplacements": [
+                {
+                  "replace": "apps/artemis-notification/src/environments/environment.ts",
+                  "with": "apps/artemis-notification/src/environments/environment.prod.ts"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@nrwl/node:node",
+          "options": {
+            "buildTarget": "artemis-notification:build"
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": ["apps/artemis-notification/**/*.ts"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/apps/artemis-notification"],
+          "options": {
+            "jestConfig": "apps/artemis-notification/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "tags": []
+    },
     "artemis-web": {
       "root": "apps/artemis-web",
       "sourceRoot": "apps/artemis-web",
@@ -86,19 +138,6 @@
       },
       "tags": [],
       "implicitDependencies": ["artemis-web"]
-    }
-  },
-  "schematics": {
-    "@nrwl/react": {
-      "application": {
-        "babel": true
-      }
-    },
-    "@nrwl/next": {
-      "application": {
-        "style": "css",
-        "linter": "eslint"
-      }
     }
   }
 }

@@ -6,6 +6,7 @@ type PropsType = {
   containsData: boolean;
   noDataMessage: string;
   errorImage?: boolean;
+  children: any
 };
 
 class ErrorBoundary extends Component<PropsType, unknown> {
