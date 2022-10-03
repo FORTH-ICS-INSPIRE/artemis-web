@@ -3,31 +3,34 @@ import Enzyme, { mount } from 'enzyme';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import { axe, toHaveNoViolations } from 'jest-axe';
 import { fetch as fetchPolyfill } from 'whatwg-fetch';
+import { render, screen } from '@testing-library/react';
+
 
 import Login from './login';
 import { Button, TextField } from '@material-ui/core';
 
-Enzyme.configure({ adapter: new Adapter() });
 expect.extend(toHaveNoViolations);
 
 describe('Login', () => {
-  it('should render successfully', () => {
-    const element = mount(<Login />);
-    expect(element.text()).toContain('Sign In');
-    expect(element.find(TextField)).toHaveLength(2);
-    expect(element.find(Button)).toHaveLength(1);
+  it('should render successfully', async () => {
+    const { container } = render(<Login />);
+    expect(container.querySelectorAll('#email')).toHaveLength(1);
+    expect(container.querySelectorAll('#password')).toHaveLength(1);
+    expect(container.querySelectorAll('[type="submit"]')).toHaveLength(1);
+    const items = await screen.findAllByText(/Sign In/);
+    expect(items).toHaveLength(1);
   });
 
   it('should have no accessibility violations', async () => {
     fetchPolyfill('');
 
-    const html = mount(
+    const { container } = render(
       <div role={'main'}>
         {' '}
         <Login />{' '}
       </div>
-    ).getDOMNode();
-    const results = await axe(html);
+    );
+    const results = await axe(container);
     expect(results).toHaveNoViolations();
   });
 });

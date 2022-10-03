@@ -1,14 +1,10 @@
-import { act, render } from '@testing-library/react';
-import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
+import { act, render, screen } from '@testing-library/react';
 import { ContentState, EditorState } from 'draft-js';
-import Enzyme, { shallow } from 'enzyme';
 import { enableFetchMocks } from 'jest-fetch-mock';
 import React from 'react';
 import HijackInfoComponent from './hijack-info';
 
 enableFetchMocks();
-
-Enzyme.configure({ adapter: new Adapter() });
 
 describe('HijackInfoComponent', () => {
   window.matchMedia = () => ({
@@ -59,10 +55,11 @@ describe('HijackInfoComponent', () => {
       })
     );
 
-    const element = shallow(<HijackInfoComponent {...mock} />);
-    // const element = screen.getByText(/Hijack Information/i);
-    expect(element.text()).toContain('Hijack Information');
-    expect(element.text()).toContain('BGP Announcement');
+    render(<HijackInfoComponent {...mock} />);
+    let items = await screen.findAllByText(/Hijack Information/);
+    expect(items).toHaveLength(1);
+    items = await screen.findAllByText(/BGP Announcement/);
+    expect(items).toHaveLength(1);
 
     await act(() => promise);
   });
