@@ -2,6 +2,7 @@ import { render, screen } from '@testing-library/react';
 import { axe, toHaveNoViolations } from 'jest-axe';
 import { fetch as fetchPolyfill } from 'whatwg-fetch';
 import Login from './login';
+import React from 'react';
 
 expect.extend(toHaveNoViolations);
 
