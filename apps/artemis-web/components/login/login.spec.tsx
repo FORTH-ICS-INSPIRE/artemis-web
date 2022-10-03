@@ -1,13 +1,7 @@
-import React from 'react';
-import Enzyme, { mount } from 'enzyme';
-import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
+import { render, screen } from '@testing-library/react';
 import { axe, toHaveNoViolations } from 'jest-axe';
 import { fetch as fetchPolyfill } from 'whatwg-fetch';
-import { render, screen } from '@testing-library/react';
-
-
 import Login from './login';
-import { Button, TextField } from '@material-ui/core';
 
 expect.extend(toHaveNoViolations);
 
