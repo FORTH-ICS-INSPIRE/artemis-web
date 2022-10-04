@@ -5,6 +5,12 @@ import { enableFetchMocks } from 'jest-fetch-mock';
 
 enableFetchMocks();
 
+global.fetch = jest.fn(() =>
+  Promise.resolve({
+    json: () => Promise.resolve({}),
+  })
+);
+
 describe('HijackAS', () => {
   window.matchMedia = () => ({
     addListener: () => {
