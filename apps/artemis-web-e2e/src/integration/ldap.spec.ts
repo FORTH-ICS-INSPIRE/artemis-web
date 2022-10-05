@@ -22,7 +22,6 @@ describe('artemis-web', () => {
   });
 
 
-
   it('[LDAP] admin logs out', () => {
     cy.visit('/dashboard');
     cy.get('#logout', { timeout: 2000 }).click({ force: true });
