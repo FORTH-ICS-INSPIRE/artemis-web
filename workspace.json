@@ -8,12 +8,16 @@
       "architect": {
         "build": {
           "builder": "@nrwl/node:webpack",
-          "outputs": ["{options.outputPath}"],
+          "outputs": [
+            "{options.outputPath}"
+          ],
           "options": {
             "outputPath": "dist/apps/artemis-notification",
             "main": "apps/artemis-notification/src/main.ts",
             "tsConfig": "apps/artemis-notification/tsconfig.app.json",
-            "assets": ["apps/artemis-notification/src/assets"]
+            "assets": [
+              "apps/artemis-notification/src/assets"
+            ]
           },
           "configurations": {
             "production": {
@@ -37,14 +41,20 @@
         },
         "lint": {
           "builder": "@nrwl/linter:eslint",
-          "outputs": ["{options.outputFile}"],
+          "outputs": [
+            "{options.outputFile}"
+          ],
           "options": {
-            "lintFilePatterns": ["apps/artemis-notification/**/*.ts"]
+            "lintFilePatterns": [
+              "apps/artemis-notification/**/*.ts"
+            ]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
-          "outputs": ["coverage/apps/artemis-notification"],
+          "outputs": [
+            "coverage/apps/artemis-notification"
+          ],
           "options": {
             "jestConfig": "apps/artemis-notification/jest.config.js",
             "passWithNoTests": true
@@ -96,7 +106,10 @@
               "apps/artemis-web/tsconfig.json",
               "apps/artemis-web/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!apps/artemis-web/**/*"]
+            "exclude": [
+              "**/node_modules/**",
+              "!apps/artemis-web/**/*"
+            ]
           }
         },
         "test": {
@@ -117,7 +130,7 @@
         "e2e": {
           "builder": "@nrwl/cypress:cypress",
           "options": {
-            "cypressConfig": "apps/artemis-web-e2e/cypress.json",
+            "cypressConfig": "apps/artemis-web-e2e/cypress.config.ts",
             "tsConfig": "apps/artemis-web-e2e/tsconfig.e2e.json",
             "devServerTarget": "artemis-web:serve"
           },
@@ -131,13 +144,20 @@
           "builder": "@nrwl/linter:lint",
           "options": {
             "linter": "eslint",
-            "tsConfig": ["apps/artemis-web-e2e/tsconfig.e2e.json"],
-            "exclude": ["**/node_modules/**", "!apps/artemis-web-e2e/**/*"]
+            "tsConfig": [
+              "apps/artemis-web-e2e/tsconfig.e2e.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!apps/artemis-web-e2e/**/*"
+            ]
           }
         }
       },
       "tags": [],
-      "implicitDependencies": ["artemis-web"]
+      "implicitDependencies": [
+        "artemis-web"
+      ]
     }
   }
 }

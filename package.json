@@ -108,7 +108,7 @@
     "@typescript-eslint/parser": "5.36.1",
     "@zarconontol/enzyme-adapter-react-18": "^0.7.3",
     "axe-core": "^4.3.5",
-    "cypress": "^10.7.0",
+    "cypress": "10.9.0",
     "cypress-axe": "^1.0.0",
     "cypress-plugin-snapshots": "^1.4.4",
     "dotenv": "16.0.2",
