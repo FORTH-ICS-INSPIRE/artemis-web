@@ -1,6 +1,4 @@
 import { Grid } from '@material-ui/core';
-import 'codemirror/lib/codemirror.css';
-import 'codemirror/theme/material.css';
 import Head from 'next/head';
 import React, { useEffect } from 'react';
 import AuthHOC from '../../components/401-hoc/401-hoc';

@@ -48,8 +48,8 @@ export const formatDate = (date: Date, incr = 0): string => {
   const parsedDate = isToday
     ? 'Today'
     : isYesterday
-    ? 'Yesterday'
-    : newDate.getFullYear() +
+      ? 'Yesterday'
+      : newDate.getFullYear() +
       '-' +
       (newDate.getMonth() + 1) +
       '-' +
@@ -398,7 +398,8 @@ export const autoLogout = (props: any): void => {
   }
 
   function destroy() {
-    clearTimeout();
+    if (warnTimeout) clearTimeout(warnTimeout);
+    if (logoutTimeout) clearTimeout(logoutTimeout);
 
     for (const i in events) {
       if (Object.prototype.hasOwnProperty.call(events, i))
