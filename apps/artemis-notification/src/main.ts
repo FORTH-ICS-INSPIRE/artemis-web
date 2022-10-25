@@ -55,7 +55,7 @@ const fetchHijackUpdates = async () => {
     })
     const httpLink =
         createHttpLink({
-            uri: `https://localhost/api/graphql`,
+            uri: `https://${process.env.NGINX_HOST}/api/graphql`,
             fetch,
             fetchOptions: {
                 agent: agent
