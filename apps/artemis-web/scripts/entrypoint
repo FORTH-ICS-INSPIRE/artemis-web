@@ -2,5 +2,5 @@
 ./wait-for -h ${MONGODB_HOST} -p ${MONGODB_PORT} -t 0
 node query.js
 
-if [ -z "${SERVICE_ACCOUNT_PATH}" ]; then (yarn start:notification&); fi
+if [ -z "$SERVICE_ACCOUNT_PATH" ]; then (yarn start:notification&); fi
 NODE_ENV=production NEXT_PUBLIC_REVISION=$(git rev-parse HEAD) yarn run nx serve artemis-web --prod

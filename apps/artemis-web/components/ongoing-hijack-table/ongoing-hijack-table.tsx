@@ -118,8 +118,8 @@ const getColumns = (stateValues) => [
         'as_title',
         'The AS that is potentially responsible for the hijack.</br>Note that this is an experimental field.'
       ),
-    text: 'Hijacked AS',
-    filter: getExactMatchFilter(stateValues['hijack_as'], 'Hijacked AS'),
+    text: 'Hijacker AS',
+    filter: getExactMatchFilter(stateValues['hijack_as'], 'Hijacker AS'),
   },
   {
     dataField: 'rpki_status',
@@ -356,8 +356,8 @@ const OngoingHijackTableComponent = (props: any): ReactElement => {
             key={i}
             value={option.text}
             className={`btn ${currSizePerPage === `${option.page}`
-                ? 'btn-secondary'
-                : 'btn-warning'
+              ? 'btn-secondary'
+              : 'btn-warning'
               }`}
           >
             {option.text}
