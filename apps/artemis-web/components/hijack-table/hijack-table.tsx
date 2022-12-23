@@ -489,7 +489,6 @@ const HijackTableComponent = (props) => {
     const { hijackState, setHijackState, selectState, setSelectState } = props;
 
     const selectRef = React.createRef<HTMLSelectElement>();
-
     return (
       <>
         <button
@@ -522,6 +521,7 @@ const HijackTableComponent = (props) => {
             }}
             className="form-control form-control-sm-auto"
             id="action_selection"
+            value={selectState}
           >
             <option value="hijack_action_resolve">Mark as Resolved</option>
             <option value="hijack_action_ignore">Mark as Ignored</option>
@@ -544,6 +544,7 @@ const HijackTableComponent = (props) => {
             }}
             className="form-control form-control-sm-auto"
             id="action_selection"
+            value={selectState}
           >
             <option value="hijack_action_acknowledge">
               Mark as Acknowledged
