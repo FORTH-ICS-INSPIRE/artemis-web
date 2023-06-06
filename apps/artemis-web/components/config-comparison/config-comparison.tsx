@@ -3,6 +3,7 @@ import DMP from 'diff_match_patch';
 import React, { Component } from 'react';
 import { Controlled as CodeMirror } from 'react-codemirror2';
 import fetch from 'cross-fetch';
+import { Button } from '@material-ui/core';
 
 type stateType = {
   configs: any[];
@@ -42,6 +43,9 @@ class ConfigComparisonComponent extends Component<unknown, stateType> {
       currentCommentLeft: '',
       currentConfigRight: '',
       currentCommentRight: '',
+      alertMessage: '',
+      fetchState: false,
+      alertState: 'none'
     };
   }
 
@@ -112,6 +116,34 @@ class ConfigComparisonComponent extends Component<unknown, stateType> {
     }
   }
 
+  restoreConfig() {
+    const new_config = this.state.currentConfigRight;
+    const comment = this.state.currentCommentRight;
+    const res = await fetch('/api/config', {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        new_config: new_config,
+        comment: comment,
+        _csrf: props._csrf,
+      }),
+    });
+    if (res.status === 200) {
+      const json = await res.json();
+      this.setState({ alertState: "block" });
+      if (json.success)
+        this.setState({ fetchState: true });
+      else
+        this.setState({ fetchState: false });
+
+      this.setState({ alertMessage: json.status });
+    }
+  }
+
   render() {
     return (
       <>
@@ -134,6 +166,14 @@ class ConfigComparisonComponent extends Component<unknown, stateType> {
                       );
                     })}
                   </select>
+                  <Button
+                    onClick={(e) => this.restoreConfig()}
+                    style={{ float: 'right' }}
+                    variant="contained"
+                  // className={classes.inactiveButton}
+                  >
+                    Restore
+                  </Button>
                 </div>
                 <div className="col-lg-6">
                   <span style={{ marginLeft: '50px' }}>Select config:</span>{' '}
@@ -187,6 +227,19 @@ class ConfigComparisonComponent extends Component<unknown, stateType> {
                   />
                 </div>
                 <div className="col-lg-6">
+                  <div style={{ display: this.state.alertState }} id="config_alert_box">
+                    <div className={"alert alert-dismissible " + (this.state.fetchState ? "alert-success" : "alert-danger")}>
+                      <a
+                        href="#"
+                        className="close"
+                        data-dismiss="alert"
+                        aria-label="close"
+                      >
+                        ×
+                      </a>
+                      {this.state.alertMessage}
+                    </div>
+                  </div>
                   <CodeMirror
                     value={this.state.currentCommentRight}
                     options={{
