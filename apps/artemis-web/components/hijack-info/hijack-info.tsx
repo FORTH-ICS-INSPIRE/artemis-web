@@ -10,6 +10,7 @@ import {
   isUnderMitigation,
 } from '../../utils/token';
 import HijackAS from '../hijack-as/hijack-as';
+import yaml from "js-yaml";
 
 class HijackInfoComponent extends Component<any, any> {
   seenTransitions: any;
@@ -24,6 +25,7 @@ class HijackInfoComponent extends Component<any, any> {
   hijackInfoRight: any;
   hijackInfoLeft: any;
   user: any;
+  configData: any;
 
   constructor(props) {
     super(props);
@@ -203,12 +205,27 @@ class HijackInfoComponent extends Component<any, any> {
                     </select>
                   )}
                 <button
-                  onClick={(e) =>
-                    mRef.current.value === 'hijack_action_ignore'
-                      ? this.setOpenModalState(true)
-                      : mRef.current.value === 'hijack_action_export'
-                        ? exportHijack(hijackKey, this.props._csrf)
-                        : sendHijackData(e, {
+                  onClick={(e) => {
+                    if (mRef.current.value === 'hijack_action_ignore') {
+                      this.setOpenModalState(true)
+                    } else if (mRef.current.value === 'hijack_action_export') {
+                      exportHijack(hijackKey, this.props._csrf)
+                    } else if (mRef.current.value === 'hijack_action_mitigate') {
+                      if (this.props.configData && !this.props.configData.loading && this.props.configData.data) {
+                        const config = yaml.load(this.props.configData.data.view_configs[0].raw_config);
+                        const rules = config.rules;
+
+                        rules.forEach(rule => {
+                          if (rule.prefixes.flat().includes(this.props.hijackDataState.configured_prefix)) {
+                            if (rule.mitigation && rule.mitigation != "manual") {
+                              if (rule.announced_prefixes) {
+                                alert("Mitigation started. The following prefixes will be announced: \n" + rule.announced_prefixes.join(" "));
+                              }
+                            }
+
+                          }
+                        });
+                        sendHijackData(e, {
                           hijackKey: hijackKey,
                           selectState: mRef.current.value,
                           prefix: this.props.hijackDataState.prefix,
@@ -216,7 +233,18 @@ class HijackInfoComponent extends Component<any, any> {
                           type: this.props.hijackDataState.type,
                           _csrf: this.props._csrf,
                         })
-                  }
+                      }
+                    } else {
+                      sendHijackData(e, {
+                        hijackKey: hijackKey,
+                        selectState: mRef.current.value,
+                        prefix: this.props.hijackDataState.prefix,
+                        hijack_as: this.props.hijackDataState.hijack_as,
+                        type: this.props.hijackDataState.type,
+                        _csrf: this.props._csrf,
+                      })
+                    }
+                  }}
                   style={{ marginRight: '5px' }}
                   id="apply_selected"
                   type="button"

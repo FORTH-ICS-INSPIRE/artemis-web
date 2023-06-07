@@ -38,7 +38,7 @@ export const useHijack = () => {
   const [openModalState, setOpenModalState] = useState(false);
 
   const config = useGraphQl('config', {
-    isLive: false,
+    isLive: true,
     hasDateFilter: false,
     hasColumnFilter: false,
     hasStatusFilter: false,
