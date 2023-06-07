@@ -2,6 +2,7 @@ import { Button, FormControlLabel, FormGroup, Grid } from '@material-ui/core';
 import { AntSwitch, useStyles } from '../../utils/styles';
 import React, { useState } from 'react';
 import { useGraphQl } from '../../utils/hooks/use-graphql';
+import yaml from "js-yaml";
 
 const SystemModule = (props) => {
   const { module, modulesStateObj, labels, subModules } = props;
@@ -56,6 +57,15 @@ const SystemModule = (props) => {
                     <AntSwitch
                       checked={state[module]}
                       onChange={() => {
+                        if (module === 'autoconfiguration') {
+                          if (props.configData && !props.configData.loading && props.configData.data) {
+                            const config = yaml.load(props.configData.data.view_configs[0].raw_config);
+                            const monitors = config.monitors;
+                            console.log(monitors)
+                          }
+                        } else if (module === 'automitigation') {
+
+                        }
                         setState((prevState) => ({
                           ...prevState,
                           [module]: !state[module],
