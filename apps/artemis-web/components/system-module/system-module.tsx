@@ -58,9 +58,9 @@ const SystemModule = (props) => {
                       checked={state[module]}
                       onChange={() => {
                         if (module === 'autoconfiguration-1') {
-                          console.log('mpikeeee');
-                          if (configData && !configData.loading && configData.data) {
-                            const config = yaml.load(configData.data.view_configs[0].raw_config);
+                          console.log(configData);
+                          if (configData && configData.view_configs) {
+                            const config = yaml.load(configData.view_configs[0].raw_config);
                             const monitors = config.monitors;
                             console.log(monitors)
                           }
