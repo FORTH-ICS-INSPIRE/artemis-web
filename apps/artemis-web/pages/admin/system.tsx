@@ -42,8 +42,10 @@ const SystemPage = (props) => {
         ps['name'].charAt(0).toUpperCase() + ps['name'].slice(1),
         ps['running'],
       ];
-    })
+    }).concat([['autoconfiguration-1', false]])
     : [];
+
+  console.log(modules)
 
   const modulesStateObj = {};
   const modulesList = [
@@ -54,6 +56,7 @@ const SystemPage = (props) => {
     'mitigation',
     'bgpstreamhisttap',
     'bgpstreamkafkatap',
+    'autoconfiguration'
   ];
   const modulesLabels = {
     riperistap: 'RIPE RIS Monitor',
@@ -63,6 +66,7 @@ const SystemPage = (props) => {
     exabgptap: 'ExaBGP Monitor',
     detection: 'Detection',
     mitigation: 'Mitigation',
+    autoconfiguration: 'Auto configuration'
   };
 
   modules.forEach(
@@ -132,11 +136,21 @@ const SystemPage = (props) => {
                           subModules={subModules}
                           labels={modulesLabels}
                           modulesStateObj={modulesStateObj}
+                          configData={CONFIG_DATA}
                           is
                         />
                       );
                     } else return <> </>;
                   })}
+                  {/* <SystemModule
+                    {...props}
+                    key={moduleNames.length} // React requires a unique key value for each component rendered within a loop
+                    module={"autoconfiguration"}
+                    subModules={["autoconfiguration-1"]}
+                    labels={modulesLabels}
+                    modulesStateObj={modulesStateObj}
+                    is
+                  /> */}
                 </Grid>
               </div>
             </div>
