@@ -4971,6 +4971,11 @@ acorn@^8.2.4:
   resolved "https://registry.yarnpkg.com/acorn/-/acorn-8.8.1.tgz#0a3f9cbecc4ec3bea6f0a80b66ae8dd2da250b73"
   integrity sha512-7zFpHzhnqYKrkYdUjF1HI1bzd0VygEGX8lFk4k5zVMqHEoES+P+7TKI+EvLO9WVMJ8eekdO0aDEK044xTXwPPA==
 
+addrs@^0.0.3:
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/addrs/-/addrs-0.0.3.tgz#8a5fe2ce75a9112c75e3a00c491da4ef57485e71"
+  integrity sha512-r1AWSt7Ei04uhUvB8uC57lXw6F5IV0T0Eb+nlnZwwEwmKtv6W59+Ye/XZXgN2PJRu1umA6WLQQewEO6awGApaQ==
+
 after@0.8.2:
   version "0.8.2"
   resolved "https://registry.yarnpkg.com/after/-/after-0.8.2.tgz#fedb394f9f0e02aa9768e702bda23b505fae7e1f"

@@ -11,6 +11,7 @@ import {
 } from '../../utils/token';
 import HijackAS from '../hijack-as/hijack-as';
 import yaml from "js-yaml";
+import addrs from "addrs";
 
 class HijackInfoComponent extends Component<any, any> {
   seenTransitions: any;
@@ -54,6 +55,7 @@ class HijackInfoComponent extends Component<any, any> {
       gripState: false,
       event_data: [],
       gripFetched: false,
+      mitigationState: {},
     };
 
     this.isMobile = props.isMobile;
@@ -219,8 +221,23 @@ class HijackInfoComponent extends Component<any, any> {
                           if (rule.prefixes.flat().includes(this.props.hijackDataState.configured_prefix)) {
                             if (rule.mitigation && rule.mitigation != "manual") {
                               if (rule.announced_prefixes) {
-                                alert("Mitigation started. The following prefixes will be announced: \n" + rule.announced_prefixes.join(" "));
+                                this.setState({
+                                  mitigationState: {mode: "automitigation", prefixes: rule.announced_prefixes}
+                                });
+                                // alert("Mitigation started. The following prefixes will be announced: \n" + rule.announced_prefixes.join(" "));
+                              } else {
+                                const prefix = this.props.hijackDataState.prefix;
+                                const netwrk = addrs.Ipv4Network.fromCidr(prefix);
+                                const splitted = netwrk.split(netwrk.prefixlen + 1);
+                                this.setState({
+                                  mitigationState: {mode: "automitigation", prefixes: splitted}
+                                });
+                                // alert("Mitigation started. The following prefixes will be announced: \n" + splitted.join(" "));
                               }
+                            } else if (rule.mitigation === "manual") {
+                              this.setState({
+                                mitigationState: {mode: "manual", prefixes: []}
+                              });
                             }
 
                           }
@@ -234,6 +251,8 @@ class HijackInfoComponent extends Component<any, any> {
                           _csrf: this.props._csrf,
                         })
                       }
+                    } else if (mRef.current.value === 'hijack_action_unmitigate') {
+                      this.setState({mitigationState: {}});
                     } else {
                       sendHijackData(e, {
                         hijackKey: hijackKey,
@@ -256,7 +275,7 @@ class HijackInfoComponent extends Component<any, any> {
             </div>
           </div>
         </div>
-        <div className="row">
+        <div className="row" style={{ marginBottom: '15px' }}>
           <div className="col-lg-12">
             <div className="card">
               <div className="card-header">
@@ -306,7 +325,30 @@ class HijackInfoComponent extends Component<any, any> {
             </div>
           </div>
         </div>
-
+        <div className="row" style={{ visibility: this.state.mitigationState.mode? 'visible': 'hidden', marginBottom: '15px'}}>
+          <div className="col-lg-12">
+            <div className="card">
+              <div className="card-header">
+                Mitigated Prefixes
+              </div>
+              <div className="card-body">
+                {
+                  !this.state.mitigationState.mode || this.state.mitigationState.mode === "manual" ? "Mitigation is set to manual. No actions will be followed." : (
+                    <>
+                    The following prefixes will be announced:
+                    <ul> 
+                      {
+                        this.state.mitigationState.prefixes.map((prefix) => <li>{prefix}</li>)
+                      }
+                  </ul>
+                  </>
+                  )
+                }
+                
+              </div>
+            </div>
+          </div>   
+          </div>    
         <div className="row">
           <div className="col-lg-12">
             <div className="card" style={{ marginTop: '12px', visibility: this.state.gripState ? "visible" : "hidden" }}>
