@@ -253,6 +253,14 @@ class HijackInfoComponent extends Component<any, any> {
                       }
                     } else if (mRef.current.value === 'hijack_action_unmitigate') {
                       this.setState({mitigationState: {}});
+                      sendHijackData(e, {
+                        hijackKey: hijackKey,
+                        selectState: mRef.current.value,
+                        prefix: this.props.hijackDataState.prefix,
+                        hijack_as: this.props.hijackDataState.hijack_as,
+                        type: this.props.hijackDataState.type,
+                        _csrf: this.props._csrf,
+                      })
                     } else {
                       sendHijackData(e, {
                         hijackKey: hijackKey,
