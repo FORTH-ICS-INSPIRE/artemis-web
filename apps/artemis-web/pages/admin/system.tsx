@@ -42,9 +42,11 @@ const SystemPage = (props) => {
         ps['name'].charAt(0).toUpperCase() + ps['name'].slice(1),
         ps['running'],
       ];
-    })
+    }).concat([['autoconfiguration-1', false]])
     : [];
   modules.push(['Autoconfiguration-1', false]);
+
+  console.log(modules)
 
   const modulesStateObj = {};
   const modulesList = [
@@ -135,11 +137,21 @@ const SystemPage = (props) => {
                           subModules={subModules}
                           labels={modulesLabels}
                           modulesStateObj={modulesStateObj}
+                          configData={CONFIG_DATA}
                           is
                         />
                       );
                     } else return <> </>;
                   })}
+                  {/* <SystemModule
+                    {...props}
+                    key={moduleNames.length} // React requires a unique key value for each component rendered within a loop
+                    module={"autoconfiguration"}
+                    subModules={["autoconfiguration-1"]}
+                    labels={modulesLabels}
+                    modulesStateObj={modulesStateObj}
+                    is
+                  /> */}
                 </Grid>
               </div>
             </div>
