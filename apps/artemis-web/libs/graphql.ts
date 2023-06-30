@@ -112,10 +112,10 @@ export class QueryGenerator {
 
   private setModuleState() {
     return gql`
-      mutation updateIntendedProcessStates($name: String, $running: Boolean) {
+      mutation updateIntendedProcessStates($name: String, $running: Boolean, $extra_info: String) {
         update_view_intended_process_states(
           where: { name: { _eq: $name } }
-          _set: { running: $running }
+          _set: { running: $running, extra_info:  $extra_info}
         ) {
           affected_rows
           returning {

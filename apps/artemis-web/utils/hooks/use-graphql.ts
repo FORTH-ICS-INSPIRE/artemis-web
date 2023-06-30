@@ -38,10 +38,12 @@ export function useGraphQl(module: queryType, options: optionsType) {
   if (isTesting)
     return null;
   else if (isMutation) {
+    const { extra_info } = options;
+    console.log(extra_info)
     const generator = new QueryGenerator(module, isSubscription, options);
 
     vars = {
-      variables: { running, name },
+      variables: { running, name, extra_info },
     };
 
     const res = useMutation(generator.getQuery(), {

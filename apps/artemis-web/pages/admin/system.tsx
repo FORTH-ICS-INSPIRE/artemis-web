@@ -44,6 +44,7 @@ const SystemPage = (props) => {
       ];
     })
     : [];
+  modules.push(['Autoconfiguration-1', false]);
 
   const modulesStateObj = {};
   const modulesList = [
@@ -54,6 +55,7 @@ const SystemPage = (props) => {
     'mitigation',
     'bgpstreamhisttap',
     'bgpstreamkafkatap',
+    'autoconfiguration'
   ];
   const modulesLabels = {
     riperistap: 'RIPE RIS Monitor',
@@ -63,6 +65,7 @@ const SystemPage = (props) => {
     exabgptap: 'ExaBGP Monitor',
     detection: 'Detection',
     mitigation: 'Mitigation',
+    autoconfiguration: 'Auto Configuration',
   };
 
   modules.forEach(

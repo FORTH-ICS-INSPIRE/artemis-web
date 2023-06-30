@@ -2,11 +2,11 @@ import { Button, FormControlLabel, FormGroup, Grid } from '@material-ui/core';
 import { AntSwitch, useStyles } from '../../utils/styles';
 import React, { useState } from 'react';
 import { useGraphQl } from '../../utils/hooks/use-graphql';
-import yaml from "js-yaml";
 
 const SystemModule = (props) => {
-  const { module, modulesStateObj, labels, subModules } = props;
+  const { modulesStateObj, labels, subModules, module } = props;
   const [state, setState] = useState(modulesStateObj);
+  const [extraInfoState, setExtraInfoState] = useState("");
 
   const key = module.substring(0, module.indexOf('-')).toLowerCase();
   let totalActive = 0;
@@ -18,7 +18,8 @@ const SystemModule = (props) => {
     isMutation: true,
     running: state[module],
     isTesting: props.isTesting,
-    name: module.toLowerCase().substring(0, module.toLowerCase().indexOf('-')),
+    extra_info: extraInfoState,
+    name: extraInfoState.length === 0 ? module.toLowerCase().substring(0, module.toLowerCase().indexOf('-')) : 'Exabgptap-1',
   });
 
   const classes = useStyles();
@@ -57,19 +58,21 @@ const SystemModule = (props) => {
                     <AntSwitch
                       checked={state[module]}
                       onChange={() => {
-                        if (module === 'autoconfiguration') {
-                          if (props.configData && !props.configData.loading && props.configData.data) {
-                            const config = yaml.load(props.configData.data.view_configs[0].raw_config);
-                            const monitors = config.monitors;
-                            console.log(monitors)
-                          }
-                        } else if (module === 'automitigation') {
+                        if (module === 'Autoconfiguration-1') {
+                          if (state[module]) setExtraInfoState("autoconf-off");
+                          else setExtraInfoState("autoconf-on");
 
+                          setState((prevState) => ({
+                            ...prevState,
+                            [module]: !state[module],
+                          }));
+                        } else {
+                          setExtraInfoState("");
+                          setState((prevState) => ({
+                            ...prevState,
+                            [module]: !state[module],
+                          }));
                         }
-                        setState((prevState) => ({
-                          ...prevState,
-                          [module]: !state[module],
-                        }));
                       }}
                       name="checkedB"
                     />
