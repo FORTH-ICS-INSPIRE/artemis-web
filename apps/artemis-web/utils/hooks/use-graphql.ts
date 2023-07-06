@@ -5,7 +5,7 @@ import queryType from '../../libs/graphql.d';
 import { useMutation, useQuery, useSubscription } from '@apollo/client';
 
 export function useGraphQl(module: queryType, options: optionsType) {
-  const { isLive, key, limits, callback, isMutation, running, name, isTesting } = options;
+  let { isLive, key, limits, callback, isMutation, running, name, isTesting } = options;
   let vars;
   const varTmp = {};
   const isSubscription = shallSubscribe(isLive);
@@ -38,13 +38,26 @@ export function useGraphQl(module: queryType, options: optionsType) {
   if (isTesting)
     return null;
   else if (isMutation) {
+    if (name === 'autoconfiguration' && module !== 'setModuleExtraInfo') {
+      return null;
+    } else if (name !== 'autoconfiguration' && module === 'setModuleExtraInfo') {
+      return null;
+    }
+
     const { extra_info } = options;
-    console.log(extra_info)
+
     const generator = new QueryGenerator(module, isSubscription, options);
 
     vars = {
-      variables: { running, name, extra_info },
+      variables: { running, name },
     };
+
+    if (module === 'setModuleExtraInfo') {
+      name = 'exabgptap';
+      vars = {
+        variables: { extra_info, name },
+      };
+    }
 
     const res = useMutation(generator.getQuery(), {
       ...vars,

@@ -4,12 +4,13 @@ import React, { useState } from 'react';
 import { useGraphQl } from '../../utils/hooks/use-graphql';
 
 const SystemModule = (props) => {
-  const { modulesStateObj, labels, subModules, module } = props;
+  const { modulesStateObj, labels, subModules, module, autoconfState } = props;
   const [state, setState] = useState(modulesStateObj);
-  const [extraInfoState, setExtraInfoState] = useState("");
+  const [extraInfoState, setExtraInfoState] = useState(autoconfState ? "autoconf-on" : "autoconf-off");
 
   const key = module.substring(0, module.indexOf('-')).toLowerCase();
   let totalActive = 0;
+  if (module === 'Autoconfiguration-1' && extraInfoState === "autoconf-on") totalActive = 1;
   subModules[key].forEach((module) => (totalActive += module[1] ? 1 : 0));
   const totalModules = subModules[key].length;
 
@@ -18,8 +19,14 @@ const SystemModule = (props) => {
     isMutation: true,
     running: state[module],
     isTesting: props.isTesting,
+    name: module.toLowerCase().substring(0, module.toLowerCase().indexOf('-')),
+  });
+
+  useGraphQl('setModuleExtraInfo', {
+    isLive: false,
+    isMutation: true,
+    name: module.toLowerCase().substring(0, module.toLowerCase().indexOf('-')),
     extra_info: extraInfoState,
-    name: extraInfoState.length === 0 ? module.toLowerCase().substring(0, module.toLowerCase().indexOf('-')) : 'Exabgptap-1',
   });
 
   const classes = useStyles();
@@ -36,7 +43,7 @@ const SystemModule = (props) => {
                 variant="contained"
                 style={{ marginTop: '9px', cursor: 'default' }}
                 className={
-                  totalActive > 0
+                  totalActive > 0 || extraInfoState === "autoconf-on"
                     ? classes.activeButton
                     : classes.inactiveButton
                 }
@@ -56,18 +63,17 @@ const SystemModule = (props) => {
                 <FormControlLabel
                   control={
                     <AntSwitch
-                      checked={state[module]}
+                      checked={module === 'Autoconfiguration-1' ? extraInfoState === "autoconf-on" : state[module]}
                       onChange={() => {
                         if (module === 'Autoconfiguration-1') {
-                          if (state[module]) setExtraInfoState("autoconf-off");
-                          else setExtraInfoState("autoconf-on");
-
-                          setState((prevState) => ({
-                            ...prevState,
-                            [module]: !state[module],
-                          }));
+                          if (extraInfoState ===  "autoconf-on") {
+                            totalActive = 0;
+                            setExtraInfoState("autoconf-off");
+                          } else {
+                            totalActive = 1;
+                            setExtraInfoState("autoconf-on");
+                          } 
                         } else {
-                          setExtraInfoState("");
                           setState((prevState) => ({
                             ...prevState,
                             [module]: !state[module],

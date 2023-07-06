@@ -36,17 +36,22 @@ const SystemPage = (props) => {
 
   const processes = STATS_DATA ? STATS_DATA.view_processes : null;
 
+  let autoconfState = false;
+  console.log(processes)
+
   const modules = processes
     ? processes.map((ps) => {
+      if (ps['name'] === 'exabgptap' && ps['extra_info'] === "autoconf-on") {
+        autoconfState = true;
+      }
+
       return [
         ps['name'].charAt(0).toUpperCase() + ps['name'].slice(1),
         ps['running'],
       ];
-    }).concat([['autoconfiguration-1', false]])
+    })
     : [];
-  modules.push(['Autoconfiguration-1', false]);
-
-  console.log(modules)
+  modules.push(['Autoconfiguration-1', autoconfState]);
 
   const modulesStateObj = {};
   const modulesList = [
@@ -138,20 +143,12 @@ const SystemPage = (props) => {
                           labels={modulesLabels}
                           modulesStateObj={modulesStateObj}
                           configData={CONFIG_DATA}
+                          autoconfState={autoconfState}
                           is
                         />
                       );
                     } else return <> </>;
                   })}
-                  {/* <SystemModule
-                    {...props}
-                    key={moduleNames.length} // React requires a unique key value for each component rendered within a loop
-                    module={"autoconfiguration"}
-                    subModules={["autoconfiguration-1"]}
-                    labels={modulesLabels}
-                    modulesStateObj={modulesStateObj}
-                    is
-                  /> */}
                 </Grid>
               </div>
             </div>
