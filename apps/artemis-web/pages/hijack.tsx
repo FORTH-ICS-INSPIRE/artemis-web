@@ -14,7 +14,7 @@ import 'draft-js/dist/Draft.css';
 import DefaultErrorPage from 'next/error';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Media from 'react-media';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -71,7 +71,6 @@ const ViewHijackPage = (props) => {
     setOpenModalState,
     config,
   } = useHijack();
-
   const router = useRouter();
 
   const hijackKey: string = router.query.key.toString() ?? '';
@@ -105,6 +104,7 @@ const ViewHijackPage = (props) => {
     hasColumnFilter: false,
     hasStatusFilter: false,
   });
+
 
   const onChangeValue = (event) => {
     setSelectState(event.target.value);
@@ -180,6 +180,7 @@ const ViewHijackPage = (props) => {
               </div>
               <HijackInfoComponent
                 {...props}
+                configData={config}
                 hijackDataState={hijackDataState}
                 isMobile={matches.mobile}
                 tooltips={tooltips}
