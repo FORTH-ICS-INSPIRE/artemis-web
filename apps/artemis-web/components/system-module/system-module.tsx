@@ -3,15 +3,38 @@ import { AntSwitch, useStyles } from '../../utils/styles';
 import React, { useState } from 'react';
 import { useGraphQl } from '../../utils/hooks/use-graphql';
 
-const SystemModule = (props) => {
-  const { modulesStateObj, labels, subModules, module, autoconfState } = props;
-  const [state, setState] = useState(modulesStateObj);
-  const [extraInfoState, setExtraInfoState] = useState(autoconfState ? "autoconf-on" : "autoconf-off");
+enum AutoModuleStatus {
+  AUTO_ON = "automodule-on",
+  AUTO_OFF = "automodule-off",
+  AUTO_UNDEF = ""
+}
 
+const SystemModule = (props) => {
+  const { modulesStateObj, labels, subModules, module } = props;
+  // const [extraInfoState, setExtraInfoState] = useState("");
+
+  const isChecked = () => {
+    if (module === 'Autoconfiguration-1') return autoConfState === AutoModuleStatus.AUTO_ON;
+    else if (module === 'Automitigation-1') return autoMitigationState === AutoModuleStatus.AUTO_ON;
+    else return state[module];
+  };
+
+  const getState = () => {
+    if (module === 'Autoconfiguration-1') return modulesStateObj["Autoconfiguration-1"] ? AutoModuleStatus.AUTO_ON : AutoModuleStatus.AUTO_OFF;
+    else if (module === 'Automitigation-1') return modulesStateObj["Automitigation-1"] ? AutoModuleStatus.AUTO_ON : AutoModuleStatus.AUTO_OFF;
+    else return "";
+  };
+  
+  const [state, setState] = useState(modulesStateObj);
+  const [autoConfState, setAutoConfState] = useState(getState());
+  const [autoMitigationState, setAutoMitigationState] = useState(getState());
   const key = module.substring(0, module.indexOf('-')).toLowerCase();
   let totalActive = 0;
-  if (module === 'Autoconfiguration-1' && extraInfoState === "autoconf-on") totalActive = 1;
   subModules[key].forEach((module) => (totalActive += module[1] ? 1 : 0));
+  // if (module === 'Autoconfiguration-1' && autoConf !== AutoModuleStatus.AUTO_UNDEF) setAutoConfState(autoConf)
+  if (module === 'Autoconfiguration-1') totalActive = (autoConfState === AutoModuleStatus.AUTO_ON ? 1 : 0);
+  if (module === 'Automitigation-1') totalActive = (autoMitigationState === AutoModuleStatus.AUTO_ON ? 1 : 0);
+
   const totalModules = subModules[key].length;
 
   useGraphQl('setModuleState', {
@@ -26,7 +49,7 @@ const SystemModule = (props) => {
     isLive: false,
     isMutation: true,
     name: module.toLowerCase().substring(0, module.toLowerCase().indexOf('-')),
-    extra_info: extraInfoState,
+    extra_info: module === 'Automitigation-1' ? autoMitigationState : (module === 'Autoconfiguration-1' ? autoConfState : ''),
   });
 
   const classes = useStyles();
@@ -43,7 +66,8 @@ const SystemModule = (props) => {
                 variant="contained"
                 style={{ marginTop: '9px', cursor: 'default' }}
                 className={
-                  totalActive > 0 || extraInfoState === "autoconf-on"
+                  totalActive > 0 || (module === 'Autoconfiguration-1' && autoConfState === AutoModuleStatus.AUTO_ON)
+                  || (module === 'Automitigation-1' && autoMitigationState === AutoModuleStatus.AUTO_ON)
                     ? classes.activeButton
                     : classes.inactiveButton
                 }
@@ -63,15 +87,23 @@ const SystemModule = (props) => {
                 <FormControlLabel
                   control={
                     <AntSwitch
-                      checked={module === 'Autoconfiguration-1' ? extraInfoState === "autoconf-on" : state[module]}
+                      checked={isChecked()}
                       onChange={() => {
                         if (module === 'Autoconfiguration-1') {
-                          if (extraInfoState ===  "autoconf-on") {
+                          if (autoConfState === AutoModuleStatus.AUTO_ON) {
                             totalActive = 0;
-                            setExtraInfoState("autoconf-off");
+                            setAutoConfState(AutoModuleStatus.AUTO_OFF);
                           } else {
                             totalActive = 1;
-                            setExtraInfoState("autoconf-on");
+                            setAutoConfState(AutoModuleStatus.AUTO_ON);
+                          } 
+                        } else if (module === 'Automitigation-1') {
+                          if (autoMitigationState === AutoModuleStatus.AUTO_ON) {
+                            totalActive = 0;
+                            setAutoMitigationState(AutoModuleStatus.AUTO_OFF);
+                          } else {
+                            totalActive = 1;
+                            setAutoMitigationState(AutoModuleStatus.AUTO_ON);
                           } 
                         } else {
                           setState((prevState) => ({

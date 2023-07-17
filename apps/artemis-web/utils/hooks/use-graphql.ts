@@ -38,11 +38,11 @@ export function useGraphQl(module: queryType, options: optionsType) {
   if (isTesting)
     return null;
   else if (isMutation) {
-    if (name === 'autoconfiguration' && module !== 'setModuleExtraInfo') {
+    if ((name === 'autoconfiguration' || name === 'automitigation') && module !== 'setModuleExtraInfo') {
       return null;
-    } else if (name !== 'autoconfiguration' && module === 'setModuleExtraInfo') {
+    } else if (name !== 'autoconfiguration' && name !== 'automitigation' && module === 'setModuleExtraInfo') {
       return null;
-    }
+    } 
 
     const { extra_info } = options;
 
@@ -53,7 +53,10 @@ export function useGraphQl(module: queryType, options: optionsType) {
     };
 
     if (module === 'setModuleExtraInfo') {
-      name = 'exabgptap';
+      if (name === 'autoconfiguration')
+        name = 'exabgptap';
+      else
+        name = 'mitigation';
       vars = {
         variables: { extra_info, name },
       };
