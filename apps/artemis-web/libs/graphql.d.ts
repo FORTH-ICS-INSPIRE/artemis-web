@@ -12,6 +12,7 @@ type queryType =
   | 'config'
   | 'moduleState'
   | 'setModuleState'
+  | 'setModuleExtraInfo'
   | 'dataplane'
   | 'hijackCount';
 

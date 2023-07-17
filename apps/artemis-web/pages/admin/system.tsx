@@ -1,6 +1,6 @@
 import { Grid } from '@material-ui/core';
 import Head from 'next/head';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import AuthHOC from '../../components/401-hoc/401-hoc';
 import SystemConfigurationComponent from '../../components/system-configuration/system-configuration';
 import SystemModule from '../../components/system-module/system-module';
@@ -8,7 +8,14 @@ import { setup } from '../../libs/csrf';
 import { useGraphQl } from '../../utils/hooks/use-graphql';
 import { autoLogout, shallMock } from '../../utils/token';
 
+enum AutoStatus {
+  AUTO_ON = "automodule-on",
+  AUTO_OFF = "automodule-off",
+  AUTO_UNDEF = ""
+}
+
 const SystemPage = (props) => {
+
   if (shallMock(props.isTesting)) {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const { worker } = require('../../utils/mock-sw/browser');
@@ -18,6 +25,9 @@ const SystemPage = (props) => {
   useEffect(() => {
     autoLogout(props);
   }, [props]);
+
+  let autoConf: AutoStatus = AutoStatus.AUTO_UNDEF;
+  let autoMitigate: AutoStatus = AutoStatus.AUTO_UNDEF;
 
   const user = props.user;
   const STATS_RES: any = useGraphQl('stats', {
@@ -35,9 +45,23 @@ const SystemPage = (props) => {
   CONFIG_DATA = CONFIG_DATA?.data;
 
   const processes = STATS_DATA ? STATS_DATA.view_processes : null;
-
-  const modules = processes
+  
+  let modules = processes
     ? processes.map((ps) => {
+      if (ps['name'].includes('exabgptap')) {
+        if (ps['extra_info'].includes("-on"))
+          autoConf = AutoStatus.AUTO_ON;
+        else if (ps['extra_info'].includes("-off") || ps['extra_info'].length == 0)
+          autoConf = AutoStatus.AUTO_OFF;
+      }
+
+      if (ps['name'].includes('mitigation')) {
+        if (ps['extra_info'].includes("-on"))
+        autoMitigate = AutoStatus.AUTO_ON;
+        else if (ps['extra_info'].includes("-off") || ps['extra_info'].length == 0)
+        autoMitigate = AutoStatus.AUTO_OFF;
+      }
+
       return [
         ps['name'].charAt(0).toUpperCase() + ps['name'].slice(1),
         ps['running'],
@@ -45,6 +69,14 @@ const SystemPage = (props) => {
     })
     : [];
 
+  if (autoConf !== AutoStatus.AUTO_UNDEF) {
+    modules = [...modules, ['Autoconfiguration-1', autoConf === AutoStatus.AUTO_ON ? true : false]];
+  }
+
+  if (autoMitigate !== AutoStatus.AUTO_UNDEF) {
+    modules = [...modules, ['Automitigation-1', autoMitigate === AutoStatus.AUTO_ON ? true : false]];
+  }
+  
   const modulesStateObj = {};
   const modulesList = [
     'riperistap',
@@ -54,6 +86,8 @@ const SystemPage = (props) => {
     'mitigation',
     'bgpstreamhisttap',
     'bgpstreamkafkatap',
+    'autoconfiguration',
+    'automitigation'
   ];
   const modulesLabels = {
     riperistap: 'RIPE RIS Monitor',
@@ -63,6 +97,8 @@ const SystemPage = (props) => {
     exabgptap: 'ExaBGP Monitor',
     detection: 'Detection',
     mitigation: 'Mitigation',
+    autoconfiguration: 'Auto Configuration',
+    automitigation: 'Auto Mitigation'
   };
 
   modules.forEach(
@@ -93,7 +129,7 @@ const SystemPage = (props) => {
   moduleNames.sort();
 
   const moduleList = [];
-
+  
   return (
     <>
       <Head>
@@ -132,6 +168,8 @@ const SystemPage = (props) => {
                           subModules={subModules}
                           labels={modulesLabels}
                           modulesStateObj={modulesStateObj}
+                          configData={CONFIG_DATA}
+                          autoConf={autoConf}
                           is
                         />
                       );

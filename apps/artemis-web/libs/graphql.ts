@@ -115,12 +115,29 @@ export class QueryGenerator {
       mutation updateIntendedProcessStates($name: String, $running: Boolean) {
         update_view_intended_process_states(
           where: { name: { _eq: $name } }
-          _set: { running: $running }
+          _set: { running: $running}
         ) {
           affected_rows
           returning {
             name
             running
+          }
+        }
+      }
+    `;
+  }
+
+  private setModuleExtraInfo() {
+    return gql`
+      mutation updateIntendedProcessStates($name: String, $extra_info: String) {
+        update_view_intended_process_states(
+          where: { name: { _eq: $name } }
+          _set: { extra_info:  $extra_info}
+        ) {
+          affected_rows
+          returning {
+            name
+            extra_info
           }
         }
       }
@@ -247,6 +264,7 @@ export class QueryGenerator {
         name
         running
         loading
+        extra_info
         timestamp
       }
     }
@@ -481,6 +499,9 @@ export class QueryGenerator {
         break;
       case 'setModuleState':
         query = this.setModuleState();
+        break;
+      case 'setModuleExtraInfo':
+        query = this.setModuleExtraInfo();
         break;
     }
 
