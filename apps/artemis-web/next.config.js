@@ -40,18 +40,19 @@ module.exports = {
                 'https://localhost/api/graphql',
                 'http://localhost/api/graphql',
                 'https://demo.artemis-pc.duckdns.org/api/graphql',
-                'https://accounts.google.com/o/oauth2/v2/auth'
+                'https://accounts.google.com/o/oauth2/v2/auth',
+                'https://api.grip.inetintel.cc.gatech.edu'
               ],
-              frameAncestors: "'none",
+              // frameAncestors: "'none",
               imgSrc: ["'self'", 'data:'],
-              objectSrc: "'none",
+              // objectSrc: "'none",
             },
           },
           forceHTTPSRedirect: [
             true,
             { maxAge: 60 * 60 * 24 * 4, includeSubDomains: true },
           ],
-          referrerPolicy: 'origin',
+          referrerPolicy: 'same-origin',
         }),
       },
     ];
