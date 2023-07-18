@@ -11,9 +11,12 @@ type stateType = {
   currentConfigRight: string;
   currentCommentLeft: string;
   currentCommentRight: string;
+  alertState: string;
+  fetchState: boolean;
+  alertMessage: string;
 };
 
-class ConfigComparisonComponent extends Component<unknown, stateType> {
+class ConfigComparisonComponent extends Component<any, stateType> {
   CodeMirror: any;
   _ref: any;
   mergeView: any;
@@ -116,7 +119,7 @@ class ConfigComparisonComponent extends Component<unknown, stateType> {
     }
   }
 
-  restoreConfig() {
+  async restoreConfig() {
     const new_config = this.state.currentConfigRight;
     const comment = this.state.currentCommentRight;
     const res = await fetch('/api/config', {
@@ -129,7 +132,7 @@ class ConfigComparisonComponent extends Component<unknown, stateType> {
       body: JSON.stringify({
         new_config: new_config,
         comment: comment,
-        _csrf: props._csrf,
+        _csrf: this.props._csrf,
       }),
     });
     if (res.status === 200) {
@@ -168,9 +171,9 @@ class ConfigComparisonComponent extends Component<unknown, stateType> {
                   </select>
                   <Button
                     onClick={(e) => this.restoreConfig()}
-                    style={{ float: 'right' }}
+                    style={{ float: 'right', marginTop: "-10px", marginRight: "30px" }}
                     variant="contained"
-                  // className={classes.inactiveButton}
+                    className="btn btn-primary btn-sm"
                   >
                     Restore
                   </Button>
