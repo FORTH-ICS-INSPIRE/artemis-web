@@ -132,7 +132,7 @@ class ConfigComparisonComponent extends Component<any, stateType> {
       body: JSON.stringify({
         new_config: new_config,
         comment: comment,
-        _csrf: this.props._csrf,
+        _csrf: this.props.csrfToken,
       }),
     });
     if (res.status === 200) {

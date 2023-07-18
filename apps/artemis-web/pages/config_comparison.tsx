@@ -40,7 +40,7 @@ const ConfigComparisonPage = (props) => {
             <div className="row">
               <div className="col-lg-1"></div>
               <div className="col-lg-10">
-                <ConfigComparisonComponent />
+                <ConfigComparisonComponent csrfToken={props._csrf} />
               </div>
             </div>
           </div>
