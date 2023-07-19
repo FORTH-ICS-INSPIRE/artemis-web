@@ -68,13 +68,15 @@ class HijackInfoComponent extends Component<any, any> {
 
     try {
       // https://api.grip.inetintel.cc.gatech.edu/json/events?event_type=moas&asns=209242&pfxs=23.26.222.0/23
-      const resp = await fetch(`https://api.grip.inetintel.cc.gatech.edu/json/events?event_type=${type}&asns=${asn}&pfxs=${prefix}`, {
+      const resp = await fetch(`https://cors-anywhere.herokuapp.com/https://api.grip.inetintel.cc.gatech.edu/json/events?event_type=moas&asns=8522&pfxs=192.67.249.0/24`, {
         method: 'GET',
         mode: 'cors',
         cache: "default",
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
+          origin: 'localhost',
+          'x-requested-with': 'artemis'
         },
       });
       const json = await resp.json();

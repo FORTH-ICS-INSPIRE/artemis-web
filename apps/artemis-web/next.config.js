@@ -41,7 +41,7 @@ module.exports = {
                 'http://localhost/api/graphql',
                 'https://demo.artemis-pc.duckdns.org/api/graphql',
                 'https://accounts.google.com/o/oauth2/v2/auth',
-                'https://api.grip.inetintel.cc.gatech.edu'
+                'https://cors-anywhere.herokuapp.com'
               ],
               // frameAncestors: "'none",
               imgSrc: ["'self'", 'data:'],
