@@ -41,7 +41,8 @@ module.exports = {
                 'http://localhost/api/graphql',
                 'https://demo.artemis-pc.duckdns.org/api/graphql',
                 'https://accounts.google.com/o/oauth2/v2/auth',
-                'https://cors-anywhere.herokuapp.com'
+                'https://127.0.0.1:8088/https://api.grip.inetintel.cc.gatech.edu/',
+                'http://localhost:8088/https://api.grip.inetintel.cc.gatech.edu/'
               ],
               // frameAncestors: "'none",
               imgSrc: ["'self'", 'data:'],

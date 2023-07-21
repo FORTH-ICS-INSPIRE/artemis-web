@@ -67,7 +67,7 @@ class HijackInfoComponent extends Component<any, any> {
     const type = this.getEventType(hijackDataState["type"]);
 
     try {
-      const resp = await fetch(`https://cors-anywhere.herokuapp.com/https://api.grip.inetintel.cc.gatech.edu/json/events?event_type=${type}&asns=${asn}&pfxs=${prefix}`, {
+      const resp = await fetch(`http://${window.location.host}:8088/https://api.grip.inetintel.cc.gatech.edu/json/events?event_type=${type}&asns=${asn}&pfxs=${prefix}`, {
         method: 'GET',
         mode: 'cors',
         cache: "default",
