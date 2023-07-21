@@ -67,11 +67,15 @@ class HijackInfoComponent extends Component<any, any> {
     const type = this.getEventType(hijackDataState["type"]);
 
     try {
-      const resp = await fetch(`https://api.grip.caida.org/v1/json/events?event_type=${type}&asns=${asn}&pfxs=${prefix}`, {
+      const resp = await fetch(`http://${window.location.host}:8088/https://api.grip.inetintel.cc.gatech.edu/json/events?event_type=${type}&asns=${asn}&pfxs=${prefix}`, {
         method: 'GET',
+        mode: 'cors',
+        cache: "default",
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
+          origin: 'localhost',
+          'x-requested-with': 'artemis'
         },
       });
       const json = await resp.json();
@@ -310,7 +314,7 @@ class HijackInfoComponent extends Component<any, any> {
                   type="button"
                   className={`btn btn-primary
                           } btn-lg`}
-                  onClick={() => window.open(`https://grip-dev.caida.org/events/${type}/${this.eventRef.current.value}`, "_blank")}
+                  onClick={() => window.open(`https://grip.inetintel.cc.gatech.edu/events/${type}/${this.eventRef.current.value}`, "_blank")}
                 >
                   Go to GRIP event
                 </button>
