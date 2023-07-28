@@ -211,7 +211,7 @@ class HijackInfoComponent extends Component<any, any> {
                     </select>
                   )}
                 <button
-                  onClick={(e) => {
+                  onClick={async (e) => {
                     if (mRef.current.value === 'hijack_action_ignore') {
                       this.setOpenModalState(true)
                     } else if (mRef.current.value === 'hijack_action_export') {
@@ -219,9 +219,10 @@ class HijackInfoComponent extends Component<any, any> {
                     } else if (mRef.current.value === 'hijack_action_mitigate') {
                       if (this.props.configData && !this.props.configData.loading && this.props.configData.data) {
                         const config = yaml.load(this.props.configData.data.view_configs[0].raw_config);
+
                         const rules = config.rules;
 
-                        rules.forEach(rule => {
+                        rules.forEach(async rule => {
                           if (rule.prefixes.flat().includes(this.props.hijackDataState.configured_prefix)) {
                             if (rule.mitigation && rule.mitigation != "manual") {
                               if (rule.announced_prefixes) {
@@ -231,10 +232,25 @@ class HijackInfoComponent extends Component<any, any> {
                                 // alert("Mitigation started. The following prefixes will be announced: \n" + rule.announced_prefixes.join(" "));
                               } else {
                                 const prefix = this.props.hijackDataState.prefix;
-                                const netwrk = addrs.Ipv4Network.fromCidr(prefix);
-                                const splitted = netwrk.split(netwrk.prefixlen + 1);
+                                // const netwrk = addrs.Ipv4Network.fromCidr(prefix);
+                                const splitted = []; //netwrk.split(netwrk.prefixlen + 1);
                                 this.setState({
                                   mitigationState: {mode: "automitigation", prefixes: splitted}
+                                });
+                                const resp = await fetch(`${document.location.protocol}//${document.location.host}/api/address`, {
+                                  method: 'POST',
+                                  headers: {
+                                    Accept: 'application/json',
+                                    'Content-Type': 'application/json',
+                                  },
+                                  body: JSON.stringify({
+                                    ip: prefix
+                                  })
+                                });
+                                const obj = await resp.json();
+                                const ips = JSON.parse((obj.ips).replaceAll("'", '"'));
+                                this.setState({
+                                  mitigationState: {mode: "automitigation", prefixes: ips}
                                 });
                                 // alert("Mitigation started. The following prefixes will be announced: \n" + splitted.join(" "));
                               }
@@ -243,7 +259,6 @@ class HijackInfoComponent extends Component<any, any> {
                                 mitigationState: {mode: "manual", prefixes: []}
                               });
                             }
-
                           }
                         });
                         sendHijackData(e, {
@@ -356,7 +371,6 @@ class HijackInfoComponent extends Component<any, any> {
                   </>
                   )
                 }
-                
               </div>
             </div>
           </div>   

@@ -11625,6 +11625,11 @@ net@^1.0.2:
   resolved "https://registry.yarnpkg.com/net/-/net-1.0.2.tgz#d1757ec9a7fb2371d83cf4755ce3e27e10829388"
   integrity sha512-kbhcj2SVVR4caaVnGLJKmlk2+f+oLkjqdKeQlmUtz6nGzOpbcobwVIeSURNgraV/v3tlmGIX82OcPCl0K6RbHQ==
 
+netaddr@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/netaddr/-/netaddr-1.1.0.tgz#3a0f03bc3145b7df76bb8aaaa965262b08dc880d"
+  integrity sha512-onmQZagG0l8uY5Swl/NxEI80PTTzDkM3u4ZIDot5Q3Nc7YKJY5ndoR/Wsjj71Q9yigULqBWVKuFk2VLNfA5DHA==
+
 next-connect@^0.11.0:
   version "0.11.1"
   resolved "https://registry.yarnpkg.com/next-connect/-/next-connect-0.11.1.tgz#3bdca8a7b91c366f7d15c8f03cb39933f65a87cc"

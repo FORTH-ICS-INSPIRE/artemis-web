@@ -169,14 +169,6 @@ class ConfigComparisonComponent extends Component<any, stateType> {
                       );
                     })}
                   </select>
-                  <Button
-                    onClick={(e) => this.restoreConfig()}
-                    style={{ float: 'right', marginTop: "-10px", marginRight: "30px" }}
-                    variant="contained"
-                    className="btn btn-primary btn-sm"
-                  >
-                    Restore
-                  </Button>
                 </div>
                 <div className="col-lg-6">
                   <span style={{ marginLeft: '50px' }}>Select config:</span>{' '}
@@ -195,6 +187,27 @@ class ConfigComparisonComponent extends Component<any, stateType> {
                       );
                     })}
                   </select>
+                  <Button
+                    onClick={(e) => this.restoreConfig()}
+                    style={{ float: 'right', marginTop: "-10px", marginRight: "30px" }}
+                    variant="contained"
+                    className="btn btn-primary btn-sm"
+                  >
+                    Restore
+                  </Button>
+                  <div style={{ display: this.state.alertState }} id="config_alert_box">
+                    <div className={"alert alert-dismissible " + (this.state.fetchState ? "alert-success" : "alert-danger")}>
+                      <a
+                        href="#"
+                        className="close"
+                        data-dismiss="alert"
+                        aria-label="close"
+                      >
+                        ×
+                      </a>
+                      {this.state.alertMessage}
+                    </div>
+                  </div>
                 </div>
               </div>
               <div ref={(ref) => (this._ref = ref)}></div>
@@ -230,19 +243,6 @@ class ConfigComparisonComponent extends Component<any, stateType> {
                   />
                 </div>
                 <div className="col-lg-6">
-                  <div style={{ display: this.state.alertState }} id="config_alert_box">
-                    <div className={"alert alert-dismissible " + (this.state.fetchState ? "alert-success" : "alert-danger")}>
-                      <a
-                        href="#"
-                        className="close"
-                        data-dismiss="alert"
-                        aria-label="close"
-                      >
-                        ×
-                      </a>
-                      {this.state.alertMessage}
-                    </div>
-                  </div>
                   <CodeMirror
                     value={this.state.currentCommentRight}
                     options={{
