@@ -15,25 +15,21 @@ const SystemModule = (props) => {
 
   const isChecked = () => {
     if (module === 'Autoconfiguration-1') return autoConfState === AutoModuleStatus.AUTO_ON;
-    else if (module === 'Automitigation-1') return autoMitigationState === AutoModuleStatus.AUTO_ON;
     else return state[module];
   };
 
   const getState = () => {
     if (module === 'Autoconfiguration-1') return modulesStateObj["Autoconfiguration-1"] ? AutoModuleStatus.AUTO_ON : AutoModuleStatus.AUTO_OFF;
-    else if (module === 'Automitigation-1') return modulesStateObj["Automitigation-1"] ? AutoModuleStatus.AUTO_ON : AutoModuleStatus.AUTO_OFF;
     else return "";
   };
   
   const [state, setState] = useState(modulesStateObj);
   const [autoConfState, setAutoConfState] = useState(getState());
-  const [autoMitigationState, setAutoMitigationState] = useState(getState());
   const key = module.substring(0, module.indexOf('-')).toLowerCase();
   let totalActive = 0;
   subModules[key].forEach((module) => (totalActive += module[1] ? 1 : 0));
   // if (module === 'Autoconfiguration-1' && autoConf !== AutoModuleStatus.AUTO_UNDEF) setAutoConfState(autoConf)
   if (module === 'Autoconfiguration-1') totalActive = (autoConfState === AutoModuleStatus.AUTO_ON ? 1 : 0);
-  if (module === 'Automitigation-1') totalActive = (autoMitigationState === AutoModuleStatus.AUTO_ON ? 1 : 0);
 
   const totalModules = subModules[key].length;
 
@@ -41,7 +37,7 @@ const SystemModule = (props) => {
     isLive: false,
     isMutation: true,
     running: state[module],
-    isTesting: props.isTesting,
+    isTesting: props.isTesting, 
     name: module.toLowerCase().substring(0, module.toLowerCase().indexOf('-')),
   });
 
@@ -49,7 +45,7 @@ const SystemModule = (props) => {
     isLive: false,
     isMutation: true,
     name: module.toLowerCase().substring(0, module.toLowerCase().indexOf('-')),
-    extra_info: module === 'Automitigation-1' ? autoMitigationState : (module === 'Autoconfiguration-1' ? autoConfState : ''),
+    extra_info: module.includes('Mitigation') ? (state[module] ? AutoModuleStatus.AUTO_ON : AutoModuleStatus.AUTO_OFF ) : (module === 'Autoconfiguration-1' ? autoConfState : ''),
   });
 
   const classes = useStyles();
@@ -67,7 +63,6 @@ const SystemModule = (props) => {
                 style={{ marginTop: '9px', cursor: 'default' }}
                 className={
                   totalActive > 0 || (module === 'Autoconfiguration-1' && autoConfState === AutoModuleStatus.AUTO_ON)
-                  || (module === 'Automitigation-1' && autoMitigationState === AutoModuleStatus.AUTO_ON)
                     ? classes.activeButton
                     : classes.inactiveButton
                 }
@@ -96,14 +91,6 @@ const SystemModule = (props) => {
                           } else {
                             totalActive = 1;
                             setAutoConfState(AutoModuleStatus.AUTO_ON);
-                          } 
-                        } else if (module === 'Automitigation-1') {
-                          if (autoMitigationState === AutoModuleStatus.AUTO_ON) {
-                            totalActive = 0;
-                            setAutoMitigationState(AutoModuleStatus.AUTO_OFF);
-                          } else {
-                            totalActive = 1;
-                            setAutoMitigationState(AutoModuleStatus.AUTO_ON);
                           } 
                         } else {
                           setState((prevState) => ({

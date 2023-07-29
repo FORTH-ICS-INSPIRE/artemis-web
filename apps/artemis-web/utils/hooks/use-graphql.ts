@@ -38,9 +38,9 @@ export function useGraphQl(module: queryType, options: optionsType) {
   if (isTesting)
     return null;
   else if (isMutation) {
-    if ((name === 'autoconfiguration' || name === 'automitigation') && module !== 'setModuleExtraInfo') {
+    if ((name === 'autoconfiguration') && module !== 'setModuleExtraInfo') {
       return null;
-    } else if (name !== 'autoconfiguration' && name !== 'automitigation' && module === 'setModuleExtraInfo') {
+    } else if (name !== 'autoconfiguration' && name !== 'mitigation' && module === 'setModuleExtraInfo') {
       return null;
     } 
 

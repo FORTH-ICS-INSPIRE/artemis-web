@@ -27,7 +27,6 @@ const SystemPage = (props) => {
   }, [props]);
 
   let autoConf: AutoStatus = AutoStatus.AUTO_UNDEF;
-  let autoMitigate: AutoStatus = AutoStatus.AUTO_UNDEF;
 
   const user = props.user;
   const STATS_RES: any = useGraphQl('stats', {
@@ -55,13 +54,6 @@ const SystemPage = (props) => {
           autoConf = AutoStatus.AUTO_OFF;
       }
 
-      if (ps['name'].includes('mitigation')) {
-        if (ps['extra_info'].includes("-on"))
-        autoMitigate = AutoStatus.AUTO_ON;
-        else if (ps['extra_info'].includes("-off") || ps['extra_info'].length == 0)
-        autoMitigate = AutoStatus.AUTO_OFF;
-      }
-
       return [
         ps['name'].charAt(0).toUpperCase() + ps['name'].slice(1),
         ps['running'],
@@ -71,10 +63,6 @@ const SystemPage = (props) => {
 
   if (autoConf !== AutoStatus.AUTO_UNDEF) {
     modules = [...modules, ['Autoconfiguration-1', autoConf === AutoStatus.AUTO_ON ? true : false]];
-  }
-
-  if (autoMitigate !== AutoStatus.AUTO_UNDEF) {
-    modules = [...modules, ['Automitigation-1', autoMitigate === AutoStatus.AUTO_ON ? true : false]];
   }
   
   const modulesStateObj = {};
@@ -87,7 +75,6 @@ const SystemPage = (props) => {
     'bgpstreamhisttap',
     'bgpstreamkafkatap',
     'autoconfiguration',
-    'automitigation'
   ];
   const modulesLabels = {
     riperistap: 'RIPE RIS Monitor',
@@ -96,9 +83,8 @@ const SystemPage = (props) => {
     bgpstreamhisttap: 'BGPStream Historical Monitor',
     exabgptap: 'ExaBGP Monitor',
     detection: 'Detection',
-    mitigation: 'Mitigation',
+    mitigation: 'Auto Mitigation',
     autoconfiguration: 'Auto Configuration',
-    automitigation: 'Auto Mitigation'
   };
 
   modules.forEach(
