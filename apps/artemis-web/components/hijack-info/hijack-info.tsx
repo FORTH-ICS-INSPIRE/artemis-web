@@ -237,6 +237,7 @@ class HijackInfoComponent extends Component<any, any> {
                                 this.setState({
                                   mitigationState: {mode: "automitigation", prefixes: splitted}
                                 });
+                                console.log(prefix)
                                 const resp = await fetch(`${document.location.protocol}//${document.location.host}/api/address`, {
                                   method: 'POST',
                                   headers: {
@@ -248,6 +249,7 @@ class HijackInfoComponent extends Component<any, any> {
                                   })
                                 });
                                 const obj = await resp.json();
+                                console.log(obj)
                                 const ips = JSON.parse((obj.ips).replaceAll("'", '"'));
                                 this.setState({
                                   mitigationState: {mode: "automitigation", prefixes: ips}

@@ -1,6 +1,7 @@
 from ipaddress import ip_network as str2ip
+import sys
 
-hijacked_prefix = str2ip("2001:648:2c30::/48")
+hijacked_prefix = str2ip(sys.argv[1])
 hijacked_prefix_len = hijacked_prefix.prefixlen
 
 deagg_len_threshold = 32

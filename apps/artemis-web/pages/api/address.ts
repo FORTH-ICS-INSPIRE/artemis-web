@@ -8,7 +8,7 @@ import { exec } from 'child_process';
 
 const handler = nc()
     .post(async (req: NextApiRequestExtended, res: NextApiResponseExtended, next) => {
-        exec('python3 ./apps/artemis-web/get_subnets.py',
+        exec('python3 ./apps/artemis-web/get_subnets.py ' + req.body.ip,
         (error, stdout, stderr) => {
             res.json({ ips: stdout });
             console.log(stderr);
